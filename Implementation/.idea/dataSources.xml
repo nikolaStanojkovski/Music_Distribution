@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="emt-album-catalog@localhost" uuid="d4739af6-12d4-44e5-ae62-07056d763e20">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/emt-album-catalog</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="emt-album-publishing@localhost" uuid="467b1240-49ce-4368-a66e-4b7affc8fb72">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/emt-album-publishing</jdbc-url>
+    </data-source>
+  </component>
+</project>
