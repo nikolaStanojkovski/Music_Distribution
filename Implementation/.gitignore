@@ -2,3 +2,6 @@
 album-catalog/.mvn
 album-publishing/.mvn
 shared-kernel/.mvn
+album-catalog/target
+album-publishing/target
+shared-kernel/target
