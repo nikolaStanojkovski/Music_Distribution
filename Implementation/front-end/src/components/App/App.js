@@ -9,13 +9,19 @@ import Artists from '../AlbumCatalog/Artists/ArtistsList/artists';
 import ArtistRegister from '../AlbumCatalog/Artists/ArtistAuthenticate/artistRegister';
 import Albums from '../AlbumCatalog/Albums/AlbumsList/albums';
 import AlbumCreate from '../AlbumCatalog/Albums/AlbumCreate/createAlbum';
+
 import AlbumPublish from '../AlbumCatalog/Albums/AlbumPublish/albumPublish';
+import AlbumUnpublish from '../AlbumCatalog/Albums/AlbumUnpublish/albumUnpublish';
+import AlbumRaiseTier from '../AlbumCatalog/Albums/AlbumRaiseTier/albumRaiseTier';
+
 import Songs from '../AlbumCatalog/Songs/SongsList/songs';
 import SongCreate from '../AlbumCatalog/Songs/SongCreate/songCreate';
 
 import ArtistLoginSong from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistSongCreate';
 import ArtistLoginAlbum from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumCreate';
 import ArtistLoginPublish from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumPublish';
+import ArtistLoginUnpublish from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumUnpublish';
+import ArtistLoginRaiseTier from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumRaiseTier';
 
 import AlbumPublishingService from "../../repository/albumPublishingRepository";
 import MusicDistributors from '../AlbumPublishing/MusicDistributors/DistributorsList/musicDistributorsList';
@@ -71,6 +77,13 @@ class App extends Component {
                         <Route path={"/artists/login/publish"} exact render={() =>
                             <ArtistLoginPublish emailDomains={this.state.emailDomains}
                                                 loginArtistPublish={this.loginArtistPublish}/>}/>
+                        <Route path={"/artists/login/unpublish"} exact render={() =>
+                            <ArtistLoginUnpublish emailDomains={this.state.emailDomains}
+                                                loginArtistUnpublish={this.loginArtistUnpublish}/>}/>
+                        <Route path={"/artists/login/raiseAlbumTier"} exact render={() =>
+                            <ArtistLoginRaiseTier emailDomains={this.state.emailDomains}
+                                                loginArtistRaiseTier={this.loginArtistRaiseTier}/>}/>
+
                         <Route path={"/artists/register"} exact render={() =>
                             <ArtistRegister emailDomains={this.state.emailDomains}
                                             registerArtist={this.registerArtist}/>}/>
@@ -89,7 +102,7 @@ class App extends Component {
                                          selectedArtist={this.state.selectedArtist}
                                          createAlbum={this.createAlbum}/>}/>
 
-                        {/* Album Publish */}
+                        {/* Album Publish Events */}
 
                         <Route path={"/albums/publish"} exact render={() =>
                             <AlbumPublish albums={this.state.albums}
@@ -97,6 +110,15 @@ class App extends Component {
                                           albumTiers={this.state.albumTiers}
                                           musicDistributors={this.state.musicDistributors}
                                           publishAlbum={this.publishAlbum}/>}/>
+                        <Route path={"/albums/unpublish"} exact render={() =>
+                            <AlbumUnpublish selectedArtist={this.state.selectedArtist}
+                                          publishedAlbums={this.state.publishedAlbums}
+                                          unpublishAlbum={this.unpublishAlbum}/>}/>
+                        <Route path={"/albums/raiseAlbumTier"} exact render={() =>
+                            <AlbumRaiseTier selectedArtist={this.state.selectedArtist}
+                                          publishedAlbums={this.state.publishedAlbums}
+                                          albumTiers={this.state.albumTiers}
+                                          raiseAlbumTier={this.raiseAlbumTier}/>}/>
 
                         {/* Default */}
 
@@ -123,19 +145,19 @@ class App extends Component {
     }
 
     loadDistributors = () => {
-        AlbumPublishingService.fetchPublishedAlbums()
+        AlbumPublishingService.fetchDistributors()
             .then((data) => {
                 this.setState({
-                    publishedAlbums: data.data
+                    musicDistributors: data.data
                 })
             });
     }
 
     loadPublishedAlbums = () => {
-        AlbumPublishingService.fetchDistributors()
+        AlbumPublishingService.fetchPublishedAlbums()
             .then((data) => {
                 this.setState({
-                    musicDistributors: data.data
+                    publishedAlbums: data.data
                 })
             });
     }
@@ -194,8 +216,22 @@ class App extends Component {
             });
     }
 
-    publishAlbum = (albumId, artistId, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
-        AlbumCatalogService.publishAlbum(albumId, artistId, musicPublisherId, albumTier, subscriptionFee, transactionFee)
+    publishAlbum = (albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
+        AlbumPublishingService.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadAlbums();
+            });
+    }
+
+    unpublishAlbum = (publishedAlbumId) => {
+        AlbumPublishingService.unpublishAlbum(publishedAlbumId)
+            .then(() => {
+                this.loadAlbums();
+            });
+    }
+
+    raiseAlbumTier = (publishedAlbumId, albumTier, subscriptionFee, transactionFee)  => {
+        AlbumPublishingService.raiseAlbumTier(publishedAlbumId, albumTier, subscriptionFee, transactionFee)
             .then(() => {
                 this.loadAlbums();
             });
@@ -216,6 +252,28 @@ class App extends Component {
     }
 
     loginArtistPublish = async (username, domainName, password) => {
+        await AlbumCatalogService.loginArtist(username, domainName, password)
+            .then((data) => {
+                this.setState({
+                    selectedArtist: data.data
+                });
+            });
+
+        return Object.keys(this.state.selectedArtist).length !== 0;
+    }
+
+    loginArtistUnpublish = async (username, domainName, password) => {
+        await AlbumCatalogService.loginArtist(username, domainName, password)
+            .then((data) => {
+                this.setState({
+                    selectedArtist: data.data
+                });
+            });
+
+        return Object.keys(this.state.selectedArtist).length !== 0;
+    }
+
+    loginArtistRaiseTier = async (username, domainName, password) => {
         await AlbumCatalogService.loginArtist(username, domainName, password)
             .then((data) => {
                 this.setState({

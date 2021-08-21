@@ -3,6 +3,9 @@ package finki.ukim.mk.emtproject.albumcatalog.domain.models.dto;
 import finki.ukim.mk.emtproject.albumcatalog.domain.valueobjects.SongLength;
 import lombok.Data;
 
+/**
+ * SongDto - Dto object for a song
+ */
 @Data
 public class SongDto {
 

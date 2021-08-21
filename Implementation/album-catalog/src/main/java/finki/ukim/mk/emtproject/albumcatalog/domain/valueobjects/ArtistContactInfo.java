@@ -7,6 +7,9 @@ import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
+/**
+ * ArtistContactInfo - Value object for the artist contact information that contains the email and the telephone number
+ */
 @Embeddable
 @Getter
 public class ArtistContactInfo implements ValueObject {
@@ -25,13 +28,5 @@ public class ArtistContactInfo implements ValueObject {
 
     public static ArtistContactInfo build(String telephoneNumber, String username, EmailDomain emailDomain) {
         return new ArtistContactInfo(Email.createEmail(username, emailDomain), telephoneNumber);
-    }
-
-    public void changeEmail(Email email) {
-        this.email = email;
-    }
-
-    public void changeTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
     }
 }

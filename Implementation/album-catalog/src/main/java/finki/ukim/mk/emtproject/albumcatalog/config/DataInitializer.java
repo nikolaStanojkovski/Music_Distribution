@@ -24,6 +24,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
+/**
+ * Initial data definition, for testing purposes
+ */
 @Component
 @AllArgsConstructor
 public class DataInitializer {
@@ -32,6 +35,9 @@ public class DataInitializer {
     private final AlbumService albumService;
     private final SongService songService;
 
+    /**
+     * Initial data definition, for testing purposes
+     */
     @PostConstruct
     public void initData() {
 

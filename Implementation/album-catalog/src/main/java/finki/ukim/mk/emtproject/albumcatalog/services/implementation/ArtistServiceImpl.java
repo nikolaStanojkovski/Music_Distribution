@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * ArtistService - Service for the implementation of the main specific business logic for the artists
+ */
 @Service
 @Transactional
 @AllArgsConstructor

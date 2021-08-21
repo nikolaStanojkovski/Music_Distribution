@@ -10,6 +10,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * ArtistForm - object used to transfer data from the front-end user form to the backend
+ */
 @Data
 public class ArtistForm {
 

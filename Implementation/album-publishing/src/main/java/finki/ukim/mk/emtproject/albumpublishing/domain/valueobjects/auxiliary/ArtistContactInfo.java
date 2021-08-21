@@ -5,6 +5,9 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.Email;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
 import lombok.Getter;
 
+/**
+ * ArtistContactInfo - value object that keeps the main contact information for the artist value object
+ */
 @Getter
 public class ArtistContactInfo implements ValueObject {
 

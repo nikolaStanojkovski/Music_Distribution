@@ -10,6 +10,9 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 
+/**
+ * SongForm - object used to transfer data from the front-end user form to the backend
+ */
 @Data
 public class SongForm {
 

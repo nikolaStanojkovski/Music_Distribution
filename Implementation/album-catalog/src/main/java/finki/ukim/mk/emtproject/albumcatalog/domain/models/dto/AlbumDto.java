@@ -11,6 +11,9 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.base.AbstractEntity;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.Data;
 
+/**
+ * AlbumDto - Dto object for an album
+ */
 @Data
 public class AlbumDto {
 

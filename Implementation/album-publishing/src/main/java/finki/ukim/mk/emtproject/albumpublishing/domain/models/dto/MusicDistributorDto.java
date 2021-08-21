@@ -4,6 +4,9 @@ import finki.ukim.mk.emtproject.albumpublishing.domain.valueobjects.DistributorI
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.Money;
 import lombok.Data;
 
+/**
+ * MusicDistributorDto - Dto object for a music distributor
+ */
 @Data
 public class MusicDistributorDto {
 

@@ -12,6 +12,9 @@ import finki.ukim.mk.emtproject.albumcatalog.services.form.ArtistLoginForm;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ArtistService - Service for the implementation of the main specific business logic for the artists
+ */
 public interface ArtistService {
 
     List<ArtistDto> findAll();

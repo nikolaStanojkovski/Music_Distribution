@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * SongResource - Rest Controller for the song methods that communicate with the front-end app
+ */
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")

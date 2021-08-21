@@ -1,5 +1,6 @@
 package finki.ukim.mk.emtproject.albumcatalog.services.implementation;
 
+import finki.ukim.mk.emtproject.albumcatalog.domain.exceptions.AlbumNotFoundException;
 import finki.ukim.mk.emtproject.albumcatalog.domain.exceptions.ArtistNotFoundException;
 import finki.ukim.mk.emtproject.albumcatalog.domain.models.Album;
 import finki.ukim.mk.emtproject.albumcatalog.domain.models.AlbumId;
@@ -12,19 +13,17 @@ import finki.ukim.mk.emtproject.albumcatalog.domain.repository.ArtistRepository;
 import finki.ukim.mk.emtproject.albumcatalog.domain.valueobjects.AlbumInfo;
 import finki.ukim.mk.emtproject.albumcatalog.services.AlbumService;
 import finki.ukim.mk.emtproject.albumcatalog.services.form.AlbumForm;
-import finki.ukim.mk.emtproject.albumcatalog.services.form.AlbumPublishForm;
-import finki.ukim.mk.emtproject.sharedkernel.infra.DomainEventPublisher;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * AlbumService - Service for the implementation of the main specific business logic for the albums
+ */
 @Service
 @Transactional
 @AllArgsConstructor
@@ -32,8 +31,6 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
-    private final DomainEventPublisher domainEventPublisher;
-    private final Validator validator;
 
 
     @Override
@@ -63,5 +60,25 @@ public class AlbumServiceImpl implements AlbumService {
         artistRepository.save(creator);
 
         return Optional.of(newAlbum);
+    }
+
+    @Override
+    public Optional<Album> albumPublished(AlbumId id) {
+        Album album = findById(id).orElseThrow(() -> new AlbumNotFoundException(id));
+        album.publish();
+
+        albumRepository.save(album);
+
+        return Optional.of(album);
+    }
+
+    @Override
+    public Optional<Album> albumUnpublished(AlbumId id) {
+        Album album = findById(id).orElseThrow(() -> new AlbumNotFoundException(id));
+        album.unpublish();
+
+        albumRepository.save(album);
+
+        return Optional.of(album);
     }
 }

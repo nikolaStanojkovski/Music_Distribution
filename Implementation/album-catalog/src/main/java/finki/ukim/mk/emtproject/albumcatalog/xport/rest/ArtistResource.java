@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * ArtistResource - Rest Controller for the artist methods that communicate with the front-end app
+ */
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")

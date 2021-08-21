@@ -9,6 +9,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * AlbumForm - object used to transfer data from the front-end user form to the backend
+ */
 @Data
 public class AlbumForm {
 

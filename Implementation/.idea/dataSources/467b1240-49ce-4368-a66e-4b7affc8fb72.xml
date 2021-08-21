@@ -784,7 +784,7 @@ false YEKT
 false Z
 false Zulu
 </TimeZones>
-      <StartupTime>1628862970</StartupTime>
+      <StartupTime>1629488149</StartupTime>
     </root>
     <database id="2" parent="1" name="bazi_na_podatoci">
       <ObjectId>17488</ObjectId>
@@ -801,7 +801,7 @@ false Zulu
     <database id="5" parent="1" name="emt-album-publishing">
       <ObjectId>49285</ObjectId>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>6141</IntrospectionStateNumber>
+      <IntrospectionStateNumber>6207</IntrospectionStateNumber>
       <Current>1</Current>
     </database>
     <database id="6" parent="1" name="emt-lab">
@@ -878,7 +878,7 @@ false Zulu
       <Comment>standard public schema</Comment>
       <StateNumber>287</StateNumber>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>6142</IntrospectionStateNumber>
+      <IntrospectionStateNumber>6208</IntrospectionStateNumber>
       <Current>1</Current>
     </schema>
     <access-method id="24" parent="5" name="heap">
@@ -948,5 +948,196 @@ false Zulu
     <language id="33" parent="5" name="internal"/>
     <language id="34" parent="5" name="plpgsql"/>
     <language id="35" parent="5" name="sql"/>
+    <table id="36" parent="23" name="music_distributor">
+      <ObjectId>49364</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>6171</StateNumber>
+    </table>
+    <table id="37" parent="23" name="music_distributor_published_album">
+      <ObjectId>49372</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>6170</StateNumber>
+    </table>
+    <table id="38" parent="23" name="published_album">
+      <ObjectId>49378</ObjectId>
+      <Owner>postgres</Owner>
+      <StateNumber>6170</StateNumber>
+    </table>
+    <column id="39" parent="36" name="id">
+      <Position>1</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>6165</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="40" parent="36" name="distributor_company_name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6165</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="41" parent="36" name="distributor_name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6165</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="42" parent="36" name="music_distributor_pkey">
+      <ObjectId>49370</ObjectId>
+      <StateNumber>6165</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+    </index>
+    <key id="43" parent="36" name="music_distributor_pkey">
+      <ObjectId>49371</ObjectId>
+      <StateNumber>6165</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>music_distributor_pkey</UnderlyingIndexName>
+    </key>
+    <column id="44" parent="37" name="music_distributor_id">
+      <Position>1</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>6166</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="45" parent="37" name="published_albums_id">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>6166</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="46" parent="37" name="uk_cx0nbau6g706cq52eru72ujwr">
+      <ObjectId>49386</ObjectId>
+      <StateNumber>6169</StateNumber>
+      <ColNames>published_albums_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="47" parent="37" name="uk_cx0nbau6g706cq52eru72ujwr">
+      <ObjectId>49387</ObjectId>
+      <StateNumber>6169</StateNumber>
+      <ColNames>published_albums_id</ColNames>
+      <UnderlyingIndexName>uk_cx0nbau6g706cq52eru72ujwr</UnderlyingIndexName>
+    </key>
+    <foreign-key id="48" parent="37" name="fk4lj4q32pwwoep2o2h2wauxhfp">
+      <ObjectId>49393</ObjectId>
+      <StateNumber>6171</StateNumber>
+      <ColNames>music_distributor_id</ColNames>
+      <RefTableId>49364</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>music_distributor</RefTableName>
+      <RefKeyName>music_distributor_pkey</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="49" parent="37" name="fk9x2ia8jm33t23kscucphsj28k">
+      <ObjectId>49388</ObjectId>
+      <StateNumber>6170</StateNumber>
+      <ColNames>published_albums_id</ColNames>
+      <RefTableId>49378</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>published_album</RefTableName>
+      <RefKeyName>published_album_pkey</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="50" parent="38" name="id">
+      <Position>1</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="51" parent="38" name="album_id">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="52" parent="38" name="album_name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="53" parent="38" name="album_tier">
+      <Position>4</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="54" parent="38" name="artist_id">
+      <Position>5</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="55" parent="38" name="artist_information">
+      <Position>6</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="56" parent="38" name="published_on">
+      <Position>7</Position>
+      <DataType>timestamp|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="57" parent="38" name="fee_amount">
+      <Position>8</Position>
+      <DataType>double precision|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>701</TypeId>
+    </column>
+    <column id="58" parent="38" name="fee_currency">
+      <Position>9</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="59" parent="38" name="transaction_amount">
+      <Position>10</Position>
+      <DataType>double precision|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>701</TypeId>
+    </column>
+    <column id="60" parent="38" name="transaction_currency">
+      <Position>11</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="61" parent="38" name="publisher_id">
+      <Position>12</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <StateNumber>6167</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="62" parent="38" name="published_album_pkey">
+      <ObjectId>49384</ObjectId>
+      <StateNumber>6167</StateNumber>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+      <Primary>1</Primary>
+    </index>
+    <key id="63" parent="38" name="published_album_pkey">
+      <ObjectId>49385</ObjectId>
+      <StateNumber>6167</StateNumber>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>published_album_pkey</UnderlyingIndexName>
+    </key>
+    <foreign-key id="64" parent="38" name="fko379io4pt9yjdowx5h00w5m6b">
+      <ObjectId>49398</ObjectId>
+      <StateNumber>6172</StateNumber>
+      <ColNames>publisher_id</ColNames>
+      <RefTableId>49364</RefTableId>
+      <RefColPositions>1</RefColPositions>
+      <RefTableName>music_distributor</RefTableName>
+      <RefKeyName>music_distributor_pkey</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
   </database-model>
 </dataSource>

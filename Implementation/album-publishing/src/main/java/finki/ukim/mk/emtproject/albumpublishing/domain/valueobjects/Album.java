@@ -11,6 +11,9 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
+/**
+ * Album - value object that keeps the essential information about the album
+ */
 @Getter
 public class Album implements ValueObject {
 

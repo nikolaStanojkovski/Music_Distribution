@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * DomainObjectId - the abstract class for a domain object ID object
+ */
 @MappedSuperclass
 @Embeddable
 @Getter

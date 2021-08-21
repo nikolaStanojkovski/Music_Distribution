@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * SongRepository - JPA Repository for a song
+ */
 public interface SongRepository extends JpaRepository<Song, SongId> {
 }

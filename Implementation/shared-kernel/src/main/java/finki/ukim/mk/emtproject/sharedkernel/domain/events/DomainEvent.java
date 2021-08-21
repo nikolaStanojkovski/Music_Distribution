@@ -6,14 +6,17 @@ import lombok.Getter;
 
 import java.time.Instant;
 
+/**
+ * DomainEvent - abstract class for a domain event
+ */
 @Getter
 public class DomainEvent {
 
     private String topic;
-    private Instant occurredOn;
+    private String occurredOn;
 
     public DomainEvent(String topic) {
-        this.occurredOn = Instant.now();
+        this.occurredOn = Instant.now().toString();
         this.topic = topic;
     }
 

@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
+/**
+ * DistributorInfo - value object that keeps the main information for the music distributor
+ */
 @Embeddable
 @Getter
 public class DistributorInfo implements ValueObject {
@@ -23,14 +26,6 @@ public class DistributorInfo implements ValueObject {
     }
 
     protected DistributorInfo() {
-    }
-
-    public void changeCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public void changeDistributorName(String distributorName) {
-        this.distributorName = distributorName;
     }
 
     public String getDistributorInformation() {

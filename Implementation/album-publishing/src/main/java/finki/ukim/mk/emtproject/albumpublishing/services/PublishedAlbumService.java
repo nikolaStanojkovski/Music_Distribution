@@ -7,6 +7,9 @@ import finki.ukim.mk.emtproject.albumpublishing.services.form.PublishedAlbumForm
 
 import java.util.List;
 
+/**
+ * PublishedAlbumService - Service for the implementation of the main specific business logic for the published albums
+ */
 public interface PublishedAlbumService {
 
     List<PublishedAlbumDto> findAll();

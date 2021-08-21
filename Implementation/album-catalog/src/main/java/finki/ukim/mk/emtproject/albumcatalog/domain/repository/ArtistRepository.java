@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ArtistRepository - JPA Repository for an artist
+ */
 public interface ArtistRepository extends JpaRepository<Artist, ArtistId> {
 
     Optional<Artist> findByArtistContactInfo_Email(Email artistMail);

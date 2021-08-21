@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
+/**
+ * ArtistPersonalInfo - value object that keeps the main personal information for the artist value object
+ */
 @Embeddable
 @Getter
 public class ArtistPersonalInfo implements ValueObject {

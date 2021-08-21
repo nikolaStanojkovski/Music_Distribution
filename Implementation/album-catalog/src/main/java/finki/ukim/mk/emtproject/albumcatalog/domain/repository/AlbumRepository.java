@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+/**
+ * AlbumRepository - JPA Repository for an album
+ */
 public interface AlbumRepository extends JpaRepository<Album, AlbumId> {
 }

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
+/**
+ * Initial data definition, for testing purposes
+ */
 @Component
 @AllArgsConstructor
 public class DataInitializer {
@@ -19,6 +22,9 @@ public class DataInitializer {
     private final MusicDistributorService musicDistributorService;
     private final PublishedAlbumService publishedAlbumService;
 
+    /**
+     * Initial data definition, for testing purposes
+     */
     @PostConstruct
     public void initData() {
         if(musicDistributorService.findAll().size() == 0) {

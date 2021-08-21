@@ -11,6 +11,9 @@ import lombok.Data;
 
 import java.time.Instant;
 
+/**
+ * PublishedAlbumForm - object used to transfer data from the front-end user form to the backend
+ */
 @Data
 public class PublishedAlbumForm {
 

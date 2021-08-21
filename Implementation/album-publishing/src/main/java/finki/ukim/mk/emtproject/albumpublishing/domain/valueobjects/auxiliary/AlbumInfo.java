@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
+/**
+ * AlbumInfo - value object that keeps the main information for the album value object
+ */
 @Embeddable
 @Getter
 public class AlbumInfo implements ValueObject {

@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * SongService - Service for the implementation of the main specific business logic for the songs
+ */
 @Service
 @Transactional
 @AllArgsConstructor
@@ -58,7 +61,7 @@ public class SongServiceImpl implements SongService {
             newSong = Song.build(form.getSongName(), creator, album, SongLength.build(form.getLengthInSeconds()));
             songRepository.save(newSong);
 
-            album.addSongToAlbum(newSong);
+            album.addSong(newSong);
             creator.addSongToArtist(newSong);
             albumRepository.save(album);
             artistRepository.save(creator);

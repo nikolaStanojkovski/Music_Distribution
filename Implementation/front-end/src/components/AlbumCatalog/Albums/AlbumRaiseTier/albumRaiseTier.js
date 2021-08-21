@@ -1,12 +1,11 @@
 import React from 'react';
 import {Link, useHistory} from 'react-router-dom';
 
-const PublishAlbum = (props) => {
+const RaiseAlbumTier = (props) => {
 
     const History = useHistory();
     const [formData, updateFormData] = React.useState({
         albumId: 0,
-        musicPublisherId: 0,
         albumTier: 0
     });
 
@@ -34,61 +33,34 @@ const PublishAlbum = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const album = formData.albumId.split(" ");
-        const albumId = album[0];
-        var albumName = "";
-        for(var i=1;i<album.length;i++)
-            albumName = albumName + " " + album[i];
 
-        const artistId = props.selectedArtist.id;
-        const artistInformation = props.selectedArtist.artistPersonalInfo.fullName;
-        const musicPublisherId = formData.musicPublisherId;
+        const publishedAlbumId = formData.albumId;
         const albumTier = formData.albumTier;
         const subscriptionFee = document.getElementById("subscriptionFee").value.split(" ")[0];
         const transactionFee = 5.00;
 
-        props.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee);
+        props.raiseAlbumTier(publishedAlbumId, albumTier, subscriptionFee, transactionFee);
         History.push("/albums");
     }
 
     return (
         <div className="container">
-            <h1 className={"text-center mt-4"}>Publish an album</h1>
+            <h1 className={"text-center mt-4"}>Raise album tier</h1>
             <br/>
             <div className={""}>
                 <div className="col-md-6">
                     <br/>
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
-                            <label>Album</label>
+                            <label>Published Albums</label>
                             <select onChange={handleChange} name="albumId" className="form-control">
-                                <option value={null}>Select the album</option>
+                                <option value={null}>Select the published album to raise the tier to</option>
 
-                                {props.albums.map((term) => {
-                                        if (term.artistId === props.selectedArtist.id && term.isPublished === false) {
+                                {props.publishedAlbums.map((term) => {
+                                        if (term.artistId === props.selectedArtist.id) {
                                             // show only the albums the appropriate creator has created
-                                            return <option value={term.id + " " + term.albumName}>{term.albumName}</option>;
+                                            return <option value={term.publishedAlbumId}>{term.albumName}</option>;
                                         }
-                                    }
-                                )}
-                            </select>
-                        </div>
-                        <br/>
-
-                        <div className="form-group">
-                            <label>Artist</label>
-                            <input name="artistName" disabled={true}
-                                   value={props.selectedArtist.artistPersonalInfo.fullName}
-                                   className="form-control disabled"/>
-                        </div>
-                        <br/>
-
-                        <div className="form-group">
-                            <label>Music Publisher</label>
-                            <select onChange={handleChange} name="musicPublisherId" className="form-control">
-                                <option value={null}>Select the music distributor</option>
-                                {props.musicDistributors.map((term) => {
-                                        return <option value={term.id}>{term.distributorInfo}</option>;
                                     }
                                 )}
                             </select>
@@ -139,4 +111,4 @@ const PublishAlbum = (props) => {
     );
 };
 
-export default PublishAlbum;
+export default RaiseAlbumTier;

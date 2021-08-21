@@ -13,10 +13,17 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Album domain entity
+ */
 @Entity
 @Table(name="album")
 @Data
 public class Album extends AbstractEntity<AlbumId> {
+
+    /**
+     * Required properties defintiion
+     */
 
     private String albumName;
 
@@ -63,34 +70,44 @@ public class Album extends AbstractEntity<AlbumId> {
         return album;
     }
 
+    /**
+     * Methods used for defining the consistency rules
+     */
 
-    public Song addSongToAlbum(Song song) {
+    // add the song to the appropriate album
+    public Song addSong(Song song) {
         this.songs.add(song);
         this.totalLength.addSecondsToSongLength(song.getSongLength().getLengthSeconds());
 
         return song;
     }
 
-    public Song removeSongFromAlbum(Song song) {
+    // remove the song from the appropriate album
+    public Song removeSong(Song song) {
         this.songs.remove(song);
         this.totalLength.removeSecondsFromSongLength(song.getSongLength().getLengthSeconds());
 
         return song;
     }
 
+    // return total length of the album
     public SongLength totalLength() {
         Integer sum = 0;
         if(this.songs.size() != 0)
             sum = this.songs.stream().mapToInt(i -> i.getSongLength().getLengthSeconds()).sum();
 
         return SongLength.build(sum);
-    } // return total length of the album
+    }
 
+    // make the album published
     public Boolean publish() {
-        return this.isPublished = true;
-    } // make album published
+        this.isPublished = true;
+        return this.isPublished;
+    }
 
+    // make the album unpublished
     public Boolean unpublish() {
-        return this.isPublished = false;
-    } // make album unpublished
+        this.isPublished = false;
+        return this.isPublished;
+    } // make the album unpublished
 }

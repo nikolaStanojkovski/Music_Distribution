@@ -10,6 +10,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.util.Objects;
 
+/**
+ * Money - value object for money that contains the currency and amount
+ */
 @Embeddable
 @Getter
 public class Money implements ValueObject {
@@ -38,7 +41,7 @@ public class Money implements ValueObject {
             if (!currency.equals(money.currency)) {
                 throw new IllegalArgumentException("Cannot add two Money objects with different currencies");
             }
-            return new Money(currency,amount + money.amount);
+            return new Money(currency,this.amount + money.amount);
         } else
             return null;
     }
@@ -55,7 +58,7 @@ public class Money implements ValueObject {
 
     public Money multiply(int m)  {
         if(currency != null)
-            return new Money(currency,amount*m);
+            return new Money(currency,amount * m);
 
         return null;
     }

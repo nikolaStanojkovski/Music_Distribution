@@ -9,10 +9,17 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
+/**
+ * Song domain entity
+ */
 @Entity
 @Table(name="song")
 @Getter
 public class Song extends AbstractEntity<SongId> {
+
+    /**
+     * Required properties defintiion
+     */
 
     private String songName;
 

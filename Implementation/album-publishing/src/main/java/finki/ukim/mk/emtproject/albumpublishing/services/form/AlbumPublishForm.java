@@ -3,6 +3,9 @@ package finki.ukim.mk.emtproject.albumpublishing.services.form;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Data;
 
+/**
+ * AlbumPublishForm - object used to transfer data from the front-end user form to the backend
+ */
 @Data
 public class AlbumPublishForm {
 

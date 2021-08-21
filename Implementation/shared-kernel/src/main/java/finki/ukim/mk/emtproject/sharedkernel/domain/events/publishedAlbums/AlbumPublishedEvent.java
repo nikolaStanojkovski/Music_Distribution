@@ -4,30 +4,33 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.events.DomainEvent;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Getter;
 
+/**
+ * AlbumPublishedEvent - specific domain event class for album publishing
+ */
 @Getter
-public class AlbumPublished extends DomainEvent {
+public class AlbumPublishedEvent extends DomainEvent {
 
     private String albumId;
     private String artistId;
     private String musicPublisherId;
 
-    private Tier albumTier;
-    private Double subscriptionFee; // in eur
-    private Double transactionFee; // in eur
+    private String albumTier;
+    private String subscriptionFee; // in eur
+    private String transactionFee; // in eur
 
-    public AlbumPublished() {
+    public AlbumPublishedEvent() {
         super(finki.ukim.mk.emtproject.sharedkernel.domain.config.TopicHolder.TOPIC_ALBUM_PUBLISHED);
     }
 
-    public AlbumPublished(String albumId, String artistId, String musicPublisherId, Tier albumTier, Double subscriptionFee, Double transactionFee) {
+    public AlbumPublishedEvent(String albumId, String artistId, String musicPublisherId, String albumTier, Double subscriptionFee, Double transactionFee) {
         super(finki.ukim.mk.emtproject.sharedkernel.domain.config.TopicHolder.TOPIC_ALBUM_PUBLISHED);
 
         this.albumId = albumId;
         this.artistId = artistId;
         this.musicPublisherId = musicPublisherId;
         this.albumTier = albumTier;
-        this.subscriptionFee = subscriptionFee;
-        this.transactionFee = transactionFee;
+        this.subscriptionFee = subscriptionFee.toString();
+        this.transactionFee = transactionFee.toString();
     }
 }
 

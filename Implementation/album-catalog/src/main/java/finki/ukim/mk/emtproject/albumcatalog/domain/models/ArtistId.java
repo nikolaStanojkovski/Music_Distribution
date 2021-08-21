@@ -3,6 +3,9 @@ package finki.ukim.mk.emtproject.albumcatalog.domain.models;
 import finki.ukim.mk.emtproject.sharedkernel.domain.base.DomainObjectId;
 import org.springframework.lang.NonNull;
 
+/**
+ * ArtistId value object for the artist identifier
+ */
 public class ArtistId extends DomainObjectId {
 
     private ArtistId() {

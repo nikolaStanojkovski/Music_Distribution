@@ -11,6 +11,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.util.Objects;
 
+/**
+ * Email - value object for a user email that contains the domain name and username
+ */
 @Embeddable
 @Getter
 public class Email implements ValueObject {

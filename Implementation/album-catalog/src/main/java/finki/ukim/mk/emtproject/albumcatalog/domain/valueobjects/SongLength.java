@@ -4,6 +4,9 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.base.ValueObject;
 
 import javax.persistence.Embeddable;
 
+/**
+ * SongLength - Value object for the song length
+ */
 @Embeddable
 public class SongLength implements ValueObject {
 
@@ -33,19 +36,7 @@ public class SongLength implements ValueObject {
         }
     }
 
-    public Integer getLengthMiliseconds() {
-        return this.lengthInSeconds * 1000;
-    }
-
     public Integer getLengthSeconds() {
         return this.lengthInSeconds;
-    }
-
-    public Integer getLengthMinutes() {
-        return this.lengthInSeconds / 60;
-    }
-
-    public Integer getLengthHours() {
-        return (this.lengthInSeconds / 60) / 60;
     }
 }

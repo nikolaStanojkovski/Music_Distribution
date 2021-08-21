@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import javax.persistence.Embeddable;
 
+/**
+ * AlbumInfo - Value object for album information that contains the name of the artist, producer and composer
+ */
 @Embeddable
 @Getter
 public class AlbumInfo implements ValueObject {
@@ -26,17 +29,5 @@ public class AlbumInfo implements ValueObject {
     }
 
     protected AlbumInfo() {
-    }
-
-    public void changeArtistName(String artistName) {
-        this.artistName = artistName;
-    }
-
-    public void changeProducerName(String producerName) {
-        this.producerName = producerName;
-    }
-
-    public void changeComposerName(String composerName) {
-        this.composerName = composerName;
     }
 }

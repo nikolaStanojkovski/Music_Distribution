@@ -17,6 +17,9 @@ import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+/**
+ * ArtistDto - Dto object for an artist
+ */
 @Data
 public class ArtistDto {
 

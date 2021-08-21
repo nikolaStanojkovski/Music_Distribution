@@ -7,6 +7,9 @@ import lombok.Data;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+/**
+ * ArtistLoginForm - object used to transfer data from the front-end user form to the backend
+ */
 @Data
 public class ArtistLoginForm {
 

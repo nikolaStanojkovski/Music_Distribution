@@ -4,15 +4,16 @@ import finki.ukim.mk.emtproject.albumcatalog.domain.models.Album;
 import finki.ukim.mk.emtproject.albumcatalog.domain.models.AlbumId;
 import finki.ukim.mk.emtproject.albumcatalog.domain.models.dto.AlbumDto;
 import finki.ukim.mk.emtproject.albumcatalog.services.AlbumService;
-import finki.ukim.mk.emtproject.albumcatalog.services.ArtistService;
 import finki.ukim.mk.emtproject.albumcatalog.services.form.AlbumForm;
-import finki.ukim.mk.emtproject.albumcatalog.services.form.AlbumPublishForm;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * AlbumResource - Rest Controller for the album methods that communicate with the front-end app
+ */
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")

@@ -13,10 +13,17 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Artist domain entity
+ */
 @Entity
 @Table(name="artist")
 @Getter
 public class Artist extends AbstractEntity<ArtistId> {
+
+    /**
+     * Required properties defintiion
+     */
 
     @AttributeOverrides({
             @AttributeOverride(name="email", column = @Column(name="artist_email")),
@@ -31,6 +38,7 @@ public class Artist extends AbstractEntity<ArtistId> {
     })
     private ArtistPersonalInfo artistPersonalInfo;
 
+    // Didn't add encryption to the password because it's out of this project's scope
     @Column(nullable = false)
     private String password;
 
@@ -59,15 +67,46 @@ public class Artist extends AbstractEntity<ArtistId> {
         return artist;
     }
 
+    /**
+     * Methods used for defining the consistency rules
+     */
+
+    // create a new album
     public Album createAlbum(Album album) {
         this.albums.add(album);
 
         return album;
     }
 
+    // add a new song to an artist
     public Song addSongToArtist(Song song) {
         this.songs.add(song);
 
         return song;
+    }
+
+    // remove a song from an artist
+    public Song removeSongFromArtist(Song song) {
+        this.songs.remove(song);
+
+        return song;
+    }
+
+    // make some artist's album published
+    public Boolean makeAlbumPublished(AlbumId albumId) {
+        Album album = this.albums.stream().filter(i -> i.getId().getId().equals(albumId.getId()))
+                .findAny().get();
+        album.setIsPublished(true);
+
+        return album.getIsPublished();
+    }
+
+    // make some artist's album unpublished
+    public Boolean makeAlbumUnpublished(AlbumId albumId) {
+        Album album = this.albums.stream().filter(i -> i.getId().getId().equals(albumId.getId()))
+                .findAny().get();
+        album.setIsPublished(false);
+
+        return album.getIsPublished();
     }
 }

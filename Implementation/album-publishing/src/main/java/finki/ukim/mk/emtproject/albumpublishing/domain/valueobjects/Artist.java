@@ -9,6 +9,9 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
+/**
+ * Artist - value object that keeps the essential information about the artist
+ */
 @Getter
 public class Artist implements ValueObject {
 

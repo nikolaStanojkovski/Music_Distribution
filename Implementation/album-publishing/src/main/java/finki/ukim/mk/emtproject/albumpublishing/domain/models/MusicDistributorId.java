@@ -3,6 +3,9 @@ package finki.ukim.mk.emtproject.albumpublishing.domain.models;
 import finki.ukim.mk.emtproject.sharedkernel.domain.base.DomainObjectId;
 import org.springframework.lang.NonNull;
 
+/**
+ * MusicDistributorId value object for the music distributor identifier
+ */
 public class MusicDistributorId extends DomainObjectId {
 
     private MusicDistributorId() {

@@ -6,13 +6,25 @@ const albums = (props) => {
 
         <div className={"container mm-4 mt-5"}>
             <div className={"row"}>
-                <div className={"col-12"}>
+                <div className={"col-4"}>
                     <form className="form-inline my-2 my-lg-0">
                         <Link to={"/artists/login/publish"} className="btn btn-primary w-100">Publish Album</Link>
                     </form>
                 </div>
+                <div className={"col-4"}>
+                    <form className="form-inline my-2 my-lg-0">
+                        <Link to={"/artists/login/raiseAlbumTier"} className="btn btn-info w-100">Raise Album Tier</Link>
+                    </form>
+                </div>
+                <div className={"col-4"}>
+                    <form className="form-inline my-2 my-lg-0">
+                        <Link to={"/artists/login/unpublish"} className="btn btn-outline-danger w-100">
+                            Unpublish Album
+                        </Link>
+                    </form>
+                </div>
             </div>
-            <br />
+            <br/>
             <div className={"row"}>
                 <div className={"col-12"}>
                     <Link to={"/artists/login/album"} className={"btn btn-success"}>
@@ -20,7 +32,7 @@ const albums = (props) => {
                     </Link>
                 </div>
             </div>
-            <br />
+            <br/>
             <div className={"row"}>
                 <div className={"table-responsive"}>
                     <table className={"table table-striped"}>
@@ -36,17 +48,17 @@ const albums = (props) => {
                         <tbody>
                         {props.albums.map((term) => {
                             var yesNo = "";
-                            if(term.isPublished === true)
+                            if (term.isPublished === true)
                                 yesNo = "Yes";
                             else
                                 yesNo = "No";
 
                             var creator = "None";
-                            if(term.creator != null)
+                            if (term.creator != null)
                                 creator = term.creator.artistPersonalInfo.firstName + " " + term.creator.artistPersonalInfo.lastName;
 
                             var length = "No songs yet";
-                            if(term.totalLength.lengthSeconds > 0)
+                            if (term.totalLength.lengthSeconds > 0)
                                 length = (term.totalLength.lengthMinutes) + "m : " + (term.totalLength.lengthSeconds % 60) + "s";
 
                             return (

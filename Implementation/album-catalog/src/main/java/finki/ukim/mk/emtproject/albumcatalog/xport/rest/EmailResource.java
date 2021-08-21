@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * EmailResource - Rest Controller for the email methods that communicate with the front-end app
+ */
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")

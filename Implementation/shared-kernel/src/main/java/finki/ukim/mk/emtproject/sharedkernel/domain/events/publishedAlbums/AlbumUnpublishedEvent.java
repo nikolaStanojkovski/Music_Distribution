@@ -4,16 +4,19 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.config.TopicHolder;
 import finki.ukim.mk.emtproject.sharedkernel.domain.events.DomainEvent;
 import lombok.Getter;
 
+/**
+ * AlbumUnpublishedEvent - specific domain event class for album unpublishing
+ */
 @Getter
-public class AlbumUnpublished extends DomainEvent {
+public class AlbumUnpublishedEvent extends DomainEvent {
 
     private String albumId;
 
-    public AlbumUnpublished() {
+    public AlbumUnpublishedEvent() {
         super(TopicHolder.TOPIC_ALBUM_UNPUBLISHED);
     }
 
-    public AlbumUnpublished(String albumId) {
+    public AlbumUnpublishedEvent(String albumId) {
         super(TopicHolder.TOPIC_ALBUM_UNPUBLISHED);
         this.albumId = albumId;
     }

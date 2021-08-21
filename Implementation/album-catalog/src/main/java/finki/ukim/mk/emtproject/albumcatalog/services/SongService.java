@@ -11,6 +11,9 @@ import finki.ukim.mk.emtproject.albumcatalog.services.form.SongForm;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * SongService - Service for the implementation of the main specific business logic for the songs
+ */
 public interface SongService {
 
     List<SongDto> findAll();

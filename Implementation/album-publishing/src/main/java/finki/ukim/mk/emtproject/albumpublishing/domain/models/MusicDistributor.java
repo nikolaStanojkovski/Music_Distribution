@@ -1,27 +1,28 @@
 package finki.ukim.mk.emtproject.albumpublishing.domain.models;
 
-import finki.ukim.mk.emtproject.albumpublishing.domain.models.MusicDistributorId;
-import finki.ukim.mk.emtproject.albumpublishing.domain.models.PublishedAlbum;
-import finki.ukim.mk.emtproject.albumpublishing.domain.valueobjects.Album;
-import finki.ukim.mk.emtproject.albumpublishing.domain.valueobjects.ArtistId;
 import finki.ukim.mk.emtproject.albumpublishing.domain.valueobjects.DistributorInfo;
 import finki.ukim.mk.emtproject.sharedkernel.domain.base.AbstractEntity;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.Money;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.Currency;
-import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Getter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Domain entity for a Music Distributor
+ */
 @Entity
 @Table(name="music_distributor")
 @Getter
 public class MusicDistributor extends AbstractEntity<MusicDistributorId> {
+
+    /**
+     * Required properties defintiion
+     */
 
     @AttributeOverrides({
             @AttributeOverride(name="companyName", column = @Column(name="distributor_companyName")),
@@ -47,25 +48,31 @@ public class MusicDistributor extends AbstractEntity<MusicDistributorId> {
         return musicDistributor;
     }
 
+    /**
+     * Methods used for defining the consistency rules
+     */
 
+    // calculate the total earnings of the music distributor
     public Money totalEarnings() {
         Money totalEarnings = Money.valueOf(Currency.EUR, 0.0);
         if(this.publishedAlbums != null && this.publishedAlbums.size() != 0) {
-            this.publishedAlbums.forEach(i -> totalEarnings.add(i.earningsPerAlbum()));
+            for(PublishedAlbum p : publishedAlbums) {
+                totalEarnings = totalEarnings.add(p.earningsPerAlbum());
+            }
         }
 
         return totalEarnings;
     }
 
+    // add a new album to the list
     public PublishedAlbum subscribeAlbum(PublishedAlbum newAlbum) {
         this.publishedAlbums.add(newAlbum);
-        // add a new album to the list
         return newAlbum;
     }
 
+    // remove the album from the subscribed list
     public PublishedAlbum unsubscribeAlbum(PublishedAlbum album) {
         this.publishedAlbums.remove(album);
-        // remove the album from the subscribed list
         return album;
     }
 }

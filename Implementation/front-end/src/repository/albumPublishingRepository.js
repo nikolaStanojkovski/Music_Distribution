@@ -10,14 +10,29 @@ const AlbumPublishingService = {
     fetchAlbumTiers: () => {
         return axios.get("/albumTiers");
     },
-    publishAlbum: (albumId, artistId, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
+    publishAlbum: (albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
         return axios.post("/distributors/publish", {
             "albumId" : albumId,
+            "albumName" : albumName,
             "artistId" : artistId,
+            "artistInformation" : artistInformation,
             "musicPublisherId" : musicPublisherId,
             "albumTier" : albumTier,
             "subscriptionFee" : subscriptionFee,
             "transactionFee" : transactionFee
+        });
+    },
+    unpublishAlbum: (publishedAlbumId) => {
+        return axios.post("/distributors/unpublish", {
+            "id" : publishedAlbumId
+        });
+    },
+    raiseAlbumTier: (publishedAlbumId, albumTier, subscriptionFee, transactionFee) => {
+        return axios.post("/distributors/raiseAlbumTier", {
+            "publishedAlbumId" : publishedAlbumId,
+            "albumTier" : albumTier,
+            "subscriptionFee" : subscriptionFee,
+            "transactionFee" : transactionFee,
         });
     },
 };

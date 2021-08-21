@@ -8,6 +8,10 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
+/**
+ * AbstractEntity - the abstract class for ID entity object
+ * @param <ID> - the main identifier for the entity
+ */
 @MappedSuperclass
 @Getter
 public class AbstractEntity<ID extends DomainObjectId> {
