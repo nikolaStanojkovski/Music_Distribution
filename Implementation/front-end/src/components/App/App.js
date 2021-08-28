@@ -2,6 +2,7 @@ import './App.css';
 import React, {Component} from "react";
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
 import Header from '../Header/header';
+import HomePage from '../Home/homePage';
 
 import AlbumCatalogService from "../../repository/albumCatalogRepository";
 
@@ -55,6 +56,11 @@ class App extends Component {
                 <main>
 
                     <div className="container">
+
+                        {/*Home Page / Index Page*/}
+
+                        <Route path={["/index", "home", "/"]} exact render={() =>
+                            <HomePage />}/>
 
                         {/* Album Publishing App */}
 
@@ -122,7 +128,7 @@ class App extends Component {
 
                         {/* Default */}
 
-                        <Redirect to={"/albums"}/>
+                        <Redirect to={"/"}/>
                     </div>
                 </main>
             </Router>
