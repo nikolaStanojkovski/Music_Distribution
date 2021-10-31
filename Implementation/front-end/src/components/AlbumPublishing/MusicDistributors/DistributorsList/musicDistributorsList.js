@@ -17,7 +17,7 @@ const musicDistributors = (props) => {
                 </div>
                 <div className={"col-4"}>
                     <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/unpublish"} className="btn btn-outline-danger w-100">
+                        <Link to={"/artists/login/unPublish"} className="btn btn-outline-danger w-100">
                             Unpublish Album
                         </Link>
                     </form>

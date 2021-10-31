@@ -23,7 +23,7 @@ const AlbumPublishingService = {
         });
     },
     unpublishAlbum: (publishedAlbumId) => {
-        return axios.post("/distributors/unpublish", {
+        return axios.post("/distributors/unPublish", {
             "id" : publishedAlbumId
         });
     },

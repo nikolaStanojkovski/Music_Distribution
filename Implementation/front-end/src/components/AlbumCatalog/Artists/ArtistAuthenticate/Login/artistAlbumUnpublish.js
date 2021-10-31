@@ -25,7 +25,7 @@ const LoginArtistUnpublishAlbum = (props) => {
 
         let isLogged = await props.loginArtistUnpublish(username, domainName, password);
         if (isLogged)
-            History.push("/albums/unpublish");
+            History.push("/albums/unPublish");
         else
             History.push("/albums");
     }

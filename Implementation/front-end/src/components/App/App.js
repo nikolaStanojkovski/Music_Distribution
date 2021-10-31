@@ -82,7 +82,7 @@ class App extends Component {
                         <Route path={"/artists/login/publish"} exact render={() =>
                             <ArtistLoginPublish emailDomains={this.state.emailDomains}
                                                 loginArtistPublish={this.loginArtistPublish}/>}/>
-                        <Route path={"/artists/login/unpublish"} exact render={() =>
+                        <Route path={"/artists/login/unPublish"} exact render={() =>
                             <ArtistLoginUnpublish emailDomains={this.state.emailDomains}
                                                 loginArtistUnpublish={this.loginArtistUnpublish}/>}/>
                         <Route path={"/artists/login/raiseAlbumTier"} exact render={() =>
@@ -115,7 +115,7 @@ class App extends Component {
                                           albumTiers={this.state.albumTiers}
                                           musicDistributors={this.state.musicDistributors}
                                           publishAlbum={this.publishAlbum}/>}/>
-                        <Route path={"/albums/unpublish"} exact render={() =>
+                        <Route path={"/albums/unPublish"} exact render={() =>
                             <AlbumUnpublish selectedArtist={this.state.selectedArtist}
                                           publishedAlbums={this.state.publishedAlbums}
                                           unpublishAlbum={this.unpublishAlbum}/>}/>
