@@ -1,47 +1,60 @@
 package finki.ukim.mk.emtproject.albumcatalog.xport.rest;
 
-import finki.ukim.mk.emtproject.albumcatalog.domain.models.Album;
-import finki.ukim.mk.emtproject.albumcatalog.domain.models.AlbumId;
-import finki.ukim.mk.emtproject.albumcatalog.domain.models.Song;
 import finki.ukim.mk.emtproject.albumcatalog.domain.models.SongId;
-import finki.ukim.mk.emtproject.albumcatalog.domain.models.dto.SongDto;
-import finki.ukim.mk.emtproject.albumcatalog.services.AlbumService;
+import finki.ukim.mk.emtproject.albumcatalog.domain.models.request.SongRequest;
+import finki.ukim.mk.emtproject.albumcatalog.domain.models.response.SongResponse;
 import finki.ukim.mk.emtproject.albumcatalog.services.SongService;
-import finki.ukim.mk.emtproject.albumcatalog.services.form.AlbumForm;
-import finki.ukim.mk.emtproject.albumcatalog.services.form.SongForm;
+import finki.ukim.mk.emtproject.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * SongResource - Rest Controller for the song methods that communicate with the front-end app
+ * Song Rest Controller.
  */
-@RestController
+@ApiController
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/songs")
 public class SongResource {
 
     private final SongService songService;
 
+    /**
+     * Method for getting information about all songs.
+     *
+     * @return the list of all songs.
+     */
     @GetMapping
-    public List<SongDto> getAll() {
-        return songService.findAll();
+    public List<SongResponse> getAll() {
+        return songService.findAll().stream().map(SongResponse::from).collect(Collectors.toList());
     }
 
+    /**
+     * Method for getting information about a specific song.
+     *
+     * @param id - song's id.
+     * @return the found song.
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<Song> findById(@PathVariable String id) {
+    public ResponseEntity<SongResponse> findById(@PathVariable String id) {
         return this.songService.findById(SongId.of(id))
-                .map(album -> ResponseEntity.ok().body(album))
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Method for creating a new song.
+     *
+     * @param songRequest - dto object containing information for the song to be created.
+     * @return the created song.
+     */
     @PostMapping("/create")
-    public ResponseEntity<Song> createSong(@RequestBody SongForm songForm) {
-        return this.songService.createSong(songForm)
-                .map(song -> ResponseEntity.ok().body(song))
+    public ResponseEntity<SongResponse> createSong(@RequestBody SongRequest songRequest) {
+        return this.songService.createSong(songRequest)
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 

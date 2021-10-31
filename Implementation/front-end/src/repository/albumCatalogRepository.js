@@ -38,7 +38,7 @@ const AlbumCatalogService = {
     loginArtist: (username, domainName, password) => {
         return axios.post("/artists/login", {
             "username" : username,
-            "domainName" : domainName,
+            "emailDomain" : domainName,
             "password" : password
         });
     },

@@ -5,7 +5,7 @@ import finki.ukim.mk.emtproject.albumcatalog.domain.valueobjects.SongLength;
 import finki.ukim.mk.emtproject.sharedkernel.domain.base.AbstractEntity;
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -14,16 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Album domain entity
+ * Album domain entity.
  */
-@Entity
-@Table(name="album")
 @Data
+@Entity
+@Table(name = "album")
+@EqualsAndHashCode(callSuper = true)
 public class Album extends AbstractEntity<AlbumId> {
-
-    /**
-     * Required properties defintiion
-     */
 
     private String albumName;
 
@@ -35,9 +32,9 @@ public class Album extends AbstractEntity<AlbumId> {
     private Genre genre;
 
     @AttributeOverrides({
-            @AttributeOverride(name="artistName", column = @Column(name="album_artistName")),
-            @AttributeOverride(name="producerName", column = @Column(name="album_producerName")),
-            @AttributeOverride(name="composerName", column = @Column(name="album_composerName"))
+            @AttributeOverride(name = "artistName", column = @Column(name = "album_artistName")),
+            @AttributeOverride(name = "producerName", column = @Column(name = "album_producerName")),
+            @AttributeOverride(name = "composerName", column = @Column(name = "album_composerName"))
     })
     private AlbumInfo albumInfo;
 
@@ -50,11 +47,22 @@ public class Album extends AbstractEntity<AlbumId> {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs;
 
-
+    /**
+     * Protected no args constructor for the Album entity.
+     */
     protected Album() {
         super(AlbumId.randomId(AlbumId.class));
     }
 
+    /**
+     * Static method for creating a new album.
+     *
+     * @param albumName - the album's name
+     * @param genre     - the album's genre
+     * @param albumInfo - the album's information
+     * @param creator   - the album's creator
+     * @return the created album.
+     */
     public static Album build(String albumName, Genre genre, AlbumInfo albumInfo, Artist creator) {
         Album album = new Album();
 
@@ -63,7 +71,7 @@ public class Album extends AbstractEntity<AlbumId> {
         album.albumInfo = albumInfo;
         album.creator = creator;
         album.isPublished = false;
-        album.totalLength = SongLength.build(0); // the album is empty in the start
+        album.totalLength = SongLength.build(0);
 
         album.songs = new ArrayList<>();
 
@@ -71,43 +79,45 @@ public class Album extends AbstractEntity<AlbumId> {
     }
 
     /**
-     * Methods used for defining the consistency rules
+     * Method for adding a song to an album.
+     *
+     * @param song - the song to be added to the album.
      */
-
-    // add the song to the appropriate album
-    public Song addSong(Song song) {
+    public void addSong(Song song) {
         this.songs.add(song);
-        this.totalLength.addSecondsToSongLength(song.getSongLength().getLengthSeconds());
-
-        return song;
+        this.totalLength.addSecondsToSongLength(song.getSongLength().getLengthInSeconds());
     }
 
-    // remove the song from the appropriate album
-    public Song removeSong(Song song) {
+    /**
+     * Method for removing a song from an album.
+     *
+     * @param song - the song to be added to the album.
+     */
+    public void removeSong(Song song) {
         this.songs.remove(song);
-        this.totalLength.removeSecondsFromSongLength(song.getSongLength().getLengthSeconds());
-
-        return song;
+        this.totalLength.removeSecondsFromSongLength(song.getSongLength().getLengthInSeconds());
     }
 
-    // return total length of the album
+    /**
+     * Method for calculating the total song length of an album.
+     *
+     * @return the song length of an album.
+     */
     public SongLength totalLength() {
-        Integer sum = 0;
-        if(this.songs.size() != 0)
-            sum = this.songs.stream().mapToInt(i -> i.getSongLength().getLengthSeconds()).sum();
-
-        return SongLength.build(sum);
+        return SongLength.build(this.songs.size() != 0 ? this.songs.stream().mapToInt(i -> i.getSongLength().getLengthInSeconds()).sum() : 0);
     }
 
-    // make the album published
-    public Boolean publish() {
+    /**
+     * Method for updating the flag containing information that an album is being published.
+     */
+    public void publish() {
         this.isPublished = true;
-        return this.isPublished;
     }
 
-    // make the album unpublished
-    public Boolean unpublish() {
+    /**
+     * Method for updating the flag containing information that an album is being unpublished.
+     */
+    public void unPublish() {
         this.isPublished = false;
-        return this.isPublished;
-    } // make the album unpublished
+    }
 }

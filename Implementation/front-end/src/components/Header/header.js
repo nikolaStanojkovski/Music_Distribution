@@ -6,7 +6,7 @@ const header = (props) => {
         <header>
             <nav className="navbar navbar-expand-md navbar-dark navbar-fixed bg-dark">
                 <div className={"container"}>
-                    <Link className="navbar-brand" to={"/albums"}>Album Distribution Application</Link>
+                    <Link className="navbar-brand" to={"/"}>Album Distribution Application</Link>
                     <div className="collapse navbar-collapse" id="navbarCollapse">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item active">

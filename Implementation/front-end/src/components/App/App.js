@@ -46,7 +46,6 @@ class App extends Component {
             publishedAlbums: [],
             albumTiers: []
         }
-
     }
 
     render() {
@@ -136,15 +135,12 @@ class App extends Component {
     }
 
     componentDidMount() {
-
-        // album catalog
         this.loadArtists();
         this.loadAlbums();
         this.loadSongs();
         this.loadEmailDomains();
         this.loadGenres();
 
-        // album publishing
         this.loadDistributors();
         this.loadPublishedAlbums();
         this.loadAlbumTiers();
@@ -309,6 +305,7 @@ class App extends Component {
                 });
             });
 
+        console.log(this.state.selectedArtist);
         return Object.keys(this.state.selectedArtist).length !== 0;
     }
 

@@ -4,7 +4,7 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.base.DomainObjectId;
 import org.springframework.lang.NonNull;
 
 /**
- * ArtistId value object for the artist identifier
+ * ArtistId value object used as the artist identifier.
  */
 public class ArtistId extends DomainObjectId {
 
@@ -17,7 +17,6 @@ public class ArtistId extends DomainObjectId {
     }
 
     public static ArtistId of(String uuid) {
-        ArtistId a = new ArtistId(uuid);
-        return a;
+        return new ArtistId(uuid);
     }
 }

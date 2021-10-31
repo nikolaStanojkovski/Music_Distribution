@@ -1,26 +1,26 @@
 package finki.ukim.mk.emtproject.albumcatalog.xport.rest;
 
 import finki.ukim.mk.emtproject.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import finki.ukim.mk.emtproject.sharedkernel.util.ApiController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 /**
- * EmailResource - Rest Controller for the email methods that communicate with the front-end app
+ * Email Rest Controller.
  */
-@RestController
-@AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@ApiController
 @RequestMapping("/api/emailDomains")
 public class EmailResource {
 
+    /**
+     * Method for getting all the email domains.
+     *
+     * @return the list of email domains.
+     */
     @GetMapping
     public List<EmailDomain> getEmailDomains() {
         return List.of(EmailDomain.values());
     }
-
 }

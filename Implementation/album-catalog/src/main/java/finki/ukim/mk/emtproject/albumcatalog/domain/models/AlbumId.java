@@ -4,7 +4,7 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.base.DomainObjectId;
 import org.springframework.lang.NonNull;
 
 /**
- * AlbumId value object for the album identifier
+ * AlbumId value object used as the album identifier.
  */
 public class AlbumId extends DomainObjectId {
 
@@ -17,7 +17,6 @@ public class AlbumId extends DomainObjectId {
     }
 
     public static AlbumId of(String uuid) {
-        AlbumId a = new AlbumId(uuid);
-        return a;
+        return new AlbumId(uuid);
     }
 }

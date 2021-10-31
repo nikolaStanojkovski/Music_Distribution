@@ -4,7 +4,7 @@ import finki.ukim.mk.emtproject.albumcatalog.domain.models.AlbumId;
 import finki.ukim.mk.emtproject.albumcatalog.domain.models.SongId;
 
 /**
- * SongNotFoundException - thrown if the song is not found
+ * SongNotFoundException - thrown if the song is not found.
  */
 public class SongNotFoundException extends RuntimeException {
 

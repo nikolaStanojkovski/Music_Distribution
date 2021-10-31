@@ -12,7 +12,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 /**
- * PublishedAlbumEventListener - class used as a listener for the events published by the album-publishing app
+ * Class that consumes the events for album publishing.
  */
 @Service
 @AllArgsConstructor
@@ -21,8 +21,9 @@ public class PublishedAlbumEventListener {
     private final AlbumService albumService;
 
     /**
-     * consumePublishedAlbumEvent - event used for receiving a notification about an published album
-     * @param jsonMessage - the message that is received from the published event
+     * Event used for receiving a notification about an published album.
+     *
+     * @param jsonMessage - the message that is received from the published event.
      */
     @KafkaListener(topics = TopicHolder.TOPIC_ALBUM_PUBLISHED, groupId = "albumCatalog")
     public void consumePublishedAlbumEvent(String jsonMessage) {
@@ -34,8 +35,9 @@ public class PublishedAlbumEventListener {
     }
 
     /**
-     * consumeUnpublishedAlbumEvent - event used for receiving a notification about an unpublished album
-     * @param jsonMessage - the message that is received from the published event
+     * Event used for receiving a notification about an unpublished album.
+     *
+     * @param jsonMessage - the message that is received from the published event.
      */
     @KafkaListener(topics = TopicHolder.TOPIC_ALBUM_UNPUBLISHED, groupId = "albumCatalog")
     public void consumeUnpublishedAlbumEvent(String jsonMessage) {
@@ -47,8 +49,9 @@ public class PublishedAlbumEventListener {
     }
 
     /**
-     * consumeAlbumRaisedTierEvent - event used for receiving a notification about a raised album tier
-     * @param jsonMessage - the message that is received from the published event
+     * Event used for receiving a notification about a raised album tier.
+     *
+     * @param jsonMessage - the message that is received from the published event.
      */
     @KafkaListener(topics = TopicHolder.TOPIC_ALBUM_TIER_RAISED, groupId = "albumCatalog")
     public void consumeAlbumRaisedTierEvent(String jsonMessage) {

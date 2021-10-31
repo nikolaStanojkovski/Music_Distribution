@@ -4,7 +4,7 @@ import finki.ukim.mk.emtproject.sharedkernel.domain.base.DomainObjectId;
 import org.springframework.lang.NonNull;
 
 /**
- * SongId value object for the song identifier
+ * SongId value object used as the song identifier.
  */
 public class SongId extends DomainObjectId {
 
@@ -17,7 +17,6 @@ public class SongId extends DomainObjectId {
     }
 
     public static SongId of(String uuid) {
-        SongId s = new SongId(uuid);
-        return s;
+        return new SongId(uuid);
     }
 }

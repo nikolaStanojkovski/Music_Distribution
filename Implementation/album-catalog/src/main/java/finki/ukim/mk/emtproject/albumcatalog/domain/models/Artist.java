@@ -4,8 +4,6 @@ import finki.ukim.mk.emtproject.albumcatalog.domain.valueobjects.ArtistContactIn
 import finki.ukim.mk.emtproject.albumcatalog.domain.valueobjects.ArtistPersonalInfo;
 import finki.ukim.mk.emtproject.sharedkernel.domain.base.AbstractEntity;
 import lombok.Getter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -14,31 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Artist domain entity
+ * Artist domain entity.
  */
 @Entity
-@Table(name="artist")
 @Getter
+@Table(name = "artist")
 public class Artist extends AbstractEntity<ArtistId> {
 
-    /**
-     * Required properties defintiion
-     */
-
     @AttributeOverrides({
-            @AttributeOverride(name="email", column = @Column(name="artist_email")),
-            @AttributeOverride(name="telephoneNumber", column = @Column(name="artist_telephoneNumber"))
+            @AttributeOverride(name = "email", column = @Column(name = "artist_email")),
+            @AttributeOverride(name = "telephoneNumber", column = @Column(name = "artist_telephoneNumber"))
     })
     private ArtistContactInfo artistContactInfo;
 
     @AttributeOverrides({
-            @AttributeOverride(name="firstName", column = @Column(name="artist_firstName")),
-            @AttributeOverride(name="lastName", column = @Column(name="artist_lastName")),
-            @AttributeOverride(name="artName", column = @Column(name="artist_artName"))
+            @AttributeOverride(name = "firstName", column = @Column(name = "artist_firstName")),
+            @AttributeOverride(name = "lastName", column = @Column(name = "artist_lastName")),
+            @AttributeOverride(name = "artName", column = @Column(name = "artist_artName"))
     })
     private ArtistPersonalInfo artistPersonalInfo;
 
-    // Didn't add encryption to the password because it's out of this project's scope
     @Column(nullable = false)
     private String password;
 
@@ -50,11 +43,21 @@ public class Artist extends AbstractEntity<ArtistId> {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs;
 
-
-    private Artist() {
+    /**
+     * Protected no args constructor for the Artist entity.
+     */
+    protected Artist() {
         super(ArtistId.randomId(ArtistId.class));
     }
 
+    /**
+     * Static method for creating a new album.
+     *
+     * @param artistContactInfo  - artist's contact information.
+     * @param artistPersonalInfo - artist's contact information.
+     * @param password           - artist's password.
+     * @return the created artist.
+     */
     public static Artist build(ArtistContactInfo artistContactInfo, ArtistPersonalInfo artistPersonalInfo, String password) {
         Artist artist = new Artist();
         artist.artistContactInfo = artistContactInfo;
@@ -68,45 +71,49 @@ public class Artist extends AbstractEntity<ArtistId> {
     }
 
     /**
-     * Methods used for defining the consistency rules
+     * Method used for creation of a new album by an artist.
+     *
+     * @param album - the album to be created.
      */
-
-    // create a new album
-    public Album createAlbum(Album album) {
+    public void createAlbum(Album album) {
         this.albums.add(album);
-
-        return album;
     }
 
-    // add a new song to an artist
-    public Song addSongToArtist(Song song) {
+    /**
+     * Method used for creation of a new song by an artist.
+     *
+     * @param song - the song to be created.
+     */
+    public void addSongToArtist(Song song) {
         this.songs.add(song);
-
-        return song;
     }
 
-    // remove a song from an artist
-    public Song removeSongFromArtist(Song song) {
+    /**
+     * Method used for deletion of a song by an artist.
+     *
+     * @param song - the song to be deleted.
+     */
+    public void removeSongFromArtist(Song song) {
         this.songs.remove(song);
-
-        return song;
     }
 
-    // make some artist's album published
-    public Boolean makeAlbumPublished(AlbumId albumId) {
-        Album album = this.albums.stream().filter(i -> i.getId().getId().equals(albumId.getId()))
-                .findAny().get();
-        album.setIsPublished(true);
-
-        return album.getIsPublished();
+    /**
+     * Method used for making an album published for an artist.
+     *
+     * @param albumId - the album's id to be published.
+     */
+    public void makeAlbumPublished(AlbumId albumId) {
+        this.albums.stream().filter(a -> a.getId().getId().equals(albumId.getId()))
+                .findAny().ifPresent(a -> a.setIsPublished(Boolean.TRUE));
     }
 
-    // make some artist's album unpublished
-    public Boolean makeAlbumUnpublished(AlbumId albumId) {
-        Album album = this.albums.stream().filter(i -> i.getId().getId().equals(albumId.getId()))
-                .findAny().get();
-        album.setIsPublished(false);
-
-        return album.getIsPublished();
+    /**
+     * Method used for making an album unpublished for an artist.
+     *
+     * @param albumId - the album's id to be unpublished.
+     */
+    public void makeAlbumUnpublished(AlbumId albumId) {
+        this.albums.stream().filter(a -> a.getId().getId().equals(albumId.getId()))
+                .findAny().ifPresent(a -> a.setIsPublished(Boolean.FALSE));
     }
 }
