@@ -1,7 +1,7 @@
 package com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary;
 
 /**
- * EmailDomain - enumeration for an email domain
+ * Enumeration for the email's domain.
  */
 public enum EmailDomain {
     yahoo, gmail, outlook, students_finki

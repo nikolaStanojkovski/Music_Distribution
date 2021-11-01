@@ -1,7 +1,7 @@
 package com.musicdistribution.sharedkernel.domain.config;
 
 /**
- * TopicHolder - class that contains the main topics for event listening
+ * Class that contains the main topics for event listening.
  */
 public class TopicHolder {
     public final static String TOPIC_ALBUM_PUBLISHED = "album-published";

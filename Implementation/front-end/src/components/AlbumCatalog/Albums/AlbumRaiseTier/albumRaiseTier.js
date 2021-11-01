@@ -16,7 +16,7 @@ const RaiseAlbumTier = (props) => {
         });
 
         if(e.target.name === "albumTier") {
-            var subFee = document.getElementById("subscriptionFee");
+            let subFee = document.getElementById("subscriptionFee");
 
             if(e.target.value === "Bronze")
                 subFee.value = "10.00 EUR";

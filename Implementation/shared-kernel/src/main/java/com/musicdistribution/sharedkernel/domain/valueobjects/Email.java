@@ -2,8 +2,8 @@ package com.musicdistribution.sharedkernel.domain.valueobjects;
 
 import com.musicdistribution.sharedkernel.domain.base.ValueObject;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -11,10 +11,11 @@ import javax.persistence.Enumerated;
 import java.util.Objects;
 
 /**
- * Email - value object for a user email that contains the domain name and username
+ * Value object for a artist email that contains the domain name and username.
  */
-@Embeddable
 @Getter
+@Embeddable
+@AllArgsConstructor
 public class Email implements ValueObject {
 
     private final String username;
@@ -22,37 +23,35 @@ public class Email implements ValueObject {
     @Enumerated(value = EnumType.STRING)
     private final EmailDomain domainName;
 
-
-    public static Email createEmail(String username, EmailDomain domainName) {
-        return new Email(username, domainName);
-    }
-
-
+    /**
+     * Protected no-args constructor for the email class.
+     */
     protected Email() {
         this.username = "";
         this.domainName = null;
     }
 
-    public Email(@NonNull String username, @NonNull EmailDomain domainName) {
-        this.username = username;
-        this.domainName = domainName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public EmailDomain getDomainName() {
-        if(domainName != null)
-            return domainName;
-
-        return null;
+    /**
+     * Static method for creation of an email.
+     *
+     * @param username   - artist's username.
+     * @param domainName - artist's domain name.
+     * @return the created email.
+     */
+    public static Email createEmail(String username, EmailDomain domainName) {
+        return new Email(username, domainName);
     }
 
     public String getFullAddress() {
         return String.format("%s@%s.com", getUsername(), getDomainName());
     }
 
+    /**
+     * Method used for comparing two objects of type email.
+     *
+     * @param o - the other object that is compared to this.
+     * @return a flag whether the two objects are equal or not.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,6 +60,11 @@ public class Email implements ValueObject {
         return username.equals(email.username) && domainName == email.domainName;
     }
 
+    /**
+     * Method used for generating the hash code for an email object.
+     *
+     * @return the integer value of the hash code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(username, domainName);

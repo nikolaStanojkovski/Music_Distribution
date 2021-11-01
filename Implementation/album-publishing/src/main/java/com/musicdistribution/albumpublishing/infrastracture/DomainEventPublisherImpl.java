@@ -17,7 +17,7 @@ public class DomainEventPublisherImpl implements DomainEventPublisher {
 
     @Override
     public void publish(DomainEvent event) {
-        this.kafkaTemplate.send(event.topic(), event.toJson());
+        this.kafkaTemplate.send(event.getTopic(), event.toJson());
     }
 }
 

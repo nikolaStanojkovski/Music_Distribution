@@ -1,7 +1,7 @@
 package com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary;
 
 /**
- * Currency - enumeration for a money currency
+ * Enumeration for the money's currency.
  */
 public enum Currency {
     EUR, USD, MKD

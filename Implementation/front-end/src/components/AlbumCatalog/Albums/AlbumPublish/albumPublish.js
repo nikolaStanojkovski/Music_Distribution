@@ -16,18 +16,18 @@ const PublishAlbum = (props) => {
             [e.target.name]: e.target.value.trim()
         });
 
-        if(e.target.name === "albumTier") {
-            var subFee = document.getElementById("subscriptionFee");
+        if (e.target.name === "albumTier") {
+            let subFee = document.getElementById("subscriptionFee");
 
-            if(e.target.value === "Bronze")
+            if (e.target.value === "Bronze")
                 subFee.value = "10.00 EUR";
-            else if(e.target.value === "Silver")
+            else if (e.target.value === "Silver")
                 subFee.value = "20.00 EUR";
-            else if(e.target.value === "Gold")
+            else if (e.target.value === "Gold")
                 subFee.value = "50.00 EUR";
-            else if(e.target.value === "Platinum")
+            else if (e.target.value === "Platinum")
                 subFee.value = "100.00 EUR";
-            else if(e.target.value === "Diamond")
+            else if (e.target.value === "Diamond")
                 subFee.value = "500.00 EUR";
         }
     }
@@ -36,8 +36,8 @@ const PublishAlbum = (props) => {
         e.preventDefault();
         const album = formData.albumId.split(" ");
         const albumId = album[0];
-        var albumName = "";
-        for(var i=1;i<album.length;i++)
+        let albumName = "";
+        for (let i = 1; i < album.length; i++)
             albumName = albumName + " " + album[i];
 
         const artistId = props.selectedArtist.id;
@@ -66,7 +66,6 @@ const PublishAlbum = (props) => {
 
                                 {props.albums.map((term) => {
                                         if (term.artistId === props.selectedArtist.id && term.isPublished === false) {
-                                            // show only the albums the appropriate creator has created
                                             return <option value={term.id + " " + term.albumName}>{term.albumName}</option>;
                                         }
                                     }
