@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.databinding.FragmentRegistrationBinding
-import com.musicdistribution.albumdistribution.util.Validators
+import com.musicdistribution.albumdistribution.util.ValidationUtils
 
 
 class RegistrationFragment : Fragment() {
@@ -37,7 +37,7 @@ class RegistrationFragment : Fragment() {
         binding.btnRegister.setOnClickListener {
             val email = view.findViewById<EditText>(R.id.inputRegisterEmail).text.toString()
             val password = view.findViewById<EditText>(R.id.inputRegisterPassword).text.toString()
-            if (Validators.validateUsername(email, requireContext()) && Validators.validatePassword(
+            if (ValidationUtils.validateUsername(email, requireContext()) && ValidationUtils.validatePassword(
                     password,
                     requireContext()
                 )

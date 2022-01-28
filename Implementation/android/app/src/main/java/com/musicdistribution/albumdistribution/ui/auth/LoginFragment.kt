@@ -13,7 +13,7 @@ import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.databinding.FragmentLoginBinding
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
-import com.musicdistribution.albumdistribution.util.Validators
+import com.musicdistribution.albumdistribution.util.ValidationUtils
 
 class LoginFragment : Fragment() {
 
@@ -38,7 +38,7 @@ class LoginFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
             val email = view.findViewById<EditText>(R.id.inputLoginEmail).text.toString()
             val password = view.findViewById<EditText>(R.id.inputLoginPassword).text.toString()
-            if (Validators.validateUsername(email, requireContext()) && Validators.validatePassword(
+            if (ValidationUtils.validateUsername(email, requireContext()) && ValidationUtils.validatePassword(
                     password,
                     requireContext()
                 )

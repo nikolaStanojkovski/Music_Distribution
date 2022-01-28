@@ -1,11 +1,13 @@
 package com.musicdistribution.albumdistribution.ui.auth
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.facebook.*
@@ -22,6 +24,7 @@ import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.databinding.FragmentWelcomeBinding
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.util.InternetUtils
 
 
 class WelcomeFragment : Fragment() {
@@ -40,6 +43,7 @@ class WelcomeFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,6 +52,18 @@ class WelcomeFragment : Fragment() {
         }
         binding.btnLogIn.setOnClickListener {
             findNavController().navigate(R.id.action_WelcomeFragment_to_LoginFragment)
+        }
+
+        if (InternetUtils.isOffline(requireActivity())) {
+            binding.btnSignGoogle.isEnabled = false
+            binding.btnSignGoogle.isClickable = false
+            binding.btnSignFacebook.isEnabled = false
+            binding.btnSignFacebook.isClickable = false
+        } else {
+            binding.btnSignGoogle.isEnabled = true
+            binding.btnSignGoogle.isClickable = true
+            binding.btnSignFacebook.isEnabled = true
+            binding.btnSignFacebook.isClickable = true
         }
 
         binding.btnSignFacebook.setOnClickListener {
@@ -63,7 +79,8 @@ class WelcomeFragment : Fragment() {
     private fun facebookSignIn() {
         callbackManager = create()
 
-        LoginManager.getInstance().logInWithReadPermissions(this, listOf("openid, email, public_profile"))
+        LoginManager.getInstance()
+            .logInWithReadPermissions(this, listOf("openid, email, public_profile"))
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult?> {
                 override fun onSuccess(result: LoginResult?) {
@@ -116,7 +133,7 @@ class WelcomeFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-        } else if(requestCode == FirebaseAuthDB.FB_SIGN_IN) {
+        } else if (requestCode == FirebaseAuthDB.FB_SIGN_IN) {
             callbackManager!!.onActivityResult(requestCode, resultCode, data)
         }
 
