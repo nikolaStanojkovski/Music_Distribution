@@ -17,8 +17,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (FirebaseAuthDB.checkLogin()) {
-            FirebaseAuthDB.firebaseAuth.signOut()
-//            navigateOut()
+            navigateOut()
         }
 
         binding = ActivityAuthBinding.inflate(layoutInflater)

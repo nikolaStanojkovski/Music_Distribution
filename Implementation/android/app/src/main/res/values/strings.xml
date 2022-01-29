@@ -13,12 +13,13 @@
     <string name="login_email">Enter your username</string>
     <string name="login_password">Enter your password</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="user_creator">Creator</string>
+    <string name="user_listener">Listener</string>
 
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Strings related to search -->
+    <string name="search_title">Search</string>
+    <string name="search_placeholder">Artists, Songs or Albums</string>
+    <string name="search_favourite_genre_title">Your favourite genres</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

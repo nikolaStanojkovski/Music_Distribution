@@ -14,27 +14,12 @@
         android:text="[location_text]"
         android:textColor="@color/orange"
         android:textSize="21dp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/dateTimeText"
         app:layout_constraintTop_toBottomOf="@+id/dateTimeText"
-        app:layout_constraintVertical_bias="0.015" />
-
-    <TextView
-        android:id="@+id/timeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[time_text]"
-        android:textColor="@color/orange"
-        android:textSize="21dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/locationText"
-        app:layout_constraintTop_toBottomOf="@+id/locationText"
-        app:layout_constraintVertical_bias="0.008" />
+        app:layout_constraintVertical_bias="0.007" />
 
     <TextView
         android:id="@+id/dateTimeText"
@@ -53,19 +38,19 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainHomeRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
-        android:layout_marginTop="60dp"
+        android:layout_height="515dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/timeText"
-        app:layout_constraintTop_toBottomOf="@+id/timeText"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintEnd_toEndOf="@+id/locationText"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="@+id/locationText"
+        app:layout_constraintTop_toBottomOf="@+id/locationText"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/btnAddHome"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:elevation="10dp"
         android:src="@drawable/ic_add_one"
         android:tint="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,18 +59,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.102" />
-
-    <ImageView
-        android:id="@+id/btnSettingsHome"
-        android:layout_width="31dp"
-        android:layout_height="31dp"
-        android:tint="@color/lighter_black"
-        android:src="@drawable/ic_settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.761"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.109" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

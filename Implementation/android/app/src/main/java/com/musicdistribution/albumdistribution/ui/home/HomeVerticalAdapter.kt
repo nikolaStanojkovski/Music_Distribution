@@ -42,7 +42,7 @@ class HomeVerticalAdapter(categoryList: MutableList<Category>) :
     }
 
     private fun setCartItemView(recyclerView: RecyclerView, categoryItemList: MutableList<CategoryItem>) {
-        val horizontalAdapter: HomeHorizontalAdapter = HomeHorizontalAdapter(categoryItemList)
+        val horizontalAdapter = HomeHorizontalAdapter(categoryItemList)
         recyclerView.layoutManager =  LinearLayoutManager(activityContext, RecyclerView.HORIZONTAL, false)
         recyclerView.adapter = horizontalAdapter
     }

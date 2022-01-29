@@ -79,16 +79,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun fillDateAndTime() {
-        val timeString = LocalizationUtils.getStringForTime()
         val greetingTime = LocalizationUtils.getStringForGreeting()
 
         fragmentView.findViewById<TextView>(R.id.dateTimeText).text = greetingTime
-        fragmentView.findViewById<TextView>(R.id.timeText).text = timeString
         fragmentView.findViewById<TextView>(R.id.locationText).text = ""
     }
 
     private fun fillRecyclerViews() {
-        // TODO: check user role
+        // TODO: Check user role, and decide category upon that
         val verticalAdapter = HomeVerticalAdapter(CategoryData.creatorCategoryData)
         val verticalRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.mainHomeRecyclerView)

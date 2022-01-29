@@ -31,7 +31,7 @@ class LocalizationUtils {
         fun getStringForTime(): String {
             val time = Calendar.getInstance().time
 
-            return "${time.hours}:${time.minutes}"
+            return "${if (time.hours >= 10) time.hours else "0" + time.hours}:${if (time.minutes >= 10) time.minutes else "0" + time.minutes}"
         }
 
         fun getLocationProvider(context: Activity): FusedLocationProviderClient {

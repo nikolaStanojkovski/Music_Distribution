@@ -9,9 +9,9 @@ class CategoryData {
         val creatorCategoryData = mutableListOf<Category>(
             Category(
                 "Your Published Songs", mutableListOf(
-                    CategoryItem(1, R.drawable.ulver_1),
-                    CategoryItem(2, R.drawable.ulver_2),
-                    CategoryItem(3, R.drawable.ulver_3),
+                    CategoryItem(1, R.drawable.icon),
+                    CategoryItem(2, R.drawable.icon),
+                    CategoryItem(3, R.drawable.icon),
                     CategoryItem(4, R.drawable.icon),
                     CategoryItem(5, R.drawable.icon),
                 )

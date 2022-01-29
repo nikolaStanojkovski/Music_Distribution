@@ -7,22 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeActivity">
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fab"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        app:rippleColor="@color/white"-->
-<!--        android:backgroundTint="@color/white"-->
-<!--        android:layout_marginEnd="@dimen/fab_margin"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        app:srcCompat="@android:drawable/ic_input_add" />-->
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray"
+        android:background="@color/white"
+        android:elevation="15dp"
         android:outlineSpotShadowColor="@color/black"
         app:itemRippleColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/bottom_navigation" />
+        app:navGraph="@navigation/nav_graph_main" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
