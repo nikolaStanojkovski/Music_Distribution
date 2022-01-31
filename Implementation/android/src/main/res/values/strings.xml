@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Album Distribution</string>
+
+    <!-- Strings related to authentication -->
+    <string name="title_activity_auth">AuthActivity</string>
+    <string name="registration_fragment_label">Create account</string>
+    <string name="button_sign_up">Sign up free</string>
+    <string name="button_sign_facebook">Continue with Facebook</string>
+    <string name="button_sign_google">Continue with Google</string>
+    <string name="button_log_in">Log In</string>
+    <string name="registration_title">Create Account</string>
+    <string name="login_title">Sign into your account</string>
+    <string name="login_email">Enter your username</string>
+    <string name="login_password">Enter your password</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="user_creator">Creator</string>
+    <string name="user_listener">Listener</string>
+
+    <!-- Strings related to home -->
+    <string name="button_follow">Follow</string>
+    <string name="dot_text">⚫</string>
+
+    <!-- Strings related to search -->
+    <string name="search_title">Search</string>
+    <string name="search_placeholder">Artists, Songs or Albums</string>
+    <string name="search_favourite_genre_title">Your favourite genres</string>
+
+</resources>
