@@ -17,7 +17,7 @@ class ValidationUtils {
 
         fun validatePassword(password: String, context: Context): Boolean {
             if (password.isEmpty()) {
-                Toast.makeText(context, "Invalid e-mail address", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Invalid password", Toast.LENGTH_SHORT).show()
                 return false
             }
 

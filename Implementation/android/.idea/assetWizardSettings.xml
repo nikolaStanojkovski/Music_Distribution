@@ -307,7 +307,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/D:/androidSDK/icons/material/materialicons/add_circle/baseline_add_circle_24.xml" />
+                                      <entry key="url" value="file:/D:/androidSDK/icons/material/materialicons/favorite/baseline_favorite_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -317,7 +317,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_add_one" />
+                            <entry key="color" value="833d3d" />
+                            <entry key="outputName" value="ic_favourite_filled" />
                             <entry key="sourceFile" value="C:\Users\Nick\Desktop\Fax\7 semester\MPIP\AlbumDistribution" />
                           </map>
                         </option>

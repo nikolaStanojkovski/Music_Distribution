@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.CategoryData
 import com.musicdistribution.albumdistribution.model.Category
 import com.musicdistribution.albumdistribution.model.CategoryItem
 

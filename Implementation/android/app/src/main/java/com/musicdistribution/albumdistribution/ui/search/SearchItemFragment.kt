@@ -7,12 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.GenreData
-import com.musicdistribution.albumdistribution.model.SearchItem
 
 class SearchItemFragment : Fragment() {
 

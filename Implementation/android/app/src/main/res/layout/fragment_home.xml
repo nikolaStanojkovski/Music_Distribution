@@ -48,8 +48,8 @@
 
     <ImageView
         android:id="@+id/btnAddHome"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:elevation="10dp"
         android:src="@drawable/ic_add_one"
         android:tint="@color/orange"

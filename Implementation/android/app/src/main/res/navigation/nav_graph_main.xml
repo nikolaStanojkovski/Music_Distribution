@@ -31,9 +31,9 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListenerFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile_listener" />
     <fragment
         android:id="@+id/searchItemFragment"
         android:name="com.musicdistribution.albumdistribution.ui.search.SearchItemFragment"
