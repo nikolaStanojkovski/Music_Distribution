@@ -33,11 +33,12 @@ The folder <b>Documentation</b> has all of the needed documentation and specific
 The application has the following functionalities:
 <br/>
 - <b>CRUD</b> (Create, Read, Update & Delete) functionalities for <b>songs</b>.
-- <b>CRUD (Create, Read, Update & Delete) functionalities for albums and the corresponding songs that make them up.
-- <b>User Management Module (Registration / Login)</b> which has three roles: Administrator, Artist and Listener, whereby one user will be able to authenticate with an existing user account on the platform 'Google' or the platform 'Facebook'.
+- <b>CRUD</b> (Create, Read, Update & Delete) functionalities for <b>albums</b> and the <b>corresponding songs</b> that make them up.
+- <b>User Management Module (Registration / Login)</b> which has two roles: Artist and Listener, whereby one user will be able to authenticate with an existing user account on the platform 'Google' or the platform 'Facebook'.
 - Possibility to <b>release an album</b> by an authenticated artist.
 - Possibility to <b>release a song (single)</b> by an authenticated artist.
+- Possibility to <b>release a song (single)</b> by an authenticated artist.
 - Opportunity to <b>increase the ranking of an already published song / album</b> by an authenticated artist.
-- <b>Admin functionalities</b> for published songs.
-- <b>Admin functionalities</b> for published albums.
+- <b>Artist functionalities</b> for published songs.
+- <b>Artist functionalities</b> for published albums.
 - <b>Sending notifications to users</b> with news regarding new published releases.

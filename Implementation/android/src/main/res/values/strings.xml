@@ -25,4 +25,19 @@
     <string name="search_placeholder">Artists, Songs or Albums</string>
     <string name="search_favourite_genre_title">Your favourite genres</string>
 
+    <!-- Strings related to profile -->
+    <string name="profile_name">Your name</string>
+    <string name="profile_surname">Your surname</string>
+    <string name="profile_favourite_artist">Your favourite artist</string>
+    <string name="profile_name_placeholder">Enter your name</string>
+    <string name="profile_surname_placeholder">Enter your surname</string>
+    <string name="text_followers">Followers</string>
+    <string name="text_following">Following</string>
+    <string name="button_favourite_songs">Songs</string>
+    <string name="button_favourite_artists">Artists</string>
+    <string name="button_published_songs">Published Songs</string>
+    <string name="button_published_albums">Published Albums</string>
+    <string name="button_edit_profile">Edit Info</string>
+    <string name="button_edit_picture">Edit Picture</string>
+
 </resources>
