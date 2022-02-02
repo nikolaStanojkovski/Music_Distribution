@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_songFragment"
             app:destination="@id/songFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_createFragment"
+            app:destination="@id/createFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -33,7 +36,20 @@
         android:id="@+id/profileFragment"
         android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListenerFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile_listener" />
+        tools:layout="@layout/fragment_profile_listener" >
+        <action
+            android:id="@+id/action_profileFragmentListener_to_profileListFragment"
+            app:destination="@id/profileListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragmentArtist"
+        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileArtistFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile_artist" >
+        <action
+            android:id="@+id/action_profileFragmentArtist_to_profileListFragment"
+            app:destination="@id/profileListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchItemFragment"
         android:name="com.musicdistribution.albumdistribution.ui.search.SearchItemFragment"
@@ -54,4 +70,14 @@
         android:name="com.musicdistribution.albumdistribution.ui.home.item.SongFragment"
         android:label="fragment_song"
         tools:layout="@layout/fragment_song" />
+    <fragment
+        android:id="@+id/createFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.item.CreateFragment"
+        android:label="fragment_create"
+        tools:layout="@layout/fragment_create" />
+    <fragment
+        android:id="@+id/profileListFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListFragment"
+        android:label="fragment_profile_list"
+        tools:layout="@layout/fragment_profile_list" />
 </navigation>

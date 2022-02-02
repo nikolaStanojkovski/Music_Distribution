@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.facebook.*
 import com.facebook.CallbackManager.Factory.create
@@ -18,13 +19,19 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
 import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
+import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.databinding.FragmentWelcomeBinding
+import com.musicdistribution.albumdistribution.model.firebase.User
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
 import com.musicdistribution.albumdistribution.util.InternetUtils
+import com.musicdistribution.albumdistribution.util.ValidationUtils
 
 
 class WelcomeFragment : Fragment() {
@@ -32,6 +39,8 @@ class WelcomeFragment : Fragment() {
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
     private var callbackManager: CallbackManager? = null
+
+    private lateinit var authActivityViewModel: AuthActivityViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +55,9 @@ class WelcomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        authActivityViewModel =
+            ViewModelProvider(requireActivity())[AuthActivityViewModel::class.java]
 
         binding.btnSignUp.setOnClickListener {
             findNavController().navigate(R.id.action_WelcomeFragment_to_RegistrationFragment)
@@ -144,7 +156,7 @@ class WelcomeFragment : Fragment() {
         FirebaseAuthDB.firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful && FirebaseAuthDB.checkLogin()) {
-                    navigateOut()
+                    registerFirebaseDb()
                 } else {
                     Toast.makeText(
                         activity,
@@ -160,7 +172,7 @@ class WelcomeFragment : Fragment() {
         FirebaseAuthDB.firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful && FirebaseAuthDB.checkLogin()) {
-                    navigateOut()
+                    registerFirebaseDb()
                 } else {
                     Toast.makeText(
                         activity,
@@ -169,6 +181,33 @@ class WelcomeFragment : Fragment() {
                     ).show()
                 }
             }
+    }
+
+    private fun registerFirebaseDb() {
+        val email = FirebaseAuthDB.firebaseAuth.currentUser!!.email!!
+        val nameSurname = ValidationUtils.generateFirstLastName(email)
+        val user = User(
+            name = nameSurname[0],
+            surname = nameSurname[1],
+            email = email,
+            role = Role.LISTENER,
+            picture = "",
+            noFollowers = 0L,
+            noFollowing = 0L
+        )
+        FirebaseRealtimeDB.usersReference.child(nameSurname[0] + nameSurname[1]).setValue(user)
+            .addOnCompleteListener(OnCompleteListener<Void?> { task ->
+                if (task.isSuccessful) {
+                    FirebaseAuthUser.user = user
+                    navigateOut()
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "Error: " + task.exception!!.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
     }
 
     private fun navigateOut() {

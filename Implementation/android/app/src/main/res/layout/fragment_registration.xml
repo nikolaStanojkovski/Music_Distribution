@@ -54,29 +54,6 @@
             android:autofillHints="Enter your username" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/btnEnableSearch"
-        android:layout_width="286dp"
-        android:layout_height="51dp"
-        android:background="@color/gray"
-        android:enabled="true"
-        android:scrollbarSize="25dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463"
-        app:passwordToggleEnabled="true"
-        app:passwordToggleTint="@color/black">
-
-        <EditText
-            android:id="@+id/inputRegisterPassword"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autofillHints="Enter your username" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegister"
         android:layout_width="208dp"
@@ -90,7 +67,68 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnEnableSearch"
-        app:layout_constraintVertical_bias="0.475" />
+        app:layout_constraintVertical_bias="0.501" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/btnEnableSearch"
+        android:layout_width="286dp"
+        android:layout_height="51dp"
+        android:background="@color/gray"
+        android:enabled="true"
+        android:scrollbarSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.486"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/black">
+
+        <EditText
+            android:id="@+id/inputRegisterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="Enter your username" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroupRoleRegister"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEnableSearch"
+        app:layout_constraintVertical_bias="0.467">
+
+        <RadioButton
+            android:id="@+id/creator_role_register"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/radio_selector"
+            android:button="@android:color/transparent"
+            android:elevation="8dp"
+            android:padding="16dp"
+            android:text="@string/user_creator"
+            android:textColor="@drawable/radio_text_color" />
+
+        <RadioButton
+            android:id="@+id/listener_role_register"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/radio_selector"
+            android:button="@android:color/transparent"
+            android:elevation="8dp"
+            android:padding="16dp"
+            android:text="@string/user_listener"
+            android:textColor="@drawable/radio_text_color" />
+
+    </RadioGroup>
 
     <TextView
         android:id="@+id/txtInputEmailRegister"
@@ -105,7 +143,7 @@
         app:layout_constraintHorizontal_bias="0.326"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.384" />
+        app:layout_constraintVertical_bias="0.404" />
 
     <TextView
         android:id="@+id/txtInputPasswordRegister"
@@ -122,37 +160,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.19" />
 
-    <RadioGroup
-        android:layout_width="320dp"
+    <TextView
+        android:id="@+id/txtHintUsername"
+        android:layout_width="286dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEnableSearch">
-
-        <RadioButton
-            android:layout_width="126dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:button="@android:color/transparent"
-            android:background="@drawable/radio_selector"
-            android:textColor="@drawable/radio_text_color"
-            android:elevation="8dp"
-            android:text="@string/user_creator" />
-
-        <RadioButton
-            android:layout_width="126dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:button="@android:color/transparent"
-            android:background="@drawable/radio_selector"
-            android:textColor="@drawable/radio_text_color"
-            android:elevation="8dp"
-            android:text="@string/user_listener" />
-
-    </RadioGroup>
+        android:text="@string/hint_text_username"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtInputEmailRegister"
+        app:layout_constraintEnd_toEndOf="@+id/inputRegisterLayoutEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputRegisterLayoutEmail"
+        app:layout_constraintTop_toBottomOf="@+id/inputRegisterLayoutEmail"
+        app:layout_constraintVertical_bias="0.236" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

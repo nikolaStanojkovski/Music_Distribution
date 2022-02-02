@@ -1,7 +1,7 @@
 package com.musicdistribution.albumdistribution.data.room.dao
 
 import androidx.room.*
-import com.musicdistribution.albumdistribution.data.domain.User
+import com.musicdistribution.albumdistribution.data.domain.UserRoom
 import com.musicdistribution.albumdistribution.data.domain.relation.UserAlbum
 import com.musicdistribution.albumdistribution.data.domain.relation.UserAlbumSong
 import com.musicdistribution.albumdistribution.data.domain.relation.UserSong
@@ -12,29 +12,32 @@ abstract class UserDao {
     // Standard CRUD operations
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun createUser(user: User)
+    abstract fun createUser(userRoom: UserRoom)
 
-    @Query("SELECT * FROM User WHERE id = :id")
-    abstract fun readUser(id: Long): User
+    @Query("SELECT * FROM UserRoom WHERE id = :id")
+    abstract fun readUser(id: Long): UserRoom
 
     @Update
-    abstract fun updateUser(user: User)
+    abstract fun updateUser(userRoom: UserRoom)
 
     @Delete
-    abstract fun deleteUser(user: User)
+    abstract fun deleteUser(userRoom: UserRoom)
 
 
     // Other specific operations
 
-    @Query("SELECT * FROM User")
-    abstract fun readAllUsers(): MutableList<User>
+    @Query("SELECT * FROM UserRoom WHERE name = :name AND surname = :surname")
+    abstract fun readUserByNameAndSurname(name: String, surname: String): UserRoom?
 
-    @Query("SELECT * FROM User WHERE id = :id")
+    @Query("SELECT * FROM UserRoom")
+    abstract fun readAllUsers(): MutableList<UserRoom>
+
+    @Query("SELECT * FROM UserRoom WHERE id = :id")
     abstract fun readAllUsersWithAlbums(id: Long): UserAlbum
 
-    @Query("SELECT * FROM User WHERE id = :id")
+    @Query("SELECT * FROM UserRoom WHERE id = :id")
     abstract fun readAllUsersWithSongs(id: Long): UserSong
 
-    @Query("SELECT * FROM User WHERE id = :id")
+    @Query("SELECT * FROM UserRoom WHERE id = :id")
     abstract fun readAllUsersWithAlbumsAndSongs(id: Long): UserAlbumSong
 }

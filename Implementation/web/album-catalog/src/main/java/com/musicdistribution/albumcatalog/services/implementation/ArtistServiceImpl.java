@@ -36,14 +36,6 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Optional<Artist> createArtist(ArtistRequest artistRequest) {
-        Artist newArtist = Artist.build(ArtistContactInfo.build(artistRequest.getTelephoneNumber(), artistRequest.getUsername(), artistRequest.getEmailDomain()),
-                ArtistPersonalInfo.build(artistRequest.getFirstName(), artistRequest.getLastName(), artistRequest.getArtName()), artistRequest.getPassword());
-
-        return Optional.of(artistRepository.save(newArtist));
-    }
-
-    @Override
     public Optional<Artist> loginArtist(ArtistRequest artistRequest) {
         Optional<Artist> artist = artistRepository.findByArtistContactInfo_Email(Email.createEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()));
 

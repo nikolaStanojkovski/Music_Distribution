@@ -8,6 +8,7 @@
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/gradient.xml" value="0.2265625" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/ic_favourite_unfilled.xml" value="0.35625" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2265625" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/ic_profile.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/radio_normal.xml" value="0.35625" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/radio_selected.xml" value="0.35625" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/drawable/radio_selector.xml" value="0.35625" />
@@ -21,16 +22,18 @@
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/category_item_adapter.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/content_auth.xml" value="0.25181159420289856" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/content_y.xml" value="0.25181159420289856" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/dialog_create_item.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_album.xml" value="0.25181159420289856" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_artist.xml" value="0.25181159420289856" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_create.xml" value="0.18177083333333333" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_first.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_login.xml" value="0.25181159420289856" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile.xml" value="0.2" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_artist.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_list.xml" value="0.18" />
-        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_listener.xml" value="0.33" />
-        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_registration.xml" value="0.25181159420289856" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_listener.xml" value="0.25" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_registration.xml" value="0.33" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_search_item.xml" value="0.20625" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_second.xml" value="0.20625" />

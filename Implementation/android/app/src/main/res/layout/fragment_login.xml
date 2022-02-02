@@ -23,10 +23,10 @@
     <Button
         android:id="@+id/btnBackLogin"
         style="@style/Widget.MaterialComponents.Button.Icon"
+        app:icon="@drawable/left_arrow"
         android:layout_width="46dp"
         android:layout_height="32dp"
         android:background="@android:color/transparent"
-        app:icon="@drawable/left_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"

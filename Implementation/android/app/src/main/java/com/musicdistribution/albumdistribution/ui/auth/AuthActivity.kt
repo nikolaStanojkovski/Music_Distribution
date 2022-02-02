@@ -21,7 +21,8 @@ class AuthActivity : AppCompatActivity() {
         }
 
         if (FirebaseAuthDB.checkLogin()) {
-            navigateOut()
+            FirebaseAuthDB.firebaseAuth.signOut()
+//            navigateOut()
         }
 
         binding = ActivityAuthBinding.inflate(layoutInflater)

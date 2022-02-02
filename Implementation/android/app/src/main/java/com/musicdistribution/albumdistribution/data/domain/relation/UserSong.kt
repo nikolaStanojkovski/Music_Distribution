@@ -2,15 +2,15 @@ package com.musicdistribution.albumdistribution.data.domain.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.musicdistribution.albumdistribution.data.domain.Song
-import com.musicdistribution.albumdistribution.data.domain.User
+import com.musicdistribution.albumdistribution.data.domain.SongRoom
+import com.musicdistribution.albumdistribution.data.domain.UserRoom
 
 data class UserSong(
     @Embedded
-    val user: User,
+    val userRoom: UserRoom,
     @Relation(
         parentColumn = "id",
         entityColumn = "userId"
     )
-    val songs: MutableList<Song> = mutableListOf()
+    val songRooms: MutableList<SongRoom> = mutableListOf()
 )

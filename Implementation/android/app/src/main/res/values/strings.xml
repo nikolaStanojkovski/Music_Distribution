@@ -5,6 +5,7 @@
     <string name="title_activity_auth">AuthActivity</string>
     <string name="registration_fragment_label">Create account</string>
     <string name="button_sign_up">Sign up free</string>
+    <string name="button_logout">Sign Out</string>
     <string name="button_sign_facebook">Continue with Facebook</string>
     <string name="button_sign_google">Continue with Google</string>
     <string name="button_log_in">Log In</string>
@@ -15,9 +16,16 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="user_creator">Creator</string>
     <string name="user_listener">Listener</string>
+    <string name="hint_text_username">Use your first and last name comma separated as a username.</string>
+    <string name="note_oauth_login">Available only for listeners</string>
 
     <!-- Strings related to home -->
     <string name="button_follow">Follow</string>
+    <string name="create_dialog_title">What is the action you want to take?</string>
+    <string name="publish_album_title">Publish an Album</string>
+    <string name="publish_song_title">Publish a Song</string>
+    <string name="raise_tier_title">Raise Album/Song TIer</string>
+    <string name="exit_dialog">Exit</string>
     <string name="dot_text">⚫</string>
 
     <!-- Strings related to search -->
@@ -39,5 +47,7 @@
     <string name="button_published_albums">Published Albums</string>
     <string name="button_edit_profile">Edit Info</string>
     <string name="button_edit_picture">Edit Picture</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

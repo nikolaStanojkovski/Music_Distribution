@@ -8,20 +8,41 @@ class ValidationUtils {
     companion object {
         fun validateUsername(email: String, context: Context): Boolean {
             if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(context, "Invalid e-mail address", Toast.LENGTH_SHORT).show()
-                return false
+                val firstLastName = generateFirstLastName(email)
+                if (firstLastName.size == 2 && firstLastName[0].isNotBlank() && firstLastName[1].isNotBlank()) {
+                    Toast.makeText(context, "Invalid e-mail address", Toast.LENGTH_SHORT).show()
+                    return false
+                }
             }
 
             return true
         }
 
         fun validatePassword(password: String, context: Context): Boolean {
-            if (password.isEmpty()) {
+            if (password.isEmpty() && password.length < 6) {
                 Toast.makeText(context, "Invalid password", Toast.LENGTH_SHORT).show()
                 return false
             }
 
             return true
+        }
+
+        fun validateRole(roleId: Int, context: Context): Boolean {
+            if (roleId == -1) {
+                Toast.makeText(context, "Please select a role", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            return true
+        }
+
+        fun generateFirstLastName(email: String): MutableList<String> {
+            val usernameValidation = email.split("@")
+            val firstLastName = usernameValidation[0].split(".")
+            return if (firstLastName.isNullOrEmpty()) mutableListOf() else mutableListOf(
+                firstLastName[0][0].uppercaseChar() + firstLastName[0].substring(1),
+                firstLastName[1][0].uppercaseChar() + firstLastName[1].substring(1)
+            )
         }
     }
 }

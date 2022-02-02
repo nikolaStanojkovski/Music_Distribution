@@ -47,19 +47,6 @@ public class ArtistResource {
     }
 
     /**
-     * Method for creating a new artist.
-     *
-     * @param artistRequest - dto object containing information for the artist to be created.
-     * @return the created artist.
-     */
-    @PostMapping("/create")
-    public ResponseEntity<ArtistResponse> createArtist(@RequestBody @Valid ArtistRequest artistRequest) {
-        return this.artistService.createArtist(artistRequest)
-                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    /**
      * Method for authenticating an existing artist.
      *
      * @param artistRequest - dto object containing the login information about an artist.

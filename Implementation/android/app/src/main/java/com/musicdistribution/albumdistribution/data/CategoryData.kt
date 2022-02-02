@@ -6,7 +6,7 @@ import com.musicdistribution.albumdistribution.model.CategoryItem
 
 class CategoryData {
     companion object {
-        val creatorCategoryData = mutableListOf<Category>(
+        val creatorCategoryData = mutableListOf(
             Category(
                 "Your Published Songs", mutableListOf(
                     CategoryItem(1, R.drawable.icon),
@@ -63,8 +63,7 @@ class CategoryData {
             )
         )
 
-        val listenerCategoryData = mutableListOf<Category>(
-            Category("Your Playlists", mutableListOf()),
+        val listenerCategoryData = mutableListOf(
             Category("Favourite Songs", mutableListOf()),
             Category("Favourite Albums", mutableListOf()),
             Category("Favourite Artists", mutableListOf()),

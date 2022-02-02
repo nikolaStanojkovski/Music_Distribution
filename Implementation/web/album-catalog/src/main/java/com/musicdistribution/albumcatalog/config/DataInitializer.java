@@ -42,8 +42,8 @@ public class DataInitializer {
                     ArtistPersonalInfo.build("Nikola", "Stanojkovski", "Agremorta"), "mst-2");
             Artist artist2 = Artist.build(ArtistContactInfo.build("077-911-998", "trajko.trajanovski", EmailDomain.gmail),
                     ArtistPersonalInfo.build("Trajko", "Trajkovski", "Higretorta"), "mst-4");
-            artist1 = artistService.createArtist(ArtistRequest.build(artist1)).get();
-            artist2 = artistService.createArtist(ArtistRequest.build(artist2)).get();
+            artist1 = artistService.registerArtist(ArtistRequest.build(artist1)).get();
+            artist2 = artistService.registerArtist(ArtistRequest.build(artist2)).get();
 
             Album album1 = Album.build("Album 1", Genre.Jazz, AlbumInfo.build("Agro", "Agro", "Agro"), artist1);
             Album album2 = Album.build("Album 2", Genre.Rock, AlbumInfo.build("Wa", "Ki", "Ca"), artist2);

@@ -31,7 +31,20 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logoWelcomeScreen"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintVertical_bias="0.063" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogIn"
+        android:layout_width="256dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/transparent"
+        android:text="@string/button_log_in"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignUp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignFacebook"
@@ -45,7 +58,34 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSignUp"
-        app:layout_constraintVertical_bias="0.11" />
+        app:layout_constraintVertical_bias="0.279" />
+
+    <TextView
+        android:id="@+id/txtNoteGoogleLogin"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/note_oauth_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignGoogle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnSignGoogle"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignGoogle"
+        app:layout_constraintVertical_bias="0.123" />
+
+    <TextView
+        android:id="@+id/txtNoteFacebookLogin"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="@string/note_oauth_login"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignGoogle"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignFacebook"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnSignFacebook"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignFacebook"
+        app:layout_constraintVertical_bias="0.023" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignGoogle"
@@ -59,22 +99,8 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSignFacebook"
-        app:layout_constraintVertical_bias="0.153"
+        app:layout_constraintVertical_bias="0.432"
         app:strokeWidth="2dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogIn"
-        android:layout_width="256dp"
-        android:layout_height="38dp"
-        android:background="@android:color/transparent"
-        android:text="@string/button_log_in"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignGoogle"
-        app:layout_constraintVertical_bias="0.245" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

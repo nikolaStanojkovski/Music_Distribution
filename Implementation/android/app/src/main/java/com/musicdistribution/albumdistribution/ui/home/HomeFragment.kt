@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -18,6 +19,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.CategoryData
 import com.musicdistribution.albumdistribution.data.SessionService
+import com.musicdistribution.albumdistribution.data.domain.Role
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.util.LocalizationUtils
 import java.util.*
 
@@ -39,8 +42,21 @@ class HomeFragment : Fragment() {
 
         SessionService.setSessionService(requireActivity().applicationContext)
         getLocation(LocalizationUtils.getLocationProvider(requireActivity()))
+        fillAddButton()
         fillDateAndTime()
         fillRecyclerViews()
+    }
+
+    private fun fillAddButton() {
+        val buttonAdd = fragmentView.findViewById<ImageView>(R.id.btnAddHome)
+        if(FirebaseAuthUser.user!!.role == Role.LISTENER) {
+            buttonAdd.visibility = View.GONE
+        } else {
+            buttonAdd.setOnClickListener {
+                val createDialog = HomeCreateDialog()
+                fragmentManager?.let { it1 -> createDialog.show(it1, "'Create' Dialog") }
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -86,8 +102,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun fillRecyclerViews() {
-        // TODO: Check user role, and decide category upon that
-        val verticalAdapter = HomeVerticalAdapter(CategoryData.creatorCategoryData)
+        val categories =
+            if (FirebaseAuthUser.user!!.role == Role.CREATOR) CategoryData.creatorCategoryData else CategoryData.listenerCategoryData
+        val verticalAdapter = HomeVerticalAdapter(categories)
         val verticalRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.mainHomeRecyclerView)
         verticalRecyclerView.layoutManager = LinearLayoutManager(requireActivity())

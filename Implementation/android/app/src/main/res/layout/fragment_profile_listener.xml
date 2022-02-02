@@ -7,11 +7,10 @@
     android:background="@drawable/gradient"
     tools:context=".ui.profile.ProfileListenerFragment">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/imageProfileListener"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_centerHorizontal="true"
         android:elevation="12dp"
         android:innerRadius="0dp"
@@ -26,6 +25,7 @@
         app:layout_constraintVertical_bias="0.127">
 
         <ImageView
+            android:id="@+id/profileImageListener"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:src="@tools:sample/avatars" />
@@ -36,13 +36,13 @@
         android:id="@+id/txtNameSurnameListener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:text="[name_surname]"
         android:textAlignment="center"
-        android:textSize="34dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageProfileListener"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="@+id/imageProfileListener"
         app:layout_constraintTop_toBottomOf="@+id/imageProfileListener" />
 
@@ -96,18 +96,75 @@
         app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="@+id/txtNoFollowersTitleListener" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFavouriteArtistsListener"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/orange"
+        android:text="@string/button_favourite_artists"
+        android:textColor="@color/white"
+        app:cornerRadius="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNameSurnameListener"
+        app:layout_constraintVertical_bias="0.263" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFavouriteSongsListener"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/orange"
+        android:text="@string/button_favourite_songs"
+        android:textColor="@color/white"
+        app:cornerRadius="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNameSurnameListener"
+        app:layout_constraintVertical_bias="0.263" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEditImageListener"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/border"
+        android:text="@string/button_edit_picture"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.777"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.246" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEditProfileListener"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/border"
+        android:text="@string/button_edit_profile"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.246" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_marginTop="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="172dp"
         android:background="@color/gray"
         android:orientation="vertical"
         android:paddingLeft="15dp"
-        android:paddingTop="30dp"
         android:paddingRight="15dp"
-        android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="@+id/txtNameSurnameListener"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="@+id/txtNameSurnameListener"
         app:layout_constraintTop_toBottomOf="@+id/txtNameSurnameListener">
 
@@ -165,91 +222,23 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:id="@+id/txtProfileFavouriteArtistListener"
-                    android:layout_width="93dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".75"
-                    android:text="@string/profile_favourite_artist"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/profileFavouriteArtistListener"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.25"
-                    android:text="[user_favourite_artist]"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-
         </LinearLayout>
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnEditImageListener"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/border"
-        android:text="@string/button_edit_picture"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.819"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.408" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnEditProfileListener"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:background="@drawable/border"
-        android:text="@string/button_edit_profile"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.172"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.408" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnFavouriteSongsListener"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:backgroundTint="@color/orange"
-        android:text="@string/button_favourite_songs"
-        android:textColor="@color/white"
-        app:cornerRadius="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.172"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/button_logout"
+        app:icon="@drawable/ic_logout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/btnFavouriteArtistsListener"
+        app:layout_constraintHorizontal_bias="0.446"
+        app:layout_constraintStart_toStartOf="@+id/btnFavouriteSongsListener"
         app:layout_constraintTop_toBottomOf="@+id/txtNameSurnameListener"
-        app:layout_constraintVertical_bias="0.115" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnFavouriteArtistsListener"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:backgroundTint="@color/orange"
-        android:text="@string/button_favourite_artists"
-        android:textColor="@color/white"
-        app:cornerRadius="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.862"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNameSurnameListener"
-        app:layout_constraintVertical_bias="0.115" />
+        app:layout_constraintVertical_bias="0.225" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

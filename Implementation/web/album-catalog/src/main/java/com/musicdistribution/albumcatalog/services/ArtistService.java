@@ -28,14 +28,6 @@ public interface ArtistService {
     Optional<Artist> findById(ArtistId id);
 
     /**
-     * Method for creating a new artist in the database.
-     *
-     * @param artist - artist's dto object containing new artist's information.
-     * @return an optional with the found artist.
-     */
-    Optional<Artist> createArtist(ArtistRequest artist);
-
-    /**
      * Method for authenticating an existing artist from the database.
      *
      * @param artist - artist's login form object containing artist's information needed for authentication.
