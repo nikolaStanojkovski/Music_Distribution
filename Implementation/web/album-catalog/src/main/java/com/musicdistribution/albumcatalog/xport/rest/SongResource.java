@@ -33,6 +33,17 @@ public class SongResource {
         return songService.findAll().stream().map(SongResponse::from).collect(Collectors.toList());
     }
 
+
+    /**
+     * Method for getting a page of information about all songs.
+     *
+     * @return the list of all songs.
+     */
+    @GetMapping("/page")
+    public List<SongResponse> getAllPage() {
+        return songService.findAllPageable().stream().map(SongResponse::from).collect(Collectors.toList());
+    }
+
     /**
      * Method for getting information about a specific song.
      *

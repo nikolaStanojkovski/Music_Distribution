@@ -1,7 +1,7 @@
 package com.musicdistribution.albumcatalog.xport.rest;
 
-import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.ArtistResponse;
 import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.util.ApiController;
@@ -31,6 +31,16 @@ public class ArtistResource {
     @GetMapping
     public List<ArtistResponse> getAll() {
         return artistService.findAll().stream().map(ArtistResponse::from).collect(Collectors.toList());
+    }
+
+    /**
+     * Method for getting a page of information about all artists.
+     *
+     * @return the list of all artists.
+     */
+    @GetMapping("/page")
+    public List<ArtistResponse> getAllPage() {
+        return artistService.findAllPageable().stream().map(ArtistResponse::from).collect(Collectors.toList());
     }
 
     /**

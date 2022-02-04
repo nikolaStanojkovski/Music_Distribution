@@ -10,6 +10,9 @@ import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.albumcatalog.services.SongService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,14 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<Song> findAll() {
         return songRepository.findAll();
+    }
+
+    @Override
+    public Page<Song> findAllPageable() {
+        long totalQuantity = songRepository.count();
+        int index = (int)(Math.random() * totalQuantity);
+        Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
+        return songRepository.findAll(pageable);
     }
 
     @Override

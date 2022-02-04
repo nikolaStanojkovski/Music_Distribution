@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class ArtistResponse {
 
     private String id;
+    private String email;
     private ArtistContactInfo artistContactInfo;
     private ArtistPersonalInfo artistPersonalInfo;
     private String password;
@@ -21,6 +22,7 @@ public class ArtistResponse {
     public static ArtistResponse from(Artist artist) {
         ArtistResponse artistResponse = new ArtistResponse();
         artistResponse.setId(artist.getId().getId());
+        artistResponse.setEmail(artist.getArtistContactInfo().getEmail().getFullAddress());
         artistResponse.setArtistContactInfo(artist.getArtistContactInfo());
         artistResponse.setArtistPersonalInfo(artist.getArtistPersonalInfo());
         artistResponse.setPassword(artist.getPassword());

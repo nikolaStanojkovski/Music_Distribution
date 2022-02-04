@@ -56,7 +56,7 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
         if (role == Role.CREATOR) {
             val nameSurname = ValidationUtils.generateFirstLastName(email)
             val artistRetrofit = ArtistRetrofitAuth(
-                username = email,
+                username = email.split("@")[0],
                 emailDomain = EmailDomain.valueOf(email.split("@")[1].split(".")[0]),
                 telephoneNumber = "[not-defined]",
                 firstName = nameSurname[0],

@@ -3,6 +3,7 @@ package com.musicdistribution.albumcatalog.services;
 import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,13 @@ public interface AlbumService {
      * @return a list of the albums.
      */
     List<Album> findAll();
+
+    /**
+     * Method for getting a page of albums from the database.
+     *
+     * @return a page of the albums.
+     */
+    Page<Album> findAllPageable();
 
     /**
      * Method for getting an album from the database.

@@ -1,3 +1,3 @@
 package com.musicdistribution.albumdistribution.model
 
-data class Category(val title: String, val categoryItems: MutableList<CategoryItem>)
+data class Category(val id: Int, val title: String, var categoryItems: MutableList<CategoryItem>)

@@ -19,6 +19,16 @@ interface AlbumCatalogApi {
     @GET("api/albums")
     fun getAllSongs(): Call<ArrayList<SongRetrofit>>
 
+    @GET("api/albums/page")
+    fun getAlbumsPage(): Call<ArrayList<AlbumRetrofit>>
+
+    @GET("api/artists/page")
+    fun getArtistsPage(): Call<ArrayList<ArtistRetrofit>>
+
+    @GET("api/albums/page")
+    fun getSongsPage(): Call<ArrayList<SongRetrofit>>
+
+
     @POST("api/artists/login")
     fun loginArtist(@Body artist: ArtistRetrofitAuth): Call<ArtistRetrofit>
 

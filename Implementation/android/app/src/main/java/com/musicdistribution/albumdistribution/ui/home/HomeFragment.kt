@@ -13,20 +13,26 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.firebase.storage.StorageException
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.CategoryData
 import com.musicdistribution.albumdistribution.data.SessionService
 import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
+import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
+import com.musicdistribution.albumdistribution.model.CategoryItem
+import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.util.LocalizationUtils
 import java.util.*
 
 class HomeFragment : Fragment() {
 
     private lateinit var fragmentView: View
+    private lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +43,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         fragmentView = view
+
+        homeFragmentViewModel =
+            ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
+        fetchData()
 
         SessionService.setSessionService(requireActivity().applicationContext)
         getLocation(LocalizationUtils.getLocationProvider(requireActivity()))
@@ -47,9 +56,21 @@ class HomeFragment : Fragment() {
         fillRecyclerViews()
     }
 
+    private fun fetchData() {
+        if (homeFragmentViewModel.getSongsLiveData().value.isNullOrEmpty()) {
+            homeFragmentViewModel.fetchSongs()
+        }
+        if (homeFragmentViewModel.getAlbumsLiveData().value.isNullOrEmpty()) {
+            homeFragmentViewModel.fetchAlbums()
+        }
+        if (homeFragmentViewModel.getArtistsLiveData().value.isNullOrEmpty()) {
+            homeFragmentViewModel.fetchArtists()
+        }
+    }
+
     private fun fillAddButton() {
         val buttonAdd = fragmentView.findViewById<ImageView>(R.id.btnAddHome)
-        if(FirebaseAuthUser.user!!.role == Role.LISTENER) {
+        if (FirebaseAuthUser.user!!.role == Role.LISTENER) {
             buttonAdd.visibility = View.GONE
         } else {
             buttonAdd.setOnClickListener {
@@ -102,13 +123,115 @@ class HomeFragment : Fragment() {
     }
 
     private fun fillRecyclerViews() {
-        val categories =
-            if (FirebaseAuthUser.user!!.role == Role.CREATOR) CategoryData.creatorCategoryData else CategoryData.listenerCategoryData
-        val verticalAdapter = HomeVerticalAdapter(categories)
+        val verticalAdapter = HomeVerticalAdapter(CategoryData.mainData, this)
         val verticalRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.mainHomeRecyclerView)
         verticalRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
         verticalRecyclerView.adapter = verticalAdapter
+
+        fetchSongs(verticalAdapter)
+        fetchAlbums(verticalAdapter)
+        fetchArtists(verticalAdapter)
+    }
+
+    private fun fetchSongs(verticalAdapter: HomeVerticalAdapter) {
+        verticalAdapter.emptyData(CategoryData.mainData[0])
+        homeFragmentViewModel.getSongsLiveData()
+            .observe(viewLifecycleOwner,
+                { songs ->
+                    if (songs != null) {
+                        for (item in songs) {
+                            val gsReference =
+                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${item.id}.jpg")
+                            try {
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    var link = ""
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    verticalAdapter.updateData(
+                                        CategoryData.mainData[0],
+                                        CategoryItem(item.id, link, CategoryItemType.SONG)
+                                    )
+                                }
+                            } catch (ignored: StorageException) {
+                            }
+
+                        }
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Error when trying to fetch songs",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+    }
+
+    private fun fetchAlbums(verticalAdapter: HomeVerticalAdapter) {
+        verticalAdapter.emptyData(CategoryData.mainData[1])
+        homeFragmentViewModel.getAlbumsLiveData()
+            .observe(viewLifecycleOwner,
+                { albums ->
+                    if (albums != null) {
+                        for (item in albums) {
+                            val gsReference =
+                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.id}.jpg")
+                            try {
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    var link = ""
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    verticalAdapter.updateData(
+                                        CategoryData.mainData[1],
+                                        CategoryItem(item.id, link, CategoryItemType.ALBUM)
+                                    )
+                                }
+                            } catch (ignored: StorageException) {
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Error when trying to fetch albums",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+    }
+
+    private fun fetchArtists(verticalAdapter: HomeVerticalAdapter) {
+        verticalAdapter.emptyData(CategoryData.mainData[2])
+        homeFragmentViewModel.getArtistsLiveData()
+            .observe(viewLifecycleOwner,
+                { artists ->
+                    if (artists != null) {
+                        for (item in artists) {
+                            val gsReference =
+                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${item.email}.jpg")
+                            try {
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    var link = ""
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    verticalAdapter.updateData(
+                                        CategoryData.mainData[2],
+                                        CategoryItem(item.id!!, link, CategoryItemType.ARTIST)
+                                    )
+                                }
+                            } catch (ignored: StorageException) {
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Error when trying to fetch artists",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
     }
 
     private fun getLocation(locationProvider: FusedLocationProviderClient?) {

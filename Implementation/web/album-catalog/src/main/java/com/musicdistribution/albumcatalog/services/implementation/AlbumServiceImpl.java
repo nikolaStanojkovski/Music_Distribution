@@ -12,6 +12,9 @@ import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,14 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Album> findAll() {
         return albumRepository.findAll();
+    }
+
+    @Override
+    public Page<Album> findAllPageable() {
+        long totalQuantity = albumRepository.count();
+        int index = (int)(Math.random() * totalQuantity);
+        Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
+        return albumRepository.findAll(pageable);
     }
 
     @Override

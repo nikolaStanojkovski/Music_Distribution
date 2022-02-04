@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.storage.StorageException
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
@@ -27,7 +28,6 @@ class ProfileListenerFragment : Fragment() {
     private var profileImageControl: ImageView? = null
 
     private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
-    private var editCounter: Int = 0
     private val PICK_IMAGE_REQUEST = 234
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,16 +93,16 @@ class ProfileListenerFragment : Fragment() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data!!.data != null) {
             val filePath = data.data
             val profileImagesRef =
-                FirebaseStorage.storage.reference.child("profile-images/${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}.jpg")
+                FirebaseStorage.storage.reference.child("profile-images/${FirebaseAuthUser.user!!.email}.jpg")
+            val progressDialog = ProgressDialog(requireActivity())
+            progressDialog.setTitle("Uploading...")
+            progressDialog.show()
             profileImagesRef.putFile(filePath!!).addOnSuccessListener {
                 Toast.makeText(requireActivity(), "File successfully uploaded", Toast.LENGTH_SHORT)
                     .show()
             }.addOnProgressListener { task ->
                 val progress = (100.0 * task.bytesTransferred) / task.totalByteCount
-                val progressDialog = ProgressDialog(requireActivity())
-                progressDialog.setTitle("Uploading...")
                 progressDialog.setMessage("${progress.toInt()}% Uploaded...")
-                progressDialog.show()
                 if (progress.toInt() == 100) {
                     progressDialog.dismiss()
                     refresh()
@@ -127,16 +127,19 @@ class ProfileListenerFragment : Fragment() {
 
         profileImageControl = fragmentView!!.findViewById<ImageView>(R.id.profileImageListener)
         val gsReference =
-            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}.jpg")
-        gsReference.downloadUrl.addOnCompleteListener { uri ->
-            var link = ""
-            if (uri.isSuccessful) {
-                link = uri.result.toString()
+            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${FirebaseAuthUser.user!!.email}.jpg")
+        try {
+            gsReference.downloadUrl.addOnCompleteListener { uri ->
+                var link = ""
+                if (uri.isSuccessful) {
+                    link = uri.result.toString()
+                }
+                Glide.with(this)
+                    .load(link)
+                    .placeholder(R.drawable.default_profile)
+                    .into(profileImageControl!!)
             }
-            Glide.with(this)
-                .load(link)
-                .placeholder(R.drawable.default_profile)
-                .into(profileImageControl!!)
+        } catch (ignored: StorageException) {
         }
     }
 

@@ -3,6 +3,8 @@ package com.musicdistribution.albumcatalog.services;
 import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,13 @@ public interface ArtistService {
      * @return a list of the artists.
      */
     List<Artist> findAll();
+
+    /**
+     * Method for a page of artists from the database.
+     *
+     * @return a page of the artists.
+     */
+    Page<Artist> findAllPageable();
 
     /**
      * Method for getting an artist from the database.

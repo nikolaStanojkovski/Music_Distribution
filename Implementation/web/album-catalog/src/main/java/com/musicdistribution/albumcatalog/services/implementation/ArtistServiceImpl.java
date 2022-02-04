@@ -9,6 +9,9 @@ import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistPersonalInfo
 import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,14 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public List<Artist> findAll() {
         return artistRepository.findAll();
+    }
+
+    @Override
+    public Page<Artist> findAllPageable() {
+        long totalQuantity = artistRepository.count();
+        int index = (int)(Math.random() * totalQuantity);
+        Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
+        return artistRepository.findAll(pageable);
     }
 
     @Override
