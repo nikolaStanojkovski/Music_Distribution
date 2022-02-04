@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseUser
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
@@ -29,6 +30,7 @@ class RegistrationFragment : Fragment() {
     private lateinit var authActivityViewModel: AuthActivityViewModel
     private var registerCounter: Int = 0
     private var role: Role? = null
+    private var firebaseUser: FirebaseUser? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,9 +73,6 @@ class RegistrationFragment : Fragment() {
             role =
                 if (view.findViewById<RadioButton>(roleControl).text.equals("Creator")) Role.CREATOR else Role.LISTENER
             registerFirebaseAuth(email, password)
-            registerFirebaseDb(email, role!!)
-            authActivityViewModel.registerApi(email, password, role!!)
-            authActivityViewModel.registerRoom(email, role!!)
         }
     }
 
@@ -82,9 +81,12 @@ class RegistrationFragment : Fragment() {
             .addOnCompleteListener(
                 requireActivity()
             ) { task ->
-                if (task.isSuccessful && FirebaseAuthDB.checkLogin()) {
+                if (task.isSuccessful) {
+                    firebaseUser = task.result.user
                     registerCounter++
-                    checkRedirect()
+                    registerFirebaseDb(email, role!!)
+                    authActivityViewModel.registerApi(email, password, role!!)
+                    authActivityViewModel.registerRoom(email, role!!, firebaseUser!!)
                 } else {
                     Toast.makeText(
                         requireActivity(),
@@ -102,11 +104,10 @@ class RegistrationFragment : Fragment() {
             surname = nameSurname[1],
             email = email,
             role = role,
-            picture = "",
             noFollowers = 0L,
             noFollowing = 0L
         )
-        FirebaseRealtimeDB.usersReference.child(nameSurname[0] + nameSurname[1]).setValue(user)
+        FirebaseRealtimeDB.usersReference.child(firebaseUser!!.uid).setValue(user)
             .addOnCompleteListener(OnCompleteListener<Void?> { task ->
                 if (task.isSuccessful) {
                     registerCounter++
@@ -155,7 +156,8 @@ class RegistrationFragment : Fragment() {
 
     private fun checkRedirect() {
         if ((registerCounter == 4 && role == Role.CREATOR) ||
-            (registerCounter == 3 && role == Role.LISTENER)) {
+            (registerCounter == 3 && role == Role.LISTENER)
+        ) {
             Toast.makeText(
                 activity,
                 "Registration successful",

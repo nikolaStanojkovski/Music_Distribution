@@ -31,7 +31,7 @@
     <!-- Strings related to search -->
     <string name="search_title">Search</string>
     <string name="search_placeholder">Artists, Songs or Albums</string>
-    <string name="search_favourite_genre_title">Your favourite genres</string>
+    <string name="search_favourite_genre_title">Genres of music we offer</string>
 
     <!-- Strings related to profile -->
     <string name="profile_name">Your name</string>

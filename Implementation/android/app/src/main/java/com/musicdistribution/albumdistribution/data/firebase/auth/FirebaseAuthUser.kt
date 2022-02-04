@@ -15,7 +15,6 @@ class FirebaseAuthUser {
                 item["surname"]!!.toString(),
                 item["email"]!!.toString(),
                 Role.valueOf(item["role"]!!.toString()),
-                item["picture"]!!.toString(),
                 item["noFollowers"]!!.toString().toLong(),
                 item["noFollowing"]!!.toString().toLong()
             )

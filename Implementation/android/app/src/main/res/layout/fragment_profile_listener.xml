@@ -227,7 +227,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnLogout"
+        android:id="@+id/btnLogoutListener"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="160dp"
         android:layout_height="wrap_content"

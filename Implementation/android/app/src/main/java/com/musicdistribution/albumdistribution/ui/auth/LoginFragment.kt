@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseUser
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
@@ -26,7 +27,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var authActivityViewModel: AuthActivityViewModel
     private var loginCounter: Int = 0
-    private var role: Role? = null
+    private lateinit var firebaseUser: FirebaseUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +59,6 @@ class LoginFragment : Fragment() {
                 )
             ) {
                 loginFirebase(email, password)
-                loginFirebaseDb(email)
             }
         }
 
@@ -68,9 +68,10 @@ class LoginFragment : Fragment() {
     private fun loginFirebase(email: String, password: String) {
         FirebaseAuthDB.firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful && FirebaseAuthDB.checkLogin()) {
+                if (task.isSuccessful) {
                     loginCounter++
-                    checkRedirect()
+                    firebaseUser = task.result.user!!
+                    loginFirebaseDb(email)
                 } else {
                     Toast.makeText(
                         activity, "Login failed with message: " + task.exception!!.message,
@@ -81,23 +82,20 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginFirebaseDb(email: String) {
-        val nameSurname = ValidationUtils.generateFirstLastName(email)
-        if (nameSurname.isNotEmpty() && nameSurname.size == 2) {
-            FirebaseRealtimeDB.usersReference.child("/${nameSurname[0] + nameSurname[1]}").get()
-                .addOnSuccessListener { user ->
-                    if (user.exists()) {
-                        loginCounter++
-                        FirebaseAuthUser.updateUser(user)
-                        checkRedirect()
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            "There is no user with such username",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+        FirebaseRealtimeDB.usersReference.child("/${firebaseUser.uid}").get()
+            .addOnSuccessListener { user ->
+                if (user.exists()) {
+                    loginCounter++
+                    FirebaseAuthUser.updateUser(user)
+                    checkRedirect()
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "There is no user with such username",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-        }
+            }
     }
 
     private fun validateLogin() {
@@ -130,8 +128,8 @@ class LoginFragment : Fragment() {
 
     private fun navigateOut() {
         val intent = Intent(activity, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {

@@ -65,7 +65,6 @@ class CategoryData {
 
         val listenerCategoryData = mutableListOf(
             Category("Favourite Songs", mutableListOf()),
-            Category("Favourite Albums", mutableListOf()),
             Category("Favourite Artists", mutableListOf()),
             Category("Recommendations", mutableListOf())
         )

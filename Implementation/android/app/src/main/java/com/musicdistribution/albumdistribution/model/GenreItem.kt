@@ -1,3 +1,5 @@
 package com.musicdistribution.albumdistribution.model
 
-data class GenreItem (val genreName: String, val genreImage: Int)
+import com.musicdistribution.albumdistribution.data.domain.Genre
+
+data class GenreItem (val genreName: Genre, val genreImage: Int)

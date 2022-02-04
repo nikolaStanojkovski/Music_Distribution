@@ -26,8 +26,8 @@ abstract class UserDao {
 
     // Other specific operations
 
-    @Query("SELECT * FROM UserRoom WHERE name = :name AND surname = :surname")
-    abstract fun readUserByNameAndSurname(name: String, surname: String): UserRoom?
+    @Query("SELECT * FROM UserRoom WHERE uid = :uid")
+    abstract fun readByUid(uid: String): UserRoom?
 
     @Query("SELECT * FROM UserRoom")
     abstract fun readAllUsers(): MutableList<UserRoom>

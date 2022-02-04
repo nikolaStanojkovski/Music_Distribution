@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.domain.Role
@@ -41,6 +42,7 @@ class WelcomeFragment : Fragment() {
     private var callbackManager: CallbackManager? = null
 
     private lateinit var authActivityViewModel: AuthActivityViewModel
+    private lateinit var firebaseUser: FirebaseUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -155,7 +157,8 @@ class WelcomeFragment : Fragment() {
         val credential = FacebookAuthProvider.getCredential(token.token)
         FirebaseAuthDB.firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful && FirebaseAuthDB.checkLogin()) {
+                if (task.isSuccessful) {
+                    firebaseUser = task.result.user!!
                     registerFirebaseDb()
                 } else {
                     Toast.makeText(
@@ -171,7 +174,8 @@ class WelcomeFragment : Fragment() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         FirebaseAuthDB.firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful && FirebaseAuthDB.checkLogin()) {
+                if (task.isSuccessful) {
+                    firebaseUser = task.result.user!!
                     registerFirebaseDb()
                 } else {
                     Toast.makeText(
@@ -191,11 +195,10 @@ class WelcomeFragment : Fragment() {
             surname = nameSurname[1],
             email = email,
             role = Role.LISTENER,
-            picture = "",
             noFollowers = 0L,
             noFollowing = 0L
         )
-        FirebaseRealtimeDB.usersReference.child(nameSurname[0] + nameSurname[1]).setValue(user)
+        FirebaseRealtimeDB.usersReference.child(firebaseUser.uid).setValue(user)
             .addOnCompleteListener(OnCompleteListener<Void?> { task ->
                 if (task.isSuccessful) {
                     FirebaseAuthUser.user = user
@@ -212,8 +215,8 @@ class WelcomeFragment : Fragment() {
 
     private fun navigateOut() {
         val intent = Intent(activity, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {

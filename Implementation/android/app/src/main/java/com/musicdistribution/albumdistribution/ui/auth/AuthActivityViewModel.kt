@@ -4,6 +4,7 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseUser
 import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
 import com.musicdistribution.albumdistribution.data.domain.Role
@@ -30,9 +31,10 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
     private var usersLiveData: MutableLiveData<UserRoom> = MutableLiveData()
     private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
 
-    fun registerRoom(email: String, role: Role) {
+    fun registerRoom(email: String, role: Role, firebaseUser: FirebaseUser) {
         val nameSurname = ValidationUtils.generateFirstLastName(email)
         val user = UserRoom(
+            uid = firebaseUser.uid,
             name = nameSurname[0],
             surname = nameSurname[1],
             role = role,
@@ -41,7 +43,7 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
             noFollowers = 0L
         )
         CoroutineScope(Dispatchers.IO).launch {
-            if (database.userDao().readUserByNameAndSurname(user.name, user.surname) == null) {
+            if (database.userDao().readByUid(firebaseUser.uid) == null) {
                 database.userDao().createUser(user)
                 withContext(Dispatchers.Main) {
                     usersLiveData.value = user

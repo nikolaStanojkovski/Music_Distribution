@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_profileFragmentListener_to_profileListFragment"
             app:destination="@id/profileListFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_profileFragmentArtist"
+            app:destination="@id/profileFragmentArtist" />
     </fragment>
     <fragment
         android:id="@+id/profileFragmentArtist"
