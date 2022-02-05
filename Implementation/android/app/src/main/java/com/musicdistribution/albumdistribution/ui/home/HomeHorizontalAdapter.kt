@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.model.CategoryItem
-import com.musicdistribution.albumdistribution.model.CategoryItemType
+import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
 
-class HomeHorizontalAdapter(categoryItemList: MutableList<CategoryItem>, fragment: Fragment) :
+class HomeHorizontalAdapter(
+    categoryItemList: MutableList<CategoryItem>,
+    fragment: CategoryItemClickListener
+) :
     RecyclerView.Adapter<HomeHorizontalAdapter.ViewHolder>() {
 
     private var activityContext: Context? = null
@@ -31,16 +32,7 @@ class HomeHorizontalAdapter(categoryItemList: MutableList<CategoryItem>, fragmen
             val position = layoutPosition
             if (position != RecyclerView.NO_POSITION) {
                 val clickedItem = categoryData[position]
-                if (clickedItem.itemType == CategoryItemType.ARTIST) {
-                    parentFragment.findNavController()
-                        .navigate(R.id.action_homeFragment_to_artistFragment)
-                } else if (clickedItem.itemType == CategoryItemType.ALBUM) {
-                    parentFragment.findNavController()
-                        .navigate(R.id.action_homeFragment_to_albumFragment)
-                } else if (clickedItem.itemType == CategoryItemType.SONG) {
-                    parentFragment.findNavController()
-                        .navigate(R.id.action_homeFragment_to_songFragment)
-                }
+                parentFragment.onClick(clickedItem)
             }
         }
     }

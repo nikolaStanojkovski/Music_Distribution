@@ -39,6 +39,7 @@ public class AlbumResponse {
         albumResponse.setAlbumInfo(album.getAlbumInfo());
         albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null : ArtistResponse.from(album.getCreator()));
         albumResponse.setArtistId(Objects.isNull(album.getCreator()) ? null : album.getCreator().getId().getId());
+        albumResponse.setArtistName(Objects.isNull(album.getCreator()) ? null : album.getCreator().getArtistPersonalInfo().getFullName());
 
         return albumResponse;
     }

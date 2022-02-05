@@ -105,12 +105,6 @@ class LoginFragment : Fragment() {
                     if (t != null) {
                         loginCounter++
                         checkRedirect()
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            "Error when trying to login, please try again",
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
                 })
     }

@@ -55,13 +55,15 @@ public class DataInitializer {
             Song song1 = Song.build("Forandra", artist1, album1, SongLength.build(187));
             Song song2 = Song.build("Jokawa", artist1, album1, SongLength.build(201));
             Song song3 = Song.build("Mikaragwa", artist1, album1, SongLength.build(172));
-            Song song4 = Song.build("Seneda", artist1, album1, SongLength.build(255));
-            Song song5 = Song.build("Norma", artist1, album1, SongLength.build(176));
+            Song song4 = Song.build("Seneda", artist2, album1, SongLength.build(255));
+            Song song5 = Song.build("Norma", artist2, album1, SongLength.build(176));
+            Song song6 = Song.build("Norma", artist1, null, SongLength.build(176));
             songService.createSong(SongRequest.build(song1));
             songService.createSong(SongRequest.build(song2));
             songService.createSong(SongRequest.build(song3));
             songService.createSong(SongRequest.build(song4));
             songService.createSong(SongRequest.build(song5));
+            songService.createSong(SongRequest.build(song6));
         }
     }
 }

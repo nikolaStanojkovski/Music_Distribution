@@ -22,7 +22,7 @@ import com.musicdistribution.albumdistribution.ui.home.HomeActivity
 class ProfileArtistFragment : Fragment() {
 
     private var fragmentView: View? = null
-    private var profileImageControl: ImageView? = null
+    private var imageControl: ImageView? = null
 
     private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
     private val PICK_IMAGE_REQUEST = 234
@@ -120,7 +120,7 @@ class ProfileArtistFragment : Fragment() {
         fragmentView!!.findViewById<EditText>(R.id.profileSurnameInputArtist)
             .setText(currentUser.surname)
 
-        profileImageControl = fragmentView!!.findViewById<ImageView>(R.id.profileImageArtist)
+        imageControl = fragmentView!!.findViewById<ImageView>(R.id.profileImageArtist)
         val gsReference =
             FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${FirebaseAuthUser.user!!.email}.jpg")
         gsReference.downloadUrl.addOnCompleteListener { uri ->
@@ -131,7 +131,7 @@ class ProfileArtistFragment : Fragment() {
             Glide.with(this)
                 .load(link)
                 .placeholder(R.drawable.default_profile)
-                .into(profileImageControl!!)
+                .into(imageControl!!)
         }
     }
 

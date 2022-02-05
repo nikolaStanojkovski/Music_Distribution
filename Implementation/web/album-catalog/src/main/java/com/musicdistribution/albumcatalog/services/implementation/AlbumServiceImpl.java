@@ -38,6 +38,11 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
+    public List<Album> findAllByArtist(ArtistId artistId) {
+        return albumRepository.findAllByCreatorId(artistId);
+    }
+
+    @Override
     public Page<Album> findAllPageable() {
         long totalQuantity = albumRepository.count();
         int index = (int)(Math.random() * totalQuantity);

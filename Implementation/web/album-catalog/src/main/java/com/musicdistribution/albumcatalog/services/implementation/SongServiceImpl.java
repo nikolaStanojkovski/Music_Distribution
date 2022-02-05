@@ -38,6 +38,16 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    public List<Song> findAllByArtist(ArtistId artistId) {
+        return songRepository.findAllByCreatorId(artistId);
+    }
+
+    @Override
+    public List<Song> findAllByAlbum(AlbumId albumId) {
+        return songRepository.findAllByAlbumId(albumId);
+    }
+
+    @Override
     public Page<Song> findAllPageable() {
         long totalQuantity = songRepository.count();
         int index = (int)(Math.random() * totalQuantity);
@@ -60,17 +70,20 @@ public class SongServiceImpl implements SongService {
 
             if (Objects.nonNull(form.getAlbumId())) {
                 AlbumId albumId = AlbumId.of(form.getAlbumId());
-                Album album = albumRepository.findById(albumId).orElseThrow(() -> new AlbumNotFoundException(albumId));
+                Album album = albumRepository.findById(albumId).orElse(null);
                 song = Optional.of(Song.build(form.getSongName(), creator, album, SongLength.build(form.getLengthInSeconds())));
-                song.ifPresent(album::addSong);
-                albumRepository.save(album);
+                songRepository.save(song.get());
+                if(album != null) {
+                    song.ifPresent(album::addSong);
+                    albumRepository.save(album);
+                }
             } else {
                 song = Optional.of(Song.build(form.getSongName(), creator, null, SongLength.build(form.getLengthInSeconds())));
+                songRepository.save(song.get());
             }
 
             song.ifPresent(s -> {
                 creator.addSongToArtist(s);
-                songRepository.save(s);
                 artistRepository.save(creator);
             });
         }

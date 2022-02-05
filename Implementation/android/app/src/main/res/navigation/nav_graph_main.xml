@@ -62,22 +62,47 @@
         android:id="@+id/albumFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.item.AlbumFragment"
         android:label="fragment_album"
-        tools:layout="@layout/fragment_album" />
+        tools:layout="@layout/fragment_album" >
+        <action
+            android:id="@+id/action_albumFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_albumFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
     <fragment
         android:id="@+id/artistFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.item.ArtistFragment"
         android:label="fragment_artist"
-        tools:layout="@layout/fragment_artist" />
+        tools:layout="@layout/fragment_artist" >
+        <action
+            android:id="@+id/action_artistFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_artistFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_artistFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
     <fragment
         android:id="@+id/songFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.item.SongFragment"
         android:label="fragment_song"
-        tools:layout="@layout/fragment_song" />
+        tools:layout="@layout/fragment_song" >
+        <action
+            android:id="@+id/action_songFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.item.CreateFragment"
         android:label="fragment_create"
-        tools:layout="@layout/fragment_create" />
+        tools:layout="@layout/fragment_create" >
+        <action
+            android:id="@+id/action_createFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileListFragment"
         android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListFragment"

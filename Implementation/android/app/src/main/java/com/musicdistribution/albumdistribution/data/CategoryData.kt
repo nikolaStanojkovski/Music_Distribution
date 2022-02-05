@@ -9,5 +9,10 @@ class CategoryData {
             Category(2, "Explore Albums", mutableListOf()),
             Category(3, "Explore Artists", mutableListOf()),
         )
+
+        val artistData: MutableList<Category> = mutableListOf(
+            Category(1, "Songs", mutableListOf()),
+            Category(2, "Albums", mutableListOf()),
+        )
     }
 }

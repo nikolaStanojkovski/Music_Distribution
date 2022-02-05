@@ -1,6 +1,7 @@
 package com.musicdistribution.albumcatalog.services;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
+import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
+import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.entity.Song;
 import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
@@ -20,6 +21,20 @@ public interface SongService {
      * @return a list of the songs.
      */
     List<Song> findAll();
+
+    /**
+     * Method for getting all the songs with the specified artist id from the database.
+     *
+     * @return a list of the songs.
+     */
+    List<Song> findAllByArtist(ArtistId artistId);
+
+    /**
+     * Method for getting all the songs with the specified album id from the database.
+     *
+     * @return a list of the songs.
+     */
+    List<Song> findAllByAlbum(AlbumId artistId);
 
     /**
      * Method for a page of songs from the database.

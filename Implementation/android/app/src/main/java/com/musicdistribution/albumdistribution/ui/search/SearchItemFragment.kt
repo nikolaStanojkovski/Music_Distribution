@@ -1,17 +1,19 @@
 package com.musicdistribution.albumdistribution.ui.search
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.albumdistribution.model.SearchItem
+import com.musicdistribution.albumdistribution.util.listeners.SearchItemClickListener
 
-class SearchItemFragment : Fragment() {
+class SearchItemFragment : Fragment(), SearchItemClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +31,7 @@ class SearchItemFragment : Fragment() {
 
     private fun fillRecyclerView(view: View) {
         // TODO: Replace with real data
-        val searchItemAdapter = SearchItemAdapter(mutableListOf())
+        val searchItemAdapter = SearchItemAdapter(mutableListOf(), this)
         val searchItemRecyclerView =
             view.findViewById<RecyclerView>(R.id.searchListRecyclerView)
         searchItemRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
@@ -42,5 +44,9 @@ class SearchItemFragment : Fragment() {
         searchInput.addTextChangedListener {
             val searchValue = searchInput.text
         }
+    }
+
+    override fun onClick(searchItem: SearchItem) {
+        // TODO: Implement search
     }
 }

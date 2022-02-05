@@ -1,5 +1,7 @@
 package com.musicdistribution.albumcatalog.xport.rest;
 
+import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
+import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.SongResponse;
@@ -33,6 +35,27 @@ public class SongResource {
         return songService.findAll().stream().map(SongResponse::from).collect(Collectors.toList());
     }
 
+    /**
+     * Method for getting information about all songs by a particular artist.
+     *
+     * @return the list of all albums.
+     */
+    @GetMapping("/artist/{artistId}")
+    public List<SongResponse> getAllByArtist(@PathVariable String artistId) {
+        return songService.findAllByArtist(ArtistId.of(artistId))
+                .stream().map(SongResponse::from).collect(Collectors.toList());
+    }
+
+    /**
+     * Method for getting information about all songs by a particular artist.
+     *
+     * @return the list of all albums.
+     */
+    @GetMapping("/album/{albumId}")
+    public List<SongResponse> getAllByAlbum(@PathVariable String albumId) {
+        return songService.findAllByAlbum(AlbumId.of(albumId))
+                .stream().map(SongResponse::from).collect(Collectors.toList());
+    }
 
     /**
      * Method for getting a page of information about all songs.

@@ -44,5 +44,13 @@ class ValidationUtils {
                 firstLastName[1][0].uppercaseChar() + firstLastName[1].substring(1)
             )
         }
+
+        fun generateTimeString(timeInSeconds: Int): String {
+            val minutes = timeInSeconds / 60
+            val seconds = timeInSeconds % 60
+            val minutesString = if(minutes < 10) "0$minutes" else minutes.toString()
+            val secondsString = if(seconds < 10) "0$seconds" else seconds.toString()
+            return "$minutesString:$secondsString"
+        }
     }
 }

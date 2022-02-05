@@ -20,12 +20,13 @@ import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUs
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.ui.auth.AuthActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import java.io.IOException
 
 
 class ProfileListenerFragment : Fragment() {
 
     private var fragmentView: View? = null
-    private var profileImageControl: ImageView? = null
+    private var imageControl: ImageView? = null
 
     private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
     private val PICK_IMAGE_REQUEST = 234
@@ -125,7 +126,7 @@ class ProfileListenerFragment : Fragment() {
         fragmentView!!.findViewById<EditText>(R.id.profileSurnameInputListener)
             .setText(currentUser.surname)
 
-        profileImageControl = fragmentView!!.findViewById<ImageView>(R.id.profileImageListener)
+        imageControl = fragmentView!!.findViewById(R.id.profileImageListener)
         val gsReference =
             FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${FirebaseAuthUser.user!!.email}.jpg")
         try {
@@ -137,9 +138,9 @@ class ProfileListenerFragment : Fragment() {
                 Glide.with(this)
                     .load(link)
                     .placeholder(R.drawable.default_profile)
-                    .into(profileImageControl!!)
+                    .into(imageControl!!)
             }
-        } catch (ignored: StorageException) {
+        } catch (ignored: IOException) {
         }
     }
 

@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.model.Category
 import com.musicdistribution.albumdistribution.model.CategoryItem
+import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
 
-class HomeVerticalAdapter(categoryList: MutableList<Category>, fragment: Fragment) :
+class HomeVerticalAdapter(
+    categoryList: MutableList<Category>,
+    fragment: CategoryItemClickListener
+) :
     RecyclerView.Adapter<HomeVerticalAdapter.ViewHolder>() {
 
     private var activityContext: Context? = null
@@ -58,7 +61,9 @@ class HomeVerticalAdapter(categoryList: MutableList<Category>, fragment: Fragmen
     }
 
     fun updateData(category: Category, categoryItem: CategoryItem) {
-        this.categoryData.filter { item -> item.id == category.id }[0].categoryItems.add(categoryItem)
+        this.categoryData.filter { item -> item.id == category.id }[0].categoryItems.add(
+            categoryItem
+        )
         this.notifyDataSetChanged()
     }
 }

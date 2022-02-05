@@ -1,6 +1,8 @@
 package com.musicdistribution.albumcatalog.xport.rest;
 
+import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
+import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.AlbumResponse;
 import com.musicdistribution.albumcatalog.services.AlbumService;
@@ -34,13 +36,24 @@ public class AlbumResource {
     }
 
     /**
-     * Method for getting a page of information about all albums.
+     * Method for getting information about all albums by a particular artist.
+     *
+     * @return the list of all albums.
+     */
+    @GetMapping("/artist/{artistId}")
+    public List<AlbumResponse> getAllByArtist(@PathVariable String artistId) {
+        return albumService.findAllByArtist(ArtistId.of(artistId))
+                .stream().map(AlbumResponse::from).collect(Collectors.toList());
+    }
+
+    /**
+     * Method for getting a page of information about published albums.
      *
      * @return the list of all albums.
      */
     @GetMapping("/page")
     public List<AlbumResponse> getAllPage() {
-        return albumService.findAllPageable().stream().map(AlbumResponse::from).collect(Collectors.toList());
+        return albumService.findAllPageable().stream().filter(Album::getIsPublished).map(AlbumResponse::from).collect(Collectors.toList());
     }
 
     /**

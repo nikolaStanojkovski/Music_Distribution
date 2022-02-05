@@ -9,16 +9,19 @@ class FirebaseAuthUser {
         var user: User? = null
 
         fun updateUser(snapshot: DataSnapshot) {
-            val item = snapshot.value as HashMap<String, Object>
-            val newUser = User(
-                item["name"]!!.toString(),
-                item["surname"]!!.toString(),
-                item["email"]!!.toString(),
-                Role.valueOf(item["role"]!!.toString()),
-                item["noFollowers"]!!.toString().toLong(),
-                item["noFollowing"]!!.toString().toLong()
-            )
+            val newUser = getUser(snapshot.value as HashMap<String, Object>)
             user = newUser
+        }
+
+        fun getUser(value: HashMap<String, Object>): User {
+            return User(
+                value["name"]!!.toString(),
+                value["surname"]!!.toString(),
+                value["email"]!!.toString(),
+                Role.valueOf(value["role"]!!.toString()),
+                value["noFollowers"]!!.toString().toLong(),
+                value["noFollowing"]!!.toString().toLong()
+            )
         }
     }
 }

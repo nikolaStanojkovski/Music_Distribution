@@ -33,10 +33,10 @@ public class SongRequest {
      */
     public static SongRequest build(Song song) {
         SongRequest songRequest = new SongRequest();
-        songRequest.setAlbumId(song.getId().getId());
+        songRequest.setSongName(song.getSongName());
         songRequest.setIsASingle(song.getIsASingle());
         songRequest.setLengthInSeconds(song.getSongLength().getLengthInSeconds());
-        songRequest.setCreatorId(songRequest.getCreatorId());
+        songRequest.setCreatorId(song.getCreator().getId().getId());
         songRequest.setAlbumId(Objects.isNull(song.getAlbum()) ? null : song.getAlbum().getId().getId());
 
         return songRequest;

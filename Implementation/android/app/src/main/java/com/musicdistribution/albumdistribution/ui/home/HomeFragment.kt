@@ -12,8 +12,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -27,9 +29,11 @@ import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseSto
 import com.musicdistribution.albumdistribution.model.CategoryItem
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.util.LocalizationUtils
+import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
+import java.io.IOException
 import java.util.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), CategoryItemClickListener {
 
     private lateinit var fragmentView: View
     private lateinit var homeFragmentViewModel: HomeFragmentViewModel
@@ -143,20 +147,16 @@ class HomeFragment : Fragment() {
                         for (item in songs) {
                             val gsReference =
                                 FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${item.id}.jpg")
-                            try {
-                                gsReference.downloadUrl.addOnCompleteListener { uri ->
-                                    var link = ""
-                                    if (uri.isSuccessful) {
-                                        link = uri.result.toString()
-                                    }
-                                    verticalAdapter.updateData(
-                                        CategoryData.mainData[0],
-                                        CategoryItem(item.id, link, CategoryItemType.SONG)
-                                    )
+                            gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                var link = ""
+                                if (uri.isSuccessful) {
+                                    link = uri.result.toString()
                                 }
-                            } catch (ignored: StorageException) {
-                            }
-
+                                verticalAdapter.updateData(
+                                    CategoryData.mainData[0],
+                                    CategoryItem(item.id, link, CategoryItemType.SONG)
+                                )
+                            }.addOnFailureListener {  }
                         }
                     } else {
                         Toast.makeText(
@@ -177,19 +177,16 @@ class HomeFragment : Fragment() {
                         for (item in albums) {
                             val gsReference =
                                 FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.id}.jpg")
-                            try {
-                                gsReference.downloadUrl.addOnCompleteListener { uri ->
-                                    var link = ""
-                                    if (uri.isSuccessful) {
-                                        link = uri.result.toString()
-                                    }
-                                    verticalAdapter.updateData(
-                                        CategoryData.mainData[1],
-                                        CategoryItem(item.id, link, CategoryItemType.ALBUM)
-                                    )
+                            gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                var link = ""
+                                if (uri.isSuccessful) {
+                                    link = uri.result.toString()
                                 }
-                            } catch (ignored: StorageException) {
-                            }
+                                verticalAdapter.updateData(
+                                    CategoryData.mainData[1],
+                                    CategoryItem(item.id, link, CategoryItemType.ALBUM)
+                                )
+                            }.addOnFailureListener { }
                         }
                     } else {
                         Toast.makeText(
@@ -208,9 +205,9 @@ class HomeFragment : Fragment() {
                 { artists ->
                     if (artists != null) {
                         for (item in artists) {
-                            val gsReference =
-                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${item.email}.jpg")
-                            try {
+                            if (item.email != FirebaseAuthUser.user!!.email) {
+                                val gsReference =
+                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${item.email}.jpg")
                                 gsReference.downloadUrl.addOnCompleteListener { uri ->
                                     var link = ""
                                     if (uri.isSuccessful) {
@@ -220,8 +217,7 @@ class HomeFragment : Fragment() {
                                         CategoryData.mainData[2],
                                         CategoryItem(item.id!!, link, CategoryItemType.ARTIST)
                                     )
-                                }
-                            } catch (ignored: StorageException) {
+                                }.addOnFailureListener { }
                             }
                         }
                     } else {
@@ -268,5 +264,25 @@ class HomeFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onClick(item: CategoryItem) {
+        when (item.itemType) {
+            CategoryItemType.ARTIST -> {
+                val bundle = bundleOf("selected_artist_id" to item.itemId)
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_artistFragment, bundle)
+            }
+            CategoryItemType.ALBUM -> {
+                val bundle = bundleOf("selected_album_id" to item.itemId)
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_albumFragment, bundle)
+            }
+            CategoryItemType.SONG -> {
+                val bundle = bundleOf("selected_song_id" to item.itemId)
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_songFragment, bundle)
+            }
+        }
     }
 }
