@@ -1,8 +1,8 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
-import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistContactInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistPersonalInfo;
@@ -36,9 +36,14 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public Page<Artist> findAllPageable() {
         long totalQuantity = artistRepository.count();
-        int index = (int)(Math.random() * totalQuantity);
+        int index = (int) (Math.random() * totalQuantity);
         Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
         return artistRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Artist> searchArtists(String searchTerm) {
+        return artistRepository.findAllByArtistPersonalInfo_ArtNameIgnoreCaseOrArtistPersonalInfo_FirstNameIgnoreCaseOrArtistPersonalInfo_LastNameIgnoreCase(searchTerm, searchTerm, searchTerm);
     }
 
     @Override

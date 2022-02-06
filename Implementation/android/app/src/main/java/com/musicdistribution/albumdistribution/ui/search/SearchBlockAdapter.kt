@@ -8,15 +8,30 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.model.GenreItem
+import com.musicdistribution.albumdistribution.util.listeners.GenreItemClickListener
 
-class SearchBlockAdapter(genreItemsList: MutableList<GenreItem>) :
+class SearchBlockAdapter(genreItemsList: MutableList<GenreItem>, genreItemClickListener: GenreItemClickListener) :
     RecyclerView.Adapter<SearchBlockAdapter.ViewHolder>() {
 
     private var activityContext: Context? = null
     private var genreData: MutableList<GenreItem> = genreItemsList
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private var parentFragment = genreItemClickListener
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         val genreImageControl: ImageView = view.findViewById(R.id.favouriteGenreImage)
+
+        init {
+            view.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = layoutPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val clickedItem = genreData[position]
+                parentFragment.onClick(clickedItem.genreName)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

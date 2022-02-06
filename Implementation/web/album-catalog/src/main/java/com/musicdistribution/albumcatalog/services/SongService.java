@@ -1,9 +1,6 @@
 package com.musicdistribution.albumcatalog.services;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.albumcatalog.domain.models.entity.Song;
-import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
+import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import org.springframework.data.domain.Page;
 
@@ -42,6 +39,14 @@ public interface SongService {
      * @return a page of the songs.
      */
     Page<Song> findAllPageable();
+
+    /**
+     * Method for searching songs.
+     *
+     * @param searchTerm - the term used for filtering
+     * @return a list of the filtered songs.
+     */
+    List<Song> searchSongs(String searchTerm);
 
     /**
      * Method for getting a song from the database.

@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistContactInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistPersonalInfo;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 

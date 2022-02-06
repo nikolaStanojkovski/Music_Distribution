@@ -44,6 +44,18 @@ public class ArtistResource {
     }
 
     /**
+     * Method for search artists.
+     *
+     * @param searchTerm - the search term by which the filtering will be done
+     * @return the list of all filtered artists.
+     */
+    @GetMapping("/search/{searchTerm}")
+    public List<ArtistResponse> searchArtists(@PathVariable String searchTerm) {
+        return artistService.searchArtists(searchTerm)
+                .stream().map(ArtistResponse::from).collect(Collectors.toList());
+    }
+
+    /**
      * Method for getting information about a specific artist.
      *
      * @param id - artist's id.

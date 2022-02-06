@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient"
     tools:context=".ui.profile.ProfileListFragment">
 
     <TextView
@@ -15,15 +16,14 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.046" />
+        app:layout_constraintVertical_bias="0.105" />
 
     <Button
         android:id="@+id/btnBackProfileItem"
         style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="46dp"
+        android:layout_width="36dp"
         android:layout_height="32dp"
         android:background="@android:color/transparent"
         app:icon="@drawable/left_arrow"
@@ -32,12 +32,12 @@
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profileListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="630dp"
+        android:layout_height="550dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

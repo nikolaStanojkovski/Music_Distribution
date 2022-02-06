@@ -1,6 +1,5 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
-import com.musicdistribution.albumcatalog.domain.exceptions.AlbumNotFoundException;
 import com.musicdistribution.albumcatalog.domain.exceptions.ArtistNotFoundException;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
@@ -50,9 +49,14 @@ public class SongServiceImpl implements SongService {
     @Override
     public Page<Song> findAllPageable() {
         long totalQuantity = songRepository.count();
-        int index = (int)(Math.random() * totalQuantity);
+        int index = (int) (Math.random() * totalQuantity);
         Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
         return songRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Song> searchSongs(String searchTerm) {
+        return songRepository.findAllBySongNameIgnoreCase(searchTerm);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class SongServiceImpl implements SongService {
                 Album album = albumRepository.findById(albumId).orElse(null);
                 song = Optional.of(Song.build(form.getSongName(), creator, album, SongLength.build(form.getLengthInSeconds())));
                 songRepository.save(song.get());
-                if(album != null) {
+                if (album != null) {
                     song.ifPresent(album::addSong);
                     albumRepository.save(album);
                 }

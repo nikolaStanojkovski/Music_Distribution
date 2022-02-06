@@ -20,8 +20,22 @@ interface AlbumCatalogApi {
     @GET("api/songs")
     fun getAllSongs(): Call<ArrayList<SongRetrofit>>
 
+
+    @GET("api/albums/search/{searchTerm}")
+    fun searchAlbums(@Path("searchTerm") searchTerm: String): Call<ArrayList<AlbumRetrofit>>
+
+    @GET("api/artists/search/{searchTerm}")
+    fun searchArtists(@Path("searchTerm") searchTerm: String): Call<ArrayList<ArtistRetrofit>>
+
+    @GET("api/songs/search/{searchTerm}")
+    fun searchSongs(@Path("searchTerm") searchTerm: String): Call<ArrayList<SongRetrofit>>
+
+
     @GET("api/albums/page")
     fun getAlbumsPage(): Call<ArrayList<AlbumRetrofit>>
+
+    @GET("api/albums/genre/{genre}")
+    fun getAlbumsGenre(@Path("genre") genre: String): Call<ArrayList<AlbumRetrofit>>
 
     @GET("api/artists/page")
     fun getArtistsPage(): Call<ArrayList<ArtistRetrofit>>

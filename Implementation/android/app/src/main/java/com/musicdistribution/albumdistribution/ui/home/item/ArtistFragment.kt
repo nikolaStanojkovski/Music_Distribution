@@ -15,12 +15,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.storage.StorageException
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.CategoryData
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
+import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItem
 import com.musicdistribution.albumdistribution.model.CategoryItemType
+import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeVerticalAdapter
 import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
@@ -30,6 +32,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
 
     private lateinit var homeItemFragmentViewModel: HomeItemFragmentViewModel
     private lateinit var fragmentView: View
+    private lateinit var currentArtist: ArtistRetrofit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,9 +58,6 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
             findNavController().navigate(R.id.action_artistFragment_to_homeFragment)
             homeItemFragmentViewModel.clear()
         }
-        fragmentView.findViewById<Button>(R.id.btnFollow).setOnClickListener {
-            // TODO: Add one more follower to artist
-        }
     }
 
     private fun fillData(selectedArtistId: String) {
@@ -71,6 +71,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                     if (artist != null) {
                         homeItemFragmentViewModel.fetchArtistFirebase(artist.email)
 
+                        currentArtist = artist
                         fragmentView.findViewById<TextView>(R.id.txtArtistName).text =
                             artist.artistPersonalInfo.fullName
                         val imageControl =
@@ -105,11 +106,13 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                         followButton.isEnabled = false
                     }
                 })
+        fillFollowButton(selectedArtistId)
 
         val verticalAdapter = HomeVerticalAdapter(CategoryData.artistData, this)
         val verticalRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.artistItemRecyclerView)
-        verticalRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        verticalRecyclerView.layoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
         verticalRecyclerView.adapter = verticalAdapter
         verticalAdapter.emptyData(CategoryData.artistData[0])
         verticalAdapter.emptyData(CategoryData.artistData[1])
@@ -161,6 +164,45 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                         }
                     }
                 })
+    }
+
+    private fun fillFollowButton(selectedArtistId: String) {
+        FirebaseRealtimeDB.favouriteArtistsReference.child("/follow-${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}-${selectedArtistId}")
+            .get()
+            .addOnSuccessListener { user ->
+                val followButton = fragmentView.findViewById<Button>(R.id.btnFollow)
+                if (user.exists()) {
+                    buttonUnfollow(followButton, selectedArtistId)
+                } else {
+                    buttonFollow(followButton, selectedArtistId)
+                }
+            }
+    }
+
+    private fun buttonFollow(followButton: Button, selectedArtistId: String) {
+        followButton.text = "Follow"
+        followButton.setOnClickListener {
+            homeItemFragmentViewModel.updateFollowers(
+                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
+                selectedArtistId,
+                true,
+                currentArtist.email
+            )
+            buttonUnfollow(followButton, selectedArtistId)
+        }
+    }
+
+    private fun buttonUnfollow(followButton: Button, selectedArtistId: String) {
+        followButton.text = "Unfollow"
+        followButton.setOnClickListener {
+            homeItemFragmentViewModel.updateFollowers(
+                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
+                selectedArtistId,
+                false,
+                currentArtist.email
+            )
+            buttonFollow(followButton, selectedArtistId)
+        }
     }
 
     override fun onClick(item: CategoryItem) {

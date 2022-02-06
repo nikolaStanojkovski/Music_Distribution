@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.firebase.storage.StorageException
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.CategoryData
 import com.musicdistribution.albumdistribution.data.SessionService
@@ -30,7 +29,6 @@ import com.musicdistribution.albumdistribution.model.CategoryItem
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.util.LocalizationUtils
 import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
-import java.io.IOException
 import java.util.*
 
 class HomeFragment : Fragment(), CategoryItemClickListener {
@@ -130,7 +128,8 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         val verticalAdapter = HomeVerticalAdapter(CategoryData.mainData, this)
         val verticalRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.mainHomeRecyclerView)
-        verticalRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        verticalRecyclerView.layoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
         verticalRecyclerView.adapter = verticalAdapter
 
         fetchSongs(verticalAdapter)
@@ -145,18 +144,20 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 { songs ->
                     if (songs != null) {
                         for (item in songs) {
-                            val gsReference =
-                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${item.id}.jpg")
-                            gsReference.downloadUrl.addOnCompleteListener { uri ->
-                                var link = ""
-                                if (uri.isSuccessful) {
-                                    link = uri.result.toString()
-                                }
-                                verticalAdapter.updateData(
-                                    CategoryData.mainData[0],
-                                    CategoryItem(item.id, link, CategoryItemType.SONG)
-                                )
-                            }.addOnFailureListener {  }
+                            if (item.creator!!.email != FirebaseAuthUser.user!!.email) {
+                                val gsReference =
+                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${item.id}.jpg")
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    var link = ""
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    verticalAdapter.updateData(
+                                        CategoryData.mainData[0],
+                                        CategoryItem(item.id, link, CategoryItemType.SONG)
+                                    )
+                                }.addOnFailureListener { }
+                            }
                         }
                     } else {
                         Toast.makeText(
@@ -175,18 +176,20 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 { albums ->
                     if (albums != null) {
                         for (item in albums) {
-                            val gsReference =
-                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.id}.jpg")
-                            gsReference.downloadUrl.addOnCompleteListener { uri ->
-                                var link = ""
-                                if (uri.isSuccessful) {
-                                    link = uri.result.toString()
-                                }
-                                verticalAdapter.updateData(
-                                    CategoryData.mainData[1],
-                                    CategoryItem(item.id, link, CategoryItemType.ALBUM)
-                                )
-                            }.addOnFailureListener { }
+                            if (item.creator.email != FirebaseAuthUser.user!!.email) {
+                                val gsReference =
+                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.id}.jpg")
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    var link = ""
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    verticalAdapter.updateData(
+                                        CategoryData.mainData[1],
+                                        CategoryItem(item.id, link, CategoryItemType.ALBUM)
+                                    )
+                                }.addOnFailureListener { }
+                            }
                         }
                     } else {
                         Toast.makeText(

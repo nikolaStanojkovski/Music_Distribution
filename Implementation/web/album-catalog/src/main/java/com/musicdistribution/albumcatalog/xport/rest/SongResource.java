@@ -68,6 +68,19 @@ public class SongResource {
     }
 
     /**
+     * Method for search songs.
+     *
+     * @param searchTerm - the search term by which the filtering will be done
+     * @return the list of all filtered songs.
+     */
+    @GetMapping("/search/{searchTerm}")
+    public List<SongResponse> searchSongs(@PathVariable String searchTerm) {
+        return songService.searchSongs(searchTerm)
+                .stream().map(SongResponse::from).collect(Collectors.toList());
+    }
+
+
+    /**
      * Method for getting information about a specific song.
      *
      * @param id - song's id.

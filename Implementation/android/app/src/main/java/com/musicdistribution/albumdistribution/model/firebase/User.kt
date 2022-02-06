@@ -7,6 +7,6 @@ data class User(
     var surname: String,
     val email: String,
     val role: Role,
-    val noFollowers: Long,
-    val noFollowing: Long
+    var noFollowers: Long,
+    var noFollowing: Long
 )

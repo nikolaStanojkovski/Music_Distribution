@@ -4,6 +4,7 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -11,6 +12,8 @@ import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
+import com.musicdistribution.albumdistribution.model.firebase.FavouriteArtist
+import com.musicdistribution.albumdistribution.model.firebase.FavouriteSong
 import com.musicdistribution.albumdistribution.model.firebase.User
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
@@ -56,13 +59,113 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
         })
     }
 
+    fun favouriteSong(fanId: String, selectedSongId: String, like: Boolean) {
+        if (like) {
+            val favouriteSongMap = FavouriteSong(fanId, selectedSongId)
+            FirebaseRealtimeDB.favouriteSongsReference.child("/like-${fanId}-${selectedSongId}")
+                .setValue(favouriteSongMap)
+        } else {
+            FirebaseRealtimeDB.favouriteSongsReference.child("/like-${fanId}-${selectedSongId}")
+                .removeValue()
+        }
+    }
+
+    fun updateFollowers(
+        followerId: String,
+        followingId: String,
+        follow: Boolean,
+        followingEmail: String
+    ) {
+        if (follow) {
+            val favouriteArtistMap = FavouriteArtist(followerId, followingId)
+            FirebaseRealtimeDB.favouriteArtistsReference.child("/follow-${followerId}-${followingId}")
+                .setValue(favouriteArtistMap)
+                .addOnCompleteListener(OnCompleteListener<Void?> { task ->
+                    if (task.isSuccessful) {
+                        FirebaseRealtimeDB.usersReference.child("/${followerId}").get()
+                            .addOnSuccessListener { user ->
+                                if (user.exists()) {
+                                    val userValue =
+                                        FirebaseAuthUser.getUser(user.value as HashMap<String, Object>)
+                                    userValue.noFollowing = userValue.noFollowing + 1
+                                    FirebaseRealtimeDB.usersReference.child("/${followerId}")
+                                        .setValue(userValue)
+                                }
+                            }
+                        FirebaseRealtimeDB.usersReference.orderByChild("email")
+                            .equalTo(followingEmail)
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    if (snapshot.exists() && snapshot.value != null) {
+                                        val values = snapshot.value as HashMap<String, Object>
+                                        val userInfo = values.entries.first()
+                                        val userValue =
+                                            FirebaseAuthUser.getUser(userInfo.value as HashMap<String, Object>)
+                                        userValue.noFollowers = userValue.noFollowers + 1
+                                        FirebaseRealtimeDB.usersReference.child("/${userInfo.key}")
+                                            .setValue(userValue)
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    Toast.makeText(
+                                        app,
+                                        "There was a problem when trying to fetch the user with email: $followingEmail",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            })
+                    }
+                })
+        } else {
+            FirebaseRealtimeDB.favouriteArtistsReference.child("/follow-${followerId}-${followingId}")
+                .removeValue().addOnCompleteListener(OnCompleteListener<Void?> { task ->
+                    if (task.isSuccessful) {
+                        FirebaseRealtimeDB.usersReference.child("/${followerId}").get()
+                            .addOnSuccessListener { user ->
+                                if (user.exists()) {
+                                    val userValue =
+                                        FirebaseAuthUser.getUser(user.value as HashMap<String, Object>)
+                                    userValue.noFollowing = userValue.noFollowing - 1
+                                    FirebaseRealtimeDB.usersReference.child("/${followerId}")
+                                        .setValue(userValue)
+                                }
+                            }
+                        FirebaseRealtimeDB.usersReference.orderByChild("email")
+                            .equalTo(followingEmail)
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    if (snapshot.exists() && snapshot.value != null) {
+                                        val values = snapshot.value as HashMap<String, Object>
+                                        val userInfo = values.entries.first()
+                                        val userValue =
+                                            FirebaseAuthUser.getUser(userInfo.value as HashMap<String, Object>)
+                                        userValue.noFollowers = userValue.noFollowers - 1
+                                        FirebaseRealtimeDB.usersReference.child("/${userInfo.key}")
+                                            .setValue(userValue)
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    Toast.makeText(
+                                        app,
+                                        "There was a problem when trying to fetch the user with email: $followingEmail",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            })
+                    }
+                })
+        }
+
+    }
+
     fun fetchArtistFirebase(email: String) {
         FirebaseRealtimeDB.usersReference.orderByChild("email").equalTo(email)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists() && snapshot.value != null) {
                         val value = snapshot.value as HashMap<String, Object>
-                        usersLiveData.value = null
                         usersLiveData.value =
                             FirebaseAuthUser.getUser(value.entries.first().value as HashMap<String, Object>)
                     } else {
@@ -89,7 +192,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                 ) {
                     val albums = response.body()
                     if (albums != null) {
-                        artistAlbumsLiveData.value = null
                         artistAlbumsLiveData.value = albums
                     }
                 }
@@ -116,7 +218,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                 ) {
                     val songs = response.body()
                     if (songs != null) {
-                        artistSongsLiveData.value = null
                         artistSongsLiveData.value = songs
                     }
                 }
@@ -142,7 +243,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
             ) {
                 val album = response!!.body()
                 if (album != null) {
-                    albumsLiveData.value = null
                     albumsLiveData.value = album
                 }
             }
@@ -165,7 +265,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
             ) {
                 val songs = response!!.body()
                 if (songs != null && songs.isNotEmpty()) {
-                    albumSongsLiveData.value = null
                     albumSongsLiveData.value = songs
                 }
             }

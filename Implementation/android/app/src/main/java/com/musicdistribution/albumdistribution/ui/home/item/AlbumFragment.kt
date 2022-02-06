@@ -58,6 +58,12 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
     private fun fillData(selectedAlbumId: String) {
         homeItemFragmentViewModel.fetchAlbumApi(selectedAlbumId)
         homeItemFragmentViewModel.fetchAlbumSongsApi(selectedAlbumId)
+        val songItemAdapter = SearchItemAdapter(mutableListOf(), this)
+        val songItemRecyclerView =
+            fragmentView.findViewById<RecyclerView>(R.id.songListAlbumRecyclerView)
+        songItemRecyclerView!!.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        songItemRecyclerView.adapter = songItemAdapter
+        songItemAdapter.emptyData()
 
         homeItemFragmentViewModel.getAlbumsLiveData()
             .observe(viewLifecycleOwner,
@@ -86,12 +92,6 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                         }
                     }
                 })
-        val songItemAdapter = SearchItemAdapter(mutableListOf(), this)
-        val songItemRecyclerView =
-            view?.findViewById<RecyclerView>(R.id.songListAlbumRecyclerView)
-        songItemRecyclerView!!.layoutManager = LinearLayoutManager(requireActivity())
-        songItemRecyclerView.adapter = songItemAdapter
-        songItemAdapter.emptyData()
         homeItemFragmentViewModel.getAlbumSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
@@ -109,7 +109,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                             val searchItem = SearchItem(
                                 item.id,
                                 item.songName,
-                                "Length: ${ValidationUtils.generateTimeString(item.songLength.lengthInSeconds)}",
+                                "Length: ${ValidationUtils.generateTimeString(item.songLength!!.lengthInSeconds)}",
                                 CategoryItemType.SONG,
                                 link
                             )

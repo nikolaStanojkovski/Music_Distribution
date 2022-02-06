@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
+import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
 import com.musicdistribution.albumdistribution.util.ValidationUtils
@@ -42,12 +44,46 @@ class SongFragment : Fragment() {
         homeItemFragmentViewModel =
             ViewModelProvider(requireActivity())[HomeItemFragmentViewModel::class.java]
         fillData(selectedSongId!!)
-        fragmentView.findViewById<ImageView>(R.id.btnLikeSong).setOnClickListener {
-            // TODO: Implement like song functionality
-        }
         fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
             findNavController().navigate(R.id.action_songFragment_to_homeFragment)
             homeItemFragmentViewModel.clear()
+        }
+        fillLikeButton(fragmentView.findViewById(R.id.btnLikeSong), selectedSongId)
+    }
+
+    private fun fillLikeButton(btnLikeSong: ImageView?, selectedSongId: String) {
+        FirebaseRealtimeDB.favouriteSongsReference.child("/like-${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}-${selectedSongId}")
+            .get()
+            .addOnSuccessListener { entry ->
+                if (entry.exists()) {
+                    buttonUnlike(btnLikeSong!!, selectedSongId)
+                } else {
+                    buttonLike(btnLikeSong!!, selectedSongId)
+                }
+            }
+    }
+
+    private fun buttonLike(likeButton: ImageView, selectedSongId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_unfilled)
+        likeButton.setOnClickListener {
+            homeItemFragmentViewModel.favouriteSong(
+                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
+                selectedSongId,
+                true
+            )
+            buttonUnlike(likeButton, selectedSongId)
+        }
+    }
+
+    private fun buttonUnlike(likeButton: ImageView, selectedSongId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_filled)
+        likeButton.setOnClickListener {
+            homeItemFragmentViewModel.favouriteSong(
+                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
+                selectedSongId,
+                false,
+            )
+            buttonLike(likeButton, selectedSongId)
         }
     }
 
@@ -61,20 +97,20 @@ class SongFragment : Fragment() {
                         fragmentView.findViewById<TextView>(R.id.txtSongHeading).text =
                             if (song.isASingle) "Taken from" else "Taken from album"
                         fragmentView.findViewById<TextView>(R.id.txtSongProperty).text =
-                            if (!song.isASingle) song.album.albumName else song.songName
+                            if (!song.isASingle) song.album!!.albumName else song.songName
                         fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
                             song.songName
                         fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
-                            song.creator.artistPersonalInfo.fullName
+                            song.creator!!.artistPersonalInfo.fullName
 
                         fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
-                            "Length: ${ValidationUtils.generateTimeString(song.songLength.lengthInSeconds)}"
+                            "Length: ${ValidationUtils.generateTimeString(song.songLength!!.lengthInSeconds)}"
 
                         val imageControl =
                             fragmentView.findViewById<ImageView>(R.id.imageSong)
                         val gsReference =
                             if (song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
-                            else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album.id}.jpg")
+                            else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
                         gsReference.downloadUrl.addOnCompleteListener { uri ->
                             var link = ""
                             if (uri.isSuccessful) {

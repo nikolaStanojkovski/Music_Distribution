@@ -8,16 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.firebase.storage.StorageException
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
+import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
+import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.ui.auth.AuthActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
 import java.io.IOException
@@ -86,6 +88,21 @@ class ProfileListenerFragment : Fragment() {
             startActivity(intent)
             requireActivity().finish()
         }
+
+        fragmentView!!.findViewById<Button>(R.id.btnFavouriteArtistsListener).setOnClickListener {
+            val bundle = bundleOf("listing_type" to CategoryItemType.ARTIST)
+            findNavController().navigate(
+                R.id.action_profileFragmentListener_to_profileListFragment,
+                bundle
+            )
+        }
+        fragmentView!!.findViewById<Button>(R.id.btnFavouriteSongsListener).setOnClickListener {
+            val bundle = bundleOf("listing_type" to CategoryItemType.SONG)
+            findNavController().navigate(
+                R.id.action_profileFragmentListener_to_profileListFragment,
+                bundle
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,6 +130,11 @@ class ProfileListenerFragment : Fragment() {
     }
 
     private fun fillProfileInfo() {
+        FirebaseRealtimeDB.usersReference.child("/${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}")
+            .get().addOnSuccessListener { user ->
+                FirebaseAuthUser.updateUser(user)
+            }
+
         val currentUser = FirebaseAuthUser.user!!
         fragmentView!!.findViewById<TextView>(R.id.txtNoFollowingListener).text =
             currentUser.noFollowing.toString()

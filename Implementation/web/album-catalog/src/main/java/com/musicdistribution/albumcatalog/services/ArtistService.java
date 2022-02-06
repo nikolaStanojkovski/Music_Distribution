@@ -4,7 +4,6 @@ import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +26,14 @@ public interface ArtistService {
      * @return a page of the artists.
      */
     Page<Artist> findAllPageable();
+
+    /**
+     * Method for searching artists.
+     *
+     * @param searchTerm - the term used for filtering
+     * @return a list of the filtered artists.
+     */
+    List<Artist> searchArtists(String searchTerm);
 
     /**
      * Method for getting an artist from the database.

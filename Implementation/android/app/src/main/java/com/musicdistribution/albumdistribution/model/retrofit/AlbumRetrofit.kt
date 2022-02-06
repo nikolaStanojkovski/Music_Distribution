@@ -9,5 +9,6 @@ data class AlbumRetrofit(
     val isPublished: Boolean,
     val genre: Genre,
     val artistId: String,
-    val artistName: String
+    val artistName: String,
+    val creator: ArtistRetrofit
 )

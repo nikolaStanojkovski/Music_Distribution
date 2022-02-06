@@ -6,6 +6,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.AlbumResponse;
 import com.musicdistribution.albumcatalog.services.AlbumService;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,20 @@ public class AlbumResource {
     }
 
     /**
-     * Method for getting information about all albums by a particular artist.
+     * Method for getting a page of information about published albums.
      *
      * @return the list of all albums.
+     */
+    @GetMapping("/page")
+    public List<AlbumResponse> getAllPage() {
+        return albumService.findAllPageable().stream().filter(Album::getIsPublished).map(AlbumResponse::from).collect(Collectors.toList());
+    }
+
+    /**
+     * Method for getting information about all albums by a particular artist.
+     *
+     * @param artistId - artist's id
+     * @return the list of all filtered albums.
      */
     @GetMapping("/artist/{artistId}")
     public List<AlbumResponse> getAllByArtist(@PathVariable String artistId) {
@@ -47,13 +59,27 @@ public class AlbumResource {
     }
 
     /**
-     * Method for getting a page of information about published albums.
+     * Method for getting information about all albums filtered by a particular genre.
      *
-     * @return the list of all albums.
+     * @param genre - the genre by which the filtering will be done
+     * @return the list of all filtered albums.
      */
-    @GetMapping("/page")
-    public List<AlbumResponse> getAllPage() {
-        return albumService.findAllPageable().stream().filter(Album::getIsPublished).map(AlbumResponse::from).collect(Collectors.toList());
+    @GetMapping("/genre/{genre}")
+    public List<AlbumResponse> getAllByGenre(@PathVariable String genre) {
+        return albumService.findAllByGenre(Genre.valueOf(genre))
+                .stream().map(AlbumResponse::from).collect(Collectors.toList());
+    }
+
+    /**
+     * Method for search albums.
+     *
+     * @param searchTerm - the search term by which the filtering will be done
+     * @return the list of all filtered albums.
+     */
+    @GetMapping("/search/{searchTerm}")
+    public List<AlbumResponse> searchAlbums(@PathVariable String searchTerm) {
+        return albumService.searchAlbums(searchTerm)
+                .stream().map(AlbumResponse::from).collect(Collectors.toList());
     }
 
     /**

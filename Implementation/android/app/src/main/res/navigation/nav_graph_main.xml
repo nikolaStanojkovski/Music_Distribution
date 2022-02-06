@@ -57,7 +57,17 @@
         android:id="@+id/searchItemFragment"
         android:name="com.musicdistribution.albumdistribution.ui.search.SearchItemFragment"
         android:label="fragment_search_item"
-        tools:layout="@layout/fragment_search_item" />
+        tools:layout="@layout/fragment_search_item" >
+        <action
+            android:id="@+id/action_searchItemFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+        <action
+            android:id="@+id/action_searchItemFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_searchItemFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+    </fragment>
     <fragment
         android:id="@+id/albumFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.item.AlbumFragment"
@@ -107,5 +117,18 @@
         android:id="@+id/profileListFragment"
         android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListFragment"
         android:label="fragment_profile_list"
-        tools:layout="@layout/fragment_profile_list" />
+        tools:layout="@layout/fragment_profile_list" >
+        <action
+            android:id="@+id/action_profileListFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+        <action
+            android:id="@+id/action_profileListFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_profileListFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+        <action
+            android:id="@+id/action_profileListFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

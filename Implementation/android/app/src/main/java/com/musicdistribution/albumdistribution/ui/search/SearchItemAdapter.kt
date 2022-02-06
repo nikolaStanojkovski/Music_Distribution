@@ -64,7 +64,15 @@ class SearchItemAdapter(
     }
 
     fun emptyData() {
-        this.searchItemData = mutableListOf()
+        val size = this.searchItemData.size
+        this.searchItemData.clear()
+        if(size > 0) {
+            this.notifyItemRangeChanged(0, size)
+        }
+    }
+
+    fun updateDataItem(searchItem: SearchItem) {
+        this.searchItemData.add(searchItem)
         this.notifyDataSetChanged()
     }
 
@@ -72,5 +80,4 @@ class SearchItemAdapter(
         this.searchItemData = searchItemList
         this.notifyDataSetChanged()
     }
-
 }

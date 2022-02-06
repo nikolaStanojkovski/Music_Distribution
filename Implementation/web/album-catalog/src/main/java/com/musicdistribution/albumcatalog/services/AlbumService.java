@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -22,18 +23,35 @@ public interface AlbumService {
     List<Album> findAll();
 
     /**
-     * Method for getting all the albums from the database.
+     * Method for getting a page of published albums from the database.
      *
-     * @return a list of the albums.
+     * @return a page of the filtered albums.
+     */
+    Page<Album> findAllPageable();
+
+    /**
+     * Method for getting all the albums by a particular artist from the database.
+     *
+     * @param artistId - artist's id
+     * @return a list of the filtered albums.
      */
     List<Album> findAllByArtist(ArtistId artistId);
 
     /**
-     * Method for getting a page of published albums from the database.
+     * Method for getting all the albums filtered by genre from the database.
      *
-     * @return a page of the albums.
+     * @param genre - album's genre used for filtering
+     * @return a list of the filtered albums.
      */
-    Page<Album> findAllPageable();
+    List<Album> findAllByGenre(Genre genre);
+
+    /**
+     * Method for searching albums.
+     *
+     * @param searchTerm - the term used for filtering
+     * @return a list of the filtered albums.
+     */
+    List<Album> searchAlbums(String searchTerm);
 
     /**
      * Method for getting an album from the database.

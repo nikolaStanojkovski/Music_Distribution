@@ -1,16 +1,17 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
-import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
 import com.musicdistribution.albumcatalog.domain.exceptions.AlbumNotFoundException;
 import com.musicdistribution.albumcatalog.domain.exceptions.ArtistNotFoundException;
 import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +44,19 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
+    public List<Album> findAllByGenre(Genre genre) {
+        return albumRepository.findAllByGenre(genre);
+    }
+
+    @Override
+    public List<Album> searchAlbums(String searchTerm) {
+        return albumRepository.findAllByAlbumNameIgnoreCase(searchTerm);
+    }
+
+    @Override
     public Page<Album> findAllPageable() {
         long totalQuantity = albumRepository.count();
-        int index = (int)(Math.random() * totalQuantity);
+        int index = (int) (Math.random() * totalQuantity);
         Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
         return albumRepository.findAll(pageable);
     }

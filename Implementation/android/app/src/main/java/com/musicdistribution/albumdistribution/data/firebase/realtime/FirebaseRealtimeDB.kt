@@ -7,5 +7,7 @@ class FirebaseRealtimeDB {
         var database = FirebaseDatabase.getInstance()
 
         var usersReference = database.getReference("users")
+        var favouriteArtistsReference = database.getReference("favourite-artists")
+        var favouriteSongsReference = database.getReference("favourite-songs")
     }
 }
