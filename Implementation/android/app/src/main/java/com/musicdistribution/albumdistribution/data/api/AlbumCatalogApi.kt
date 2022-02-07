@@ -1,9 +1,6 @@
 package com.musicdistribution.albumdistribution.data.api
 
-import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofit
-import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
-import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth
-import com.musicdistribution.albumdistribution.model.retrofit.SongRetrofit
+import com.musicdistribution.albumdistribution.model.retrofit.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -11,14 +8,11 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AlbumCatalogApi {
-    @GET("api/albums")
-    fun getAllAlbums(): Call<ArrayList<AlbumRetrofit>>
-
-    @GET("api/artists")
-    fun getAllArtists(): Call<ArrayList<ArtistRetrofit>>
-
     @GET("api/songs")
     fun getAllSongs(): Call<ArrayList<SongRetrofit>>
+
+    @GET("api/albums")
+    fun getAllAlbums(): Call<ArrayList<AlbumRetrofit>>
 
 
     @GET("api/albums/search/{searchTerm}")
@@ -45,14 +39,14 @@ interface AlbumCatalogApi {
 
 
     @POST("api/artists/login")
-    fun loginArtist(@Body artist: ArtistRetrofitAuth): Call<ArtistRetrofit>
+    fun loginArtist(@Body artist: ArtistRetrofitAuth): Call<ArtistRetrofit?>
 
     @POST("api/artists/register")
-    fun registerArtist(@Body artist: ArtistRetrofitAuth): Call<ArtistRetrofit>
+    fun registerArtist(@Body artist: ArtistRetrofitAuth): Call<ArtistRetrofit?>
 
 
     @GET("api/artists/{id}")
-    fun getArtist(@Path("id") id: String): Call<ArtistRetrofit>
+    fun getArtist(@Path("id") id: String): Call<ArtistRetrofit?>
 
     @GET("api/albums/artist/{artistId}")
     fun getArtistAlbums(@Path("artistId") artistId: String): Call<ArrayList<AlbumRetrofit>>
@@ -62,12 +56,22 @@ interface AlbumCatalogApi {
 
 
     @GET("api/albums/{id}")
-    fun getAlbum(@Path("id") id: String): Call<AlbumRetrofit>
+    fun getAlbum(@Path("id") id: String): Call<AlbumRetrofit?>
 
     @GET("api/songs/album/{albumId}")
     fun getAlbumSongs(@Path("albumId") albumId: String): Call<ArrayList<SongRetrofit>>
 
 
     @GET("api/songs/{id}")
-    fun getSong(@Path("id") id: String): Call<SongRetrofit>
+    fun getSong(@Path("id") id: String): Call<SongRetrofit?>
+
+
+    @POST("api/albums/create")
+    fun createAlbum(@Body album: AlbumRetrofitCreate): Call<AlbumRetrofit?>
+
+    @POST("api/songs/publish")
+    fun publishSong(@Body album: SongRetrofitCreate): Call<SongRetrofit?>
+
+    @GET("api/songs/unpublish/{id}")
+    fun unPublishSong(@Path("id") id: String): Call<SongRetrofit?>
 }

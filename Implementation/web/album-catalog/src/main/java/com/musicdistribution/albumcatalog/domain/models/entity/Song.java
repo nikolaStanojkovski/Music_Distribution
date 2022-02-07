@@ -68,4 +68,30 @@ public class Song extends AbstractEntity<SongId> {
 
         return song;
     }
+
+    /**
+     * Method for publishing a song.
+     *
+     * @param song - the song to be published.
+     * @return the published song.
+     */
+    public static Song publishSong(Song song) {
+        if (!song.isASingle) {
+            song.isASingle = true;
+        }
+        return song;
+    }
+
+    /**
+     * Method for unpublishing a song.
+     *
+     * @param song - the song to be unpublished.
+     * @return the unpublished song.
+     */
+    public static Song unpublishSong(Song song) {
+        if (song.isASingle) {
+            song.isASingle = false;
+        }
+        return song;
+    }
 }

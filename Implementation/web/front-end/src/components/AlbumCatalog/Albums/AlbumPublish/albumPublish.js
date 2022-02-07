@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, useHistory} from 'react-router-dom';
-import AlbumFormUtils from "../albumFormUtils";
 
 const PublishAlbum = (props) => {
 
@@ -11,6 +10,23 @@ const PublishAlbum = (props) => {
         albumTier: 0
     });
 
+    const getAlbumTier = (inputValue) => {
+        switch (inputValue) {
+            case "Bronze":
+                return "10.00 EUR";
+            case "Silver":
+                return "20.00 EUR";
+            case "Gold":
+                return "50.00 EUR";
+            case "Platinum":
+                return "100.00 EUR";
+            case "Diamond":
+                return "500.00 EUR";
+            default:
+                return "0.00 EUR";
+        }
+    }
+
     const handleChange = (e) => {
         updateFormData({
             ...formData,
@@ -20,7 +36,7 @@ const PublishAlbum = (props) => {
         if (e.target.name === "albumTier") {
             let subFee = document.getElementById("subscriptionFee");
 
-            subFee.value = AlbumFormUtils.getAlbumTier(e.target.value);
+            subFee.value = getAlbumTier(e.target.value);
         }
     }
 

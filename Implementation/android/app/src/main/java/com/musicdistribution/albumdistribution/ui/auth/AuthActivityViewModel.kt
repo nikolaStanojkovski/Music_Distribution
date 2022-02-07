@@ -64,18 +64,18 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
                 artName = "[not-defined]",
                 password = password
             )
-            albumCatalogApi.loginArtist(artistRetrofit).enqueue(object : Callback<ArtistRetrofit> {
+            albumCatalogApi.loginArtist(artistRetrofit).enqueue(object : Callback<ArtistRetrofit?> {
                 override fun onResponse(
-                    call: Call<ArtistRetrofit>?,
-                    response: Response<ArtistRetrofit>
+                    call: Call<ArtistRetrofit?>?,
+                    response: Response<ArtistRetrofit?>
                 ) {
                     val artistLogin = response.body()
                     if (artistLogin == null) {
                         albumCatalogApi.registerArtist(artistRetrofit)
-                            .enqueue(object : Callback<ArtistRetrofit> {
+                            .enqueue(object : Callback<ArtistRetrofit?> {
                                 override fun onResponse(
-                                    call: Call<ArtistRetrofit>?,
-                                    response: Response<ArtistRetrofit>?
+                                    call: Call<ArtistRetrofit?>?,
+                                    response: Response<ArtistRetrofit?>?
                                 ) {
                                     val artist = response!!.body()
                                     if (artist != null) {
@@ -83,7 +83,10 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
                                     }
                                 }
 
-                                override fun onFailure(call: Call<ArtistRetrofit>?, t: Throwable?) {
+                                override fun onFailure(
+                                    call: Call<ArtistRetrofit?>?,
+                                    t: Throwable?
+                                ) {
                                     Toast.makeText(
                                         app,
                                         "There was a problem when trying to register the artist to the server 'Album Catalog'!",
@@ -100,7 +103,7 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
                     }
                 }
 
-                override fun onFailure(call: Call<ArtistRetrofit>?, throwable: Throwable) {
+                override fun onFailure(call: Call<ArtistRetrofit?>?, throwable: Throwable) {
                     Toast.makeText(
                         app,
                         "There is already an artist with that username and password!",

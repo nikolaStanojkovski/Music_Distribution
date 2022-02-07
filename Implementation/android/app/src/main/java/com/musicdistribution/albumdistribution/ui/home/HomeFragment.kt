@@ -68,6 +68,12 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         if (homeFragmentViewModel.getArtistsLiveData().value.isNullOrEmpty()) {
             homeFragmentViewModel.fetchArtists()
         }
+        if (homeFragmentViewModel.getPublishedSongsLiveData().value.isNullOrEmpty() && FirebaseAuthUser.user!!.role == Role.CREATOR) {
+            homeFragmentViewModel.fetchPublishedSongs()
+        }
+        if (homeFragmentViewModel.getAlbumsLiveData().value.isNullOrEmpty() && FirebaseAuthUser.user!!.role == Role.CREATOR) {
+            homeFragmentViewModel.fetchPublishedAlbums()
+        }
     }
 
     private fun fillAddButton() {
@@ -135,6 +141,18 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         fetchSongs(verticalAdapter)
         fetchAlbums(verticalAdapter)
         fetchArtists(verticalAdapter)
+        if (FirebaseAuthUser.user!!.role == Role.CREATOR) {
+            fetchPublishedSongs(verticalAdapter)
+            fetchPublishedAlbums(verticalAdapter)
+        }
+    }
+
+    private fun fillLocation(longitude: Double, latitude: Double) {
+        val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+        val address =
+            geocoder.getFromLocation(latitude, longitude, 1)[0]
+        val locationString = "${address.adminArea}, ${address.countryCode}"
+        fragmentView.findViewById<TextView>(R.id.locationText).text = locationString
     }
 
     private fun fetchSongs(verticalAdapter: HomeVerticalAdapter) {
@@ -233,6 +251,68 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 })
     }
 
+    private fun fetchPublishedSongs(verticalAdapter: HomeVerticalAdapter) {
+        verticalAdapter.updateCategory(CategoryData.artistData[0])
+        verticalAdapter.emptyData(CategoryData.artistData[0])
+        homeFragmentViewModel.getPublishedSongsLiveData()
+            .observe(viewLifecycleOwner,
+                { publishedSongs ->
+                    if (publishedSongs != null && publishedSongs.isNotEmpty()) {
+                        for (item in publishedSongs) {
+                            val gsReference =
+                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${item.id}.jpg")
+                            gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                var link = ""
+                                if (uri.isSuccessful) {
+                                    link = uri.result.toString()
+                                }
+                                verticalAdapter.updateData(
+                                    CategoryData.artistData[0],
+                                    CategoryItem(item.id, link, CategoryItemType.PUBLISHED_SONG)
+                                )
+                            }.addOnFailureListener { }
+                        }
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Error when trying to fetch published songs",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+    }
+
+    private fun fetchPublishedAlbums(verticalAdapter: HomeVerticalAdapter) {
+        verticalAdapter.updateCategory(CategoryData.artistData[1])
+        verticalAdapter.emptyData(CategoryData.artistData[1])
+        homeFragmentViewModel.getPublishedAlbumsLiveData()
+            .observe(viewLifecycleOwner,
+                { publishedAlbums ->
+                    if (publishedAlbums != null) {
+                        for (item in publishedAlbums) {
+                            val gsReference =
+                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.id}.jpg")
+                            gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                var link = ""
+                                if (uri.isSuccessful) {
+                                    link = uri.result.toString()
+                                }
+                                verticalAdapter.updateData(
+                                    CategoryData.artistData[1],
+                                    CategoryItem(item.id, link, CategoryItemType.PUBLISHED_ALBUM)
+                                )
+                            }.addOnFailureListener { }
+                        }
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Error when trying to fetch albums",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+    }
+
     private fun getLocation(locationProvider: FusedLocationProviderClient?) {
         if (ContextCompat.checkSelfPermission(
                 requireActivity(),
@@ -251,22 +331,20 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 1
             )
         } else {
-            locationProvider!!.lastLocation.addOnCompleteListener { task ->
-                val location = task.result
-                if (location != null) {
-                    val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                    val address =
-                        geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
-                    val locationString = "${address.adminArea}, ${address.countryCode}"
-
-                    SessionService.save("location_latitude", address.latitude.toString())
-                    SessionService.save("location_longitude", address.longitude.toString())
-
-                    fragmentView.findViewById<TextView>(R.id.locationText).text = locationString
+            if (SessionService.read("location_latitude") == null || SessionService.read("location_longitude") == null) {
+                locationProvider!!.lastLocation.addOnCompleteListener { task ->
+                    val location = task.result
+                    if (location != null) {
+                        SessionService.save("location_latitude", location.latitude.toString())
+                        SessionService.save("location_longitude", location.longitude.toString())
+                    }
                 }
             }
+            fillLocation(
+                SessionService.read("location_longitude")!!.toDouble(),
+                SessionService.read("location_latitude")!!.toDouble()
+            )
         }
-
     }
 
     override fun onClick(item: CategoryItem) {
@@ -285,6 +363,18 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 val bundle = bundleOf("selected_song_id" to item.itemId)
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_songFragment, bundle)
+            }
+            CategoryItemType.PUBLISHED_SONG -> {
+                val bundle =
+                    bundleOf("selected_song_id" to item.itemId, "item_type" to item.itemType)
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_songFragment, bundle)
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                val bundle =
+                    bundleOf("selected_album_id" to item.itemId, "item_type" to item.itemType)
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_albumFragment, bundle)
             }
         }
     }

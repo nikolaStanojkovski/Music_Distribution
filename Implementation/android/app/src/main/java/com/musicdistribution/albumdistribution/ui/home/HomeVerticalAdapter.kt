@@ -60,6 +60,13 @@ class HomeVerticalAdapter(
         this.notifyDataSetChanged()
     }
 
+    fun updateCategory(category: Category) {
+        if(this.categoryData.none { item -> item.id == category.id }) {
+            this.categoryData.add(category)
+            this.notifyDataSetChanged()
+        }
+    }
+
     fun updateData(category: Category, categoryItem: CategoryItem) {
         this.categoryData.filter { item -> item.id == category.id }[0].categoryItems.add(
             categoryItem

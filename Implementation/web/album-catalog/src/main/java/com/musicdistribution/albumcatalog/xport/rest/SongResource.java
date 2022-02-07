@@ -106,4 +106,29 @@ public class SongResource {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    /**
+     * Method for publishing a song.
+     *
+     * @param songRequest - dto object for the song to be published.
+     * @return the published song.
+     */
+    @PostMapping("/publish")
+    public ResponseEntity<SongResponse> publishSong(@RequestBody @Valid SongRequest songRequest) {
+        return this.songService.publishSong(songRequest)
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    /**
+     * Method for unpublishing a song.
+     *
+     * @param id - the id of the song to be unpublished.
+     * @return the unpublished song.
+     */
+    @GetMapping("/unpublish/{id}")
+    public ResponseEntity<SongResponse> unpublishSong(@PathVariable String id) {
+        return this.songService.unpublishSong(id)
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
 }

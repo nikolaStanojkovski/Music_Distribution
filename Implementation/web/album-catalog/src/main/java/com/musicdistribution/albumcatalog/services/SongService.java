@@ -59,8 +59,24 @@ public interface SongService {
     /**
      * Method for creating a new song in the database.
      *
-     * @param song - artist's dto object containing new artist's information.
+     * @param song - song's dto object containing new song's information.
      * @return an optional with the found song.
      */
     Optional<Song> createSong(SongRequest song);
+
+    /**
+     * Method for publishing a song.
+     *
+     * @param songRequest - song's dto object containing new published song's information.
+     * @return an optional with the published song.
+     */
+    Optional<Song> publishSong(SongRequest songRequest);
+
+    /**
+     * Method for unpublishing a song.
+     *
+     * @param id - the id of the song to be unpublished
+     * @return an optional with the unpublished song.
+     */
+    Optional<Song> unpublishSong(String id);
 }

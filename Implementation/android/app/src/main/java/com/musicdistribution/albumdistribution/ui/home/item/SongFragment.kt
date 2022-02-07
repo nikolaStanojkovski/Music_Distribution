@@ -1,5 +1,6 @@
 package com.musicdistribution.albumdistribution.ui.home.item
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
+import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.ui.home.HomeActivity
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 
@@ -36,6 +38,7 @@ class SongFragment : Fragment() {
         fragmentView = view
 
         val selectedSongId = arguments?.get("selected_song_id") as String?
+        val categoryItemType = arguments?.get("item_type") as CategoryItemType?
         if (selectedSongId == null) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))
             requireActivity().finish()
@@ -43,12 +46,76 @@ class SongFragment : Fragment() {
 
         homeItemFragmentViewModel =
             ViewModelProvider(requireActivity())[HomeItemFragmentViewModel::class.java]
-        fillData(selectedSongId!!)
+        fillData(selectedSongId!!, categoryItemType)
         fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
             findNavController().navigate(R.id.action_songFragment_to_homeFragment)
             homeItemFragmentViewModel.clear()
         }
-        fillLikeButton(fragmentView.findViewById(R.id.btnLikeSong), selectedSongId)
+    }
+
+    private fun fillData(selectedSongId: String, categoryItemType: CategoryItemType?) {
+        if (categoryItemType != null && categoryItemType == CategoryItemType.PUBLISHED_SONG) {
+            fragmentView.findViewById<ImageView>(R.id.btnLikeSong).visibility = View.GONE
+            val unpublishButton = fragmentView.findViewById<Button>(R.id.btnUnPublishSong)
+            unpublishButton.visibility = View.VISIBLE
+            unpublishButton.setOnClickListener {
+                fillConfirmDialog(selectedSongId)
+            }
+        } else {
+            fragmentView.findViewById<Button>(R.id.btnUnPublishSong).visibility = View.GONE
+            fragmentView.findViewById<ImageView>(R.id.btnLikeSong).visibility = View.VISIBLE
+            fillLikeButton(fragmentView.findViewById(R.id.btnLikeSong), selectedSongId)
+        }
+
+        homeItemFragmentViewModel.fetchSongApi(selectedSongId)
+        homeItemFragmentViewModel.getSongsLiveData()
+            .observe(viewLifecycleOwner,
+                { song ->
+                    if (song != null) {
+                        fragmentView.findViewById<TextView>(R.id.txtSongHeading).text =
+                            if (song.isASingle) "Taken from" else "Taken from album"
+                        fragmentView.findViewById<TextView>(R.id.txtSongProperty).text =
+                            if (!song.isASingle) song.album!!.albumName else song.songName
+                        fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
+                            song.songName
+                        fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
+                            song.creator!!.artistPersonalInfo.fullName
+
+                        fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
+                            "Length: ${ValidationUtils.generateTimeString(song.songLength!!.lengthInSeconds)}"
+
+                        val imageControl =
+                            fragmentView.findViewById<ImageView>(R.id.imageSong)
+                        val gsReference =
+                            if (song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
+                            else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
+                        gsReference.downloadUrl.addOnCompleteListener { uri ->
+                            var link = ""
+                            if (uri.isSuccessful) {
+                                link = uri.result.toString()
+                            }
+                            Glide.with(this)
+                                .load(link)
+                                .placeholder(R.drawable.default_picture)
+                                .into(imageControl!!)
+                        }
+                    }
+                })
+    }
+
+    private fun fillConfirmDialog(selectedSongId: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Confirm Unpublish Song")
+        builder.setMessage("Are you sure you want to unpublish this song?")
+        builder.setPositiveButton("Confirm") { dialog, _ ->
+            dialog.dismiss()
+            homeItemFragmentViewModel.unPublishSong(selectedSongId)
+            navigateOut()
+        }
+        builder.setNegativeButton(
+            "Cancel"
+        ) { dialog, _ -> dialog.dismiss() }
+        builder.show()
     }
 
     private fun fillLikeButton(btnLikeSong: ImageView?, selectedSongId: String) {
@@ -87,41 +154,9 @@ class SongFragment : Fragment() {
         }
     }
 
-    private fun fillData(selectedSongId: String) {
-        homeItemFragmentViewModel.fetchSongApi(selectedSongId)
-
-        homeItemFragmentViewModel.getSongsLiveData()
-            .observe(viewLifecycleOwner,
-                { song ->
-                    if (song != null) {
-                        fragmentView.findViewById<TextView>(R.id.txtSongHeading).text =
-                            if (song.isASingle) "Taken from" else "Taken from album"
-                        fragmentView.findViewById<TextView>(R.id.txtSongProperty).text =
-                            if (!song.isASingle) song.album!!.albumName else song.songName
-                        fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
-                            song.songName
-                        fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
-                            song.creator!!.artistPersonalInfo.fullName
-
-                        fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
-                            "Length: ${ValidationUtils.generateTimeString(song.songLength!!.lengthInSeconds)}"
-
-                        val imageControl =
-                            fragmentView.findViewById<ImageView>(R.id.imageSong)
-                        val gsReference =
-                            if (song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
-                            else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
-                        gsReference.downloadUrl.addOnCompleteListener { uri ->
-                            var link = ""
-                            if (uri.isSuccessful) {
-                                link = uri.result.toString()
-                            }
-                            Glide.with(this)
-                                .load(link)
-                                .placeholder(R.drawable.default_picture)
-                                .into(imageControl!!)
-                        }
-                    }
-                })
+    private fun navigateOut() {
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

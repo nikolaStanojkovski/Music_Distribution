@@ -52,7 +52,7 @@ class SearchItemAdapter(
         val currentItem: SearchItem = searchItemData[position]
 
         holder.searchItemTitleControl.text = currentItem.searchItemTitle
-        holder.searchItemTypeControl.text = currentItem.searchItemType.toString()
+        holder.searchItemTypeControl.text = currentItem.searchItemInfo
         Glide.with(activityContext!!)
             .load(currentItem.searchItemImage)
             .placeholder(R.drawable.default_picture)

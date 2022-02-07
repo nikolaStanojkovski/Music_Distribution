@@ -33,14 +33,6 @@ class ProfileListenerFragment : Fragment() {
     private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
     private val PICK_IMAGE_REQUEST = 234
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (FirebaseAuthUser.user!!.role == Role.CREATOR) {
-            findNavController().navigate(R.id.action_profileFragment_to_profileFragmentArtist)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,12 +43,14 @@ class ProfileListenerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
-
+        if (FirebaseAuthUser.user!!.role == Role.CREATOR) {
+            findNavController().navigate(R.id.action_profileFragment_to_profileFragmentArtist)
+        }
         profileFragmentViewModel =
             ViewModelProvider(requireActivity()).get(ProfileFragmentViewModel::class.java)
 
-        fillProfileInfo()
 
+        fillProfileInfo()
         fragmentView!!.findViewById<Button>(R.id.btnFavouriteSongsListener).setOnClickListener {
             findNavController().navigate(R.id.action_profileFragmentListener_to_profileListFragment)
         }

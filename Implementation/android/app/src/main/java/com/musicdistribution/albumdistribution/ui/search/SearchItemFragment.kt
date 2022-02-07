@@ -187,6 +187,18 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
                 findNavController()
                     .navigate(R.id.action_searchItemFragment_to_songFragment, bundle)
             }
+            CategoryItemType.PUBLISHED_SONG -> {
+                val bundle =
+                    bundleOf("selected_song_id" to searchItem.searchItemId, "item_type" to searchItem.searchItemType)
+                findNavController()
+                    .navigate(R.id.action_searchItemFragment_to_songFragment, bundle)
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                val bundle =
+                    bundleOf("selected_album_id" to searchItem.searchItemId, "item_type" to searchItem.searchItemType)
+                findNavController()
+                    .navigate(R.id.action_searchItemFragment_to_albumFragment, bundle)
+            }
         }
     }
 }

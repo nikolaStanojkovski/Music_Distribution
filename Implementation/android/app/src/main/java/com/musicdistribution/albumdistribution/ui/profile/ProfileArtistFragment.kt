@@ -55,11 +55,11 @@ class ProfileArtistFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
         }
         fragmentView!!.findViewById<Button>(R.id.btnPublishedSongsArtist).setOnClickListener {
-            val bundle = bundleOf("listing_type" to CategoryItemType.SONG)
+            val bundle = bundleOf("listing_type" to CategoryItemType.PUBLISHED_SONG)
             findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
         }
         fragmentView!!.findViewById<Button>(R.id.btnPublishedAlbumsArtist).setOnClickListener {
-            val bundle = bundleOf("listing_type" to CategoryItemType.ALBUM)
+            val bundle = bundleOf("listing_type" to CategoryItemType.PUBLISHED_ALBUM)
             findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
         }
         fragmentView!!.findViewById<Button>(R.id.btnEditImageArtist).setOnClickListener {

@@ -10,6 +10,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
+import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApi
+import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApiClient
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.model.firebase.FavouriteArtist
@@ -17,6 +19,7 @@ import com.musicdistribution.albumdistribution.model.firebase.FavouriteSong
 import com.musicdistribution.albumdistribution.model.firebase.User
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
+import com.musicdistribution.albumdistribution.model.retrofit.PublishedAlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.SongRetrofit
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,6 +30,8 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
     private val app: Application = application
 
     private val albumCatalogApi: AlbumCatalogApi = AlbumCatalogApiClient.getAlbumCatalogApi()!!
+    private val albumPublishingApi: AlbumPublishingApi =
+        AlbumPublishingApiClient.getMusicDistributorApi()!!
 
     private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
     private var usersLiveData: MutableLiveData<User?> = MutableLiveData()
@@ -38,18 +43,18 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
     private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
 
     fun fetchArtistApi(id: String) {
-        albumCatalogApi.getArtist(id).enqueue(object : Callback<ArtistRetrofit> {
+        albumCatalogApi.getArtist(id).enqueue(object : Callback<ArtistRetrofit?> {
             override fun onResponse(
-                call: Call<ArtistRetrofit>?,
-                response: Response<ArtistRetrofit>
+                call: Call<ArtistRetrofit?>?,
+                response: Response<ArtistRetrofit?>
             ) {
                 val artist = response.body()
                 if (artist != null) {
-                    artistsLiveData.value = artist
+                    artistsLiveData.value = artist!!
                 }
             }
 
-            override fun onFailure(call: Call<ArtistRetrofit>?, throwable: Throwable) {
+            override fun onFailure(call: Call<ArtistRetrofit?>?, throwable: Throwable) {
                 Toast.makeText(
                     app,
                     "There was a problem when trying to fetch the artist with id: $id",
@@ -217,7 +222,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                     response: Response<ArrayList<SongRetrofit>>
                 ) {
                     val songs = response.body()
-                    if (songs != null) {
+                    if (songs != null && songs.isNotEmpty()) {
                         artistSongsLiveData.value = songs
                     }
                 }
@@ -236,10 +241,10 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun fetchAlbumApi(id: String) {
-        albumCatalogApi.getAlbum(id).enqueue(object : Callback<AlbumRetrofit> {
+        albumCatalogApi.getAlbum(id).enqueue(object : Callback<AlbumRetrofit?> {
             override fun onResponse(
-                call: Call<AlbumRetrofit>?,
-                response: Response<AlbumRetrofit>?
+                call: Call<AlbumRetrofit?>?,
+                response: Response<AlbumRetrofit?>?
             ) {
                 val album = response!!.body()
                 if (album != null) {
@@ -247,7 +252,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                 }
             }
 
-            override fun onFailure(call: Call<AlbumRetrofit>?, throwable: Throwable) {
+            override fun onFailure(call: Call<AlbumRetrofit?>?, throwable: Throwable) {
                 Toast.makeText(
                     app,
                     "There was a problem when trying to fetch the album with id: $id",
@@ -280,10 +285,10 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun fetchSongApi(id: String) {
-        albumCatalogApi.getSong(id).enqueue(object : Callback<SongRetrofit> {
+        albumCatalogApi.getSong(id).enqueue(object : Callback<SongRetrofit?> {
             override fun onResponse(
-                call: Call<SongRetrofit>?,
-                response: Response<SongRetrofit>?
+                call: Call<SongRetrofit?>?,
+                response: Response<SongRetrofit?>?
             ) {
                 val song = response!!.body()
                 if (song != null) {
@@ -292,7 +297,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                 }
             }
 
-            override fun onFailure(call: Call<SongRetrofit>?, throwable: Throwable) {
+            override fun onFailure(call: Call<SongRetrofit?>?, throwable: Throwable) {
                 Toast.makeText(
                     app,
                     "There was a problem when trying to fetch the song with id: $id",
@@ -301,6 +306,69 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
             }
         })
     }
+
+
+    fun publishSong() {
+
+    }
+
+    fun unPublishSong(selectedSongId: String) {
+        albumCatalogApi.unPublishSong(selectedSongId).enqueue(object : Callback<SongRetrofit?> {
+            override fun onResponse(
+                call: Call<SongRetrofit?>?,
+                response: Response<SongRetrofit?>
+            ) {
+                val song = response.body()
+                if (song != null) {
+                    Toast.makeText(
+                        app,
+                        "The song with id $selectedSongId is successfully unpublished",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<SongRetrofit?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    "There was a problem when trying to unpublish the song with id: $selectedSongId",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    fun publishAlbum() {
+
+    }
+
+    fun unPublishAlbum(selectedAlbumId: String) {
+        albumPublishingApi.unPublishAlbum(selectedAlbumId)
+            .enqueue(object : Callback<PublishedAlbumRetrofit?> {
+                override fun onResponse(
+                    call: Call<PublishedAlbumRetrofit?>?,
+                    response: Response<PublishedAlbumRetrofit?>
+                ) {
+                    val album = response.body()
+                    if (album != null) {
+                        Toast.makeText(
+                            app,
+                            "The album with id $selectedAlbumId is successfully unpublished",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<PublishedAlbumRetrofit?>?, throwable: Throwable) {
+                    Toast.makeText(
+                        app,
+                        "There was a problem when trying to unpublish the album with id: $selectedAlbumId",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+    }
+
 
     fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit> {
         return artistsLiveData

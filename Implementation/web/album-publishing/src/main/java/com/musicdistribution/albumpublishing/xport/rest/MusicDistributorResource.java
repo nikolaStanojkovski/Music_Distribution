@@ -57,8 +57,8 @@ public class MusicDistributorResource {
      * @return an empty response entity with status code 200.
      */
     @PostMapping("/unPublish")
-    public ResponseEntity<Void> unPublishAlbum(@RequestBody PublishedAlbumId publishedAlbumId) {
-        Optional<PublishedAlbum> publishedAlbum = this.musicDistributorService.unPublishAlbum(publishedAlbumId);
+    public ResponseEntity<Void> unPublishAlbum(@RequestBody String publishedAlbumId) {
+        Optional<PublishedAlbum> publishedAlbum = this.musicDistributorService.unPublishAlbum(PublishedAlbumId.of(publishedAlbumId));
         return publishedAlbum.isPresent() ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

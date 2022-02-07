@@ -358,8 +358,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1549" />
-                            <option name="y" value="914" />
+                            <option name="x" value="1497" />
+                            <option name="y" value="656" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -375,6 +375,11 @@
                               </value>
                             </entry>
                             <entry key="action_profileListFragment_to_homeFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_profileListFragment_to_profileFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

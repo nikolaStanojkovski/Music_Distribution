@@ -128,7 +128,7 @@
             android:id="@+id/action_profileListFragment_to_artistFragment"
             app:destination="@id/artistFragment" />
         <action
-            android:id="@+id/action_profileListFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_profileListFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

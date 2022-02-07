@@ -37,7 +37,8 @@ The application has the following functionalities:
 - <b>User Management Module (Registration / Login)</b> which has two roles: Artist and Listener, whereby one user will be able to authenticate with an existing user account on the platform 'Google' or the platform 'Facebook'.
 - Possibility to <b>release an album</b> by an authenticated artist.
 - Possibility to <b>release a song (single)</b> by an authenticated artist.
-- Possibility to <b>release a song (single)</b> by an authenticated artist.
+- Possibility to <b>unpublish an album</b> by an authenticated artist.
+- Possibility to <b>unpublish a song (single)</b> by an authenticated artist.
 - Opportunity to <b>increase the ranking of an already published song / album</b> by an authenticated artist.
 - <b>Artist functionalities</b> for published songs.
 - <b>Artist functionalities</b> for published albums.

@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.albumdistribution.data.domain.Role
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.model.SearchItem
@@ -51,7 +53,7 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
         fetchData(listing_type!!, adapter)
         fragmentView.findViewById<Button>(R.id.btnBackProfileItem).setOnClickListener {
             findNavController()
-                .navigate(R.id.action_profileListFragment_to_homeFragment)
+                .navigate(R.id.action_profileListFragment_to_profileFragment)
         }
     }
 
@@ -72,12 +74,22 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
             CategoryItemType.SONG -> {
                 profileFragmentViewModel.fetchFavoriteSongs()
                 fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
-                    "Your favourite songs"
+                    "Your Favourite Songs"
             }
             CategoryItemType.ARTIST -> {
                 profileFragmentViewModel.fetchFavouriteArtists()
                 fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
-                    "Your favourite artists"
+                    "Your Favourite Artists"
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                profileFragmentViewModel.fetchPublishedAlbums()
+                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
+                    "Your Published Albums"
+            }
+            CategoryItemType.PUBLISHED_SONG -> {
+                profileFragmentViewModel.fetchPublishedSongs()
+                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
+                    "Your Published Songs"
             }
         }
 
@@ -125,6 +137,57 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
                         }
                     }
                 })
+
+        if (FirebaseAuthUser.user!!.role == Role.CREATOR) {
+            profileFragmentViewModel.getPublishedAlbumsLiveData()
+                .observe(viewLifecycleOwner,
+                    { albums ->
+                        if (!albums.isNullOrEmpty()) {
+                            for (album in albums) {
+                                val gsReference =
+                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${album!!.id}.jpg")
+                                var link = ""
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    val item = SearchItem(
+                                        album.id,
+                                        album.albumName,
+                                        "Published Album",
+                                        CategoryItemType.PUBLISHED_ALBUM,
+                                        link
+                                    )
+                                    adapter.updateDataItem(item)
+                                }
+                            }
+                        }
+                    })
+            profileFragmentViewModel.getPublishedSongsLiveData()
+                .observe(viewLifecycleOwner,
+                    { songs ->
+                        if (!songs.isNullOrEmpty()) {
+                            for (song in songs) {
+                                val gsReference =
+                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song!!.id}.jpg")
+                                var link = ""
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    val item = SearchItem(
+                                        song.id,
+                                        song.songName,
+                                        "Published Song",
+                                        CategoryItemType.PUBLISHED_SONG,
+                                        link
+                                    )
+                                    adapter.updateDataItem(item)
+                                }
+                            }
+                        }
+                    })
+        }
     }
 
     override fun onClick(searchItem: SearchItem) {
@@ -143,6 +206,24 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
                 val bundle = bundleOf("selected_song_id" to searchItem.searchItemId)
                 findNavController()
                     .navigate(R.id.action_profileListFragment_to_songFragment, bundle)
+            }
+            CategoryItemType.PUBLISHED_SONG -> {
+                val bundle =
+                    bundleOf(
+                        "selected_song_id" to searchItem.searchItemId,
+                        "item_type" to searchItem.searchItemType
+                    )
+                findNavController()
+                    .navigate(R.id.action_profileListFragment_to_songFragment, bundle)
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                val bundle =
+                    bundleOf(
+                        "selected_album_id" to searchItem.searchItemId,
+                        "item_type" to searchItem.searchItemType
+                    )
+                findNavController()
+                    .navigate(R.id.action_profileListFragment_to_albumFragment, bundle)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.musicdistribution.albumdistribution.ui.home.item
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.musicdistribution.albumdistribution.ui.search.SearchItemAdapter
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 import com.musicdistribution.albumdistribution.util.listeners.SearchItemClickListener
 
+
 class AlbumFragment : Fragment(), SearchItemClickListener {
 
     private lateinit var fragmentView: View
@@ -41,6 +43,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         fragmentView = view
 
         val selectedAlbumId = arguments?.get("selected_album_id") as String?
+        val categoryType = arguments?.get("item_type") as CategoryItemType?
         if (selectedAlbumId == null) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))
             requireActivity().finish()
@@ -48,23 +51,36 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
 
         homeItemFragmentViewModel =
             ViewModelProvider(requireActivity())[HomeItemFragmentViewModel::class.java]
-        fillData(selectedAlbumId!!)
+        fillData(selectedAlbumId!!, categoryType)
         fragmentView.findViewById<Button>(R.id.btnBackAlbum).setOnClickListener {
-            findNavController().navigate(R.id.action_albumFragment_to_homeFragment)
+            findNavController().navigate(com.musicdistribution.albumdistribution.R.id.action_albumFragment_to_homeFragment)
             homeItemFragmentViewModel.clear()
         }
     }
 
-    private fun fillData(selectedAlbumId: String) {
-        homeItemFragmentViewModel.fetchAlbumApi(selectedAlbumId)
-        homeItemFragmentViewModel.fetchAlbumSongsApi(selectedAlbumId)
+    private fun fillData(selectedAlbumId: String, categoryItemType: CategoryItemType?) {
         val songItemAdapter = SearchItemAdapter(mutableListOf(), this)
         val songItemRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.songListAlbumRecyclerView)
-        songItemRecyclerView!!.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        songItemRecyclerView!!.layoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
         songItemRecyclerView.adapter = songItemAdapter
         songItemAdapter.emptyData()
 
+        if (categoryItemType != null && categoryItemType == CategoryItemType.PUBLISHED_ALBUM) {
+            fragmentView.findViewById<TextView>(R.id.txtAlbumHeading).visibility = View.GONE
+            val unpublishButton = fragmentView.findViewById<Button>(R.id.btnUnPublishAlbum)
+            unpublishButton.visibility = View.VISIBLE
+            unpublishButton.setOnClickListener {
+                fillConfirmDialog(selectedAlbumId)
+            }
+        } else {
+            fragmentView.findViewById<Button>(R.id.btnUnPublishAlbum).visibility = View.GONE
+            fragmentView.findViewById<TextView>(R.id.txtAlbumHeading).visibility = View.VISIBLE
+        }
+
+        homeItemFragmentViewModel.fetchAlbumApi(selectedAlbumId)
+        homeItemFragmentViewModel.fetchAlbumSongsApi(selectedAlbumId)
         homeItemFragmentViewModel.getAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { album ->
@@ -120,15 +136,30 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                 })
     }
 
+    private fun fillConfirmDialog(selectedAlbumId: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Confirm Unpublish Album")
+        builder.setMessage("Are you sure you want to unpublish this album?")
+        builder.setPositiveButton("Confirm") { dialog, _ ->
+            dialog.dismiss()
+            homeItemFragmentViewModel.unPublishAlbum(selectedAlbumId)
+            navigateOut()
+        }
+        builder.setNegativeButton(
+            "Cancel"
+        ) { dialog, _ -> dialog.dismiss() }
+        builder.show()
+    }
+
+    private fun navigateOut() {
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     override fun onClick(searchItem: SearchItem) {
         val bundle = bundleOf("selected_song_id" to searchItem.searchItemId)
         findNavController().navigate(R.id.action_albumFragment_to_songFragment, bundle)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-
     }
 
 }
