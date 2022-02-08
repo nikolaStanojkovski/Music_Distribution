@@ -79,6 +79,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
             fragmentView.findViewById<TextView>(R.id.txtAlbumHeading).visibility = View.VISIBLE
         }
 
+        homeItemFragmentViewModel.clear()
         homeItemFragmentViewModel.fetchAlbumApi(selectedAlbumId)
         homeItemFragmentViewModel.fetchAlbumSongsApi(selectedAlbumId)
         homeItemFragmentViewModel.getAlbumsLiveData()
@@ -113,25 +114,25 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                 { songs ->
                     if (songs != null) {
                         val gsReference =
-                            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${selectedAlbumId}.jpg")
+                            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${selectedAlbumId}.jpg")
                         var link = ""
                         gsReference.downloadUrl.addOnCompleteListener { uri ->
                             if (uri.isSuccessful) {
                                 link = uri.result.toString()
                             }
+                            val searchItems = mutableListOf<SearchItem>()
+                            for (item in songs) {
+                                val searchItem = SearchItem(
+                                    item.id,
+                                    item.songName,
+                                    "Length: ${ValidationUtils.generateTimeString(item.songLength!!.lengthInSeconds)}",
+                                    CategoryItemType.SONG,
+                                    link
+                                )
+                                searchItems.add(searchItem)
+                            }
+                            songItemAdapter.updateData(searchItems)
                         }
-                        val searchItems = mutableListOf<SearchItem>()
-                        for (item in songs) {
-                            val searchItem = SearchItem(
-                                item.id,
-                                item.songName,
-                                "Length: ${ValidationUtils.generateTimeString(item.songLength!!.lengthInSeconds)}",
-                                CategoryItemType.SONG,
-                                link
-                            )
-                            searchItems.add(searchItem)
-                        }
-                        songItemAdapter.updateData(searchItems)
                     }
                 })
     }

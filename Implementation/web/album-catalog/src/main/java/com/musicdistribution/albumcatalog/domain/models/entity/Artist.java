@@ -40,7 +40,7 @@ public class Artist extends AbstractEntity<ArtistId> {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Album> albums;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs;
 

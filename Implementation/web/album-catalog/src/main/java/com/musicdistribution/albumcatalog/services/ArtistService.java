@@ -44,6 +44,14 @@ public interface ArtistService {
     Optional<Artist> findById(ArtistId id);
 
     /**
+     * Method for getting an artist from the database.
+     *
+     * @param email - artist's email.
+     * @return an optional with the found artist.
+     */
+    Optional<Artist> findByEmail(ArtistRequest email);
+
+    /**
      * Method for authenticating an existing artist from the database.
      *
      * @param artist - artist's login form object containing artist's information needed for authentication.

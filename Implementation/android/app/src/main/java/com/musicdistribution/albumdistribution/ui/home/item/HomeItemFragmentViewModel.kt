@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -19,7 +20,6 @@ import com.musicdistribution.albumdistribution.model.firebase.FavouriteSong
 import com.musicdistribution.albumdistribution.model.firebase.User
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
-import com.musicdistribution.albumdistribution.model.retrofit.PublishedAlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.SongRetrofit
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,7 +43,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
     private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
 
     fun fetchArtistApi(id: String) {
-        albumCatalogApi.getArtist(id).enqueue(object : Callback<ArtistRetrofit?> {
+        albumCatalogApi.getArtistById(id).enqueue(object : Callback<ArtistRetrofit?> {
             override fun onResponse(
                 call: Call<ArtistRetrofit?>?,
                 response: Response<ArtistRetrofit?>
@@ -307,11 +307,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
         })
     }
 
-
-    fun publishSong() {
-
-    }
-
     fun unPublishSong(selectedSongId: String) {
         albumCatalogApi.unPublishSong(selectedSongId).enqueue(object : Callback<SongRetrofit?> {
             override fun onResponse(
@@ -320,6 +315,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
             ) {
                 val song = response.body()
                 if (song != null) {
+                    clearFavouriteSOng(selectedSongId)
                     Toast.makeText(
                         app,
                         "The song with id $selectedSongId is successfully unpublished",
@@ -338,33 +334,57 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
         })
     }
 
-    fun publishAlbum() {
-
-    }
-
     fun unPublishAlbum(selectedAlbumId: String) {
         albumPublishingApi.unPublishAlbum(selectedAlbumId)
-            .enqueue(object : Callback<PublishedAlbumRetrofit?> {
+            .enqueue(object : Callback<Void> {
                 override fun onResponse(
-                    call: Call<PublishedAlbumRetrofit?>?,
-                    response: Response<PublishedAlbumRetrofit?>
+                    call: Call<Void>?,
+                    response: Response<Void>
                 ) {
-                    val album = response.body()
-                    if (album != null) {
+                    if (response.isSuccessful) {
                         Toast.makeText(
                             app,
                             "The album with id $selectedAlbumId is successfully unpublished",
                             Toast.LENGTH_LONG
                         ).show()
+
+                        albumCatalogApi.getAlbumSongs(selectedAlbumId).enqueue(object : Callback<ArrayList<SongRetrofit>> {
+                            override fun onResponse(
+                                call: Call<ArrayList<SongRetrofit>>?,
+                                response: Response<ArrayList<SongRetrofit>>?
+                            ) {
+                                val songs = response!!.body()
+                                if (!songs.isNullOrEmpty()) {
+                                    for(item in songs) {
+                                        clearFavouriteSOng(item.id)
+                                    }
+                                }
+                            }
+                            override fun onFailure(call: Call<ArrayList<SongRetrofit>?>?, throwable: Throwable) {
+                            }
+                        })
                     }
                 }
 
-                override fun onFailure(call: Call<PublishedAlbumRetrofit?>?, throwable: Throwable) {
+                override fun onFailure(call: Call<Void>?, throwable: Throwable) {
                     Toast.makeText(
                         app,
                         "There was a problem when trying to unpublish the album with id: $selectedAlbumId",
                         Toast.LENGTH_LONG
                     ).show()
+                }
+            })
+    }
+
+    fun clearFavouriteSOng(selectedSongId: String) {
+        FirebaseRealtimeDB.favouriteSongsReference.orderByChild("songId").equalTo(selectedSongId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.value != null) {
+                        snapshot.ref.setValue(null)
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
                 }
             })
     }
@@ -404,6 +424,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
         this.artistSongsLiveData = MutableLiveData()
         this.usersLiveData = MutableLiveData()
         this.albumsLiveData = MutableLiveData()
+        this.albumSongsLiveData = MutableLiveData()
         this.songsLiveData = MutableLiveData()
     }
 }

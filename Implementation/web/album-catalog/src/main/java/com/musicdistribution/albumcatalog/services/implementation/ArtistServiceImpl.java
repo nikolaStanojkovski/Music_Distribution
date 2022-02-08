@@ -52,8 +52,13 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    public Optional<Artist> findByEmail(ArtistRequest artistRequest) {
+        return artistRepository.findByArtistContactInfo_Email(Email.createEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()));
+    }
+
+    @Override
     public Optional<Artist> loginArtist(ArtistRequest artistRequest) {
-        Optional<Artist> artist = artistRepository.findByArtistContactInfo_Email(Email.createEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()));
+        Optional<Artist> artist = findByEmail(artistRequest);
 
         return (artist.isPresent() && (artist.get().getPassword().equals(artistRequest.getPassword()))) ? artist : Optional.empty();
     }

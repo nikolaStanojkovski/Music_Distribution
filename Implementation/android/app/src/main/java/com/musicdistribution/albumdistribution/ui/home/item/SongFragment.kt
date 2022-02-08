@@ -67,6 +67,7 @@ class SongFragment : Fragment() {
             fillLikeButton(fragmentView.findViewById(R.id.btnLikeSong), selectedSongId)
         }
 
+        homeItemFragmentViewModel.clear()
         homeItemFragmentViewModel.fetchSongApi(selectedSongId)
         homeItemFragmentViewModel.getSongsLiveData()
             .observe(viewLifecycleOwner,

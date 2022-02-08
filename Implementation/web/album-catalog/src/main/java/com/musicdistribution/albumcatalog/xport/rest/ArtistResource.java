@@ -69,6 +69,19 @@ public class ArtistResource {
     }
 
     /**
+     * Method for getting information about a specific artist.
+     *
+     * @param artistRequest - dto object containing information about an artist.
+     * @return the found artist.
+     */
+    @PostMapping("/email")
+    public ResponseEntity<ArtistResponse> findByEmail(@RequestBody @Valid ArtistRequest artistRequest) {
+        return this.artistService.findByEmail(artistRequest)
+                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
      * Method for authenticating an existing artist.
      *
      * @param artistRequest - dto object containing the login information about an artist.

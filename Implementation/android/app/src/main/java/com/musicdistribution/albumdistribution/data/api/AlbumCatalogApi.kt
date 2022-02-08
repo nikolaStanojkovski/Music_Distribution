@@ -46,7 +46,10 @@ interface AlbumCatalogApi {
 
 
     @GET("api/artists/{id}")
-    fun getArtist(@Path("id") id: String): Call<ArtistRetrofit?>
+    fun getArtistById(@Path("id") id: String): Call<ArtistRetrofit?>
+
+    @POST("api/artists/email")
+    fun getArtistByEmail(@Body artist: ArtistRetrofitAuth): Call<ArtistRetrofit?>
 
     @GET("api/albums/artist/{artistId}")
     fun getArtistAlbums(@Path("artistId") artistId: String): Call<ArrayList<AlbumRetrofit>>
@@ -66,12 +69,12 @@ interface AlbumCatalogApi {
     fun getSong(@Path("id") id: String): Call<SongRetrofit?>
 
 
-    @POST("api/albums/create")
-    fun createAlbum(@Body album: AlbumRetrofitCreate): Call<AlbumRetrofit?>
-
     @POST("api/songs/publish")
     fun publishSong(@Body album: SongRetrofitCreate): Call<SongRetrofit?>
 
     @GET("api/songs/unpublish/{id}")
     fun unPublishSong(@Path("id") id: String): Call<SongRetrofit?>
+
+    @POST("api/albums/create")
+    fun createAlbum(@Body album: AlbumRetrofitCreate): Call<AlbumRetrofit?>
 }

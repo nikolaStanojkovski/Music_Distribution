@@ -5,6 +5,7 @@ import com.musicdistribution.albumpublishing.domain.models.entity.PublishedAlbum
 import com.musicdistribution.albumpublishing.domain.models.entity.PublishedAlbumId;
 import com.musicdistribution.albumpublishing.domain.models.request.MusicDistributorRequest;
 import com.musicdistribution.albumpublishing.domain.models.request.PublishedAlbumRequest;
+import com.musicdistribution.albumpublishing.domain.valueobjects.AlbumId;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,14 @@ public interface MusicDistributorService {
      * @return an optional with the unpublished album.
      */
     Optional<PublishedAlbum> unPublishAlbum(PublishedAlbumId publishedAlbumId);
+
+    /**
+     * Method used for making an album unpublished.
+     *
+     * @param albumId - album's id.
+     * @return an optional with the unpublished album.
+     */
+    Optional<PublishedAlbum> unPublishAlbumByAlbumId(AlbumId albumId);
 
     /**
      * Method used for raising an album's tier.

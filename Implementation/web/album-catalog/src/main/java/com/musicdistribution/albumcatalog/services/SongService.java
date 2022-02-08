@@ -73,10 +73,10 @@ public interface SongService {
     Optional<Song> publishSong(SongRequest songRequest);
 
     /**
-     * Method for unpublishing a song.
+     * Method for deleting a song.
      *
-     * @param id - the id of the song to be unpublished
+     * @param id - the id of the song to be unpublished and deleted
      * @return an optional with the unpublished song.
      */
-    Optional<Song> unpublishSong(String id);
+    Optional<Song> deleteSong(String id);
 }

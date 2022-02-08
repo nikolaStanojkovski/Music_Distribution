@@ -20,8 +20,14 @@
             android:id="@+id/action_homeFragment_to_songFragment"
             app:destination="@id/songFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_createFragment"
-            app:destination="@id/createFragment" />
+            android:id="@+id/action_homeFragment_to_publishSongFragment"
+            app:destination="@id/publishSongFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_publishAlbumFragment"
+            app:destination="@id/publishAlbumFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_raiseTierFragment"
+            app:destination="@id/raiseTierFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -105,12 +111,12 @@
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/createFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.item.CreateFragment"
+        android:id="@+id/publishSongFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.publish.PublishSongFragment"
         android:label="fragment_create"
-        tools:layout="@layout/fragment_create" >
+        tools:layout="@layout/fragment_publish_song" >
         <action
-            android:id="@+id/action_createFragment_to_homeFragment"
+            android:id="@+id/action_publishSongFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
@@ -131,4 +137,14 @@
             android:id="@+id/action_profileListFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/publishAlbumFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.publish.PublishAlbumFragment"
+        android:label="fragment_publish_album"
+        tools:layout="@layout/fragment_publish_album" />
+    <fragment
+        android:id="@+id/raiseTierFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.publish.RaiseTierFragment"
+        android:label="fragment_raise_tier"
+        tools:layout="@layout/fragment_raise_tier" />
 </navigation>

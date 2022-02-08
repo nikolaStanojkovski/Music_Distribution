@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    tools:context=".ui.home.publish.PublishSongFragment">
+
+    <TextView
+        android:id="@+id/txtPublishSongTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/song_create_title"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.112" />
+
+    <TextView
+        android:id="@+id/txtDotCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dot_text"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.207" />
+
+    <EditText
+        android:id="@+id/inputSongLength"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/song_length_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtPublishSongTitle"
+        app:layout_constraintStart_toStartOf="@+id/txtPublishSongTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtPublishSongTitle"
+        app:layout_constraintVertical_bias="0.505" />
+
+    <EditText
+        android:id="@+id/inputSongName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/song_name_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtPublishSongTitle"
+        app:layout_constraintStart_toStartOf="@+id/txtPublishSongTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtPublishSongTitle"
+        app:layout_constraintVertical_bias="0.368" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/inputAlbums"
+        android:layout_width="300dp"
+        android:layout_height="37dp"
+        android:elevation="0dp"
+        android:popupElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inputSongLength"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputSongLength"
+        app:layout_constraintTop_toBottomOf="@+id/inputSongLength"
+        app:layout_constraintVertical_bias="0.141" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirmCreateSong"
+        android:layout_width="140dp"
+        android:layout_height="65dp"
+        android:backgroundTint="@color/orange"
+        android:text="@string/song_create_button"
+        android:textColor="@color/white"
+        app:cornerRadius="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inputAlbums"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputAlbums"
+        app:layout_constraintTop_toBottomOf="@+id/inputAlbums"
+        app:layout_constraintVertical_bias="0.19" />
+
+    <TextView
+        android:id="@+id/txtNoteFirstSongCreate"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:text="@string/song_create_note_1"
+        android:textSize="12dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnCancelCreateSong"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnConfirmCreateSong"
+        app:layout_constraintTop_toBottomOf="@+id/inputAlbums"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btnCancelCreateSong"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:background="@drawable/border"
+        android:text="@string/cancel_button"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inputAlbums"
+        app:layout_constraintHorizontal_bias="0.957"
+        app:layout_constraintStart_toStartOf="@+id/inputAlbums"
+        app:layout_constraintTop_toBottomOf="@+id/inputAlbums"
+        app:layout_constraintVertical_bias="0.21" />
+
+    <ImageView
+        android:id="@+id/imageCreateSong"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/default_picture"
+        app:layout_constraintBottom_toTopOf="@+id/inputSongName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.279"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDotCreate"
+        app:layout_constraintVertical_bias="0.544"
+        tools:src="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/btnChangeSongPicture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/song_create_add_picture"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toTopOf="@+id/inputSongName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.29"
+        app:layout_constraintStart_toEndOf="@+id/imageCreateSong"
+        app:layout_constraintTop_toBottomOf="@+id/txtPublishSongTitle"
+        app:layout_constraintVertical_bias="0.7" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,15 +2,14 @@ package com.musicdistribution.albumcatalog.services.implementation;
 
 import com.musicdistribution.albumcatalog.domain.exceptions.AlbumNotFoundException;
 import com.musicdistribution.albumcatalog.domain.exceptions.ArtistNotFoundException;
-import com.musicdistribution.albumcatalog.domain.models.entity.Album;
-import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
+import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
+import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +31,8 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
+    private final SongRepository songRepository;
+    private final SongService songService;
 
     @Override
     public List<Album> findAll() {
@@ -92,6 +93,10 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public void albumUnpublished(AlbumId id) {
         Album album = findById(id).orElseThrow(() -> new AlbumNotFoundException(id));
+        List<Song> albumSongs = songRepository.findAllByAlbumId(album.getId());
+        if (albumSongs.size() != 0) {
+            albumSongs.forEach(v -> songService.deleteSong(v.getId().getId()));
+        }
         album.unPublish();
 
         albumRepository.save(album);

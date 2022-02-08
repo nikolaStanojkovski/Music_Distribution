@@ -127,7 +127,7 @@ public class SongResource {
      */
     @GetMapping("/unpublish/{id}")
     public ResponseEntity<SongResponse> unpublishSong(@PathVariable String id) {
-        return this.songService.unpublishSong(id)
+        return this.songService.deleteSong(id)
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }

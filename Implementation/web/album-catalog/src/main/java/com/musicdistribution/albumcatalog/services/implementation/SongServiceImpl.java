@@ -98,20 +98,26 @@ public class SongServiceImpl implements SongService {
     @Override
     public Optional<Song> publishSong(SongRequest songRequest) {
         Optional<Song> newSong = createSong(songRequest);
-        if (newSong.isPresent()) {
+        if (newSong.isPresent() && songRequest.getIsASingle()) {
             Song publishedSong = Song.publishSong(newSong.get());
             return Optional.of(songRepository.save(publishedSong));
         }
-        return Optional.empty();
+        return newSong;
     }
 
     @Override
-    public Optional<Song> unpublishSong(String id) {
+    @Transactional
+    public Optional<Song> deleteSong(String id) {
         Optional<Song> song = findById(SongId.of(id));
-        if (song.isPresent()) {
-            Song unpublishedSong = Song.unpublishSong(song.get());
-            return Optional.of(songRepository.save(unpublishedSong));
-        }
-        return Optional.empty();
+        song.ifPresent(s -> {
+            s.getCreator().removeSongFromArtist(s);
+            if(s.getAlbum() != null) {
+                s.getAlbum().removeSong(s);
+                albumRepository.save(s.getAlbum());
+            }
+            songRepository.delete(s);
+            artistRepository.save(s.getCreator());
+        });
+        return song;
     }
 }

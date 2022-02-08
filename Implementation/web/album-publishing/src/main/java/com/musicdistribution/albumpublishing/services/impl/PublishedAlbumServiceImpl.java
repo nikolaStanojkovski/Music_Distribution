@@ -2,6 +2,7 @@ package com.musicdistribution.albumpublishing.services.impl;
 
 import com.musicdistribution.albumpublishing.domain.models.entity.PublishedAlbum;
 import com.musicdistribution.albumpublishing.domain.repository.PublishedAlbumRepository;
+import com.musicdistribution.albumpublishing.domain.valueobjects.ArtistId;
 import com.musicdistribution.albumpublishing.services.PublishedAlbumService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,10 @@ public class PublishedAlbumServiceImpl implements PublishedAlbumService {
     @Override
     public List<PublishedAlbum> findAll() {
         return publishedAlbumRepository.findAll();
+    }
+
+    @Override
+    public List<PublishedAlbum> findAllByArtist(ArtistId artistId) {
+        return publishedAlbumRepository.findByArtistId(artistId);
     }
 }

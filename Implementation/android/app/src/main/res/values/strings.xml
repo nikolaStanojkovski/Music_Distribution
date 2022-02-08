@@ -24,10 +24,23 @@
     <string name="create_dialog_title">What is the action you want to take?</string>
     <string name="publish_album_title">Publish an Album</string>
     <string name="publish_song_title">Publish a Song</string>
-    <string name="raise_tier_title">Raise Album/Song TIer</string>
     <string name="artist_default_info">Has 0 followers</string>
     <string name="exit_dialog">Exit</string>
     <string name="dot_text">⚫</string>
+
+    <!-- Strings related to publish/create -->
+    <string name="song_create_title">Publish a Song</string>
+    <string name="song_name_placeholder">Enter the song name</string>
+    <string name="song_length_placeholder">Enter the song length (seconds)</string>
+    <string name="song_create_button">Publish</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="song_create_note_1">** If you do not choose an album to publish the song to, the one will be a single</string>
+    <string name="song_create_add_picture">Change</string>
+    <string name="album_create_title">Publish an Album</string>
+    <string name="album_name_placeholder">Enter the album name</string>
+    <string name="total_album_cost">Total album cost:</string>
+    <string name="raise_tier_title">Raise Album TIer</string>
+    <string name="album_raise_note_1">** You will not be able to reduce the album tier; you will either have to raise it or leave it at its current level</string>
 
     <!-- Strings related to search -->
     <string name="search_title">Search</string>

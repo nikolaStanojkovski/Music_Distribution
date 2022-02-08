@@ -25,7 +25,8 @@
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/dialog_create_item.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_album.xml" value="0.25181159420289856" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_artist.xml" value="0.25181159420289856" />
-        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_create.xml" value="0.18177083333333333" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_create.xml" value="0.33" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_create_song.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_first.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_login.xml" value="0.25181159420289856" />
@@ -33,6 +34,9 @@
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_artist.xml" value="0.25" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_list.xml" value="0.18" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_profile_listener.xml" value="0.25" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_publish_album.xml" value="0.33" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_publish_song.xml" value="0.2694746376811594" />
+        <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_raise_tier.xml" value="0.22" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_registration.xml" value="0.33" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_search.xml" value="0.1" />
         <entry key="..\:/Users/Nick/Desktop/Fax/7 semester/MPIP/AlbumDistribution/app/src/main/res/layout/fragment_search_item.xml" value="0.20625" />

@@ -99,6 +99,13 @@ public class MusicDistributorServiceImpl implements MusicDistributorService {
     }
 
     @Override
+    public Optional<PublishedAlbum> unPublishAlbumByAlbumId(AlbumId albumId) {
+        Optional<PublishedAlbum> publishedAlbum = publishedAlbumRepository.findByAlbumId(albumId);
+        publishedAlbum.ifPresent(album -> unPublishAlbum(album.getId()));
+        return publishedAlbum;
+    }
+
+    @Override
     public Optional<PublishedAlbum> raiseAlbumTier(PublishedAlbumRequest publishedAlbumRequest) {
         PublishedAlbum publishedAlbum = publishedAlbumRepository.findById(PublishedAlbumId.of(publishedAlbumRequest.getPublishedAlbumId()))
                 .orElseThrow(() -> new PublishedAlbumNotFoundException(PublishedAlbumId.of(publishedAlbumRequest.getPublishedAlbumId())));

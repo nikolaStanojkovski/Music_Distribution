@@ -59,19 +59,13 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     }
 
     private fun fetchData() {
-        if (homeFragmentViewModel.getSongsLiveData().value.isNullOrEmpty()) {
-            homeFragmentViewModel.fetchSongs()
-        }
-        if (homeFragmentViewModel.getAlbumsLiveData().value.isNullOrEmpty()) {
-            homeFragmentViewModel.fetchAlbums()
-        }
-        if (homeFragmentViewModel.getArtistsLiveData().value.isNullOrEmpty()) {
-            homeFragmentViewModel.fetchArtists()
-        }
-        if (homeFragmentViewModel.getPublishedSongsLiveData().value.isNullOrEmpty() && FirebaseAuthUser.user!!.role == Role.CREATOR) {
+        homeFragmentViewModel.emptyData()
+
+        homeFragmentViewModel.fetchSongs()
+        homeFragmentViewModel.fetchAlbums()
+        homeFragmentViewModel.fetchArtists()
+        if (FirebaseAuthUser.user!!.role == Role.CREATOR) {
             homeFragmentViewModel.fetchPublishedSongs()
-        }
-        if (homeFragmentViewModel.getAlbumsLiveData().value.isNullOrEmpty() && FirebaseAuthUser.user!!.role == Role.CREATOR) {
             homeFragmentViewModel.fetchPublishedAlbums()
         }
     }

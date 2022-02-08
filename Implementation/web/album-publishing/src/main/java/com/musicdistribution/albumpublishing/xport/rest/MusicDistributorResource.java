@@ -4,15 +4,13 @@ import com.musicdistribution.albumpublishing.domain.models.entity.PublishedAlbum
 import com.musicdistribution.albumpublishing.domain.models.entity.PublishedAlbumId;
 import com.musicdistribution.albumpublishing.domain.models.request.PublishedAlbumRequest;
 import com.musicdistribution.albumpublishing.domain.models.response.MusicDistributorResponse;
+import com.musicdistribution.albumpublishing.domain.valueobjects.AlbumId;
 import com.musicdistribution.albumpublishing.services.MusicDistributorService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +57,18 @@ public class MusicDistributorResource {
     @PostMapping("/unPublish")
     public ResponseEntity<Void> unPublishAlbum(@RequestBody String publishedAlbumId) {
         Optional<PublishedAlbum> publishedAlbum = this.musicDistributorService.unPublishAlbum(PublishedAlbumId.of(publishedAlbumId));
+        return publishedAlbum.isPresent() ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Method used for making an album unpublished.
+     *
+     * @param albumId - album's id.
+     * @return an empty response entity with status code 200.
+     */
+    @GetMapping("/unPublish/{albumId}")
+    public ResponseEntity<Void> unPublishAlbumByAlbumId(@PathVariable String albumId) {
+        Optional<PublishedAlbum> publishedAlbum = this.musicDistributorService.unPublishAlbumByAlbumId(AlbumId.of(albumId));
         return publishedAlbum.isPresent() ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

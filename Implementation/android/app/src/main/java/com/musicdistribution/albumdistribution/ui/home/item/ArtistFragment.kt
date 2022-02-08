@@ -217,6 +217,8 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                 findNavController()
                     .navigate(R.id.action_artistFragment_to_songFragment, bundle)
             }
+            else -> findNavController()
+                .navigate(R.id.action_artistFragment_to_homeFragment)
         }
     }
 

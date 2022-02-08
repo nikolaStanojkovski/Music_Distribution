@@ -106,7 +106,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
                         for (favArtist in values.entries) {
                             val favouriteArtist = favArtist.value as HashMap<String, Object>
                             val artistId = favouriteArtist["followingId"].toString()
-                            albumCatalogApi.getArtist(artistId)
+                            albumCatalogApi.getArtistById(artistId)
                                 .enqueue(object : Callback<ArtistRetrofit?> {
                                     override fun onResponse(
                                         call: Call<ArtistRetrofit?>?,

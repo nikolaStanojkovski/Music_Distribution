@@ -3,6 +3,7 @@ package com.musicdistribution.albumdistribution.util
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
+import java.lang.Integer.parseInt
 
 class ValidationUtils {
     companion object {
@@ -48,9 +49,19 @@ class ValidationUtils {
         fun generateTimeString(timeInSeconds: Int): String {
             val minutes = timeInSeconds / 60
             val seconds = timeInSeconds % 60
-            val minutesString = if(minutes < 10) "0$minutes" else minutes.toString()
-            val secondsString = if(seconds < 10) "0$seconds" else seconds.toString()
+            val minutesString = if (minutes < 10) "0$minutes" else minutes.toString()
+            val secondsString = if (seconds < 10) "0$seconds" else seconds.toString()
             return "$minutesString:$secondsString"
+        }
+
+        fun isNumeric(string: String): Boolean {
+            try {
+                parseInt(string)
+            } catch (e: NumberFormatException) {
+                return false
+            }
+
+            return true
         }
     }
 }
