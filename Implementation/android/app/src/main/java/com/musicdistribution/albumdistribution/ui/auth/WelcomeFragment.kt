@@ -24,13 +24,13 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.databinding.FragmentWelcomeBinding
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.model.firebase.User
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.util.InternetUtils
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 

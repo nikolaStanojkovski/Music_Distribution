@@ -14,14 +14,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Role
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.ui.auth.AuthActivity
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import java.io.IOException
 
 

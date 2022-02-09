@@ -1,6 +1,5 @@
 package com.musicdistribution.albumdistribution.model.retrofit
 
-import com.musicdistribution.albumdistribution.data.domain.Tier
 import java.time.Instant
 
 data class PublishedAlbumRetrofitCreate(

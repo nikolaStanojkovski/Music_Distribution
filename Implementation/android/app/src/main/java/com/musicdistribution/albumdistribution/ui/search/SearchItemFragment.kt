@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Genre
+import com.musicdistribution.albumdistribution.model.Genre
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.model.SearchItem

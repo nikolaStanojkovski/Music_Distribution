@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.model.retrofit
 
-import com.musicdistribution.albumdistribution.data.domain.Genre
+import com.musicdistribution.albumdistribution.model.Genre
 
 data class AlbumRetrofit(
     val id: String,

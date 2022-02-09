@@ -10,7 +10,10 @@ import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.model.GenreItem
 import com.musicdistribution.albumdistribution.util.listeners.GenreItemClickListener
 
-class SearchBlockAdapter(genreItemsList: MutableList<GenreItem>, genreItemClickListener: GenreItemClickListener) :
+class SearchBlockAdapter(
+    genreItemsList: MutableList<GenreItem>,
+    genreItemClickListener: GenreItemClickListener
+) :
     RecyclerView.Adapter<SearchBlockAdapter.ViewHolder>() {
 
     private var activityContext: Context? = null
@@ -50,10 +53,4 @@ class SearchBlockAdapter(genreItemsList: MutableList<GenreItem>, genreItemClickL
     override fun getItemCount(): Int {
         return genreData.size
     }
-
-    fun updateData(genreItemsList: MutableList<GenreItem>) {
-        this.genreData = genreItemsList
-        this.notifyDataSetChanged()
-    }
-
 }

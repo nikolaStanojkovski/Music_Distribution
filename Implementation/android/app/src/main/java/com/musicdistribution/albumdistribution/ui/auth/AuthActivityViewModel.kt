@@ -4,20 +4,13 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseUser
 import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
-import com.musicdistribution.albumdistribution.data.domain.Role
-import com.musicdistribution.albumdistribution.data.domain.UserRoom
-import com.musicdistribution.albumdistribution.data.room.AppDatabase
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth
 import com.musicdistribution.albumdistribution.model.retrofit.EmailDomain
 import com.musicdistribution.albumdistribution.util.ValidationUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,30 +20,7 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
     private val app: Application = application
 
     private val albumCatalogApi: AlbumCatalogApi = AlbumCatalogApiClient.getAlbumCatalogApi()!!
-    private val database = AppDatabase.getInstance(app)
-    private var usersLiveData: MutableLiveData<UserRoom> = MutableLiveData()
     private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
-
-    fun registerRoom(email: String, role: Role, firebaseUser: FirebaseUser) {
-        val nameSurname = ValidationUtils.generateFirstLastName(email)
-        val user = UserRoom(
-            uid = firebaseUser.uid,
-            name = nameSurname[0],
-            surname = nameSurname[1],
-            role = role,
-            picture = "",
-            noFollowing = 0L,
-            noFollowers = 0L
-        )
-        CoroutineScope(Dispatchers.IO).launch {
-            if (database.userDao().readByUid(firebaseUser.uid) == null) {
-                database.userDao().createUser(user)
-                withContext(Dispatchers.Main) {
-                    usersLiveData.value = user
-                }
-            }
-        }
-    }
 
     fun registerApi(email: String, password: String, role: Role) {
         if (role == Role.CREATOR) {
@@ -79,7 +49,7 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
                                 ) {
                                     val artist = response!!.body()
                                     if (artist != null) {
-                                        artistsLiveData.value = artist
+                                        artistsLiveData.value = artist!!
                                     }
                                 }
 
@@ -112,10 +82,6 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
                 }
             })
         }
-    }
-
-    fun getUsersLiveData(): MutableLiveData<UserRoom> {
-        return usersLiveData
     }
 
     fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit> {

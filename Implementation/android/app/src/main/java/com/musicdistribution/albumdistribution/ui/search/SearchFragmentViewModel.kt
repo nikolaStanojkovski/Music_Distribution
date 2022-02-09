@@ -6,8 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
-import com.musicdistribution.albumdistribution.data.domain.Genre
-import com.musicdistribution.albumdistribution.data.room.AppDatabase
+import com.musicdistribution.albumdistribution.model.Genre
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.SongRetrofit
@@ -20,7 +19,6 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
     private val app: Application = application
 
     private val albumCatalogApi: AlbumCatalogApi = AlbumCatalogApiClient.getAlbumCatalogApi()!!
-    private val database = AppDatabase.getInstance(app)
 
     private var albumsGenreLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> =
         MutableLiveData()

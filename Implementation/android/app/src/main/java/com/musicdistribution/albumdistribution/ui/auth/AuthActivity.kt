@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.databinding.ActivityAuthBinding
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.util.InternetUtils
 
 class AuthActivity : AppCompatActivity() {
@@ -21,8 +21,7 @@ class AuthActivity : AppCompatActivity() {
         }
 
         if (FirebaseAuthDB.checkLogin()) {
-            FirebaseAuthDB.firebaseAuth.signOut()
-//            navigateOut()
+            navigateOut()
         }
 
         binding = ActivityAuthBinding.inflate(layoutInflater)

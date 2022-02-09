@@ -18,7 +18,7 @@ import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 
 class SongFragment : Fragment() {

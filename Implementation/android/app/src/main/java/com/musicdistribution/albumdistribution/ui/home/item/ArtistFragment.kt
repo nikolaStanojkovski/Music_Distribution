@@ -23,7 +23,7 @@ import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseSto
 import com.musicdistribution.albumdistribution.model.CategoryItem
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeVerticalAdapter
 import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
 import java.io.IOException

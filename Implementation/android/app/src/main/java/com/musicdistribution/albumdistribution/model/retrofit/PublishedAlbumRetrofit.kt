@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.model.retrofit
 
-import com.musicdistribution.albumdistribution.data.domain.Tier
+import com.musicdistribution.albumdistribution.model.Tier
 
 data class PublishedAlbumRetrofit(
     val publishedAlbumId: String,

@@ -12,12 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseUser
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.databinding.FragmentLoginBinding
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 
 class LoginFragment : Fragment() {
@@ -26,7 +25,6 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var authActivityViewModel: AuthActivityViewModel
-    private var loginCounter: Int = 0
     private lateinit var firebaseUser: FirebaseUser
 
     override fun onCreateView(
@@ -61,17 +59,14 @@ class LoginFragment : Fragment() {
                 loginFirebase(email, password)
             }
         }
-
-        validateLogin()
     }
 
     private fun loginFirebase(email: String, password: String) {
         FirebaseAuthDB.firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    loginCounter++
                     firebaseUser = task.result.user!!
-                    loginFirebaseDb(email)
+                    loginFirebaseDb()
                 } else {
                     Toast.makeText(
                         activity, "Login failed with message: " + task.exception!!.message,
@@ -81,13 +76,17 @@ class LoginFragment : Fragment() {
             }
     }
 
-    private fun loginFirebaseDb(email: String) {
+    private fun loginFirebaseDb() {
         FirebaseRealtimeDB.usersReference.child("/${firebaseUser.uid}").get()
             .addOnSuccessListener { user ->
                 if (user.exists()) {
-                    loginCounter++
                     FirebaseAuthUser.updateUser(user)
-                    checkRedirect()
+                    Toast.makeText(
+                        activity,
+                        "Login successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    navigateOut()
                 } else {
                     Toast.makeText(
                         activity,
@@ -96,28 +95,6 @@ class LoginFragment : Fragment() {
                     ).show()
                 }
             }
-    }
-
-    private fun validateLogin() {
-        authActivityViewModel.getUsersLiveData()
-            .observe(viewLifecycleOwner,
-                { t ->
-                    if (t != null) {
-                        loginCounter++
-                        checkRedirect()
-                    }
-                })
-    }
-
-    private fun checkRedirect() {
-        if (loginCounter == 2) {
-            Toast.makeText(
-                activity,
-                "Login successful",
-                Toast.LENGTH_SHORT
-            ).show()
-            navigateOut()
-        }
     }
 
     private fun navigateOut() {

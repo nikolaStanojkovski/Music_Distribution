@@ -22,12 +22,13 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.CategoryData
 import com.musicdistribution.albumdistribution.data.SessionService
-import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItem
 import com.musicdistribution.albumdistribution.model.CategoryItemType
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.util.LocalizationUtils
+import com.musicdistribution.albumdistribution.util.ValidationUtils
 import com.musicdistribution.albumdistribution.util.listeners.CategoryItemClickListener
 import java.util.*
 
@@ -158,7 +159,10 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                         for (item in songs) {
                             if (item.creator!!.email != FirebaseAuthUser.user!!.email) {
                                 val gsReference =
-                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${item.id}.jpg")
+                                    if (item.isASingle) FirebaseStorage.storage.getReferenceFromUrl(
+                                        "gs://album-distribution.appspot.com/song-images/${item.id}.jpg"
+                                    ) else
+                                        FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.album!!.id}.jpg")
                                 gsReference.downloadUrl.addOnCompleteListener { uri ->
                                     var link = ""
                                     if (uri.isSuccessful) {
@@ -188,7 +192,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 { albums ->
                     if (albums != null) {
                         for (item in albums) {
-                            if (item.creator.email != FirebaseAuthUser.user!!.email) {
+                            if (item.creator.email != FirebaseAuthUser.user!!.email && item.isPublished) {
                                 val gsReference =
                                     FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${item.id}.jpg")
                                 gsReference.downloadUrl.addOnCompleteListener { uri ->
@@ -325,19 +329,24 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 1
             )
         } else {
-            if (SessionService.read("location_latitude") == null || SessionService.read("location_longitude") == null) {
-                locationProvider!!.lastLocation.addOnCompleteListener { task ->
-                    val location = task.result
-                    if (location != null) {
-                        SessionService.save("location_latitude", location.latitude.toString())
-                        SessionService.save("location_longitude", location.longitude.toString())
-                    }
+            locationProvider!!.lastLocation.addOnCompleteListener { task ->
+                val location = task.result
+                if (location != null) {
+                    SessionService.save("location_latitude", location.latitude.toString())
+                    SessionService.save("location_longitude", location.longitude.toString())
+                }
+                if (ValidationUtils.isDouble(
+                        SessionService.read("location_longitude").toString()
+                    ) && ValidationUtils.isDouble(
+                        SessionService.read("location_latitude").toString()
+                    )
+                ) {
+                    fillLocation(
+                        SessionService.read("location_longitude")!!.toDouble(),
+                        SessionService.read("location_latitude")!!.toDouble()
+                    )
                 }
             }
-            fillLocation(
-                SessionService.read("location_longitude")!!.toDouble(),
-                SessionService.read("location_latitude")!!.toDouble()
-            )
         }
     }
 

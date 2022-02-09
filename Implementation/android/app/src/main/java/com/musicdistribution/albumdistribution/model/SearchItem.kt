@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.model
 
-class SearchItem(
+data class SearchItem(
     val searchItemId: String,
     val searchItemTitle: String,
     val searchItemInfo: String,

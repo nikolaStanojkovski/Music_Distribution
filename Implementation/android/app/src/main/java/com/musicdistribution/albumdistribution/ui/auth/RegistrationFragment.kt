@@ -14,10 +14,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseUser
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.databinding.FragmentRegistrationBinding
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.model.firebase.User
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 
@@ -28,7 +28,6 @@ class RegistrationFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var authActivityViewModel: AuthActivityViewModel
-    private var registerCounter: Int = 0
     private var role: Role? = null
     private var firebaseUser: FirebaseUser? = null
 
@@ -44,7 +43,7 @@ class RegistrationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         authActivityViewModel =
-            ViewModelProvider(requireActivity()).get(AuthActivityViewModel::class.java)
+            ViewModelProvider(requireActivity())[AuthActivityViewModel::class.java]
 
         binding.btnBackRegister.setOnClickListener {
             findNavController().navigate(R.id.action_RegisterFragment_to_WelcomeFragment)
@@ -83,10 +82,7 @@ class RegistrationFragment : Fragment() {
             ) { task ->
                 if (task.isSuccessful) {
                     firebaseUser = task.result.user
-                    registerCounter++
-                    registerFirebaseDb(email, role!!)
-                    authActivityViewModel.registerApi(email, password, role!!)
-                    authActivityViewModel.registerRoom(email, role!!, firebaseUser!!)
+                    registerFirebaseDb(email, password, role!!)
                 } else {
                     Toast.makeText(
                         requireActivity(),
@@ -97,7 +93,7 @@ class RegistrationFragment : Fragment() {
             }
     }
 
-    private fun registerFirebaseDb(email: String, role: Role) {
+    private fun registerFirebaseDb(email: String, password: String, role: Role) {
         val nameSurname = ValidationUtils.generateFirstLastName(email)
         val user = User(
             name = nameSurname[0],
@@ -110,8 +106,11 @@ class RegistrationFragment : Fragment() {
         FirebaseRealtimeDB.usersReference.child(firebaseUser!!.uid).setValue(user)
             .addOnCompleteListener(OnCompleteListener<Void?> { task ->
                 if (task.isSuccessful) {
-                    registerCounter++
-                    checkRedirect()
+                    if (role == Role.CREATOR) {
+                        authActivityViewModel.registerApi(email, password, role)
+                    } else {
+                        redirect()
+                    }
                 } else {
                     Toast.makeText(
                         activity,
@@ -123,27 +122,11 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun validateRegistration() {
-        authActivityViewModel.getUsersLiveData()
-            .observe(viewLifecycleOwner,
-                { t ->
-                    if (t != null) {
-                        registerCounter++
-                        checkRedirect()
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            "Error when trying to register, please try again",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                })
-
         authActivityViewModel.getArtistsLiveData()
             .observe(viewLifecycleOwner,
-                { t ->
-                    if (t != null) {
-                        registerCounter++
-                        checkRedirect()
+                { artist ->
+                    if (artist != null) {
+                        redirect()
                     } else {
                         Toast.makeText(
                             activity,
@@ -154,17 +137,13 @@ class RegistrationFragment : Fragment() {
                 })
     }
 
-    private fun checkRedirect() {
-        if ((registerCounter == 4 && role == Role.CREATOR) ||
-            (registerCounter == 3 && role == Role.LISTENER)
-        ) {
-            Toast.makeText(
-                activity,
-                "Registration successful",
-                Toast.LENGTH_SHORT
-            ).show()
-            findNavController().navigate(R.id.action_RegisterFragment_to_LoginFragment)
-        }
+    private fun redirect() {
+        Toast.makeText(
+            activity,
+            "Registration successful",
+            Toast.LENGTH_SHORT
+        ).show()
+        findNavController().navigate(R.id.action_RegisterFragment_to_LoginFragment)
     }
 
     override fun onDestroyView() {

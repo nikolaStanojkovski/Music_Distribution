@@ -12,8 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
+import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth
+import com.musicdistribution.albumdistribution.model.retrofit.EmailDomain
 import com.musicdistribution.albumdistribution.model.retrofit.SongRetrofitCreate
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeFragmentViewModel
 import com.musicdistribution.albumdistribution.util.ValidationUtils
 
@@ -116,15 +119,41 @@ class PublishSongFragment : Fragment() {
     }
 
     private fun fillData() {
-        homeFragmentViewModel.fetchPublishedAlbums()
         homeFragmentViewModel.emptyData()
+        homeFragmentViewModel.fetchPublishedAlbums()
+        val artistRetrofit = ArtistRetrofitAuth(
+            username = FirebaseAuthUser.user!!.email.split("@")[0],
+            emailDomain = EmailDomain.valueOf(FirebaseAuthUser.user!!.email.split("@")[1].split(".")[0]),
+            telephoneNumber = "[not-defined]",
+            firstName = FirebaseAuthUser.user!!.name,
+            lastName = FirebaseAuthUser.user!!.surname,
+            artName = "[not-defined]",
+            password = "[not-defined]"
+        )
+        homeFragmentViewModel.fetchArtist(artistRetrofit)
+        homeFragmentViewModel.getArtistLiveData()
+            .observe(viewLifecycleOwner,
+                { artist ->
+                    if (artist != null) {
+                        artistId = artist.id
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Error when trying to fetch artist information",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+
         val albumChoices = mutableListOf<Pair<String, String>>()
+        albumChoices.add("" to "None")
+        publishedAlbumChoices = albumChoices
+        populateSpinner()
 
         homeFragmentViewModel.getPublishedAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { publishedAlbums ->
                     if (!publishedAlbums.isNullOrEmpty()) {
-                        albumChoices.add("" to "None")
                         for (item in publishedAlbums) {
                             if (item.artistId.isNotBlank() && artistId.isNullOrBlank()) {
                                 artistId = item.artistId
@@ -156,9 +185,15 @@ class PublishSongFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val currentItemValue = albumSpinner.selectedItem.toString()
-                val updatePictureBUtton = fragmentView.findViewById<Button>(R.id.btnChangeSongPicture)
+                val updatePictureBUtton =
+                    fragmentView.findViewById<Button>(R.id.btnChangeSongPicture)
                 if (currentItemValue == "None") {
                     updatePictureBUtton.isEnabled = true
                     updatePictureBUtton.isClickable = true

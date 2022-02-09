@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.model.retrofit
 
-class Money(
+data class Money(
     val currency: String,
     val amount: Double
 )

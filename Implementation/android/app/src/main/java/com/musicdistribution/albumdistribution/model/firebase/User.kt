@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.model.firebase
 
-import com.musicdistribution.albumdistribution.data.domain.Role
+import com.musicdistribution.albumdistribution.model.Role
 
 data class User(
     var name: String,

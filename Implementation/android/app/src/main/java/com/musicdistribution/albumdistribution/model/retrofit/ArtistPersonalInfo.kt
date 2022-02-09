@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.model.retrofit
 
-class ArtistPersonalInfo (
+data class ArtistPersonalInfo (
     val firstName: String,
     val lastName: String,
     val artName: String,

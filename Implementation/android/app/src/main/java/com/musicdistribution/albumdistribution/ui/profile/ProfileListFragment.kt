@@ -14,12 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Role
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.model.SearchItem
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.ui.search.SearchItemAdapter
 import com.musicdistribution.albumdistribution.util.listeners.SearchItemClickListener
 
@@ -98,7 +98,8 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
                 { song ->
                     if (song != null) {
                         val gsReference =
-                            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
+                            if(song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
+                        else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
                         var link = ""
                         gsReference.downloadUrl.addOnCompleteListener { uri ->
                             if (uri.isSuccessful) {

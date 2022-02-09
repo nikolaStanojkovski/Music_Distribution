@@ -7,15 +7,27 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
 import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApi
 import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApiClient
-import com.musicdistribution.albumdistribution.data.domain.Tier
+import com.musicdistribution.albumdistribution.data.domain.AlbumNotification
+import com.musicdistribution.albumdistribution.data.domain.SongNotification
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
+import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
+import com.musicdistribution.albumdistribution.data.room.AppDatabase
+import com.musicdistribution.albumdistribution.model.Tier
 import com.musicdistribution.albumdistribution.model.retrofit.*
 import com.musicdistribution.albumdistribution.util.TransactionUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,10 +35,12 @@ import retrofit2.Response
 class HomeFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app: Application = application
+    private val database = AppDatabase.getInstance(app)
 
     private val albumCatalogApi: AlbumCatalogApi = AlbumCatalogApiClient.getAlbumCatalogApi()!!
     private val albumPublishingApi: AlbumPublishingApi =
         AlbumPublishingApiClient.getMusicDistributorApi()!!
+    private var notificationsLiveData: MutableLiveData<String> = MutableLiveData()
 
     private var artistsLiveData: MutableLiveData<MutableList<ArtistRetrofit>> = MutableLiveData()
     private var artistLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
@@ -250,20 +264,22 @@ class HomeFragmentViewModel(application: Application) : AndroidViewModel(applica
                     if (picturePath != null && song.isASingle) {
                         val songImagesRef =
                             FirebaseStorage.storage.reference.child("song-images/${song.id}.jpg")
-                        songImagesRef.putFile(picturePath).addOnSuccessListener {
-                            Toast.makeText(
-                                app,
-                                "The song with name ${song.songName} was successfully published",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    } else {
-                        Toast.makeText(
-                            app,
-                            "The song with name ${song.songName} was successfully published",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        songImagesRef.putFile(picturePath)
                     }
+                    Toast.makeText(
+                        app,
+                        "The song with name ${song.songName} was successfully published",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    val notificationSong =
+                        SongNotification(
+                            creatorId = song.creator!!.id!!,
+                            creatorName = song.creator.artistPersonalInfo.fullName,
+                            songId = song.id,
+                            songName = song.songName
+                        )
+                    FirebaseRealtimeDB.songNotificationsReference.child("/note-${song.creator.id!!}-${song.id}")
+                        .setValue(notificationSong)
                 }
             }
 
@@ -344,6 +360,15 @@ class HomeFragmentViewModel(application: Application) : AndroidViewModel(applica
                                         "The album with name ${album.albumName} was successfully published",
                                         Toast.LENGTH_LONG
                                     ).show()
+                                    val notificationAlbum =
+                                        AlbumNotification(
+                                            creatorId = album.creator.id!!,
+                                            creatorName = album.creator.artistPersonalInfo.fullName,
+                                            albumId = album.id,
+                                            albumName = album.albumName
+                                        )
+                                    FirebaseRealtimeDB.albumNotificationsReference.child("/note-${album.creator.id}-${album.id}")
+                                        .setValue(notificationAlbum)
                                 }
                             }
 
@@ -369,6 +394,131 @@ class HomeFragmentViewModel(application: Application) : AndroidViewModel(applica
                 ).show()
             }
         })
+    }
+
+    fun checkNotifications() {
+        FirebaseRealtimeDB.favouriteArtistsReference.orderByChild("followerId")
+            .equalTo(FirebaseAuthDB.firebaseAuth.currentUser!!.uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.value != null) {
+                        val values = snapshot.value as HashMap<String, Object>
+                        val favouriteArtistIds = mutableListOf<String>()
+                        for (favArtist in values.entries) {
+                            val favouriteArtist = favArtist.value as HashMap<String, Object>
+                            val artistId = favouriteArtist["followingId"].toString()
+                            favouriteArtistIds.add(artistId)
+                        }
+
+                        checkSongNotifications(favouriteArtistIds)
+                        checkAlbumNotifications(favouriteArtistIds)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        app,
+                        "There was a problem when trying to fetch favourite artists for current user",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+    }
+
+    private fun checkSongNotifications(favouriteArtistIds: MutableList<String>) {
+        for (artistId in favouriteArtistIds) {
+            FirebaseRealtimeDB.songNotificationsReference.orderByChild("creatorId")
+                .equalTo(artistId)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists() && snapshot.value != null) {
+                            val values = snapshot.value as HashMap<String, Object>
+                            for (notification in values.entries) {
+                                val songNotification = notification.value as HashMap<String, Object>
+                                val creatorName = songNotification["creatorName"].toString()
+                                val songId = songNotification["songId"].toString()
+                                val songName = songNotification["songName"].toString()
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    if (database.songNotificationDao()
+                                            .readSongNotification(songId, artistId) == null
+                                    ) {
+                                        val songNotificationInsert =
+                                            SongNotification(
+                                                creatorId = artistId,
+                                                songId = songId,
+                                                creatorName = creatorName,
+                                                songName = songName
+                                            )
+                                        database.songNotificationDao()
+                                            .addSongNotification(songNotificationInsert)
+                                        withContext(Dispatchers.Main) {
+                                            var currentNotificationMessage =
+                                                if (notificationsLiveData.value != null)
+                                                    notificationsLiveData.value else ""
+                                            currentNotificationMessage += "New song with name '$songName' published by $creatorName\n"
+                                            notificationsLiveData.value =
+                                                currentNotificationMessage.toString()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+        }
+    }
+
+    private fun checkAlbumNotifications(favouriteArtistIds: MutableList<String>) {
+        for (artistId in favouriteArtistIds) {
+            FirebaseRealtimeDB.albumNotificationsReference.orderByChild("creatorId")
+                .equalTo(artistId)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists() && snapshot.value != null) {
+                            val values = snapshot.value as HashMap<String, Object>
+                            for (notification in values.entries) {
+                                val albumNotification =
+                                    notification.value as HashMap<String, Object>
+                                val creatorName = albumNotification["creatorName"].toString()
+                                val albumId = albumNotification["albumId"].toString()
+                                val albumName = albumNotification["albumName"].toString()
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    if (database.albumNotificationDao()
+                                            .readAlbumNotification(albumId, artistId) == null
+                                    ) {
+                                        val albumNotificationInsert =
+                                            AlbumNotification(
+                                                creatorId = artistId,
+                                                albumId = albumId,
+                                                creatorName = creatorName,
+                                                albumName = albumName
+                                            )
+                                        database.albumNotificationDao()
+                                            .addAlbumNotification(albumNotificationInsert)
+                                        withContext(Dispatchers.Main) {
+                                            var currentNotificationMessage =
+                                                if (notificationsLiveData.value != null)
+                                                    notificationsLiveData.value else ""
+                                            currentNotificationMessage += "New album with name '$albumName' published by $creatorName\n"
+                                            notificationsLiveData.value =
+                                                currentNotificationMessage.toString()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+        }
+    }
+
+    fun getNotificationsLivedata(): MutableLiveData<String> {
+        return notificationsLiveData
     }
 
     fun getArtistsLiveData(): MutableLiveData<MutableList<ArtistRetrofit>> {

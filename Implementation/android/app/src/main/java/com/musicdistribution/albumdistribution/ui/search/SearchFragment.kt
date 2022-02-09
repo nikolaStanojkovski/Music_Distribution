@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
 import com.musicdistribution.albumdistribution.data.GenreData
-import com.musicdistribution.albumdistribution.data.domain.Genre
+import com.musicdistribution.albumdistribution.model.Genre
 import com.musicdistribution.albumdistribution.util.listeners.GenreItemClickListener
 
 class SearchFragment : Fragment(), GenreItemClickListener {

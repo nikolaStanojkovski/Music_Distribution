@@ -39,7 +39,8 @@ The application has the following functionalities:
 - Possibility to <b>release a song (single)</b> by an authenticated artist.
 - Possibility to <b>unpublish an album</b> by an authenticated artist.
 - Possibility to <b>unpublish a song (single)</b> by an authenticated artist.
-- Opportunity to <b>increase the ranking of an already published song / album</b> by an authenticated artist.
+- Opportunity to <b>increase the ranking of an already published album</b> by an authenticated artist.
 - <b>Artist functionalities</b> for published songs.
 - <b>Artist functionalities</b> for published albums.
-- <b>Sending notifications to users</b> with news regarding new published releases.
+- Opportunity for <b>liking a song (single)</b> or <b>liking an artist</b> by an authenticated user (either artist or listener).
+- <b>Sending notifications to users</b> with news regarding new published releases by their favourite artists.

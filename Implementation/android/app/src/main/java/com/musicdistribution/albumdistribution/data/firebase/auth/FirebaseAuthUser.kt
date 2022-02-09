@@ -1,7 +1,7 @@
 package com.musicdistribution.albumdistribution.data.firebase.auth
 
 import com.google.firebase.database.DataSnapshot
-import com.musicdistribution.albumdistribution.data.domain.Role
+import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.model.firebase.User
 
 class FirebaseAuthUser {

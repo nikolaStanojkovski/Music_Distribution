@@ -3,6 +3,7 @@ package com.musicdistribution.albumdistribution.util
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
+import java.lang.Double.parseDouble
 import java.lang.Integer.parseInt
 
 class ValidationUtils {
@@ -40,7 +41,7 @@ class ValidationUtils {
         fun generateFirstLastName(email: String): MutableList<String> {
             val usernameValidation = email.split("@")
             val firstLastName = usernameValidation[0].split(".")
-            return if (firstLastName.isNullOrEmpty()) mutableListOf() else mutableListOf(
+            return if (firstLastName.isNullOrEmpty() || firstLastName.size < 2) mutableListOf() else mutableListOf(
                 firstLastName[0][0].uppercaseChar() + firstLastName[0].substring(1),
                 firstLastName[1][0].uppercaseChar() + firstLastName[1].substring(1)
             )
@@ -57,6 +58,16 @@ class ValidationUtils {
         fun isNumeric(string: String): Boolean {
             try {
                 parseInt(string)
+            } catch (e: NumberFormatException) {
+                return false
+            }
+
+            return true
+        }
+
+        fun isDouble(string: String): Boolean {
+            try {
+                parseDouble(string)
             } catch (e: NumberFormatException) {
                 return false
             }

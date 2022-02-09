@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Genre
-import com.musicdistribution.albumdistribution.data.domain.Tier
+import com.musicdistribution.albumdistribution.model.Genre
+import com.musicdistribution.albumdistribution.model.Tier
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofitCreate
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth
 import com.musicdistribution.albumdistribution.model.retrofit.EmailDomain
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeFragmentViewModel
 import com.musicdistribution.albumdistribution.util.TransactionUtils
 
@@ -99,7 +99,7 @@ class PublishAlbumFragment : Fragment() {
                 val createAlbum = AlbumRetrofitCreate(
                     albumName,
                     0,
-                    false,
+                    false, // the server will make it published
                     genreValue,
                     artistName,
                     artistName,
@@ -128,6 +128,7 @@ class PublishAlbumFragment : Fragment() {
     }
 
     private fun fillData() {
+        homeFragmentViewModel.emptyData()
         homeFragmentViewModel.fetchMusicDistributors()
         val artistRetrofit = ArtistRetrofitAuth(
             username = FirebaseAuthUser.user!!.email.split("@")[0],
@@ -139,7 +140,6 @@ class PublishAlbumFragment : Fragment() {
             password = "[not-defined]"
         )
         homeFragmentViewModel.fetchArtist(artistRetrofit)
-        homeFragmentViewModel.emptyData()
 
         homeFragmentViewModel.getArtistLiveData()
             .observe(viewLifecycleOwner,

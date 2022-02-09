@@ -9,13 +9,13 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.domain.Tier
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
+import com.musicdistribution.albumdistribution.model.Tier
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth
 import com.musicdistribution.albumdistribution.model.retrofit.EmailDomain
 import com.musicdistribution.albumdistribution.model.retrofit.PublishedAlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.PublishedAlbumRetrofitCreate
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
+import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.ui.home.HomeFragmentViewModel
 import com.musicdistribution.albumdistribution.util.TransactionUtils
 
@@ -60,25 +60,35 @@ class RaiseTierFragment : Fragment() {
             val selectedPublishedAlbumValue = publishedAlbumsSpinner.selectedItem.toString()
             val selectedTierValue = Tier.valueOf(tierSpinner.selectedItem.toString())
 
-            val selectedPublishedAlbum =
-                publishedAlbums.first { v -> v.albumName == selectedPublishedAlbumValue }
+            if (selectedPublishedAlbumValue.isBlank() || tierSpinner.selectedItem.toString()
+                    .isBlank()
+            ) {
+                Toast.makeText(
+                    requireActivity(),
+                    "Please choose a published album and a tier",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                val selectedPublishedAlbum =
+                    publishedAlbums.first { v -> v.albumName == selectedPublishedAlbumValue }
 
-            val publishedAlbumCreate = PublishedAlbumRetrofitCreate(
-                publishedAlbumId = selectedPublishedAlbum.publishedAlbumId,
-                albumId = selectedPublishedAlbum.albumId,
-                albumName = selectedPublishedAlbum.albumName,
-                artistId = selectedPublishedAlbum.artistId,
-                artistInformation = selectedPublishedAlbum.artistInformation,
-                musicPublisherId = selectedPublishedAlbum.musicPublisherId,
-                musicPublisherInfo = selectedPublishedAlbum.musicPublisherInfo,
-                albumTier = selectedTierValue.toString(),
-                subscriptionFee = TransactionUtils.calculateCost(selectedTierValue),
-                transactionFee = 5.00
-            )
-            homeFragmentViewModel.raiseAlbumTier(
-                publishedAlbumCreate
-            )
-            navigateOut()
+                val publishedAlbumCreate = PublishedAlbumRetrofitCreate(
+                    publishedAlbumId = selectedPublishedAlbum.publishedAlbumId,
+                    albumId = selectedPublishedAlbum.albumId,
+                    albumName = selectedPublishedAlbum.albumName,
+                    artistId = selectedPublishedAlbum.artistId,
+                    artistInformation = selectedPublishedAlbum.artistInformation,
+                    musicPublisherId = selectedPublishedAlbum.musicPublisherId,
+                    musicPublisherInfo = selectedPublishedAlbum.musicPublisherInfo,
+                    albumTier = selectedTierValue.toString(),
+                    subscriptionFee = TransactionUtils.calculateCost(selectedTierValue),
+                    transactionFee = 5.00
+                )
+                homeFragmentViewModel.raiseAlbumTier(
+                    publishedAlbumCreate
+                )
+                navigateOut()
+            }
         }
     }
 
@@ -91,6 +101,7 @@ class RaiseTierFragment : Fragment() {
     }
 
     private fun fillData() {
+        homeFragmentViewModel.emptyData()
         val artistRetrofit = ArtistRetrofitAuth(
             username = FirebaseAuthUser.user!!.email.split("@")[0],
             emailDomain = EmailDomain.valueOf(FirebaseAuthUser.user!!.email.split("@")[1].split(".")[0]),
@@ -101,7 +112,6 @@ class RaiseTierFragment : Fragment() {
             password = "[not-defined]"
         )
         homeFragmentViewModel.fetchArtist(artistRetrofit)
-        homeFragmentViewModel.emptyData()
 
         homeFragmentViewModel.getArtistLiveData()
             .observe(viewLifecycleOwner,

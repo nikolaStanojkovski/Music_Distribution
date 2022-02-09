@@ -1,6 +1,6 @@
 package com.musicdistribution.albumdistribution.util
 
-import com.musicdistribution.albumdistribution.data.domain.Tier
+import com.musicdistribution.albumdistribution.model.Tier
 
 class TransactionUtils {
     companion object {
@@ -25,7 +25,7 @@ class TransactionUtils {
         }
 
         fun calculateAlbumCost(tier: Tier): String {
-            return calculateCost(tier).toString() + " €"
+            return (calculateCost(tier) + 5.00).toString() + " €"
         }
     }
 }
