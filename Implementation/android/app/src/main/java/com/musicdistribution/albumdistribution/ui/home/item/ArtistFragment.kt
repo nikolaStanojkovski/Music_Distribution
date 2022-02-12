@@ -52,7 +52,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         }
 
         homeItemFragmentViewModel =
-            ViewModelProvider(requireActivity())[HomeItemFragmentViewModel::class.java]
+            ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
         fillData(selectedArtistId!!)
         fragmentView.findViewById<Button>(R.id.btnBackArtist).setOnClickListener {
             findNavController().navigate(R.id.action_artistFragment_to_homeFragment)
@@ -113,10 +113,11 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
             fragmentView.findViewById<RecyclerView>(R.id.artistItemRecyclerView)
         verticalRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        verticalAdapter.clearData()
         verticalRecyclerView.adapter = verticalAdapter
-        verticalAdapter.emptyData(CategoryData.artistData[0])
-        verticalAdapter.emptyData(CategoryData.artistData[1])
 
+        CategoryData.clearData()
+        verticalAdapter.updateCategory(CategoryData.artistData[0])
         homeItemFragmentViewModel.getArtistSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
@@ -141,6 +142,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                         }
                     }
                 })
+        verticalAdapter.updateCategory(CategoryData.artistData[1])
         homeItemFragmentViewModel.getArtistAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { albums ->

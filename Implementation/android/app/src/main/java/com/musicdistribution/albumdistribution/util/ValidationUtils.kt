@@ -41,7 +41,7 @@ class ValidationUtils {
         fun generateFirstLastName(email: String): MutableList<String> {
             val usernameValidation = email.split("@")
             val firstLastName = usernameValidation[0].split(".")
-            return if (firstLastName.isNullOrEmpty() || firstLastName.size < 2) mutableListOf() else mutableListOf(
+            return if (firstLastName.isNullOrEmpty() || firstLastName.size < 2) mutableListOf(usernameValidation[0], "") else mutableListOf(
                 firstLastName[0][0].uppercaseChar() + firstLastName[0].substring(1),
                 firstLastName[1][0].uppercaseChar() + firstLastName[1].substring(1)
             )

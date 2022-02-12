@@ -50,7 +50,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         }
 
         homeItemFragmentViewModel =
-            ViewModelProvider(requireActivity())[HomeItemFragmentViewModel::class.java]
+            ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
         fillData(selectedAlbumId!!, categoryType)
         fragmentView.findViewById<Button>(R.id.btnBackAlbum).setOnClickListener {
             findNavController().navigate(com.musicdistribution.albumdistribution.R.id.action_albumFragment_to_homeFragment)
@@ -64,8 +64,8 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
             fragmentView.findViewById<RecyclerView>(R.id.songListAlbumRecyclerView)
         songItemRecyclerView!!.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
-        songItemRecyclerView.adapter = songItemAdapter
         songItemAdapter.emptyData()
+        songItemRecyclerView.adapter = songItemAdapter
 
         if (categoryItemType != null && categoryItemType == CategoryItemType.PUBLISHED_ALBUM) {
             fragmentView.findViewById<TextView>(R.id.txtAlbumHeading).visibility = View.GONE

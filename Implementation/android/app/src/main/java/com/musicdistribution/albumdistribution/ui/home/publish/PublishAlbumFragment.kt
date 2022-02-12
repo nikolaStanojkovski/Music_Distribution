@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.model.Genre
 import com.musicdistribution.albumdistribution.model.Tier
-import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofitCreate
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth
 import com.musicdistribution.albumdistribution.model.retrofit.EmailDomain
@@ -46,7 +46,7 @@ class PublishAlbumFragment : Fragment() {
 
 
         homeFragmentViewModel =
-            ViewModelProvider(requireActivity()).get(HomeFragmentViewModel::class.java)
+            ViewModelProvider(this).get(HomeFragmentViewModel::class.java)
         fragmentView.findViewById<Button>(R.id.btnCancelCreateAlbum).setOnClickListener {
             navigateOut()
         }

@@ -5,12 +5,11 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
+import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApi
 import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApiClient
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
@@ -41,6 +40,16 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
     private var albumsLiveData: MutableLiveData<AlbumRetrofit?> = MutableLiveData()
     private var albumSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
     private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
+
+    init {
+        artistsLiveData = MutableLiveData()
+        usersLiveData = MutableLiveData()
+        artistAlbumsLiveData = MutableLiveData()
+        artistSongsLiveData = MutableLiveData()
+        albumsLiveData = MutableLiveData()
+        albumSongsLiveData = MutableLiveData()
+        songsLiveData = MutableLiveData()
+    }
 
     fun fetchArtistApi(id: String) {
         albumCatalogApi.getArtistById(id).enqueue(object : Callback<ArtistRetrofit?> {
@@ -91,7 +100,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                             .addOnSuccessListener { user ->
                                 if (user.exists()) {
                                     val userValue =
-                                        FirebaseAuthUser.getUser(user.value as HashMap<String, Object>)
+                                        FirebaseAuthUser.getUser(user.value as HashMap<String, Any>)
                                     userValue.noFollowing = userValue.noFollowing + 1
                                     FirebaseRealtimeDB.usersReference.child("/${followerId}")
                                         .setValue(userValue)
@@ -102,10 +111,10 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     if (snapshot.exists() && snapshot.value != null) {
-                                        val values = snapshot.value as HashMap<String, Object>
+                                        val values = snapshot.value as HashMap<String, Any>
                                         val userInfo = values.entries.first()
                                         val userValue =
-                                            FirebaseAuthUser.getUser(userInfo.value as HashMap<String, Object>)
+                                            FirebaseAuthUser.getUser(userInfo.value as HashMap<String, Any>)
                                         userValue.noFollowers = userValue.noFollowers + 1
                                         FirebaseRealtimeDB.usersReference.child("/${userInfo.key}")
                                             .setValue(userValue)
@@ -130,7 +139,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                             .addOnSuccessListener { user ->
                                 if (user.exists()) {
                                     val userValue =
-                                        FirebaseAuthUser.getUser(user.value as HashMap<String, Object>)
+                                        FirebaseAuthUser.getUser(user.value as HashMap<String, Any>)
                                     userValue.noFollowing = userValue.noFollowing - 1
                                     FirebaseRealtimeDB.usersReference.child("/${followerId}")
                                         .setValue(userValue)
@@ -141,10 +150,10 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     if (snapshot.exists() && snapshot.value != null) {
-                                        val values = snapshot.value as HashMap<String, Object>
+                                        val values = snapshot.value as HashMap<String, Any>
                                         val userInfo = values.entries.first()
                                         val userValue =
-                                            FirebaseAuthUser.getUser(userInfo.value as HashMap<String, Object>)
+                                            FirebaseAuthUser.getUser(userInfo.value as HashMap<String, Any>)
                                         userValue.noFollowers = userValue.noFollowers - 1
                                         FirebaseRealtimeDB.usersReference.child("/${userInfo.key}")
                                             .setValue(userValue)
@@ -170,9 +179,9 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists() && snapshot.value != null) {
-                        val value = snapshot.value as HashMap<String, Object>
+                        val value = snapshot.value as HashMap<String, Any>
                         usersLiveData.value =
-                            FirebaseAuthUser.getUser(value.entries.first().value as HashMap<String, Object>)
+                            FirebaseAuthUser.getUser(value.entries.first().value as HashMap<String, Any>)
                     } else {
                         usersLiveData.value = null
                     }
@@ -348,21 +357,26 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                             Toast.LENGTH_LONG
                         ).show()
 
-                        albumCatalogApi.getAlbumSongs(selectedAlbumId).enqueue(object : Callback<ArrayList<SongRetrofit>> {
-                            override fun onResponse(
-                                call: Call<ArrayList<SongRetrofit>>?,
-                                response: Response<ArrayList<SongRetrofit>>?
-                            ) {
-                                val songs = response!!.body()
-                                if (!songs.isNullOrEmpty()) {
-                                    for(item in songs) {
-                                        clearFavouriteSOng(item.id)
+                        albumCatalogApi.getAlbumSongs(selectedAlbumId)
+                            .enqueue(object : Callback<ArrayList<SongRetrofit>> {
+                                override fun onResponse(
+                                    call: Call<ArrayList<SongRetrofit>>?,
+                                    response: Response<ArrayList<SongRetrofit>>?
+                                ) {
+                                    val songs = response!!.body()
+                                    if (!songs.isNullOrEmpty()) {
+                                        for (item in songs) {
+                                            clearFavouriteSOng(item.id)
+                                        }
                                     }
                                 }
-                            }
-                            override fun onFailure(call: Call<ArrayList<SongRetrofit>?>?, throwable: Throwable) {
-                            }
-                        })
+
+                                override fun onFailure(
+                                    call: Call<ArrayList<SongRetrofit>?>?,
+                                    throwable: Throwable
+                                ) {
+                                }
+                            })
                     }
                 }
 
@@ -384,6 +398,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
                         snapshot.ref.setValue(null)
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                 }
             })

@@ -4,8 +4,8 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
+import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.model.Role
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofitAuth

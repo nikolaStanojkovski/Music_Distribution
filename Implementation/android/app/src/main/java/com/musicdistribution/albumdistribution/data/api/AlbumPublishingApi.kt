@@ -10,6 +10,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AlbumPublishingApi {
+
     @GET("api/distributors")
     fun getAllDistributors(): Call<ArrayList<MusicDistributorRetrofit>>
 

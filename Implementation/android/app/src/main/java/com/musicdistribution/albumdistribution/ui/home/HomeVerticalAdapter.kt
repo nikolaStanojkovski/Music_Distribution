@@ -55,9 +55,16 @@ class HomeVerticalAdapter(
         recyclerView.adapter = horizontalAdapter
     }
 
-    fun emptyData(category: Category) {
-        this.categoryData.filter { item -> item.id == category.id }[0].categoryItems.clear()
+    fun clearData() {
+        this.categoryData = mutableListOf()
         this.notifyDataSetChanged()
+    }
+
+    fun emptyData(category: Category) {
+        if(this.categoryData.any { item -> item.id == category.id }) {
+            this.categoryData.filter { item -> item.id == category.id }[0].categoryItems.clear()
+            this.notifyDataSetChanged()
+        }
     }
 
     fun updateCategory(category: Category) {

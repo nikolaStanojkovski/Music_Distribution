@@ -14,8 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.model.Role
-import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
 import com.musicdistribution.albumdistribution.model.SearchItem
@@ -46,10 +44,9 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
         }
 
         profileFragmentViewModel =
-            ViewModelProvider(requireActivity())[ProfileFragmentViewModel::class.java]
+            ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
 
         val adapter = fillRecyclerView()
-        adapter.emptyData()
         fetchData(listing_type!!, adapter)
         fragmentView.findViewById<Button>(R.id.btnBackProfileItem).setOnClickListener {
             findNavController()
@@ -63,6 +60,7 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
             fragmentView.findViewById<RecyclerView>(R.id.profileListRecyclerView)
         searchItemRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        searchItemAdapter.emptyData()
         searchItemRecyclerView.adapter = searchItemAdapter
         return searchItemAdapter
     }
@@ -75,102 +73,15 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
                 profileFragmentViewModel.fetchFavoriteSongs()
                 fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
                     "Your Favourite Songs"
-            }
-            CategoryItemType.ARTIST -> {
-                profileFragmentViewModel.fetchFavouriteArtists()
-                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
-                    "Your Favourite Artists"
-            }
-            CategoryItemType.PUBLISHED_ALBUM -> {
-                profileFragmentViewModel.fetchPublishedAlbums()
-                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
-                    "Your Published Albums"
-            }
-            CategoryItemType.PUBLISHED_SONG -> {
-                profileFragmentViewModel.fetchPublishedSongs()
-                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
-                    "Your Published Songs"
-            }
-        }
-
-        profileFragmentViewModel.getSongsLiveData()
-            .observe(viewLifecycleOwner,
-                { song ->
-                    if (song != null) {
-                        val gsReference =
-                            if(song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
-                        else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
-                        var link = ""
-                        gsReference.downloadUrl.addOnCompleteListener { uri ->
-                            if (uri.isSuccessful) {
-                                link = uri.result.toString()
-                            }
-                            val item = SearchItem(
-                                song.id,
-                                song.songName,
-                                "Song",
-                                CategoryItemType.SONG,
-                                link
-                            )
-                            adapter.updateDataItem(item)
-                        }
-                    }
-                })
-        profileFragmentViewModel.getArtistsLiveData()
-            .observe(viewLifecycleOwner,
-                { artist ->
-                    if (artist != null) {
-                        val gsReference =
-                            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${artist.id}.jpg")
-                        var link = ""
-                        gsReference.downloadUrl.addOnCompleteListener { uri ->
-                            if (uri.isSuccessful) {
-                                link = uri.result.toString()
-                            }
-                            val item = SearchItem(
-                                artist.id!!,
-                                artist.artistPersonalInfo.fullName,
-                                "Artist",
-                                CategoryItemType.ARTIST,
-                                link
-                            )
-                            adapter.updateDataItem(item)
-                        }
-                    }
-                })
-
-        if (FirebaseAuthUser.user!!.role == Role.CREATOR) {
-            profileFragmentViewModel.getPublishedAlbumsLiveData()
-                .observe(viewLifecycleOwner,
-                    { albums ->
-                        if (!albums.isNullOrEmpty()) {
-                            for (album in albums) {
+                profileFragmentViewModel.getSongsLiveData()
+                    .observe(viewLifecycleOwner,
+                        { song ->
+                            if (song != null) {
                                 val gsReference =
-                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${album!!.id}.jpg")
-                                var link = ""
-                                gsReference.downloadUrl.addOnCompleteListener { uri ->
-                                    if (uri.isSuccessful) {
-                                        link = uri.result.toString()
-                                    }
-                                    val item = SearchItem(
-                                        album.id,
-                                        album.albumName,
-                                        "Published Album",
-                                        CategoryItemType.PUBLISHED_ALBUM,
-                                        link
+                                    if (song.isASingle) FirebaseStorage.storage.getReferenceFromUrl(
+                                        "gs://album-distribution.appspot.com/song-images/${song.id}.jpg"
                                     )
-                                    adapter.updateDataItem(item)
-                                }
-                            }
-                        }
-                    })
-            profileFragmentViewModel.getPublishedSongsLiveData()
-                .observe(viewLifecycleOwner,
-                    { songs ->
-                        if (!songs.isNullOrEmpty()) {
-                            for (song in songs) {
-                                val gsReference =
-                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song!!.id}.jpg")
+                                    else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
                                 var link = ""
                                 gsReference.downloadUrl.addOnCompleteListener { uri ->
                                     if (uri.isSuccessful) {
@@ -179,15 +90,100 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
                                     val item = SearchItem(
                                         song.id,
                                         song.songName,
-                                        "Published Song",
-                                        CategoryItemType.PUBLISHED_SONG,
+                                        "Song",
+                                        CategoryItemType.SONG,
                                         link
                                     )
                                     adapter.updateDataItem(item)
                                 }
                             }
-                        }
-                    })
+                        })
+            }
+            CategoryItemType.ARTIST -> {
+                profileFragmentViewModel.fetchFavouriteArtists()
+                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
+                    "Your Favourite Artists"
+                profileFragmentViewModel.getArtistsLiveData()
+                    .observe(viewLifecycleOwner,
+                        { artist ->
+                            if (artist != null) {
+                                val gsReference =
+                                    FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${artist.id}.jpg")
+                                var link = ""
+                                gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                    if (uri.isSuccessful) {
+                                        link = uri.result.toString()
+                                    }
+                                    val item = SearchItem(
+                                        artist.id!!,
+                                        artist.artistPersonalInfo.fullName,
+                                        "Artist",
+                                        CategoryItemType.ARTIST,
+                                        link
+                                    )
+                                    adapter.updateDataItem(item)
+                                }
+                            }
+                        })
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                profileFragmentViewModel.fetchPublishedAlbums()
+                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
+                    "Your Published Albums"
+                profileFragmentViewModel.getPublishedAlbumsLiveData()
+                    .observe(viewLifecycleOwner,
+                        { albums ->
+                            if (!albums.isNullOrEmpty()) {
+                                for (album in albums) {
+                                    val gsReference =
+                                        FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${album!!.id}.jpg")
+                                    var link = ""
+                                    gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                        if (uri.isSuccessful) {
+                                            link = uri.result.toString()
+                                        }
+                                        val item = SearchItem(
+                                            album.id,
+                                            album.albumName,
+                                            "Published Album",
+                                            CategoryItemType.PUBLISHED_ALBUM,
+                                            link
+                                        )
+                                        adapter.updateDataItem(item)
+                                    }
+                                }
+                            }
+                        })
+            }
+            CategoryItemType.PUBLISHED_SONG -> {
+                profileFragmentViewModel.fetchPublishedSongs()
+                fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading).text =
+                    "Your Published Songs"
+                profileFragmentViewModel.getPublishedSongsLiveData()
+                    .observe(viewLifecycleOwner,
+                        { songs ->
+                            if (!songs.isNullOrEmpty()) {
+                                for (song in songs) {
+                                    val gsReference =
+                                        FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song!!.id}.jpg")
+                                    var link = ""
+                                    gsReference.downloadUrl.addOnCompleteListener { uri ->
+                                        if (uri.isSuccessful) {
+                                            link = uri.result.toString()
+                                        }
+                                        val item = SearchItem(
+                                            song.id,
+                                            song.songName,
+                                            "Published Song",
+                                            CategoryItemType.PUBLISHED_SONG,
+                                            link
+                                        )
+                                        adapter.updateDataItem(item)
+                                    }
+                                }
+                            }
+                        })
+            }
         }
     }
 

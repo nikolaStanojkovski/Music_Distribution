@@ -1,12 +1,10 @@
 package com.musicdistribution.albumdistribution.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.databinding.ActivityAuthBinding
-import com.musicdistribution.albumdistribution.ui.HomeActivity
 import com.musicdistribution.albumdistribution.util.InternetUtils
 
 class AuthActivity : AppCompatActivity() {
@@ -21,16 +19,10 @@ class AuthActivity : AppCompatActivity() {
         }
 
         if (FirebaseAuthDB.checkLogin()) {
-            navigateOut()
+            FirebaseAuthDB.firebaseAuth.signOut()
         }
 
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    private fun navigateOut() {
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }

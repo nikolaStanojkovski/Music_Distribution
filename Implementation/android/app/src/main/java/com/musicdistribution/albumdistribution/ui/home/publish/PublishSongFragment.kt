@@ -42,7 +42,7 @@ class PublishSongFragment : Fragment() {
         fragmentView = view
 
         homeFragmentViewModel =
-            ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
+            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
         fragmentView.findViewById<Button>(R.id.btnCancelCreateSong).setOnClickListener {
             navigateOut()
         }

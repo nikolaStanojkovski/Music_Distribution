@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
+import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApi
 import com.musicdistribution.albumdistribution.data.api.AlbumPublishingApiClient
 import com.musicdistribution.albumdistribution.data.domain.AlbumNotification
@@ -464,6 +464,7 @@ class HomeFragmentViewModel(application: Application) : AndroidViewModel(applica
                             }
                         }
                     }
+
                     override fun onCancelled(error: DatabaseError) {
                     }
                 })

@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         authActivityViewModel =
-            ViewModelProvider(requireActivity())[AuthActivityViewModel::class.java]
+            ViewModelProvider(this)[AuthActivityViewModel::class.java]
 
         binding.btnBackLogin.setOnClickListener {
             findNavController().navigate(R.id.action_LoginFragment_to_WelcomeFragment)

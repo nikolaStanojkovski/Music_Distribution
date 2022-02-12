@@ -4,8 +4,8 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
+import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.model.Genre
 import com.musicdistribution.albumdistribution.model.retrofit.AlbumRetrofit
 import com.musicdistribution.albumdistribution.model.retrofit.ArtistRetrofit
@@ -27,6 +27,9 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
     private var artistsLiveData: MutableLiveData<MutableList<ArtistRetrofit>?> = MutableLiveData()
 
     fun fetchSearchData(searchTerm: String) {
+        artistsLiveData = MutableLiveData()
+        albumsLiveData = MutableLiveData()
+        artistsLiveData = MutableLiveData()
         albumCatalogApi.searchArtists(searchTerm).enqueue(object :
             Callback<ArrayList<ArtistRetrofit>> {
             override fun onResponse(
@@ -90,6 +93,7 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun fetchGenreData(genre: Genre) {
+        albumsGenreLiveData = MutableLiveData()
         albumCatalogApi.getAlbumsGenre(genre.toString()).enqueue(object :
             Callback<ArrayList<AlbumRetrofit>> {
             override fun onResponse(

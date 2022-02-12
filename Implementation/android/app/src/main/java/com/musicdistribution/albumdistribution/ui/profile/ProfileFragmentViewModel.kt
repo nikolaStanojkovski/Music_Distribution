@@ -8,8 +8,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.musicbution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
+import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApiClient
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
 import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUser
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
@@ -60,9 +60,9 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists() && snapshot.value != null) {
-                        val values = snapshot.value as HashMap<String, Object>
+                        val values = snapshot.value as HashMap<String, Any>
                         for (favSong in values.entries) {
-                            val favouriteSong = favSong.value as HashMap<String, Object>
+                            val favouriteSong = favSong.value as HashMap<String, Any>
                             val songId = favouriteSong["songId"].toString()
                             albumCatalogApi.getSong(songId)
                                 .enqueue(object : Callback<SongRetrofit?> {
@@ -107,9 +107,9 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists() && snapshot.value != null) {
-                        val values = snapshot.value as HashMap<String, Object>
+                        val values = snapshot.value as HashMap<String, Any>
                         for (favArtist in values.entries) {
-                            val favouriteArtist = favArtist.value as HashMap<String, Object>
+                            val favouriteArtist = favArtist.value as HashMap<String, Any>
                             val artistId = favouriteArtist["followingId"].toString()
                             albumCatalogApi.getArtistById(artistId)
                                 .enqueue(object : Callback<ArtistRetrofit?> {

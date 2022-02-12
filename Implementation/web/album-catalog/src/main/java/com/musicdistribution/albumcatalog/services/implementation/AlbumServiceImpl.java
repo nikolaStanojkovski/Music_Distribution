@@ -56,10 +56,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Page<Album> findAllPageable() {
-        long totalQuantity = albumRepository.count();
-        int index = (int) (Math.random() * totalQuantity);
-        Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
-        return albumRepository.findAll(pageable);
+        return albumRepository.findAll(PageRequest.of(0, 10));
     }
 
     @Override

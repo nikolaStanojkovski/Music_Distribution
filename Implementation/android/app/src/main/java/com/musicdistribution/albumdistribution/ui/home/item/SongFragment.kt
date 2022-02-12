@@ -45,7 +45,8 @@ class SongFragment : Fragment() {
         }
 
         homeItemFragmentViewModel =
-            ViewModelProvider(requireActivity())[HomeItemFragmentViewModel::class.java]
+            ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
+
         fillData(selectedSongId!!, categoryItemType)
         fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
             findNavController().navigate(R.id.action_songFragment_to_homeFragment)

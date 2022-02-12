@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AlbumCatalogApi {
+
     @GET("api/songs")
     fun getAllSongs(): Call<ArrayList<SongRetrofit>>
 

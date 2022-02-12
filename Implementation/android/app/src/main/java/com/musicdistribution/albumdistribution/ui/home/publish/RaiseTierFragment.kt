@@ -41,7 +41,7 @@ class RaiseTierFragment : Fragment() {
         fragmentView = view
 
         homeFragmentViewModel =
-            ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
+            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
         fragmentView.findViewById<Button>(R.id.btnCancelRaiseTier).setOnClickListener {
             navigateOut()
         }
@@ -176,6 +176,15 @@ class RaiseTierFragment : Fragment() {
 
                 if (initialTier.first > currentTier.first) {
                     tiersSpinner.setSelection(tierItems.indexOfFirst { v -> Tier.valueOf(v) == initialTier.second })
+                }
+
+                val buttonOk = fragmentView.findViewById<Button>(R.id.btnConfirmRaiseTier)
+                if (initialTier.first == currentTier.first) {
+                    buttonOk.isClickable = false
+                    buttonOk.isEnabled = false
+                } else {
+                    buttonOk.isClickable = true
+                    buttonOk.isEnabled = true
                 }
 
                 val currentItemValue = tiersSpinner.selectedItem.toString()

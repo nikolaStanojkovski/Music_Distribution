@@ -43,7 +43,7 @@ class RegistrationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         authActivityViewModel =
-            ViewModelProvider(requireActivity())[AuthActivityViewModel::class.java]
+            ViewModelProvider(this)[AuthActivityViewModel::class.java]
 
         binding.btnBackRegister.setOnClickListener {
             findNavController().navigate(R.id.action_RegisterFragment_to_WelcomeFragment)

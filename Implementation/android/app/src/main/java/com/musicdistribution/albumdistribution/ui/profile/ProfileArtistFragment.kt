@@ -19,8 +19,8 @@ import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthUs
 import com.musicdistribution.albumdistribution.data.firebase.realtime.FirebaseRealtimeDB
 import com.musicdistribution.albumdistribution.data.firebase.storage.FirebaseStorage
 import com.musicdistribution.albumdistribution.model.CategoryItemType
-import com.musicdistribution.albumdistribution.ui.auth.AuthActivity
 import com.musicdistribution.albumdistribution.ui.HomeActivity
+import com.musicdistribution.albumdistribution.ui.auth.AuthActivity
 
 class ProfileArtistFragment : Fragment() {
 
@@ -42,25 +42,37 @@ class ProfileArtistFragment : Fragment() {
         fragmentView = view
 
         profileFragmentViewModel =
-            ViewModelProvider(requireActivity()).get(ProfileFragmentViewModel::class.java)
+            ViewModelProvider(this).get(ProfileFragmentViewModel::class.java)
 
         fillProfileInfo()
 
         fragmentView!!.findViewById<Button>(R.id.btnFavouriteArtistsArtist).setOnClickListener {
             val bundle = bundleOf("listing_type" to CategoryItemType.ARTIST)
-            findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_profileFragmentArtist_to_profileListFragment,
+                bundle
+            )
         }
         fragmentView!!.findViewById<Button>(R.id.btnFavouriteSongsArtist).setOnClickListener {
             val bundle = bundleOf("listing_type" to CategoryItemType.SONG)
-            findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_profileFragmentArtist_to_profileListFragment,
+                bundle
+            )
         }
         fragmentView!!.findViewById<Button>(R.id.btnPublishedSongsArtist).setOnClickListener {
             val bundle = bundleOf("listing_type" to CategoryItemType.PUBLISHED_SONG)
-            findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_profileFragmentArtist_to_profileListFragment,
+                bundle
+            )
         }
         fragmentView!!.findViewById<Button>(R.id.btnPublishedAlbumsArtist).setOnClickListener {
             val bundle = bundleOf("listing_type" to CategoryItemType.PUBLISHED_ALBUM)
-            findNavController().navigate(R.id.action_profileFragmentArtist_to_profileListFragment, bundle)
+            findNavController().navigate(
+                R.id.action_profileFragmentArtist_to_profileListFragment,
+                bundle
+            )
         }
         fragmentView!!.findViewById<Button>(R.id.btnEditImageArtist).setOnClickListener {
             val intent = Intent()
@@ -116,8 +128,8 @@ class ProfileArtistFragment : Fragment() {
     private fun fillProfileInfo() {
         FirebaseRealtimeDB.usersReference.child("/${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}")
             .get().addOnSuccessListener { user ->
-            FirebaseAuthUser.updateUser(user)
-        }
+                FirebaseAuthUser.updateUser(user)
+            }
 
         val currentUser = FirebaseAuthUser.user!!
         fragmentView!!.findViewById<TextView>(R.id.txtNoFollowingArtist).text =

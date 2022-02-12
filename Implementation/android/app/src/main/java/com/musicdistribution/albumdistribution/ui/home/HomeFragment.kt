@@ -49,9 +49,10 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         fragmentView = view
 
         homeFragmentViewModel =
-            ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
+            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
         fetchData()
 
+        CategoryData.clearData()
         SessionService.setSessionService(requireActivity().applicationContext)
         getLocation(LocalizationUtils.getLocationProvider(requireActivity()))
         fillAddButton()
@@ -131,6 +132,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
             fragmentView.findViewById<RecyclerView>(R.id.mainHomeRecyclerView)
         verticalRecyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        verticalAdapter.clearData()
         verticalRecyclerView.adapter = verticalAdapter
 
         fetchSongs(verticalAdapter)
@@ -152,6 +154,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
 
     private fun fetchSongs(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[0])
+        verticalAdapter.updateCategory(CategoryData.mainData[0])
         homeFragmentViewModel.getSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
@@ -172,7 +175,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                                         CategoryData.mainData[0],
                                         CategoryItem(item.id, link, CategoryItemType.SONG)
                                     )
-                                }.addOnFailureListener { }
+                                }
                             }
                         }
                     } else {
@@ -187,6 +190,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
 
     private fun fetchAlbums(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[1])
+        verticalAdapter.updateCategory(CategoryData.mainData[1])
         homeFragmentViewModel.getAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { albums ->
@@ -204,7 +208,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                                         CategoryData.mainData[1],
                                         CategoryItem(item.id, link, CategoryItemType.ALBUM)
                                     )
-                                }.addOnFailureListener { }
+                                }
                             }
                         }
                     } else {
@@ -219,6 +223,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
 
     private fun fetchArtists(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[2])
+        verticalAdapter.updateCategory(CategoryData.mainData[2])
         homeFragmentViewModel.getArtistsLiveData()
             .observe(viewLifecycleOwner,
                 { artists ->
@@ -236,7 +241,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                                         CategoryData.mainData[2],
                                         CategoryItem(item.id!!, link, CategoryItemType.ARTIST)
                                     )
-                                }.addOnFailureListener { }
+                                }
                             }
                         }
                     } else {
@@ -250,8 +255,8 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     }
 
     private fun fetchPublishedSongs(verticalAdapter: HomeVerticalAdapter) {
-        verticalAdapter.updateCategory(CategoryData.artistData[0])
         verticalAdapter.emptyData(CategoryData.artistData[0])
+        verticalAdapter.updateCategory(CategoryData.artistData[0])
         homeFragmentViewModel.getPublishedSongsLiveData()
             .observe(viewLifecycleOwner,
                 { publishedSongs ->
@@ -268,7 +273,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                                     CategoryData.artistData[0],
                                     CategoryItem(item.id, link, CategoryItemType.PUBLISHED_SONG)
                                 )
-                            }.addOnFailureListener { }
+                            }
                         }
                     } else {
                         Toast.makeText(
@@ -281,8 +286,8 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     }
 
     private fun fetchPublishedAlbums(verticalAdapter: HomeVerticalAdapter) {
-        verticalAdapter.updateCategory(CategoryData.artistData[1])
         verticalAdapter.emptyData(CategoryData.artistData[1])
+        verticalAdapter.updateCategory(CategoryData.artistData[1])
         homeFragmentViewModel.getPublishedAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { publishedAlbums ->
@@ -299,7 +304,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                                     CategoryData.artistData[1],
                                     CategoryItem(item.id, link, CategoryItemType.PUBLISHED_ALBUM)
                                 )
-                            }.addOnFailureListener { }
+                            }
                         }
                     } else {
                         Toast.makeText(

@@ -1,6 +1,5 @@
-package com.musicbution.albumdistribution.data.api
+package com.musicdistribution.albumdistribution.data.api
 
-import com.musicdistribution.albumdistribution.data.api.AlbumCatalogApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

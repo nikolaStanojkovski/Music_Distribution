@@ -35,10 +35,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<Artist> findAllPageable() {
-        long totalQuantity = artistRepository.count();
-        int index = (int) (Math.random() * totalQuantity);
-        Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
-        return artistRepository.findAll(pageable);
+        return artistRepository.findAll(PageRequest.of(0, 10));
     }
 
     @Override

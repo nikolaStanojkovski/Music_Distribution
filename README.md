@@ -22,6 +22,7 @@ The application has the following functionalities:
 - <b>Published albums</b> list view, and an opportunity to add one, or raise the tier of an already published one, by an authenticated artist
 - <b>Music Distributors</b> list view
 
+
 ## Android version
 -----------------------------------------------------------------------------------
 

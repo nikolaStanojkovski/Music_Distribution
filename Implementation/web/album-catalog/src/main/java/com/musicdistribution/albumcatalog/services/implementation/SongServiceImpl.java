@@ -11,7 +11,6 @@ import com.musicdistribution.albumcatalog.services.SongService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,10 +47,7 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Page<Song> findAllPageable() {
-        long totalQuantity = songRepository.count();
-        int index = (int) (Math.random() * totalQuantity);
-        Pageable pageable = (totalQuantity > 10) ? PageRequest.of(index, 10) : PageRequest.of(0, 10);
-        return songRepository.findAll(pageable);
+        return songRepository.findAll(PageRequest.of(0, 10));
     }
 
     @Override
@@ -111,7 +107,7 @@ public class SongServiceImpl implements SongService {
         Optional<Song> song = findById(SongId.of(id));
         song.ifPresent(s -> {
             s.getCreator().removeSongFromArtist(s);
-            if(s.getAlbum() != null) {
+            if (s.getAlbum() != null) {
                 s.getAlbum().removeSong(s);
                 albumRepository.save(s.getAlbum());
             }
