@@ -6,8 +6,6 @@
     <string name="registration_fragment_label">Create account</string>
     <string name="button_sign_up">Sign up free</string>
     <string name="button_logout">Sign Out</string>
-    <string name="button_sign_facebook">Continue with Facebook</string>
-    <string name="button_sign_google">Continue with Google</string>
     <string name="button_log_in">Log In</string>
     <string name="registration_title">Create Account</string>
     <string name="login_title">Sign into your account</string>

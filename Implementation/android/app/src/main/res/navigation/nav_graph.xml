@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.FirstFragment"
-        android:label="@string/first_fragment_label"
+        android:label="First Fragment Label"
         tools:layout="@layout/fragment_first">
 
         <action
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.musicdistribution.albumdistribution.ui.home.SecondFragment"
-        android:label="@string/second_fragment_label"
+        android:label="Second Fragment Label"
         tools:layout="@layout/fragment_second">
 
         <action
