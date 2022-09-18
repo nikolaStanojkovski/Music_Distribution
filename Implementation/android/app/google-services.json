@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "972854535578",
+    "project_id": "album-distribution",
+    "storage_bucket": "album-distribution.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972854535578:android:5cc4089ce3ec60d788c623",
+        "android_client_info": {
+          "package_name": "com.musicdistribution.albumdistribution"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972854535578-tngks7vkaj5a9hgs4te67ec0dceq0qrn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.musicdistribution.albumdistribution",
+            "certificate_hash": "c22fc1c5b06e6ad4e2609386232ab57a484b7264"
+          }
+        },
+        {
+          "client_id": "972854535578-ggka5oa1h4ai2qqt7jesq7eqm5gaebgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8OBhyNlFwOcDyGUHqqQ8DJfhNu7D1L6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972854535578-ggka5oa1h4ai2qqt7jesq7eqm5gaebgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

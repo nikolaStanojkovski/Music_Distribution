@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchItemFragment"
+            app:destination="@id/searchItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListenerFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile_listener" />
+    <fragment
+        android:id="@+id/searchItemFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.search.SearchItemFragment"
+        android:label="fragment_search_item"
+        tools:layout="@layout/fragment_search_item" />
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.item.AlbumFragment"
+        android:label="fragment_album"
+        tools:layout="@layout/fragment_album" />
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.item.ArtistFragment"
+        android:label="fragment_artist"
+        tools:layout="@layout/fragment_artist" />
+    <fragment
+        android:id="@+id/songFragment"
+        android:name="com.musicdistribution.albumdistribution.ui.home.item.SongFragment"
+        android:label="fragment_song"
+        tools:layout="@layout/fragment_song" />
+</navigation>
