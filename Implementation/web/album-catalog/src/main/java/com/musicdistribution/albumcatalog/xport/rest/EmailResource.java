@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/emailDomains")
 public class EmailResource {
 
+
     /**
      * Method for getting all the email domains.
      *

@@ -25,8 +25,6 @@ import ArtistLoginUnPublish from '../AlbumCatalog/Artists/ArtistAuthenticate/Log
 import ArtistLoginRaiseTier from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumRaiseTier';
 
 import AlbumPublishingService from "../../repository/albumPublishingRepository";
-import MusicDistributors from '../AlbumPublishing/MusicDistributors/DistributorsList/musicDistributorsList';
-import PublishedAlbums from '../AlbumPublishing/PublishedAlbums/PublishedAlbumsList/publishedAlbumsList';
 
 class App extends Component {
 
@@ -60,14 +58,6 @@ class App extends Component {
 
                         <Route path={["/index", "home", "/"]} exact render={() =>
                             <Home/>}/>
-
-                        {/* Album Publishing App */}
-
-                        <Route path={"/distributors"} exact render={() =>
-                            <MusicDistributors musicDistributors={this.state.musicDistributors}/>}/>
-
-                        <Route path={"/publishedAlbums"} exact render={() =>
-                            <PublishedAlbums publishedAlbums={this.state.publishedAlbums}/>}/>
 
                         {/* Album Catalog App */}
 

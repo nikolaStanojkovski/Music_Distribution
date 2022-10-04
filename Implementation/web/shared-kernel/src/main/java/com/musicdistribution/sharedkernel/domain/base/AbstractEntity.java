@@ -23,16 +23,6 @@ public class AbstractEntity<ID extends DomainObjectId> {
     private ID id;
 
     /**
-     * Copy constructor.
-     *
-     * @param source the entity to copy from.
-     */
-    protected AbstractEntity(@NonNull AbstractEntity<ID> source) {
-        Objects.requireNonNull(source, "source must not be null");
-        this.id = source.id;
-    }
-
-    /**
      * Protected args constructors.
      *
      * @param id - the entity's id from which the object is created.

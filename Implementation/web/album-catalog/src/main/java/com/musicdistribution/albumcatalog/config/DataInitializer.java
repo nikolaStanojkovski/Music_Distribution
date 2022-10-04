@@ -38,19 +38,14 @@ public class DataInitializer {
     public void initData() {
 
         if (artistService.findAll().size() == 0) {
-            Artist artist1 = Artist.build(ArtistContactInfo.build("078-916-999", "nikola.stanojkovski", EmailDomain.gmail),
-                    ArtistPersonalInfo.build("Nikola", "Stanojkovski", "Agremorta"), "mst-2");
-            Artist artist2 = Artist.build(ArtistContactInfo.build("077-911-998", "trajko.trajanovski", EmailDomain.gmail),
-                    ArtistPersonalInfo.build("Trajko", "Trajkovski", "Higretorta"), "mst-4");
-            artist1 = artistService.registerArtist(ArtistRequest.build(artist1)).get();
-            artist2 = artistService.registerArtist(ArtistRequest.build(artist2)).get();
+            Artist artist1 = artistService.registerArtist(ArtistRequest.build(Artist.build(ArtistContactInfo.build("078-916-999", "nikola.stanojkovski", EmailDomain.gmail),
+                    ArtistPersonalInfo.build("Nikola", "Stanojkovski", "Agremorta"), "mst-2"))).orElse(null);
+            Artist artist2 = artistService.registerArtist(ArtistRequest.build(Artist.build(ArtistContactInfo.build("077-911-998", "trajko.trajanovski", EmailDomain.gmail),
+                    ArtistPersonalInfo.build("Trajko", "Trajkovski", "Higretorta"), "mst-4"))).orElse(null);
 
-            Album album1 = Album.build("Album 1", Genre.Jazz, AlbumInfo.build("Agro", "Agro", "Agro"), artist1);
-            Album album2 = Album.build("Album 2", Genre.Rock, AlbumInfo.build("Wa", "Ki", "Ca"), artist2);
-            Album album3 = Album.build("Album 3", Genre.Pop, AlbumInfo.build("Mk", "Mk", "Mk"), artist1);
-            album1 = albumService.createAlbum(AlbumRequest.build(album1)).get();
-            albumService.createAlbum(AlbumRequest.build(album2)).get();
-            albumService.createAlbum(AlbumRequest.build(album3)).get();
+            Album album1 = albumService.createAlbum(AlbumRequest.build(Album.build("Album 1", Genre.Jazz, AlbumInfo.build("Agro", "Agro", "Agro"), artist1))).orElse(null);
+            albumService.createAlbum(AlbumRequest.build(Album.build("Album 2", Genre.Rock, AlbumInfo.build("Wa", "Ki", "Ca"), artist2)));
+            albumService.createAlbum(AlbumRequest.build(Album.build("Album 3", Genre.Pop, AlbumInfo.build("Mk", "Mk", "Mk"), artist1)));
 
             Song song1 = Song.build("Forandra", artist1, album1, SongLength.build(187));
             Song song2 = Song.build("Jokawa", artist1, album1, SongLength.build(201));
