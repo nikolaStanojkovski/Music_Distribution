@@ -25,6 +25,7 @@ import ArtistLoginUnPublish from '../AlbumCatalog/Artists/ArtistAuthenticate/Log
 import ArtistLoginRaiseTier from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumRaiseTier';
 
 import AlbumPublishingService from "../../repository/albumPublishingRepository";
+import Footer from "../Footer/footer";
 
 class App extends Component {
 
@@ -120,6 +121,7 @@ class App extends Component {
                         <Redirect to={"/"}/>
                     </div>
                 </main>
+                <Footer/>
             </Router>
         );
     }

@@ -1,48 +1,71 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import logo from '../logo.png';
+import Carousel from "react-bootstrap/Carousel";
+import logo from "../../assets/logo.png";
+import logoSymbol from "../../assets/logo-symbol.png";
+import albumsWallpaper from "../../assets/img/albums-wallpaper.jpg";
+import songsWallpaper from "../../assets/img/songs-wallpaper.jpg";
+import artistsWallpaper from "../../assets/img/artists-wallpaper.jpg";
+import albumsTeaser from "../../assets/img/albums-teaser.jpg";
+import artistsTeaser from "../../assets/img/artists-teaser.jpg";
+import songsTeaser from "../../assets/img/songs-teaser.jpg";
 
 const Home = () => {
     return (
         <div className={"container"}>
 
             <div className={"row"}>
-                <div className="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
-                    <img src={logo} alt={""} className="display-3 font-weight-normal mb-3" />
-                </div>
-
-                <div className={"row mb-5"}>
-                    <div className={"col-4"}>
-                        <div className="card">
-                            <Link to={"/albums"} className={"button-image w-100"}>
-                                <img className="card-img-top"
-                                     src={"https://static.billboard.com/files/2021/04/record-store-billboard-1548-1617823166-compressed.jpg"}
-                                     alt={"Albums image"} />
-                            </Link>
-                        </div>
-                    </div>
-                    <div className={"col-4"}>
-                        <div className="card">
-                            <Link to={"/artists"} className={"button-image w-100"}>
-                                <img className="card-img-top"
-                                     src={"https://images.unsplash.com/photo-1576747249421-0c693525b538?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"}
-                                     alt={"Artists image"}
-                                />
-                            </Link>
-                        </div>
-                    </div>
-                    <div className={"col-4"}>
-                        <div className="card">
-                            <Link to={"/songs"} className={"button-image w-100"}>
-                                <img className="card-img-top"
-                                     src={"https://www.kveller.com/wp-content/uploads/2016/05/shabbat-songs-1200x800.jpg"}
-                                     alt={"Songs image"}
-                                />
-                            </Link>
-                        </div>
-                    </div>
+                <div className="position-relative overflow-hidden pb-3 pt-5 text-center">
+                    <img src={logo} alt={""} className="display-3 font-weight-normal" height={400} width={420} />
                 </div>
             </div>
+
+            <Carousel className={"my-5"}>
+                <Carousel.Item>
+                    <img className={"carousel-image d-block w-100"} src={albumsWallpaper} alt={"Albums Wallpaper"}/>
+                    <Carousel.Caption>
+                        <h3>Albums</h3>
+                        <p>Upload your albums and distribute them to the appropriate audience.</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img className={"carousel-image d-block w-100"} src={songsWallpaper} alt={"Songs Wallpaper"}/>
+                    <Carousel.Caption>
+                        <h3>Songs</h3>
+                        <p>Upload your favourite tracks and distribute them to the appropriate audience.</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img className={"carousel-image d-block w-100"} src={artistsWallpaper} alt={"Artists Wallpaper"}/>
+                    <Carousel.Caption>
+                        <h3>Artists</h3>
+                        <p>View the registered artists and discover their music.</p>
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+
+            <div className={"row mt-5"}>
+                <div className={"col-1"}></div>
+                <div className={"col-3"}>
+                    <div className="spin-animation position-relative overflow-hidden text-center">
+                        <img src={logoSymbol} alt={"Site Logo"} className="display-3 font-weight-normal" height={220}
+                             width={200}/>
+                    </div>
+                </div>
+                <div className={"col-4"}>
+                    <div className="spin-animation position-relative overflow-hidden text-center">
+                        <img src={logoSymbol} alt={"Site Logo"} className="display-3 font-weight-normal mb-3"/>
+                    </div>
+                </div>
+                <div className={"col-3"}>
+                    <div className="spin-animation position-relative overflow-hidden text-center">
+                        <img src={logoSymbol} alt={"Site Logo"} className="display-3 font-weight-normal" height={220}
+                             width={200}/>
+                    </div>
+                </div>
+                <div className={"col-1"}></div>
+            </div>
+            <div className={"row mb-5"}></div>
+
         </div>
     )
 }
