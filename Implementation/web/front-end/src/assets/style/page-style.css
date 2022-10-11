@@ -1,0 +1,50 @@
+.card {
+    display: flex;
+}
+
+.header-teaser {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 15px;
+}
+
+.carousel-image {
+    aspect-ratio: 87/46;
+}
+
+.navbar-img {
+    margin-right: 2rem;
+}
+
+#rnb_partners_banner {
+    background-image: linear-gradient(91deg, #4F31CB99 15%, #DB404099 41%, #FC877899 74%, #483EED99 95%),
+    url(https://routenote.com/_assets/partners/partners-lights-hero.png),
+    url(https://routenote.com/_assets/partners/partners-page-hero-cropped.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.nav-item {
+    font-size: 18px;
+    padding-right: 0.7rem;
+}
+
+#main {
+    min-height: calc(100vh - 90px - 72px);
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+}
+
+.special-character {
+    font-size: 24px;
+    font-weight: 200;
+}
+
+.form-group-inner {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}

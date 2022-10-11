@@ -1,36 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
 const Artists = (props) => {
     return (
-        <div className={"container mm-4 mt-5"}>
-            <div className={"row"}>
-                <div className={"col-4"}>
-                    <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/publish"} className="btn btn-primary w-100">Publish Album</Link>
-                    </form>
-                </div>
-                <div className={"col-4"}>
-                    <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/raiseAlbumTier"} className="btn btn-info w-100">Raise Album
-                            Tier</Link>
-                    </form>
-                </div>
-                <div className={"col-4"}>
-                    <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/unPublish"} className="btn btn-outline-danger w-100">
-                            UnPublish Album
-                        </Link>
-                    </form>
-                </div>
+        <div className={"container mm-4 my-5"}>
+            <div className={"row mb-5"}>
+                <h1 className="display-5">View our artists</h1>
+                <p className="text-muted">Discover who has been releasing music on our platform, and then decide which artists best suit your personal listening preferences.</p>
             </div>
-            <br/>
-            <div className={"row"}>
-                <div className={"col-12"}>
-                    <Link className={"btn btn-success"} to={"/artists/register"}>Create Artist</Link>
-                </div>
-            </div>
-            <br/>
+            <hr />
             <div className={"row"}>
                 <div className={"table-responsive"}>
                     <table className={"table table-striped"}>
@@ -38,20 +15,18 @@ const Artists = (props) => {
                         <tr>
                             <th scope={"col"}>Email</th>
                             <th scope={"col"}>Telephone number</th>
-                            <th scope={"col"}>First Name</th>
-                            <th scope={"col"}>Last Name</th>
+                            <th scope={"col"}>Name</th>
                             <th scope={"col"}>Art Name</th>
                         </tr>
                         </thead>
                         <tbody>
                         {props.artists.map((term) => {
                             return (
-                                <tr>
+                                <tr key={term.id}>
                                     <td>{term.artistContactInfo.email.fullAddress}</td>
                                     <td>{term.artistContactInfo.telephoneNumber}</td>
 
-                                    <td>{term.artistPersonalInfo.firstName}</td>
-                                    <td>{term.artistPersonalInfo.lastName}</td>
+                                    <td>{term.artistPersonalInfo.fullName}</td>
                                     <td>{term.artistPersonalInfo.artName}</td>
                                 </tr>
                             );

@@ -1,67 +1,42 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
 const Songs = (props) => {
     return (
-        <div className={"container mm-4 mt-5"}>
-            <div className={"row"}>
-                <div className={"col-4"}>
-                    <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/publish"} className="btn btn-primary w-100">Publish Album</Link>
-                    </form>
-                </div>
-                <div className={"col-4"}>
-                    <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/raiseAlbumTier"} className="btn btn-info w-100">Raise Album
-                            Tier</Link>
-                    </form>
-                </div>
-                <div className={"col-4"}>
-                    <form className="form-inline my-2 my-lg-0">
-                        <Link to={"/artists/login/unPublish"} className="btn btn-outline-danger w-100">
-                            UnPublish Album
-                        </Link>
-                    </form>
-                </div>
+        <div className={"container mm-4 my-5"}>
+            <div className={"row mb-5"}>
+                <h1 className="display-5">Send out your songs</h1>
+                <p className="text-muted">Allow guests to hear the songs you've always wanted them to hear.</p>
             </div>
-            <br/>
-            <div className={"row"}>
-                <div className={"col-12"}>
-                    <Link to={"/artists/login/song"} className={"btn btn-success"}>
-                        Add Song
-                    </Link>
-                </div>
-            </div>
-            <br/>
-            <div className={"row"}>
+            <hr />
+            <div className={"row my-4"}>
                 <div className={"table-responsive"}>
                     <table className={"table table-striped"}>
                         <thead>
                         <tr>
                             <th scope={"col"}>Name</th>
                             <th scope={"col"}>Length</th>
-                            <th scope={"col"}>Single</th>
-                            <th scope={"col"}>Creator</th>
+                            <th scope={"col"}>Is Single</th>
+                            <th scope={"col"}>Artist</th>
                             <th scope={"col"}>Album</th>
                         </tr>
                         </thead>
                         <tbody>
                         {props.songs.map((term) => {
-                            let yesNo = term.isASingle === true ? "Yes" : "No";
+                            let isASingle = term.isASingle === true ? "Yes" : "No";
 
-                            let creator = "None";
+                            let artist = "None";
                             let album = "None";
                             if (term.creator !== null && term.creator !== undefined)
-                                creator = term.creator.artistPersonalInfo.firstName + " " + term.creator.artistPersonalInfo.lastName;
+                                artist = term.creator.artistPersonalInfo.firstName + " " + term.creator.artistPersonalInfo.lastName;
                             if (term.album !== null && term.album !== undefined)
                                 album = term.album.albumName;
 
                             return (
-                                <tr>
+                                <tr key={term.id}>
                                     <td>{term.songName}</td>
-                                    <td>{term.songLength.lengthMinutes}m : {term.songLength.lengthSeconds % 60}s</td>
-                                    <td>{yesNo}</td>
-                                    <td>{creator}</td>
+                                    <td>{term.songLength.songLengthFormatted}</td>
+                                    <td>{isASingle}</td>
+                                    <td>{artist}</td>
                                     <td>{album}</td>
                                 </tr>
                             );

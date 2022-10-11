@@ -1,7 +1,9 @@
 const Footer = () => {
+    const year = new Date().getFullYear();
     return (
-        <footer className="pt-5 pb-4 bg-dark">
-            <p className="text-center text-muted">© 2022 Music Distribution, Inc</p>
+        <footer className="footer pt-4 pb-2 bg-dark">
+            <p className="text-center text-muted">© {year} Music Distribution, Inc
+            </p>
         </footer>
     );
 }

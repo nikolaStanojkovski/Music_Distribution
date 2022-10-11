@@ -11,15 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.card {
-  display: flex;
-}
-
-.header-teaser {
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 24px;
-  padding-right: 15px;
-}

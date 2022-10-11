@@ -7,7 +7,6 @@ import Home from '../Home/home';
 import AlbumCatalogService from "../../repository/albumCatalogRepository";
 
 import Artists from '../AlbumCatalog/Artists/ArtistsList/artists';
-import ArtistRegister from '../AlbumCatalog/Artists/ArtistAuthenticate/artistRegister';
 import Albums from '../AlbumCatalog/Albums/AlbumsList/albums';
 import AlbumCreate from '../AlbumCatalog/Albums/AlbumCreate/createAlbum';
 
@@ -26,6 +25,8 @@ import ArtistLoginRaiseTier from '../AlbumCatalog/Artists/ArtistAuthenticate/Log
 
 import AlbumPublishingService from "../../repository/albumPublishingRepository";
 import Footer from "../Footer/footer";
+import Register from "../Authentication/register";
+import Login from "../Authentication/login";
 
 class App extends Component {
 
@@ -47,12 +48,77 @@ class App extends Component {
         }
     }
 
+    resetNavbarItems(itemToCompare) {
+        Array.from(document.getElementsByClassName("nav-item dropdown")).forEach((item) => {
+            if (itemToCompare && item.isEqualNode(itemToCompare)) {
+                return;
+            }
+            item.classList.remove('show');
+            const itemDropdownMenu = item.querySelector(".dropdown-menu");
+            if (itemDropdownMenu && itemDropdownMenu instanceof HTMLElement) {
+                itemDropdownMenu.classList.remove('show');
+            }
+        });
+    }
+
+    setNavbarMobileMode() {
+        const togglerElement = document.querySelector('.navbar-toggler');
+        if (togglerElement && togglerElement instanceof HTMLElement) {
+            togglerElement.addEventListener('click', (e) => {
+                if (togglerElement && togglerElement instanceof HTMLElement) {
+                    togglerElement.classList.toggle('collapsed');
+                    const toggleNavContainer = togglerElement.parentElement.querySelector('.navbar-collapse.collapse');
+                    if (toggleNavContainer && toggleNavContainer instanceof HTMLElement) {
+                        toggleNavContainer.classList.toggle('show');
+                    }
+                }
+            });
+        }
+
+        const container = document.body;
+        const outsideNavContainer = container.querySelector('#authContainerOutside');
+        const insideNavContainer = container.querySelector('#authContainerInside');
+        if (outsideNavContainer && outsideNavContainer instanceof HTMLElement
+            && insideNavContainer && insideNavContainer instanceof HTMLElement
+            && container && container instanceof HTMLElement) {
+            window.addEventListener('resize', () => {
+                if (container.clientWidth < 992) {
+                    outsideNavContainer.hidden = true;
+                    insideNavContainer.hidden = false;
+                } else {
+                    outsideNavContainer.hidden = false;
+                    insideNavContainer.hidden = true;
+                }
+            });
+        }
+    }
+
+    toggleNavbarItems() {
+        document.addEventListener('click', (e) => {
+            const clickedElement = e.target;
+            if (clickedElement && clickedElement instanceof HTMLElement
+                && !clickedElement.classList.contains('nav-link') && !clickedElement.classList.contains('dropdown-toggle')) {
+                this.resetNavbarItems();
+            }
+        });
+        Array.from(document.getElementsByClassName("nav-item dropdown")).forEach((item) => {
+            item.addEventListener('click', () => {
+                this.resetNavbarItems(item);
+                item.classList.toggle('show');
+                const itemDropdownMenu = item.querySelector(".dropdown-menu");
+                if (itemDropdownMenu && itemDropdownMenu instanceof HTMLElement) {
+                    itemDropdownMenu.classList.toggle('show');
+                }
+            });
+        });
+        this.setNavbarMobileMode();
+    }
+
     render() {
         return (
             <Router>
                 <Header/>
-                <main>
-
+                <main id={"main"}>
                     <div className="container">
 
                         {/*Home Page / Index Page*/}
@@ -80,9 +146,12 @@ class App extends Component {
                             <ArtistLoginRaiseTier emailDomains={this.state.emailDomains}
                                                   loginArtistRaiseTier={this.loginArtistRaiseTier}/>}/>
 
-                        <Route path={"/artists/register"} exact render={() =>
-                            <ArtistRegister emailDomains={this.state.emailDomains}
-                                            registerArtist={this.registerArtist}/>}/>
+                        <Route path={"/register"} exact render={() =>
+                            <Register emailDomains={this.state.emailDomains}
+                                      registerArtist={this.registerArtist}/>}/>
+                        <Route path={"/login"} exact render={() =>
+                            <Login emailDomains={this.state.emailDomains}
+                                   registerArtist={this.registerArtist}/>}/>
 
                         <Route path={"/songs"} exact render={() =>
                             <Songs songs={this.state.songs}/>}/>
@@ -136,6 +205,8 @@ class App extends Component {
         this.loadDistributors();
         this.loadPublishedAlbums();
         this.loadAlbumTiers();
+
+        this.toggleNavbarItems();
     }
 
     loadDistributors = () => {

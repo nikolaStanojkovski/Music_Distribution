@@ -1,6 +1,6 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import ArtistLogin from "../artistLogin";
+import Login from "../../../../Authentication/login";
 
 const LoginArtistUnPublishAlbum = (props) => {
 
@@ -30,7 +30,7 @@ const LoginArtistUnPublishAlbum = (props) => {
     }
 
     return (
-        <ArtistLogin emailDomains={props.emailDomains} onFormSubmit={onFormSubmit} handleChange={handleChange}/>
+        <Login emailDomains={props.emailDomains} onFormSubmit={onFormSubmit} handleChange={handleChange}/>
     );
 };
 
