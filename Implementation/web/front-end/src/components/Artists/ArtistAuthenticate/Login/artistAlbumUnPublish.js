@@ -1,8 +1,8 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import Login from "../../../../Authentication/login";
+import Login from "../../../Authentication/login";
 
-const LoginArtistAlbum = (props) => {
+const LoginArtistUnPublishAlbum = (props) => {
 
     const History = useHistory();
     const [formData, updateFormData] = React.useState({
@@ -24,9 +24,9 @@ const LoginArtistAlbum = (props) => {
         const domainName = formData.domainName;
         const password = formData.password;
 
-        let isLogged = await props.loginArtistAlbums(username, domainName, password);
+        let isLogged = await props.loginArtistUnPublish(username, domainName, password);
 
-        isLogged ? History.push("/albums/create") : History.push("/albums");
+        isLogged ? History.push("/albums/unPublish") : History.push("/albums");
     }
 
     return (
@@ -34,4 +34,4 @@ const LoginArtistAlbum = (props) => {
     );
 };
 
-export default LoginArtistAlbum;
+export default LoginArtistUnPublishAlbum;

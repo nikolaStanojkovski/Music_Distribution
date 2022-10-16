@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 @Entity
 @Getter
-@Table(name = "song")
+@Table(name = "Song")
 public class Song extends AbstractEntity<SongId> {
 
     private String songName;

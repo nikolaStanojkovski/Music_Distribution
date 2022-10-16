@@ -11,7 +11,7 @@ import java.util.List;
  * Email Rest Controller.
  */
 @ApiController
-@RequestMapping("/api/emailDomains")
+@RequestMapping("/api/email-domains")
 public class EmailResource {
 
 

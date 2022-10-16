@@ -20,14 +20,10 @@ public class ArtistRequest {
     private String username;
     @NotNull
     private EmailDomain emailDomain;
-    @NotBlank
-    private String telephoneNumber;
 
-    @NotBlank
+    private String telephoneNumber;
     private String firstName;
-    @NotBlank
     private String lastName;
-    @NotBlank
     private String artName;
 
     @Min(4)
@@ -41,13 +37,13 @@ public class ArtistRequest {
      */
     public static ArtistRequest build(Artist artist) {
         ArtistRequest artistRequest = new ArtistRequest();
-        artistRequest.setUsername(artist.getArtistContactInfo().getEmail().getUsername());
+        artistRequest.setUsername(artist.getArtistUserInfo().getUsername());
+        artistRequest.setPassword(artist.getArtistUserInfo().getPassword());
         artistRequest.setEmailDomain(artist.getArtistContactInfo().getEmail().getDomainName());
         artistRequest.setTelephoneNumber(artist.getArtistContactInfo().getTelephoneNumber());
         artistRequest.setFirstName(artist.getArtistPersonalInfo().getFirstName());
         artistRequest.setLastName(artist.getArtistPersonalInfo().getLastName());
         artistRequest.setArtName(artist.getArtistPersonalInfo().getArtName());
-        artistRequest.setPassword(artist.getPassword());
 
         return artistRequest;
     }

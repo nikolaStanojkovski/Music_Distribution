@@ -1,6 +1,6 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import Login from "../../../../Authentication/login";
+import Login from "../../../Authentication/login";
 
 const LoginArtistRaiseAlbumTier = (props) => {
 

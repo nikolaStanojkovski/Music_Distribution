@@ -18,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Email implements ValueObject {
 
-    private final String username;
+    private final String domainUsername;
 
     @Enumerated(value = EnumType.STRING)
     private final EmailDomain domainName;
@@ -27,7 +27,7 @@ public class Email implements ValueObject {
      * Protected no-args constructor for the email class.
      */
     protected Email() {
-        this.username = "";
+        this.domainUsername = "";
         this.domainName = null;
     }
 
@@ -43,7 +43,7 @@ public class Email implements ValueObject {
     }
 
     public String getFullAddress() {
-        return String.format("%s@%s.com", getUsername(), getDomainName());
+        return String.format("%s@%s.com", getDomainUsername(), getDomainName());
     }
 
     /**
@@ -57,7 +57,7 @@ public class Email implements ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Email email = (Email) o;
-        return username.equals(email.username) && domainName == email.domainName;
+        return domainUsername.equals(email.domainUsername) && domainName == email.domainName;
     }
 
     /**
@@ -67,6 +67,6 @@ public class Email implements ValueObject {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(username, domainName);
+        return Objects.hash(domainUsername, domainName);
     }
 }

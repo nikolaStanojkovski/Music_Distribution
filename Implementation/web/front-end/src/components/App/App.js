@@ -6,24 +6,24 @@ import Home from '../Home/home';
 
 import AlbumCatalogService from "../../repository/albumCatalogRepository";
 
-import Artists from '../AlbumCatalog/Artists/ArtistsList/artists';
-import Albums from '../AlbumCatalog/Albums/AlbumsList/albums';
-import AlbumCreate from '../AlbumCatalog/Albums/AlbumCreate/createAlbum';
+import Artists from '../Artists/ArtistsList/artists';
+import Albums from '../Albums/AlbumsList/albums';
+import AlbumCreate from '../Albums/AlbumCreate/createAlbum';
 
-import AlbumPublish from '../AlbumCatalog/Albums/AlbumPublish/albumPublish';
-import AlbumUnPublish from '../AlbumCatalog/Albums/AlbumUnpublish/albumUnPublish';
-import AlbumRaiseTier from '../AlbumCatalog/Albums/AlbumRaiseTier/albumRaiseTier';
+import AlbumPublish from '../Albums/AlbumPublish/albumPublish';
+import AlbumUnPublish from '../Albums/AlbumUnpublish/albumUnPublish';
+import AlbumRaiseTier from '../Albums/AlbumRaiseTier/albumRaiseTier';
 
-import Songs from '../AlbumCatalog/Songs/SongsList/songs';
-import SongCreate from '../AlbumCatalog/Songs/SongCreate/songCreate';
+import Songs from '../Songs/SongsList/songs';
+import SongCreate from '../Songs/SongCreate/songCreate';
 
-import ArtistLoginSong from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistSongCreate';
-import ArtistLoginAlbum from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumCreate';
-import ArtistLoginPublish from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumPublish';
-import ArtistLoginUnPublish from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumUnPublish';
-import ArtistLoginRaiseTier from '../AlbumCatalog/Artists/ArtistAuthenticate/Login/artistAlbumRaiseTier';
+import ArtistLoginSong from '../Artists/ArtistAuthenticate/Login/artistSongCreate';
+import ArtistLoginAlbum from '../Artists/ArtistAuthenticate/Login/artistAlbumCreate';
+import ArtistLoginPublish from '../Artists/ArtistAuthenticate/Login/artistAlbumPublish';
+import ArtistLoginUnPublish from '../Artists/ArtistAuthenticate/Login/artistAlbumUnPublish';
+import ArtistLoginRaiseTier from '../Artists/ArtistAuthenticate/Login/artistAlbumRaiseTier';
 
-import AlbumPublishingService from "../../repository/albumPublishingRepository";
+import AlbumPublishingService from "../../repository/albumStreamingRepository";
 import Footer from "../Footer/footer";
 import Register from "../Authentication/register";
 import Login from "../Authentication/login";
@@ -130,28 +130,13 @@ class App extends Component {
 
                         <Route path={"/artists"} exact render={() =>
                             <Artists artists={this.state.artists}/>}/>
-                        <Route path={"/artists/login/song"} exact render={() =>
-                            <ArtistLoginSong emailDomains={this.state.emailDomains}
-                                             loginArtistSongs={this.loginArtistSongs}/>}/>
-                        <Route path={"/artists/login/album"} exact render={() =>
-                            <ArtistLoginAlbum emailDomains={this.state.emailDomains}
-                                              loginArtistAlbums={this.loginArtistAlbums}/>}/>
-                        <Route path={"/artists/login/publish"} exact render={() =>
-                            <ArtistLoginPublish emailDomains={this.state.emailDomains}
-                                                loginArtistPublish={this.loginArtistPublish}/>}/>
-                        <Route path={"/artists/login/unPublish"} exact render={() =>
-                            <ArtistLoginUnPublish emailDomains={this.state.emailDomains}
-                                                  loginArtistUnPublish={this.loginArtistUnPublish}/>}/>
-                        <Route path={"/artists/login/raiseAlbumTier"} exact render={() =>
-                            <ArtistLoginRaiseTier emailDomains={this.state.emailDomains}
-                                                  loginArtistRaiseTier={this.loginArtistRaiseTier}/>}/>
 
                         <Route path={"/register"} exact render={() =>
                             <Register emailDomains={this.state.emailDomains}
                                       registerArtist={this.registerArtist}/>}/>
                         <Route path={"/login"} exact render={() =>
                             <Login emailDomains={this.state.emailDomains}
-                                   registerArtist={this.registerArtist}/>}/>
+                                   loginArtist={this.loginArtist}/>}/>
 
                         <Route path={"/songs"} exact render={() =>
                             <Songs songs={this.state.songs}/>}/>
@@ -273,6 +258,7 @@ class App extends Component {
     }
 
     loadArtists = () => {
+        console.log(JSON.parse(localStorage.getItem('artist')));
         AlbumCatalogService.fetchArtists()
             .then((data) => {
                 this.setState({
@@ -316,60 +302,14 @@ class App extends Component {
             });
     }
 
-    loginArtistPublish = async (username, domainName, password) => {
+    loginArtist = async (username, domainName, password) => {
         await AlbumCatalogService.loginArtist(username, domainName, password)
             .then((data) => {
-                this.setState({
-                    selectedArtist: data.data
-                });
+                localStorage.setItem('artist', JSON.stringify(data.data['artistResponse']));
+                localStorage.setItem('token', data.data['jwtToken']);
             });
 
-        return Object.keys(this.state.selectedArtist).length !== 0;
-    }
-
-    loginArtistUnPublish = async (username, domainName, password) => {
-        await AlbumCatalogService.loginArtist(username, domainName, password)
-            .then((data) => {
-                this.setState({
-                    selectedArtist: data.data
-                });
-            });
-
-        return Object.keys(this.state.selectedArtist).length !== 0;
-    }
-
-    loginArtistRaiseTier = async (username, domainName, password) => {
-        await AlbumCatalogService.loginArtist(username, domainName, password)
-            .then((data) => {
-                this.setState({
-                    selectedArtist: data.data
-                });
-            });
-
-        return Object.keys(this.state.selectedArtist).length !== 0;
-    }
-
-    loginArtistSongs = async (username, domainName, password) => {
-        await AlbumCatalogService.loginArtist(username, domainName, password)
-            .then((data) => {
-                this.setState({
-                    selectedArtist: data.data
-                });
-            });
-
-        return Object.keys(this.state.selectedArtist).length !== 0;
-    }
-
-    loginArtistAlbums = async (username, domainName, password) => {
-        await AlbumCatalogService.loginArtist(username, domainName, password)
-            .then((data) => {
-                this.setState({
-                    selectedArtist: data.data
-                });
-            });
-
-        console.log(this.state.selectedArtist);
-        return Object.keys(this.state.selectedArtist).length !== 0;
+        window.location.reload();
     }
 
 

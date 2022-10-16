@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
 const Register = (props) => {
 
@@ -57,11 +57,16 @@ const Register = (props) => {
     return (
         <div className="container mm-4 my-5">
             <div className={"row mb-5"}>
-                <h1 className="display-5">Sign Up</h1>
-                <p className="text-muted">Join us and become a part of the community.</p>
+                <div className={"col-md-3"} />
+                <div className={"col-md-6 text-center"}>
+                    <h1 className="display-5">Sign Up</h1>
+                    <p className="text-muted">Join us and become a part of the community.</p>
+                </div>
+                <div className={"col-md-3"} />
             </div>
             <div className={"row"}>
-                <div className="col-md-8">
+                <div className={"col-md-3"} />
+                <div className="col-md-6">
                     <br/>
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
@@ -184,11 +189,15 @@ const Register = (props) => {
 
                         <br/>
 
-                        <button id="submit" type="submit" className="btn btn-dark mt-4">Submit</button>
+                        <button id="submit" type="submit" className="btn btn-dark w-100 mt-3">Sign Up</button>
 
                         <br/>
                     </form>
+
+                    <Link to={"/login"} className="btn btn-outline-dark w-100 mt-3">Sign In</Link>
+
                 </div>
+                <div className={"col-md-3"} />
             </div>
         </div>
     );

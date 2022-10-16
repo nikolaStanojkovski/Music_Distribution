@@ -2,9 +2,9 @@ package com.musicdistribution.albumcatalog.domain.models.entity;
 
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistContactInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistPersonalInfo;
+import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistUserInfo;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -21,6 +21,12 @@ import java.util.List;
 public class Artist extends AbstractEntity<ArtistId> {
 
     @AttributeOverrides({
+            @AttributeOverride(name = "username", column = @Column(name = "artist_username")),
+            @AttributeOverride(name = "password", column = @Column(name = "artist_password"))
+    })
+    private ArtistUserInfo artistUserInfo;
+
+    @AttributeOverrides({
             @AttributeOverride(name = "email", column = @Column(name = "artist_email")),
             @AttributeOverride(name = "telephoneNumber", column = @Column(name = "artist_telephoneNumber"))
     })
@@ -32,9 +38,6 @@ public class Artist extends AbstractEntity<ArtistId> {
             @AttributeOverride(name = "artName", column = @Column(name = "artist_artName"))
     })
     private ArtistPersonalInfo artistPersonalInfo;
-
-    @Column(nullable = false)
-    private String password;
 
     @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -63,7 +66,7 @@ public class Artist extends AbstractEntity<ArtistId> {
         Artist artist = new Artist();
         artist.artistContactInfo = artistContactInfo;
         artist.artistPersonalInfo = artistPersonalInfo;
-        artist.password = password;
+        artist.artistUserInfo = ArtistUserInfo.build(artistContactInfo.getEmail().getDomainUsername(), password);
 
         artist.albums = new ArrayList<>();
         artist.songs = new ArrayList<>();

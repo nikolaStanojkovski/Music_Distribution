@@ -16,6 +16,14 @@ import java.util.Optional;
 public interface ArtistRepository extends JpaRepository<Artist, ArtistId> {
 
     /**
+     * Method for reading a user by his username.
+     *
+     * @param username - artist's username used for filtering
+     * @return an optional with artist.
+     */
+    Optional<Artist> findByArtistUserInfo_Username(String username);
+
+    /**
      * Method for reading an artist by email.
      *
      * @param artistMail - artist's email used for filtering

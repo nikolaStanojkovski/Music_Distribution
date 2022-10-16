@@ -9,6 +9,7 @@ import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/songs")
+@RequestMapping("/api/resource/songs")
 public class SongResource {
 
     private final SongService songService;

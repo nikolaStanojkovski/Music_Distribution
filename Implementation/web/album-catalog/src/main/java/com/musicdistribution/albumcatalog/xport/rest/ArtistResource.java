@@ -7,6 +7,7 @@ import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/artists")
+@RequestMapping("/api/resource/artists")
 public class ArtistResource {
 
     private final ArtistService artistService;
@@ -79,31 +80,5 @@ public class ArtistResource {
         return this.artistService.findByEmail(artistRequest)
                 .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    /**
-     * Method for authenticating an existing artist.
-     *
-     * @param artistRequest - dto object containing the login information about an artist.
-     * @return the authenticated artist.
-     */
-    @PostMapping("/login")
-    public ResponseEntity<ArtistResponse> loginArtist(@RequestBody @Valid ArtistRequest artistRequest) {
-        return this.artistService.loginArtist(artistRequest)
-                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    /**
-     * Method for registering an existing artist.
-     *
-     * @param artistRequest - dto object containing the login information about an artist.
-     * @return the registered artist.
-     */
-    @PostMapping("/register")
-    public ResponseEntity<ArtistResponse> registerArtist(@RequestBody @Valid ArtistRequest artistRequest) {
-        return this.artistService.registerArtist(artistRequest)
-                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

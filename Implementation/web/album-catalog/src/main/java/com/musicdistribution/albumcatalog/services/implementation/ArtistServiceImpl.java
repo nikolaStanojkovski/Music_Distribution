@@ -11,6 +11,7 @@ import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<Artist> findAll() {
@@ -54,15 +56,17 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Optional<Artist> loginArtist(ArtistRequest artistRequest) {
-        Optional<Artist> artist = findByEmail(artistRequest);
-
-        return (artist.isPresent() && (artist.get().getPassword().equals(artistRequest.getPassword()))) ? artist : Optional.empty();
+        return findByEmail(artistRequest);
     }
 
     @Override
     public Optional<Artist> registerArtist(ArtistRequest artistRequest) {
+        if(findByEmail(artistRequest).isPresent() ||
+                artistRepository.findByArtistUserInfo_Username(artistRequest.getUsername()).isPresent())
+            return Optional.empty();
+
         Artist artist = Artist.build(ArtistContactInfo.build(artistRequest.getTelephoneNumber(), artistRequest.getUsername(), artistRequest.getEmailDomain()),
-                ArtistPersonalInfo.build(artistRequest.getFirstName(), artistRequest.getLastName(), artistRequest.getArtName()), artistRequest.getPassword());
+                ArtistPersonalInfo.build(artistRequest.getFirstName(), artistRequest.getLastName(), artistRequest.getArtName()), passwordEncoder.encode(artistRequest.getPassword()));
 
         return Optional.of(artistRepository.save(artist));
     }

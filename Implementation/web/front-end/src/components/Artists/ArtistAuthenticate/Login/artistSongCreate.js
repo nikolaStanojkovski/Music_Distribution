@@ -1,8 +1,8 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import Login from "../../../../Authentication/login";
+import Login from "../../../Authentication/login";
 
-const LoginArtistPublishAlbum = (props) => {
+const LoginArtistSong = (props) => {
 
     const History = useHistory();
     const [formData, updateFormData] = React.useState({
@@ -24,14 +24,14 @@ const LoginArtistPublishAlbum = (props) => {
         const domainName = formData.domainName;
         const password = formData.password;
 
-        let isLogged = await props.loginArtistPublish(username, domainName, password);
+        let isLogged = await props.loginArtistSongs(username, domainName, password);
 
-        isLogged ? History.push("/albums/publish") : History.push("/albums");
+        isLogged ? History.push("/songs/create") : History.push("/songs");
     }
 
     return (
-        <Login emailDomains={props.emailDomains} onFormSubmit={onFormSubmit} handleChange={handleChange} />
+        <Login emailDomains={props.emailDomains} onFormSubmit={onFormSubmit} handleChange={handleChange}/>
     );
 };
 
-export default LoginArtistPublishAlbum;
+export default LoginArtistSong;
