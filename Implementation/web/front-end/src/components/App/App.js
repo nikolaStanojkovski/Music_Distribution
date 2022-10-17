@@ -11,17 +11,11 @@ import Albums from '../Albums/AlbumsList/albums';
 import AlbumCreate from '../Albums/AlbumCreate/createAlbum';
 
 import AlbumPublish from '../Albums/AlbumPublish/albumPublish';
-import AlbumUnPublish from '../Albums/AlbumUnpublish/albumUnPublish';
+import AlbumUnpublish from '../Albums/AlbumUnpublish/albumUnpublish';
 import AlbumRaiseTier from '../Albums/AlbumRaiseTier/albumRaiseTier';
 
 import Songs from '../Songs/SongsList/songs';
 import SongCreate from '../Songs/SongCreate/songCreate';
-
-import ArtistLoginSong from '../Artists/ArtistAuthenticate/Login/artistSongCreate';
-import ArtistLoginAlbum from '../Artists/ArtistAuthenticate/Login/artistAlbumCreate';
-import ArtistLoginPublish from '../Artists/ArtistAuthenticate/Login/artistAlbumPublish';
-import ArtistLoginUnPublish from '../Artists/ArtistAuthenticate/Login/artistAlbumUnPublish';
-import ArtistLoginRaiseTier from '../Artists/ArtistAuthenticate/Login/artistAlbumRaiseTier';
 
 import AlbumPublishingService from "../../repository/albumStreamingRepository";
 import Footer from "../Footer/footer";
@@ -39,8 +33,6 @@ class App extends Component {
             genres: [],
             emailDomains: [],
             selectedAlbum: {},
-
-            selectedArtist: {},
 
             musicDistributors: [],
             publishedAlbums: [],
@@ -97,7 +89,7 @@ class App extends Component {
         document.addEventListener('click', (e) => {
             const clickedElement = e.target;
             if (clickedElement && clickedElement instanceof HTMLElement
-                && !clickedElement.classList.contains('nav-link') && !clickedElement.classList.contains('dropdown-toggle')) {
+                && !clickedElement.classList.contains('dropdown-toggle')) {
                 this.resetNavbarItems();
             }
         });
@@ -114,10 +106,14 @@ class App extends Component {
         this.setNavbarMobileMode();
     }
 
+    getCurrentArtist() {
+        return JSON.parse(localStorage.getItem('loggedArtist'));
+    }
+
     render() {
         return (
             <Router>
-                <Header/>
+                <Header logoutArtist={this.logoutArtist}/>
                 <main id={"main"}>
                     <div className="container">
 
@@ -126,10 +122,7 @@ class App extends Component {
                         <Route path={["/index", "home", "/"]} exact render={() =>
                             <Home/>}/>
 
-                        {/* Album Catalog App */}
-
-                        <Route path={"/artists"} exact render={() =>
-                            <Artists artists={this.state.artists}/>}/>
+                        {/* Authentication */}
 
                         <Route path={"/register"} exact render={() =>
                             <Register emailDomains={this.state.emailDomains}
@@ -138,34 +131,39 @@ class App extends Component {
                             <Login emailDomains={this.state.emailDomains}
                                    loginArtist={this.loginArtist}/>}/>
 
+                        {/* Album Catalog App */}
+
+                        <Route path={"/artists"} exact render={() =>
+                            <Artists artists={this.state.artists}/>}/>
+
                         <Route path={"/songs"} exact render={() =>
                             <Songs songs={this.state.songs}/>}/>
                         <Route path={"/songs/create"} exact render={() =>
                             <SongCreate albums={this.state.albums}
-                                        selectedArtist={this.state.selectedArtist}
+                                        selectedArtist={this.getCurrentArtist()}
                                         createSong={this.createSong}/>}/>
 
                         <Route path={"/albums"} exact render={() =>
                             <Albums albums={this.state.albums}/>}/>
                         <Route path={"/albums/create"} exact render={() =>
                             <AlbumCreate genres={this.state.genres}
-                                         selectedArtist={this.state.selectedArtist}
+                                         selectedArtist={this.getCurrentArtist()}
                                          createAlbum={this.createAlbum}/>}/>
 
                         {/* Album Publish Events */}
 
                         <Route path={"/albums/publish"} exact render={() =>
                             <AlbumPublish albums={this.state.albums}
-                                          selectedArtist={this.state.selectedArtist}
+                                          selectedArtist={this.getCurrentArtist()}
                                           albumTiers={this.state.albumTiers}
                                           musicDistributors={this.state.musicDistributors}
                                           publishAlbum={this.publishAlbum}/>}/>
                         <Route path={"/albums/unPublish"} exact render={() =>
-                            <AlbumUnPublish selectedArtist={this.state.selectedArtist}
+                            <AlbumUnpublish selectedArtist={this.getCurrentArtist()}
                                             publishedAlbums={this.state.publishedAlbums}
                                             unPublishAlbum={this.unPublishAlbum}/>}/>
                         <Route path={"/albums/raiseAlbumTier"} exact render={() =>
-                            <AlbumRaiseTier selectedArtist={this.state.selectedArtist}
+                            <AlbumRaiseTier selectedArtist={this.getCurrentArtist()}
                                             publishedAlbums={this.state.publishedAlbums}
                                             albumTiers={this.state.albumTiers}
                                             raiseAlbumTier={this.raiseAlbumTier}/>}/>
@@ -258,7 +256,6 @@ class App extends Component {
     }
 
     loadArtists = () => {
-        console.log(JSON.parse(localStorage.getItem('artist')));
         AlbumCatalogService.fetchArtists()
             .then((data) => {
                 this.setState({
@@ -305,8 +302,8 @@ class App extends Component {
     loginArtist = async (username, domainName, password) => {
         await AlbumCatalogService.loginArtist(username, domainName, password)
             .then((data) => {
-                localStorage.setItem('artist', JSON.stringify(data.data['artistResponse']));
-                localStorage.setItem('token', data.data['jwtToken']);
+                localStorage.setItem('loggedArtist', JSON.stringify(data.data['artistResponse']));
+                localStorage.setItem('accessToken', data.data['jwtToken']);
             });
 
         window.location.reload();
@@ -320,6 +317,10 @@ class App extends Component {
             });
     }
 
+    logoutArtist = () => {
+        AlbumCatalogService.logoutArtist();
+        window.location.reload();
+    }
 }
 
 export default App;

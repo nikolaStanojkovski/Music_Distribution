@@ -20,8 +20,9 @@ const AlbumCatalogService = {
         });
     },
     logoutArtist: () => {
-        if(localStorage.getItem('token')) {
-            localStorage.removeItem('token');
+        if(localStorage.getItem('accessToken')) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('loggedArtist');
         }
     },
 
