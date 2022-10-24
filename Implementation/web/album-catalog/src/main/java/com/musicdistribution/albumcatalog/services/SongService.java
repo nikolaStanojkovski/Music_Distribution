@@ -3,6 +3,7 @@ package com.musicdistribution.albumcatalog.services;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public interface SongService {
      * @param song - song's dto object containing new song's information.
      * @return an optional with the found song.
      */
-    Optional<Song> createSong(SongRequest song);
+    Optional<Song> createSong(SongRequest song, MultipartFile file, String username);
 
     /**
      * Method for publishing a song.

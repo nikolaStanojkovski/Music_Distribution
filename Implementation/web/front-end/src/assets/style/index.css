@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.play-pause-button {
+  border-radius: 50%;
+  border-width: thin;
+  transition: all 0.2s ease;
+}
+
+.play-pause-button:hover {
+  background-color: black;
+  border-color: white;
+  color: white;
+}
+
+.auth-form {
+  background-color: #dedede;
+}

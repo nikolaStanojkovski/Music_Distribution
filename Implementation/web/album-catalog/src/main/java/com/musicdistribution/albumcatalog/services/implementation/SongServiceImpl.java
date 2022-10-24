@@ -1,11 +1,12 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
-import com.musicdistribution.albumcatalog.domain.exceptions.ArtistNotFoundException;
+import com.musicdistribution.albumcatalog.domain.exceptions.FileStorageException;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
+import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.albumcatalog.services.SongService;
 import lombok.AllArgsConstructor;
@@ -13,9 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -29,6 +30,8 @@ public class SongServiceImpl implements SongService {
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final SongRepository songRepository;
+
+    private final IFileSystemStorage fileSystemStorage;
 
     @Override
     public List<Song> findAll() {
@@ -61,44 +64,43 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Optional<Song> createSong(SongRequest form) {
+    public Optional<Song> createSong(SongRequest form, MultipartFile file, String username) {
         Optional<Song> song = Optional.empty();
+        Optional<Artist> artist = artistRepository.findByArtistUserInfo_Username(username);
 
-        if (Objects.nonNull(form.getCreatorId())) {
-            ArtistId creatorId = ArtistId.of(form.getCreatorId());
-            Artist creator = artistRepository.findById(creatorId).orElseThrow(() -> new ArtistNotFoundException(creatorId));
-
-            if (Objects.nonNull(form.getAlbumId())) {
-                AlbumId albumId = AlbumId.of(form.getAlbumId());
-                Album album = albumRepository.findById(albumId).orElse(null);
-                song = Optional.of(Song.build(form.getSongName(), creator, album, SongLength.build(form.getLengthInSeconds())));
-                songRepository.save(song.get());
-                if (album != null) {
-                    song.ifPresent(album::addSong);
-                    albumRepository.save(album);
-                }
-            } else {
-                song = Optional.of(Song.build(form.getSongName(), creator, null, SongLength.build(form.getLengthInSeconds())));
-                songRepository.save(song.get());
-            }
+        if (artist.isPresent()) {
+            song = Optional.of(Song.build(form.getSongName(), artist.get(), SongLength.build(form.getLengthInSeconds()), form.getSongGenre()));
+            song = Optional.of(songRepository.save(song.get()));
+            saveSong(song.get(), file);
 
             song.ifPresent(s -> {
-                creator.addSongToArtist(s);
-                artistRepository.save(creator);
+                artist.get().addSongToArtist(s);
+                artistRepository.save(artist.get());
             });
         }
 
         return song;
     }
 
+    private void saveSong(Song song, MultipartFile file) {
+        String songId = song.getId().getId();
+        try {
+            String fileName = String.format("%s.mp3", songId);
+            fileSystemStorage.saveFile(file, fileName);
+        } catch (Exception exception) {
+            throw new FileStorageException("Could not save the compressed version of the song with id " + songId);
+        }
+    }
+
     @Override
     public Optional<Song> publishSong(SongRequest songRequest) {
-        Optional<Song> newSong = createSong(songRequest);
-        if (newSong.isPresent() && songRequest.getIsASingle()) {
-            Song publishedSong = Song.publishSong(newSong.get());
-            return Optional.of(songRepository.save(publishedSong));
-        }
-        return newSong;
+//        Optional<Song> newSong = createSong(songRequest);
+//        if (newSong.isPresent() && songRequest.getIsASingle()) {
+//            Song publishedSong = Song.publishSong(newSong.get());
+//            return Optional.of(songRepository.save(publishedSong));
+//        }
+//        return newSong;
+        return Optional.empty();
     }
 
     @Override

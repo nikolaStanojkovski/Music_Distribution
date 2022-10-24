@@ -137,9 +137,10 @@ class App extends Component {
                             <Artists artists={this.state.artists}/>}/>
 
                         <Route path={"/songs"} exact render={() =>
-                            <Songs songs={this.state.songs}/>}/>
+                            <Songs songs={this.state.songs} fetchSong={this.fetchSong}/>}/>
                         <Route path={"/songs/create"} exact render={() =>
                             <SongCreate albums={this.state.albums}
+                                        genres={this.state.genres}
                                         selectedArtist={this.getCurrentArtist()}
                                         createSong={this.createSong}/>}/>
 
@@ -285,8 +286,12 @@ class App extends Component {
             });
     }
 
-    createSong = (songName, lengthInSeconds, creatorId, albumId) => {
-        AlbumCatalogService.createSong(songName, lengthInSeconds, creatorId, albumId)
+    fetchSong = (id) => {
+        return AlbumCatalogService.fetchSong(id);
+    }
+
+    createSong = (file, songName, lengthInSeconds, songGenre) => {
+        AlbumCatalogService.createSong(file, songName, lengthInSeconds, songGenre)
             .then(() => {
                 this.loadSongs();
             });

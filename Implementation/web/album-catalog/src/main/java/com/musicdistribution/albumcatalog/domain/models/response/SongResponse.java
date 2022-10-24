@@ -2,9 +2,11 @@ package com.musicdistribution.albumcatalog.domain.models.response;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.Song;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -16,15 +18,18 @@ public class SongResponse {
 
     private String id;
     private String songName;
+    private Genre songGenre;
     private Boolean isASingle;
     private SongLength songLength;
     private ArtistResponse creator;
     private AlbumResponse album;
+    private File file;
 
     public static SongResponse from(Song song) {
         SongResponse songResponse = new SongResponse();
         songResponse.setId(song.getId().getId());
         songResponse.setSongName(song.getSongName());
+        songResponse.setSongGenre(song.getSongGenre());
         songResponse.setIsASingle(song.getIsASingle());
         songResponse.setSongLength(song.getSongLength());
         songResponse.setCreator(ArtistResponse.from(song.getCreator()));

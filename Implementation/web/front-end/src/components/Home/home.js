@@ -1,7 +1,6 @@
 import React from 'react';
 import Carousel from "react-bootstrap/Carousel";
 import logo from "../../assets/logo.png";
-import logoSymbol from "../../assets/logo-symbol.png";
 import albumsWallpaper from "../../assets/img/albums-wallpaper.jpg";
 import songsWallpaper from "../../assets/img/songs-wallpaper.jpg";
 import artistsWallpaper from "../../assets/img/artists-wallpaper.jpg";
@@ -12,7 +11,7 @@ const Home = () => {
         <div>
             <Carousel className={"carousel my-4"}>
                 <Carousel.Item>
-                    <img className={"carousel-image d-block w-100"} src={logo} alt={"Website Logo"} />
+                    <img className={"carousel-image d-block w-100"} src={logo} alt={"Website Logo"}/>
                 </Carousel.Item>
                 <Carousel.Item>
                     <Link to={"/albums"}>
@@ -34,7 +33,8 @@ const Home = () => {
                 </Carousel.Item>
                 <Carousel.Item>
                     <Link to={"/artists"}>
-                        <img className={"carousel-image d-block w-100"} src={artistsWallpaper} alt={"Artists Wallpaper"}/>
+                        <img className={"carousel-image d-block w-100"} src={artistsWallpaper}
+                             alt={"Artists Wallpaper"}/>
                         <Carousel.Caption>
                             <h3>Artists</h3>
                             <p>View the registered artists and discover their music.</p>

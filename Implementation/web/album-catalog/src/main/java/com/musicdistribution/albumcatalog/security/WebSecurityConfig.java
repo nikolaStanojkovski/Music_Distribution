@@ -59,7 +59,8 @@ public class WebSecurityConfig {
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/email-domains", "/api/genres",
                         "/api/resource/albums", "/api/resource/artists", "/api/resource/songs").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and().httpBasic();
 
         http.authenticationProvider(authenticationProvider());
 

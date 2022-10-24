@@ -3,16 +3,16 @@ import axios from '../custom-axios/axios-album-catalog';
 const AlbumCatalogService = {
     loginArtist: (username, domainName, password) => {
         return axios.post("/auth/login", {
-            "username" : username,
-            "emailDomain" : domainName,
-            "password" : password
+            "username": username,
+            "emailDomain": domainName,
+            "password": password
         });
     },
     registerArtist: (username, emailDomain, telephoneNumber, firstName, lastName, artName, password) => {
         return axios.post("/auth/register", {
-            "username" : username,
-            "emailDomain" : emailDomain,
-            "telephoneNumber" : telephoneNumber,
+            "username": username,
+            "emailDomain": emailDomain,
+            "telephoneNumber": telephoneNumber,
             "firstName": firstName,
             "lastName": lastName,
             "artName": artName,
@@ -20,7 +20,7 @@ const AlbumCatalogService = {
         });
     },
     logoutArtist: () => {
-        if(localStorage.getItem('accessToken')) {
+        if (localStorage.getItem('accessToken')) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('loggedArtist');
         }
@@ -41,23 +41,31 @@ const AlbumCatalogService = {
     fetchGenres: () => {
         return axios.get("/genres");
     },
-    createSong: (songName, lengthInSeconds, creatorId, albumId) => {
-        return axios.post("/resource/songs/create", {
-            "songName" : songName,
-            "lengthInSeconds" : lengthInSeconds,
-            "creatorId" : creatorId,
-            "albumId" : albumId
-        });
+
+    fetchSong: (id) => {
+        return axios.get(`/resources/songs/file/${id}`);
+    },
+    createSong: (file, songName, lengthInSeconds, songGenre) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('songRequest', new Blob([JSON.stringify({
+            "songName": songName,
+            "lengthInSeconds": lengthInSeconds,
+            "songGenre": songGenre
+        })], {
+            type: "application/json"
+        }));
+        return axios.post("/resource/songs/create", formData);
     },
     createAlbum: (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {
         return axios.post("/resource/albums/create", {
-            "albumName" : albumName,
-            "genre" : genre,
-            "isPublished" : isPublished,
-            "artistName" : artistName,
-            "producerName" : producerName,
-            "composerName" : composerName,
-            "creatorId" : creatorId
+            "albumName": albumName,
+            "genre": genre,
+            "isPublished": isPublished,
+            "artistName": artistName,
+            "producerName": producerName,
+            "composerName": composerName,
+            "creatorId": creatorId
         });
     }
 }

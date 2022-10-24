@@ -44,7 +44,7 @@ const AuthHeader = (props) => {
                                 <Link className={"nav-link"} to={"/artists"}>Artists</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href={"#"}>
+                                <Link className="nav-link" to={"/songs/create"}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
                                          className="bi bi-plus-circle" viewBox="0 0 16 16">
                                         <path
@@ -52,7 +52,7 @@ const AuthHeader = (props) => {
                                         <path
                                             d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                                     </svg>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
 
@@ -60,8 +60,8 @@ const AuthHeader = (props) => {
                             <Link className="btn btn-outline-light my-2 my-sm-0"
                                   to={"/"}>{props.loggedArtist['email']}</Link>
                             &nbsp;&nbsp;
-                            <button className="btn btn-outline-light my-2 my-sm-0" onClick={props.logoutArtist}>Logout
-                            </button>
+                            <Link to={"/"} className="btn btn-outline-light my-2 my-sm-0" onClick={props.logoutArtist}>Logout
+                            </Link>
                         </form>
                     </div>
 
@@ -69,8 +69,8 @@ const AuthHeader = (props) => {
                         <Link className="btn btn-outline-light my-2 my-sm-0"
                               to={"/"}>{props.loggedArtist['email']}</Link>
                         &nbsp;&nbsp;
-                        <button className="btn btn-outline-light my-2 my-sm-0" onClick={props.logoutArtist}>Logout
-                        </button>
+                        <Link to={"/"} className="btn btn-outline-light my-2 my-sm-0" onClick={props.logoutArtist}>Logout
+                        </Link>
                     </form>
                 </div>
             </nav>

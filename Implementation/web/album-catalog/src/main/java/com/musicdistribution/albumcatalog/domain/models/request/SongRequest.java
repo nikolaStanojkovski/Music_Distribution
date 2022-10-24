@@ -1,12 +1,13 @@
 package com.musicdistribution.albumcatalog.domain.models.request;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.Song;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 /**
  * An song object used to transfer data from the front-end user form to the backend.
@@ -17,14 +18,12 @@ public class SongRequest {
 
     @NotBlank
     private String songName;
+    @NotBlank
+    private Genre songGenre;
     @NotNull
     private Boolean isASingle;
     @NotBlank
     private Integer lengthInSeconds;
-
-    @NotNull
-    private String creatorId;
-    private String albumId;
 
     /**
      * Static method used for creation of a new song form object.
@@ -34,10 +33,9 @@ public class SongRequest {
     public static SongRequest build(Song song) {
         SongRequest songRequest = new SongRequest();
         songRequest.setSongName(song.getSongName());
+        songRequest.setSongGenre(song.getSongGenre());
         songRequest.setIsASingle(song.getIsASingle());
         songRequest.setLengthInSeconds(song.getSongLength().getLengthInSeconds());
-        songRequest.setCreatorId(song.getCreator().getId().getId());
-        songRequest.setAlbumId(Objects.isNull(song.getAlbum()) ? null : song.getAlbum().getId().getId());
 
         return songRequest;
     }
