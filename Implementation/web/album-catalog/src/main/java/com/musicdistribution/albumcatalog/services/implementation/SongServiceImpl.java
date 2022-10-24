@@ -105,8 +105,8 @@ public class SongServiceImpl implements SongService {
 
     @Override
     @Transactional
-    public Optional<Song> deleteSong(String id) {
-        Optional<Song> song = findById(SongId.of(id));
+    public Optional<Song> deleteSong(SongId id) {
+        Optional<Song> song = findById(id);
         song.ifPresent(s -> {
             s.getCreator().removeSongFromArtist(s);
             if (s.getAlbum() != null) {

@@ -29,17 +29,20 @@ public class AlbumResponse {
     private String artistId;
     private String artistName;
 
-    public static AlbumResponse from(Album album) {
+    public static AlbumResponse from(Album album, String encryptedId, String encryptedArtistId) {
         AlbumResponse albumResponse = new AlbumResponse();
-        albumResponse.setId(album.getId().getId());
+        albumResponse.setId(encryptedId);
         albumResponse.setAlbumName(album.getAlbumName());
         albumResponse.setTotalLength(album.getTotalLength());
         albumResponse.setIsPublished(album.getIsPublished());
         albumResponse.setGenre(album.getGenre());
         albumResponse.setAlbumInfo(album.getAlbumInfo());
-        albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null : ArtistResponse.from(album.getCreator()));
-        albumResponse.setArtistId(Objects.isNull(album.getCreator()) ? null : album.getCreator().getId().getId());
-        albumResponse.setArtistName(Objects.isNull(album.getCreator()) ? null : album.getCreator().getArtistPersonalInfo().getFullName());
+        albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null
+                : ArtistResponse.from(album.getCreator(), encryptedArtistId));
+        albumResponse.setArtistId(Objects.isNull(album.getCreator()) ? null
+                : album.getCreator().getId().getId());
+        albumResponse.setArtistName(Objects.isNull(album.getCreator()) ? null
+                : album.getCreator().getArtistPersonalInfo().getFullName());
 
         return albumResponse;
     }

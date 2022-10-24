@@ -79,5 +79,5 @@ public interface SongService {
      * @param id - the id of the song to be unpublished and deleted
      * @return an optional with the unpublished song.
      */
-    Optional<Song> deleteSong(String id);
+    Optional<Song> deleteSong(SongId id);
 }

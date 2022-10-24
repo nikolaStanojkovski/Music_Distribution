@@ -3,11 +3,11 @@ package com.musicdistribution.albumcatalog.xport.rest;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.ArtistResponse;
+import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class ArtistResource {
 
     private final ArtistService artistService;
+    private final IEncryptionSystem encryptionSystem;
 
     /**
      * Method for getting information about all artists.
@@ -31,7 +32,10 @@ public class ArtistResource {
      */
     @GetMapping
     public List<ArtistResponse> getAll() {
-        return artistService.findAll().stream().map(ArtistResponse::from).collect(Collectors.toList());
+        return artistService.findAll().stream()
+                .map(artist -> ArtistResponse.from(artist,
+                        encryptionSystem.encrypt(artist.getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -41,7 +45,10 @@ public class ArtistResource {
      */
     @GetMapping("/page")
     public List<ArtistResponse> getAllPage() {
-        return artistService.findAllPageable().stream().map(ArtistResponse::from).collect(Collectors.toList());
+        return artistService.findAllPageable().stream()
+                .map(artist -> ArtistResponse.from(artist,
+                        encryptionSystem.encrypt(artist.getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -52,8 +59,10 @@ public class ArtistResource {
      */
     @GetMapping("/search/{searchTerm}")
     public List<ArtistResponse> searchArtists(@PathVariable String searchTerm) {
-        return artistService.searchArtists(searchTerm)
-                .stream().map(ArtistResponse::from).collect(Collectors.toList());
+        return artistService.searchArtists(searchTerm).stream()
+                .map(artist -> ArtistResponse.from(artist,
+                        encryptionSystem.encrypt(artist.getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -64,8 +73,9 @@ public class ArtistResource {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ArtistResponse> findById(@PathVariable String id) {
-        return this.artistService.findById(ArtistId.of(id))
-                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
+        return this.artistService.findById(ArtistId.of(encryptionSystem.decrypt(id)))
+                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist,
+                        encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -78,7 +88,8 @@ public class ArtistResource {
     @PostMapping("/email")
     public ResponseEntity<ArtistResponse> findByEmail(@RequestBody @Valid ArtistRequest artistRequest) {
         return this.artistService.findByEmail(artistRequest)
-                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
+                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist,
+                        encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -25,15 +25,17 @@ public class SongResponse {
     private AlbumResponse album;
     private File file;
 
-    public static SongResponse from(Song song) {
+    public static SongResponse from(Song song, String encryptedId,
+                                    String encryptedArtistId, String encryptedAlbumId) {
         SongResponse songResponse = new SongResponse();
-        songResponse.setId(song.getId().getId());
+        songResponse.setId(encryptedId);
         songResponse.setSongName(song.getSongName());
         songResponse.setSongGenre(song.getSongGenre());
         songResponse.setIsASingle(song.getIsASingle());
         songResponse.setSongLength(song.getSongLength());
-        songResponse.setCreator(ArtistResponse.from(song.getCreator()));
-        songResponse.setAlbum(Objects.isNull(song.getAlbum()) ? null : AlbumResponse.from(song.getAlbum()));
+        songResponse.setCreator(ArtistResponse.from(song.getCreator(), encryptedArtistId));
+        songResponse.setAlbum(Objects.isNull(song.getAlbum()) ? null :
+                AlbumResponse.from(song.getAlbum(), encryptedAlbumId, encryptedArtistId));
 
         return songResponse;
     }

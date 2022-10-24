@@ -4,8 +4,6 @@ import com.musicdistribution.albumcatalog.config.FileProperties;
 import com.musicdistribution.albumcatalog.domain.exceptions.FileStorageException;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,12 +48,12 @@ public class FileSystemStorageService implements IFileSystemStorage {
     }
 
     @Override
-    public Resource loadFile(String fileName) {
+    public byte[] loadFile(String fileName) {
         try {
             Path path = this.dirLocation.resolve(fileName).normalize();
 
             if (Files.exists(path) && Files.isReadable(path)) {
-                return new UrlResource(path.toUri());
+                return Files.readAllBytes(path);
             } else {
                 throw new FileStorageException("Could not find the file with the specified file name.");
             }

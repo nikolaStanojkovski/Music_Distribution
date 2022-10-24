@@ -13,12 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArtistResponse {
 
+    private String id;
     private String email;
     private ArtistContactInfo artistContactInfo;
     private ArtistPersonalInfo artistPersonalInfo;
 
-    public static ArtistResponse from(Artist artist) {
+    public static ArtistResponse from(Artist artist, String encryptedId) {
         ArtistResponse artistResponse = new ArtistResponse();
+        artistResponse.setId(encryptedId);
         artistResponse.setArtistContactInfo(artist.getArtistContactInfo());
         artistResponse.setArtistPersonalInfo(artist.getArtistPersonalInfo());
         artistResponse.setEmail(artist.getArtistContactInfo().getEmail().getFullAddress());

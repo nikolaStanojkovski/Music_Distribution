@@ -43,7 +43,7 @@ const AlbumCatalogService = {
     },
 
     fetchSong: (id) => {
-        return axios.get(`/resources/songs/file/${id}`);
+        return axios.get(`/resource/songs/file/${id}`);
     },
     createSong: (file, songName, lengthInSeconds, songGenre) => {
         const formData = new FormData();

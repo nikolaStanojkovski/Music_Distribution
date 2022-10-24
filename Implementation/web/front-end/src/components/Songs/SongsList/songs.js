@@ -27,17 +27,31 @@ const Songs = (props) => {
             const songId = button.parentElement.parentElement.getAttribute('data-id');
             if (songId) {
                 if (button.classList.contains('bi-play')) {
-                    props.fetchSong(songId).then((data) => {
-                        const file = data.data;
-                        console.log(file);
-                        const audio = new Audio(file);
-                        updateAudio(audio);
-                        audio.play();
-                    });
+                    // TODO: Stream audio through the API call
+
+                    // new Audio('http://localhost:8082/api/resource/songs/file/' + songId).addEventListener('load', () => {
+                    //     updateAudio(audio);
+                    //     audio.play();
+                    // });
+
+
+                    // props.fetchSong(songId).then((data) => {
+                    //     if(data) {
+                    //         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    //         const buffer = new Buffer(data.data);
+                    //         console.log(buffer.buffer);
+                    //         audioContext.decodeAudioData(buffer.buffer).then((audio) => {
+                    //             const sound = audioContext.createBufferSource();
+                    //             sound.buffer = audio;
+                    //             sound.connect(audioContext.destination);
+                    //             sound.start(audioContext.currentTime);
+                    //         }).catch((error) => console.error(error));
+                    //     }
+                    // });
                 } else {
-                    if(audio) {
-                        audio.stop();
-                    }
+                    // if(audio) {
+                    //     audio.stop();
+                    // }
                 }
             }
 

@@ -1,5 +1,6 @@
 package com.musicdistribution.albumcatalog.domain.services.implementation;
 
+import com.musicdistribution.albumcatalog.domain.exceptions.EncryptionException;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,29 +38,31 @@ public class EncryptionSystemService implements IEncryptionSystem {
 
     @Override
     public String encrypt(String unencryptedString) {
-        String encryptedString = null;
+        String encryptedString;
         try {
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] plainText = unencryptedString.getBytes(StandardCharsets.UTF_8);
             byte[] encryptedText = cipher.doFinal(plainText);
-            encryptedString = new String(Base64.encodeBase64(encryptedText));
+            encryptedString = Base64.encodeBase64URLSafeString(encryptedText);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new EncryptionException("Encryption of the string: " + unencryptedString + " has failed");
         }
-        return encryptedString;
+        return (!unencryptedString.isEmpty()) ? encryptedString : "";
     }
 
     @Override
     public String decrypt(String encryptedString) {
-        String decryptedText = null;
+        String decryptedText;
         try {
             cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] encryptedText = Base64.decodeBase64(encryptedString);
+            byte[] encryptedText = Base64.decodeBase64URLSafe(encryptedString);
             byte[] plainText = cipher.doFinal(encryptedText);
             decryptedText = new String(plainText);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new EncryptionException("Decryption of the string: " + encryptedString + " has failed");
         }
-        return decryptedText;
+        return (!encryptedString.isEmpty()) ? decryptedText : "";
     }
 }

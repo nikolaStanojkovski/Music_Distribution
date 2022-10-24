@@ -16,9 +16,9 @@ public class ArtistJwtResponse {
     private ArtistResponse artistResponse;
     private String jwtToken;
 
-    public static ArtistJwtResponse from(Artist artist, String jwtToken) {
+    public static ArtistJwtResponse from(Artist artist, String jwtToken, String encryptedId) {
         ArtistJwtResponse artistJwtResponse = new ArtistJwtResponse();
-        artistJwtResponse.setArtistResponse(ArtistResponse.from(artist));
+        artistJwtResponse.setArtistResponse(ArtistResponse.from(artist, encryptedId));
         artistJwtResponse.setJwtToken(jwtToken);
 
         return artistJwtResponse;

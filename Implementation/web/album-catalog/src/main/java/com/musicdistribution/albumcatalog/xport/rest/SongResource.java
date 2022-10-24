@@ -2,16 +2,15 @@ package com.musicdistribution.albumcatalog.xport.rest;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.albumcatalog.domain.models.entity.Song;
 import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.SongResponse;
+import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,7 @@ public class SongResource {
     private final JwtUtils jwtUtils;
     private final SongService songService;
     private final IFileSystemStorage systemStorage;
+    private final IEncryptionSystem encryptionSystem;
 
     /**
      * Method for getting information about all songs.
@@ -42,8 +42,13 @@ public class SongResource {
      */
     @GetMapping
     public List<SongResponse> getAll() {
-        return songService.findAll()
-                .stream().map(SongResponse::from)
+        return songService.findAll().stream()
+                .map(song -> SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum()).map(album -> album.getId().getId())
+                                .orElse(""))))
                 .collect(Collectors.toList());
     }
 
@@ -54,8 +59,13 @@ public class SongResource {
      */
     @GetMapping("/artist/{artistId}")
     public List<SongResponse> getAllByArtist(@PathVariable String artistId) {
-        return songService.findAllByArtist(ArtistId.of(artistId))
-                .stream().map(SongResponse::from)
+        return songService.findAllByArtist(ArtistId.of(encryptionSystem.decrypt(artistId)))
+                .stream().map(song -> SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum()).map(album -> album.getId().getId())
+                                .orElse(""))))
                 .collect(Collectors.toList());
     }
 
@@ -66,8 +76,13 @@ public class SongResource {
      */
     @GetMapping("/album/{albumId}")
     public List<SongResponse> getAllByAlbum(@PathVariable String albumId) {
-        return songService.findAllByAlbum(AlbumId.of(albumId))
-                .stream().map(SongResponse::from)
+        return songService.findAllByAlbum(AlbumId.of(encryptionSystem.decrypt(albumId)))
+                .stream().map(song -> SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum()).map(album -> album.getId().getId())
+                                .orElse(""))))
                 .collect(Collectors.toList());
     }
 
@@ -78,8 +93,13 @@ public class SongResource {
      */
     @GetMapping("/page")
     public List<SongResponse> getAllPage() {
-        return songService.findAllPageable()
-                .stream().map(SongResponse::from)
+        return songService.findAllPageable().stream()
+                .map(song -> SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum()).map(album -> album.getId().getId())
+                                .orElse(""))))
                 .collect(Collectors.toList());
     }
 
@@ -91,8 +111,13 @@ public class SongResource {
      */
     @GetMapping("/search/{searchTerm}")
     public List<SongResponse> searchSongs(@PathVariable String searchTerm) {
-        return songService.searchSongs(searchTerm)
-                .stream().map(SongResponse::from)
+        return songService.searchSongs(searchTerm).stream()
+                .map(song -> SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum()).map(album -> album.getId().getId())
+                                .orElse(""))))
                 .collect(Collectors.toList());
     }
 
@@ -105,29 +130,31 @@ public class SongResource {
      */
     @GetMapping("/{id}")
     public ResponseEntity<SongResponse> findById(@PathVariable String id) {
-        return this.songService.findById(SongId.of(id))
-                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
+        return this.songService.findById(SongId.of(encryptionSystem.decrypt(id)))
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum()).map(album -> album.getId().getId())
+                                .orElse("")))))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/file/{id}")
+    @GetMapping(value = "/file/{id}", produces = "audio/mpeg")
     public ResponseEntity<?> findFileById(@PathVariable String id) {
-        Optional<Song> song = this.songService.findById(SongId.of(id));
-        if (song.isPresent()) {
-            String fileName = String.format("%s.mp3", song.get().getId().getId());
-            Resource resource = systemStorage.loadFile(fileName);
+        return this.songService.findById(SongId.of(encryptionSystem.decrypt(id)))
+                .map(song -> {
+                    String fileName = String.format("%s.mp3", song.getId().getId());
+                    byte[] resource = systemStorage.loadFile(fileName);
 
-            String contentType = "application/octet-stream";
-            String headerValue = "attachment; filename=\"" + song.get().getSongName() + ".mp3\"";
+                    String contentType = "audio/mpeg";
+                    String headerValue = "attachment; filename=\"" + song.getSongName() + ".mp3\"";
 
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-                    .body(resource);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType(contentType))
+                            .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                            .body(resource);
+                }).orElse(ResponseEntity.badRequest().build());
     }
 
     /**
@@ -140,7 +167,11 @@ public class SongResource {
     public ResponseEntity<SongResponse> createSong(@RequestHeader(value = "Authorization") String authToken, @RequestPart MultipartFile file, @RequestPart @Valid SongRequest songRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
         return this.songService.createSong(songRequest, file, username)
-                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum().getId().getId()).orElse("")))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -153,7 +184,11 @@ public class SongResource {
     @PostMapping("/publish")
     public ResponseEntity<SongResponse> publishSong(@RequestBody @Valid SongRequest songRequest) {
         return this.songService.publishSong(songRequest)
-                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum().getId().getId()).orElse("")))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -165,8 +200,12 @@ public class SongResource {
      */
     @GetMapping("/unpublish/{id}")
     public ResponseEntity<SongResponse> unpublishSong(@PathVariable String id) {
-        return this.songService.deleteSong(id)
-                .map(song -> ResponseEntity.ok().body(SongResponse.from(song)))
+        return this.songService.deleteSong(SongId.of(encryptionSystem.decrypt(id)))
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        encryptionSystem.encrypt(Optional.ofNullable(
+                                song.getAlbum().getId().getId()).orElse("")))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

@@ -3,6 +3,7 @@ package com.musicdistribution.albumcatalog.xport.rest;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.ArtistJwtResponse;
 import com.musicdistribution.albumcatalog.domain.models.response.ArtistResponse;
+import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.util.ApiController;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +30,7 @@ public class AuthResource {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final ArtistService artistService;
+    private final IEncryptionSystem encryptionSystem;
 
     /**
      * Method for authenticating an existing artist.
@@ -46,7 +47,8 @@ public class AuthResource {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         return this.artistService.loginArtist(artistRequest)
-                .map(artist -> ResponseEntity.ok().body(ArtistJwtResponse.from(artist, jwt)))
+                .map(artist -> ResponseEntity.ok().body(ArtistJwtResponse.from(artist, jwt,
+                        encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -59,7 +61,8 @@ public class AuthResource {
     @PostMapping("/register")
     public ResponseEntity<ArtistResponse> register(@RequestBody @Valid ArtistRequest artistRequest) {
         return this.artistService.registerArtist(artistRequest)
-                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist)))
+                .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist,
+                        encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

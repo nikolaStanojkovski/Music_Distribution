@@ -91,7 +91,7 @@ public class AlbumServiceImpl implements AlbumService {
         Album album = findById(id).orElseThrow(() -> new AlbumNotFoundException(id));
         List<Song> albumSongs = songRepository.findAllByAlbumId(album.getId());
         if (albumSongs.size() != 0) {
-            albumSongs.forEach(v -> songService.deleteSong(v.getId().getId()));
+            albumSongs.forEach(v -> songService.deleteSong(v.getId()));
         }
         album.unPublish();
 

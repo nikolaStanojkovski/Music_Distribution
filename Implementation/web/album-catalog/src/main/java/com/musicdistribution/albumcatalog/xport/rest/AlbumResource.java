@@ -5,12 +5,12 @@ import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.AlbumResponse;
+import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.services.AlbumService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class AlbumResource {
 
     private final AlbumService albumService;
+    private final IEncryptionSystem encryptionSystem;
 
     /**
      * Method for getting information about all albums.
@@ -34,7 +35,11 @@ public class AlbumResource {
      */
     @GetMapping
     public List<AlbumResponse> getAll() {
-        return albumService.findAll().stream().map(AlbumResponse::from).collect(Collectors.toList());
+        return albumService.findAll().stream()
+                .map(album -> AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -44,7 +49,11 @@ public class AlbumResource {
      */
     @GetMapping("/page")
     public List<AlbumResponse> getAllPage() {
-        return albumService.findAllPageable().stream().filter(Album::getIsPublished).map(AlbumResponse::from).collect(Collectors.toList());
+        return albumService.findAllPageable().stream().filter(Album::getIsPublished)
+                .map(album -> AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -55,8 +64,11 @@ public class AlbumResource {
      */
     @GetMapping("/artist/{artistId}")
     public List<AlbumResponse> getAllByArtist(@PathVariable String artistId) {
-        return albumService.findAllByArtist(ArtistId.of(artistId))
-                .stream().map(AlbumResponse::from).collect(Collectors.toList());
+        return albumService.findAllByArtist(ArtistId.of(encryptionSystem.decrypt(artistId)))
+                .stream().map(album -> AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -67,8 +79,11 @@ public class AlbumResource {
      */
     @GetMapping("/genre/{genre}")
     public List<AlbumResponse> getAllByGenre(@PathVariable String genre) {
-        return albumService.findAllByGenre(Genre.valueOf(genre))
-                .stream().map(AlbumResponse::from).collect(Collectors.toList());
+        return albumService.findAllByGenre(Genre.valueOf(genre)).stream()
+                .map(album -> AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -79,8 +94,11 @@ public class AlbumResource {
      */
     @GetMapping("/search/{searchTerm}")
     public List<AlbumResponse> searchAlbums(@PathVariable String searchTerm) {
-        return albumService.searchAlbums(searchTerm)
-                .stream().map(AlbumResponse::from).collect(Collectors.toList());
+        return albumService.searchAlbums(searchTerm).stream()
+                .map(album -> AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -91,8 +109,10 @@ public class AlbumResource {
      */
     @GetMapping("/{id}")
     public ResponseEntity<AlbumResponse> findById(@PathVariable String id) {
-        return this.albumService.findById(AlbumId.of(id))
-                .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album)))
+        return this.albumService.findById(AlbumId.of(encryptionSystem.decrypt(id)))
+                .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId()))))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -105,7 +125,9 @@ public class AlbumResource {
     @PostMapping("/create")
     public ResponseEntity<AlbumResponse> createAlbum(@RequestBody @Valid AlbumRequest albumRequest) {
         return this.albumService.createAlbum(albumRequest)
-                .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album)))
+                .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
