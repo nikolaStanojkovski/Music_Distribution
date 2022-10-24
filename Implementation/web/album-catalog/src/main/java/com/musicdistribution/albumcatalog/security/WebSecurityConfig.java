@@ -58,7 +58,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/email-domains", "/api/genres",
-                        "/api/resource/albums", "/api/resource/artists", "/api/resource/songs").permitAll()
+                        "/api/resource/albums", "/api/resource/artists", "/api/resource/songs", "/api/resource/stream/**").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic();
 

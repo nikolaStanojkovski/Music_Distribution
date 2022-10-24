@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt from 'jsonwebtoken';
+import {API_BASE_URL} from "../constants";
 
 function isExpired(token) {
     let decodedToken = jwt.decode(token, {complete: true});
@@ -9,7 +10,7 @@ function isExpired(token) {
 
 const token = localStorage.getItem('accessToken');
 const instance = axios.create({
-    baseURL: 'http://localhost:8082/api',
+    baseURL: API_BASE_URL,
     headers: {
         'Access-Control-Allow-Origin': '*',
         'Authorization': `Bearer ${(!isExpired(token)) ? token : ''}`

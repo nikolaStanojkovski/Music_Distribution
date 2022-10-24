@@ -4,5 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IFileSystemStorage {
     String saveFile(MultipartFile file, String fileName);
-    byte[] loadFile(String fileName);
+
+    Long loadFileSize(String fileName);
+
+    byte[] loadFileByteRange(String filename, long start, long end);
 }

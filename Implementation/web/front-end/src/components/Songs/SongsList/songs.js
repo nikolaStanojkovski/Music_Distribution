@@ -1,7 +1,8 @@
 import React from 'react';
+import {API_BASE_URL, STREAM_URL} from "../../../constants";
 
 const Songs = (props) => {
-    const [audio, updateAudio] = React.useState(null);
+    const [audioPlayer, updateAudioPlayer] = React.useState(undefined);
 
     const togglePlayButton = (button) => {
         button.classList.toggle('bi-play');
@@ -27,31 +28,16 @@ const Songs = (props) => {
             const songId = button.parentElement.parentElement.getAttribute('data-id');
             if (songId) {
                 if (button.classList.contains('bi-play')) {
-                    // TODO: Stream audio through the API call
-
-                    // new Audio('http://localhost:8082/api/resource/songs/file/' + songId).addEventListener('load', () => {
-                    //     updateAudio(audio);
-                    //     audio.play();
-                    // });
-
-
-                    // props.fetchSong(songId).then((data) => {
-                    //     if(data) {
-                    //         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    //         const buffer = new Buffer(data.data);
-                    //         console.log(buffer.buffer);
-                    //         audioContext.decodeAudioData(buffer.buffer).then((audio) => {
-                    //             const sound = audioContext.createBufferSource();
-                    //             sound.buffer = audio;
-                    //             sound.connect(audioContext.destination);
-                    //             sound.start(audioContext.currentTime);
-                    //         }).catch((error) => console.error(error));
-                    //     }
-                    // });
+                    if (audioPlayer) {
+                        audioPlayer.pause();
+                    }
+                    const audio = new Audio(`${API_BASE_URL}${STREAM_URL}/${songId}.mp3`, );
+                    audio.play().catch((error) => console.error(error));
+                    updateAudioPlayer(audio);
                 } else {
-                    // if(audio) {
-                    //     audio.stop();
-                    // }
+                    if (audioPlayer) {
+                        audioPlayer.pause();
+                    }
                 }
             }
 
