@@ -1,4 +1,4 @@
-package com.musicdistribution.albumcatalog.xport.rest;
+package com.musicdistribution.albumcatalog.xport.rest.auxiliary;
 
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
 import com.musicdistribution.sharedkernel.util.ApiController;

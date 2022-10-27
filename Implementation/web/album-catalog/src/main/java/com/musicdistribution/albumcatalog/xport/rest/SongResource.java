@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.SongResponse;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
@@ -160,12 +161,13 @@ public class SongResource {
     /**
      * Method for publishing a song.
      *
-     * @param songRequest - dto object for the song to be published.
+     * @param songTransactionRequest - dto object for the song to be published.
      * @return the published song.
      */
     @PostMapping("/publish")
-    public ResponseEntity<SongResponse> publishSong(@RequestBody @Valid SongRequest songRequest) {
-        return this.songService.publishSong(songRequest)
+    public ResponseEntity<SongResponse> publishSong(@RequestHeader(value = "Authorization") String authToken, @RequestBody @Valid SongTransactionRequest songTransactionRequest) {
+        String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
+        return this.songService.publishSong(songTransactionRequest, username, encryptionSystem.decrypt(songTransactionRequest.getSongId()))
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),

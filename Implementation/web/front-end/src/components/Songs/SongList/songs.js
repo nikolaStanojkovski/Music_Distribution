@@ -1,6 +1,7 @@
 import React from 'react';
 import {API_BASE_URL, STREAM_URL} from "../../../constants";
 
+// TODO: Update table considering new song parameters
 const Songs = (props) => {
     const [audioPlayer, updateAudioPlayer] = React.useState(undefined);
 

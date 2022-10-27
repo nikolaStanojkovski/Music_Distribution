@@ -1,7 +1,11 @@
 package com.musicdistribution.albumcatalog.services;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.*;
+import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
+import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.entity.Song;
+import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,7 +64,8 @@ public interface SongService {
     /**
      * Method for creating a new song in the database.
      *
-     * @param song - song's dto object containing new song's information.
+     * @param song     - song's dto object containing new song's information.
+     * @param username - the username of the user which is creating the song.
      * @return an optional with the found song.
      */
     Optional<Song> createSong(SongRequest song, MultipartFile file, String username);
@@ -69,9 +74,11 @@ public interface SongService {
      * Method for publishing a song.
      *
      * @param songRequest - song's dto object containing new published song's information.
+     * @param username    - the username of the user which is publishing the song.
+     * @param id          - the id of the selected song.
      * @return an optional with the published song.
      */
-    Optional<Song> publishSong(SongRequest songRequest);
+    Optional<Song> publishSong(SongTransactionRequest songRequest, String username, String id);
 
     /**
      * Method for deleting a song.

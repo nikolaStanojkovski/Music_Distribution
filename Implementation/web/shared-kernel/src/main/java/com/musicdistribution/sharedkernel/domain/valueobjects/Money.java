@@ -110,5 +110,4 @@ public class Money implements ValueObject {
     public int hashCode() {
         return Objects.hash(currency, amount);
     }
-
 }

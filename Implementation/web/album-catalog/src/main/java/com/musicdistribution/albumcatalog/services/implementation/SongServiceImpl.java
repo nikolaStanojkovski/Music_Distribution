@@ -3,6 +3,7 @@ package com.musicdistribution.albumcatalog.services.implementation;
 import com.musicdistribution.albumcatalog.domain.exceptions.FileStorageException;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
@@ -93,14 +94,15 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Optional<Song> publishSong(SongRequest songRequest) {
-//        Optional<Song> newSong = createSong(songRequest);
-//        if (newSong.isPresent() && songRequest.getIsASingle()) {
-//            Song publishedSong = Song.publishSong(newSong.get());
-//            return Optional.of(songRepository.save(publishedSong));
-//        }
-//        return newSong;
-        return Optional.empty();
+    public Optional<Song> publishSong(SongTransactionRequest songTransactionRequest, String username, String id) {
+        Optional<Artist> artist = artistRepository.findByArtistUserInfo_Username(username);
+        Optional<Song> song = findById(SongId.of(id));
+        if (artist.isPresent() && song.isPresent()) {
+            return song.map(s -> s.publish(songTransactionRequest.getSongTier(),
+                    songTransactionRequest.getTransactionFee(),
+                    songTransactionRequest.getSubscriptionFee()));
+        }
+        return song;
     }
 
     @Override

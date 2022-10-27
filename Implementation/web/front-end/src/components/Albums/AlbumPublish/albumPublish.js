@@ -7,10 +7,10 @@ const PublishAlbum = (props) => {
     const [formData, updateFormData] = React.useState({
         albumId: 0,
         musicPublisherId: 0,
-        albumTier: 0
+        tier: 0
     });
 
-    const getAlbumTier = (inputValue) => {
+    const gettier = (inputValue) => {
         switch (inputValue) {
             case "Bronze":
                 return "10.00 EUR";
@@ -33,10 +33,10 @@ const PublishAlbum = (props) => {
             [e.target.name]: e.target.value.trim()
         });
 
-        if (e.target.name === "albumTier") {
+        if (e.target.name === "tier") {
             let subFee = document.getElementById("subscriptionFee");
 
-            subFee.value = getAlbumTier(e.target.value);
+            subFee.value = gettier(e.target.value);
         }
     }
 
@@ -51,11 +51,11 @@ const PublishAlbum = (props) => {
         const artistId = props.selectedArtist.id;
         const artistInformation = props.selectedArtist.artistPersonalInfo.fullName;
         const musicPublisherId = formData.musicPublisherId;
-        const albumTier = formData.albumTier;
+        const tier = formData.tier;
         const subscriptionFee = document.getElementById("subscriptionFee").value.split(" ")[0];
         const transactionFee = 5.00;
 
-        props.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee);
+        props.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, tier, subscriptionFee, transactionFee);
         History.push("/albums");
     }
 
@@ -104,9 +104,9 @@ const PublishAlbum = (props) => {
 
                         <div className="form-group">
                             <label>Album Tier</label>
-                            <select onChange={handleChange} name="albumTier" className="form-control">
+                            <select onChange={handleChange} name="tier" className="form-control">
                                 <option value={null}>Select the album tier</option>
-                                {props.albumTiers.map((term) => {
+                                {props.tiers.map((term) => {
                                         return <option value={term}>{term}</option>;
                                     }
                                 )}

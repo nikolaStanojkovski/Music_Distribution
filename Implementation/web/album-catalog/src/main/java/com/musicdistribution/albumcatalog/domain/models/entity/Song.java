@@ -3,12 +3,12 @@ package com.musicdistribution.albumcatalog.domain.models.entity;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Getter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
  * Song domain entity.
@@ -21,6 +21,15 @@ public class Song extends AbstractEntity<SongId> {
     private String songName;
 
     private Boolean isASingle;
+
+    private Boolean isPublished;
+
+    private String subscriptionFee;
+
+    private String transactionFee;
+
+    @Enumerated(value = EnumType.STRING)
+    private Tier songTier;
 
     @Enumerated(value = EnumType.STRING)
     private Genre songGenre;
@@ -61,6 +70,7 @@ public class Song extends AbstractEntity<SongId> {
         song.songGenre = genre;
 
         song.isASingle = false;
+        song.isPublished = false;
         song.album = null;
 
         song.creator = artist;
@@ -72,13 +82,15 @@ public class Song extends AbstractEntity<SongId> {
     /**
      * Method for publishing a song.
      *
-     * @param song - the song to be published.
      * @return the published song.
      */
-    public static Song publishSong(Song song) {
-        if (!song.isASingle) {
-            song.isASingle = true;
-        }
-        return song;
+    public Song publish(Tier tier, String subscriptionFee, String transactionFee) {
+        this.isASingle = true;
+        this.isPublished = true;
+        this.songTier = tier;
+        this.subscriptionFee = subscriptionFee;
+        this.transactionFee = transactionFee;
+
+        return this;
     }
 }

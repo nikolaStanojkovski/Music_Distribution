@@ -35,11 +35,15 @@ const AlbumCatalogService = {
     fetchSongs: () => {
         return axios.get("/resource/songs");
     },
+
     fetchEmailDomains: () => {
         return axios.get("/email-domains");
     },
     fetchGenres: () => {
         return axios.get("/genres");
+    },
+    fetchTiers: () => {
+        return axios.get("/tiers");
     },
 
     fetchSong: (id) => {
@@ -57,6 +61,15 @@ const AlbumCatalogService = {
         }));
         return axios.post("/resource/songs/create", formData);
     },
+    publishSong: (songId, songTier, subscriptionFee, transactionFee) => {
+        return axios.post("/resource/songs/publish", {
+            "songId" : songId,
+            "songTier" : songTier,
+            "subscriptionFee" : subscriptionFee,
+            "transactionFee" : transactionFee,
+        })
+    },
+
     createAlbum: (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {
         return axios.post("/resource/albums/create", {
             "albumName": albumName,
@@ -67,7 +80,14 @@ const AlbumCatalogService = {
             "composerName": composerName,
             "creatorId": creatorId
         });
-    }
+    },
+
+    getTransactionFee: (locale) => {
+        return axios.get(`/payment/transaction?locale=${locale}`);
+    },
+    getSubscriptionFee: (tier) => {
+        return axios.get(`/payment/subscription?tier=${tier}`);
+    },
 }
 
 export default AlbumCatalogService;

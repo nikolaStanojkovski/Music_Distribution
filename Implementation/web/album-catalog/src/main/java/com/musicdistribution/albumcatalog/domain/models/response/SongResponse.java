@@ -20,6 +20,7 @@ public class SongResponse {
     private String songName;
     private Genre songGenre;
     private Boolean isASingle;
+    private Boolean isPublished;
     private SongLength songLength;
     private ArtistResponse creator;
     private AlbumResponse album;
@@ -32,6 +33,7 @@ public class SongResponse {
         songResponse.setSongName(song.getSongName());
         songResponse.setSongGenre(song.getSongGenre());
         songResponse.setIsASingle(song.getIsASingle());
+        songResponse.setIsPublished(song.getIsPublished());
         songResponse.setSongLength(song.getSongLength());
         songResponse.setCreator(ArtistResponse.from(song.getCreator(), encryptedArtistId));
         songResponse.setAlbum(Objects.isNull(song.getAlbum()) ? null :

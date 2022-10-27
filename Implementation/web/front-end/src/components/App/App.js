@@ -14,8 +14,9 @@ import AlbumPublish from '../Albums/AlbumPublish/albumPublish';
 import AlbumUnpublish from '../Albums/AlbumUnpublish/albumUnpublish';
 import AlbumRaiseTier from '../Albums/AlbumRaiseTier/albumRaiseTier';
 
-import Songs from '../Songs/SongsList/songs';
+import Songs from '../Songs/SongList/songs';
 import SongCreate from '../Songs/SongCreate/songCreate';
+import SongPublish from '../Songs/SongPublish/songPublish';
 
 import AlbumPublishingService from "../../repository/albumStreamingRepository";
 import Footer from "../Footer/footer";
@@ -30,13 +31,13 @@ class App extends Component {
             albums: [],
             artists: [],
             songs: [],
-            genres: [],
-            emailDomains: [],
             selectedAlbum: {},
 
-            musicDistributors: [],
-            publishedAlbums: [],
-            albumTiers: []
+            transactionFee: "",
+
+            genres: [],
+            emailDomains: [],
+            tiers: []
         }
     }
 
@@ -143,6 +144,13 @@ class App extends Component {
                                         genres={this.state.genres}
                                         selectedArtist={this.getCurrentArtist()}
                                         createSong={this.createSong}/>}/>
+                        <Route path={"/songs/publish"} exact render={() =>
+                            <SongPublish songs={this.state.songs}
+                                         tiers={this.state.tiers}
+                                         selectedArtist={this.getCurrentArtist()}
+                                         transactionFee={this.state.transactionFee}
+                                         subscriptionFee={this.getSubscriptionFee}
+                                         publishSong={this.publishSong}/>}/>
 
                         <Route path={"/albums"} exact render={() =>
                             <Albums albums={this.state.albums}/>}/>
@@ -156,7 +164,7 @@ class App extends Component {
                         <Route path={"/albums/publish"} exact render={() =>
                             <AlbumPublish albums={this.state.albums}
                                           selectedArtist={this.getCurrentArtist()}
-                                          albumTiers={this.state.albumTiers}
+                                          tiers={this.state.tiers}
                                           musicDistributors={this.state.musicDistributors}
                                           publishAlbum={this.publishAlbum}/>}/>
                         <Route path={"/albums/unPublish"} exact render={() =>
@@ -166,7 +174,7 @@ class App extends Component {
                         <Route path={"/albums/raiseAlbumTier"} exact render={() =>
                             <AlbumRaiseTier selectedArtist={this.getCurrentArtist()}
                                             publishedAlbums={this.state.publishedAlbums}
-                                            albumTiers={this.state.albumTiers}
+                                            tiers={this.state.tiers}
                                             raiseAlbumTier={this.raiseAlbumTier}/>}/>
 
                         {/* Default */}
@@ -180,35 +188,17 @@ class App extends Component {
     }
 
     componentDidMount() {
+        this.getTransactionFee();
+
         this.loadArtists();
         this.loadAlbums();
         this.loadSongs();
+
         this.loadEmailDomains();
         this.loadGenres();
-
-        this.loadDistributors();
-        this.loadPublishedAlbums();
-        this.loadAlbumTiers();
+        this.loadTiers();
 
         this.toggleNavbarItems();
-    }
-
-    loadDistributors = () => {
-        AlbumPublishingService.fetchDistributors()
-            .then((data) => {
-                this.setState({
-                    musicDistributors: data.data
-                })
-            });
-    }
-
-    loadPublishedAlbums = () => {
-        AlbumPublishingService.fetchPublishedAlbums()
-            .then((data) => {
-                this.setState({
-                    publishedAlbums: data.data
-                })
-            });
     }
 
     loadAlbums = () => {
@@ -238,11 +228,11 @@ class App extends Component {
             });
     }
 
-    loadAlbumTiers = () => {
-        AlbumPublishingService.fetchAlbumTiers()
+    loadTiers = () => {
+        AlbumCatalogService.fetchTiers()
             .then((data) => {
                 this.setState({
-                    albumTiers: data.data
+                    tiers: data.data
                 })
             });
     }
@@ -263,6 +253,13 @@ class App extends Component {
                     artists: data.data
                 })
             });
+    }
+
+    publishSong = (songId, songTier, subscriptionFee, transactionFee) => {
+        AlbumCatalogService.publishSong(songId, songTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadSongs();
+            })
     }
 
     publishAlbum = (albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
@@ -325,6 +322,18 @@ class App extends Component {
     logoutArtist = () => {
         AlbumCatalogService.logoutArtist();
         window.location.reload();
+    }
+
+    getTransactionFee = () => {
+        const locale = navigator.language;
+        AlbumCatalogService.getTransactionFee(locale).then((data) => {
+            this.state.transactionFee = `${data.data.amount}.00 ${data.data.currency}`;
+            console.log(this.state.transactionFee);
+        });
+    }
+
+    getSubscriptionFee = (tier) => {
+        return AlbumCatalogService.getSubscriptionFee(tier);
     }
 }
 
