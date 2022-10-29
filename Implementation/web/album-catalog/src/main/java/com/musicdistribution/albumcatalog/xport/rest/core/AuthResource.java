@@ -1,4 +1,4 @@
-package com.musicdistribution.albumcatalog.xport.rest;
+package com.musicdistribution.albumcatalog.xport.rest.core;
 
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.ArtistJwtResponse;
@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -59,8 +61,9 @@ public class AuthResource {
      * @return the registered artist.
      */
     @PostMapping("/register")
-    public ResponseEntity<ArtistResponse> register(@RequestBody @Valid ArtistRequest artistRequest) {
-        return this.artistService.registerArtist(artistRequest)
+    public ResponseEntity<ArtistResponse> register(@RequestPart MultipartFile profilePicture,
+                                                   @RequestPart @Valid ArtistRequest artistRequest) {
+        return this.artistService.registerArtist(profilePicture, artistRequest)
                 .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist,
                         encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());

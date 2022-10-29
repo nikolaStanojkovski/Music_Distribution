@@ -1,9 +1,9 @@
 package com.musicdistribution.albumcatalog.domain.models.entity;
 
+import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Getter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -24,15 +24,15 @@ public class Song extends AbstractEntity<SongId> {
 
     private Boolean isPublished;
 
-    private String subscriptionFee;
-
-    private String transactionFee;
-
-    @Enumerated(value = EnumType.STRING)
-    private Tier songTier;
-
     @Enumerated(value = EnumType.STRING)
     private Genre songGenre;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "subscriptionFee", column = @Column(name = "payment_subscription_fee")),
+            @AttributeOverride(name = "transactionFee", column = @Column(name = "payment_transaction_fee")),
+            @AttributeOverride(name = "tier", column = @Column(name = "payment_tier"))
+    })
+    private PaymentInfo paymentInfo;
 
     @AttributeOverrides({
             @AttributeOverride(name = "lengthInSeconds", column = @Column(name = "song_length"))
@@ -82,14 +82,13 @@ public class Song extends AbstractEntity<SongId> {
     /**
      * Method for publishing a song.
      *
+     * @param paymentInfo - the information about the payment for the song that is being published.
      * @return the published song.
      */
-    public Song publish(Tier tier, String subscriptionFee, String transactionFee) {
+    public Song publish(PaymentInfo paymentInfo) {
         this.isASingle = true;
         this.isPublished = true;
-        this.songTier = tier;
-        this.subscriptionFee = subscriptionFee;
-        this.transactionFee = transactionFee;
+        this.paymentInfo = paymentInfo;
 
         return this;
     }

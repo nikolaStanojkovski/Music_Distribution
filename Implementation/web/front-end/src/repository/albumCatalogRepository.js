@@ -8,8 +8,10 @@ const AlbumCatalogService = {
             "password": password
         });
     },
-    registerArtist: (username, emailDomain, telephoneNumber, firstName, lastName, artName, password) => {
-        return axios.post("/auth/register", {
+    registerArtist: (profilePicture, username, emailDomain, telephoneNumber, firstName, lastName, artName, password) => {
+        const formData = new FormData();
+        formData.append('profilePicture', profilePicture);
+        formData.append('artistRequest', new Blob([JSON.stringify({
             "username": username,
             "emailDomain": emailDomain,
             "telephoneNumber": telephoneNumber,
@@ -17,7 +19,10 @@ const AlbumCatalogService = {
             "lastName": lastName,
             "artName": artName,
             "password": password
-        });
+        })], {
+            type: "application/json"
+        }));
+        return axios.post("/auth/register", formData);
     },
     logoutArtist: () => {
         if (localStorage.getItem('accessToken')) {
@@ -61,13 +66,18 @@ const AlbumCatalogService = {
         }));
         return axios.post("/resource/songs/create", formData);
     },
-    publishSong: (songId, songTier, subscriptionFee, transactionFee) => {
-        return axios.post("/resource/songs/publish", {
+    publishSong: (cover, songId, songTier, subscriptionFee, transactionFee) => {
+        const formData = new FormData();
+        formData.append('cover', cover);
+        formData.append('songTransactionRequest', new Blob([JSON.stringify({
             "songId" : songId,
             "songTier" : songTier,
             "subscriptionFee" : subscriptionFee,
             "transactionFee" : transactionFee,
-        })
+        })], {
+            type: "application/json"
+        }));
+        return axios.post("/resource/songs/publish", formData);
     },
 
     createAlbum: (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {

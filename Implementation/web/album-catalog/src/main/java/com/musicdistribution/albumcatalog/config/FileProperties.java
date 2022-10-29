@@ -1,16 +1,23 @@
 package com.musicdistribution.albumcatalog.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "file.upload")
+@Getter
+@Component
 public class FileProperties {
-    private String location;
 
-    public String getLocation() {
-        return location;
-    }
+    @Value("${file.songs.upload.location}")
+    private String songsLocation;
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    @Value("${file.cover-songs.upload.location}")
+    private String songCoversLocation;
+
+    @Value("${file.cover-albums.upload.location}")
+    private String albumCoversLocation;
+
+    @Value("${file.profile-pictures.upload.location}")
+    private String profilePicturesLocation;
+
 }

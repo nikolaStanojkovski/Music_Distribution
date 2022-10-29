@@ -100,24 +100,4 @@ public class Artist extends AbstractEntity<ArtistId> {
     public void removeSongFromArtist(Song song) {
         this.songs.remove(song);
     }
-
-    /**
-     * Method used for making an album published for an artist.
-     *
-     * @param albumId - the album's id to be published.
-     */
-    public void makeAlbumPublished(AlbumId albumId) {
-        this.albums.stream().filter(a -> a.getId().getId().equals(albumId.getId()))
-                .findAny().ifPresent(a -> a.setIsPublished(Boolean.TRUE));
-    }
-
-    /**
-     * Method used for making an album unpublished for an artist.
-     *
-     * @param albumId - the album's id to be unpublished.
-     */
-    public void makeAlbumUnpublished(AlbumId albumId) {
-        this.albums.stream().filter(a -> a.getId().getId().equals(albumId.getId()))
-                .findAny().ifPresent(a -> a.setIsPublished(Boolean.FALSE));
-    }
 }

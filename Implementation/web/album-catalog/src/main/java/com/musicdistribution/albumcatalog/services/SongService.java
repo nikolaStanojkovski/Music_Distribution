@@ -74,17 +74,18 @@ public interface SongService {
      * Method for publishing a song.
      *
      * @param songRequest - song's dto object containing new published song's information.
+     * @param cover       - the cover picture of the selected song.
      * @param username    - the username of the user which is publishing the song.
      * @param id          - the id of the selected song.
      * @return an optional with the published song.
      */
-    Optional<Song> publishSong(SongTransactionRequest songRequest, String username, String id);
+    Optional<Song> publishSong(SongTransactionRequest songRequest, MultipartFile cover, String username, String id);
 
     /**
      * Method for deleting a song.
      *
-     * @param id - the id of the song to be unpublished and deleted
-     * @return an optional with the unpublished song.
+     * @param id - the id of the song to be deleted.
+     * @return an optional with the song that was deleted.
      */
     Optional<Song> deleteSong(SongId id);
 }

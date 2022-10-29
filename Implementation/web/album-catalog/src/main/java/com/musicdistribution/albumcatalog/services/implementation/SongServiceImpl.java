@@ -2,12 +2,14 @@ package com.musicdistribution.albumcatalog.services.implementation;
 
 import com.musicdistribution.albumcatalog.domain.exceptions.FileStorageException;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
+import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
+import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.albumcatalog.services.SongService;
 import lombok.AllArgsConstructor;
@@ -86,21 +88,30 @@ public class SongServiceImpl implements SongService {
     private void saveSong(Song song, MultipartFile file) {
         String songId = song.getId().getId();
         try {
-            String fileName = String.format("%s.mp3", songId);
-            fileSystemStorage.saveFile(file, fileName);
+            if (!file.isEmpty()) {
+                String fileName = String.format("%s.mp3", songId);
+                fileSystemStorage.saveFile(file, fileName, FileLocationType.SONGS);
+            }
         } catch (Exception exception) {
             throw new FileStorageException("Could not save the compressed version of the song with id " + songId);
         }
     }
 
     @Override
-    public Optional<Song> publishSong(SongTransactionRequest songTransactionRequest, String username, String id) {
+    public Optional<Song> publishSong(SongTransactionRequest songTransactionRequest, MultipartFile cover, String username, String id) {
         Optional<Artist> artist = artistRepository.findByArtistUserInfo_Username(username);
         Optional<Song> song = findById(SongId.of(id));
         if (artist.isPresent() && song.isPresent()) {
-            return song.map(s -> s.publish(songTransactionRequest.getSongTier(),
-                    songTransactionRequest.getTransactionFee(),
-                    songTransactionRequest.getSubscriptionFee()));
+            song = song.map(s -> {
+                if (!cover.isEmpty()) {
+                    String fileName = String.format("%s.png", s.getId().getId());
+                    fileSystemStorage.saveFile(cover, fileName, FileLocationType.SONG_COVERS);
+                }
+
+                return s.publish(PaymentInfo.build(songTransactionRequest.getSubscriptionFee(),
+                        songTransactionRequest.getTransactionFee(),
+                        songTransactionRequest.getSongTier()));
+            });
         }
         return song;
     }

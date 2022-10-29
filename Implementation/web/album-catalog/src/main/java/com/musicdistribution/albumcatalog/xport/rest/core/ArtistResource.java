@@ -1,4 +1,4 @@
-package com.musicdistribution.albumcatalog.xport.rest;
+package com.musicdistribution.albumcatalog.xport.rest.core;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;

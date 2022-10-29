@@ -1,6 +1,7 @@
 package com.musicdistribution.albumcatalog.domain.models.entity;
 
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
+import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
@@ -26,10 +27,15 @@ public class Album extends AbstractEntity<AlbumId> {
 
     private SongLength totalLength;
 
-    private Boolean isPublished;
-
     @Enumerated(EnumType.STRING)
     private Genre genre;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "subscriptionFee", column = @Column(name = "payment_subscription_fee")),
+            @AttributeOverride(name = "transactionFee", column = @Column(name = "payment_transaction_fee")),
+            @AttributeOverride(name = "tier", column = @Column(name = "payment_tier"))
+    })
+    private PaymentInfo paymentInfo;
 
     @AttributeOverrides({
             @AttributeOverride(name = "artistName", column = @Column(name = "album_artistName")),
@@ -61,17 +67,18 @@ public class Album extends AbstractEntity<AlbumId> {
      * @param genre     - the album's genre
      * @param albumInfo - the album's information
      * @param creator   - the album's creator
+     * @param paymentInfo - the album's payment information
      * @return the created album.
      */
-    public static Album build(String albumName, Genre genre, AlbumInfo albumInfo, Artist creator) {
+    public static Album build(String albumName, Genre genre, AlbumInfo albumInfo, Artist creator, PaymentInfo paymentInfo) {
         Album album = new Album();
 
         album.albumName = albumName;
         album.genre = genre;
         album.albumInfo = albumInfo;
         album.creator = creator;
-        album.isPublished = false;
         album.totalLength = SongLength.build(0);
+        album.paymentInfo = paymentInfo;
 
         album.songs = new ArrayList<>();
 
@@ -105,19 +112,5 @@ public class Album extends AbstractEntity<AlbumId> {
      */
     public SongLength totalLength() {
         return SongLength.build(this.songs.size() != 0 ? this.songs.stream().mapToInt(i -> i.getSongLength().getLengthInSeconds()).sum() : 0);
-    }
-
-    /**
-     * Method for updating the flag containing information that an album is being published.
-     */
-    public void publish() {
-        this.isPublished = true;
-    }
-
-    /**
-     * Method for updating the flag containing information that an album is being unpublished.
-     */
-    public void unPublish() {
-        this.isPublished = false;
     }
 }

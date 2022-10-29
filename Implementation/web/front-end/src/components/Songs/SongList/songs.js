@@ -1,25 +1,42 @@
 import React from 'react';
-import {API_BASE_URL, STREAM_URL} from "../../../constants";
+import Modal from 'react-bootstrap/Modal';
+import {API_BASE_URL, AUDIO_STREAM_URL, SONG_COVER_URL} from "../../../constants/constants";
 
-// TODO: Update table considering new song parameters
 const Songs = (props) => {
+    const [showModal, setShowModal] = React.useState(false);
+    const [imageSource, updateImageSource] = React.useState(undefined);
     const [audioPlayer, updateAudioPlayer] = React.useState(undefined);
 
-    const togglePlayButton = (button) => {
+    const togglePlayButtonClassList = (button) => {
         button.classList.toggle('bi-play');
         button.classList.toggle('bi-stop');
     }
 
-    const toggleButton = (button) => {
+    const togglePlayButton = (button) => {
         if (button && button instanceof HTMLElement) {
-            togglePlayButton(button);
+            togglePlayButtonClassList(button);
             const songId = button.parentElement.parentElement.getAttribute('data-id');
             Array.from(document.querySelectorAll(".play-pause-button")).forEach((btn) => {
                 const itemSongId = btn.parentElement.parentElement.getAttribute('data-id');
                 if (itemSongId !== songId && btn.classList.contains('bi-stop')) {
-                    togglePlayButton(btn);
+                    togglePlayButtonClassList(btn);
                 }
             });
+        }
+    }
+
+    const playAudio = (songId, button) => {
+        if (button.classList.contains('bi-play')) {
+            if (audioPlayer) {
+                audioPlayer.pause();
+            }
+            const audio = new Audio(`${API_BASE_URL}${AUDIO_STREAM_URL}/${songId}.mp3`);
+            audio.play().catch((error) => console.error(error));
+            updateAudioPlayer(audio);
+        } else {
+            if (audioPlayer) {
+                audioPlayer.pause();
+            }
         }
     }
 
@@ -28,21 +45,17 @@ const Songs = (props) => {
         if (button && button instanceof HTMLElement) {
             const songId = button.parentElement.parentElement.getAttribute('data-id');
             if (songId) {
-                if (button.classList.contains('bi-play')) {
-                    if (audioPlayer) {
-                        audioPlayer.pause();
-                    }
-                    const audio = new Audio(`${API_BASE_URL}${STREAM_URL}/${songId}.mp3`, );
-                    audio.play().catch((error) => console.error(error));
-                    updateAudioPlayer(audio);
-                } else {
-                    if (audioPlayer) {
-                        audioPlayer.pause();
-                    }
-                }
+                playAudio(songId, button);
             }
 
-            toggleButton(button);
+            togglePlayButton(button);
+        }
+    }
+
+    const fetchSongCover = (id, isASingle) => {
+        if (id && isASingle) {
+            updateImageSource(`${API_BASE_URL}${SONG_COVER_URL}/${id}.png`);
+            setShowModal(true);
         }
     }
 
@@ -61,6 +74,7 @@ const Songs = (props) => {
                             <th scope={"col"}>Name</th>
                             <th scope={"col"}>Genre</th>
                             <th scope={"col"}>Length</th>
+                            <th scope={"col"}>Is Published</th>
                             <th scope={"col"}>Is Single</th>
                             <th scope={"col"}>Artist</th>
                             <th scope={"col"}>Album</th>
@@ -69,25 +83,19 @@ const Songs = (props) => {
                         </thead>
                         <tbody>
                         {props.songs.map((term) => {
-                            let isASingle = term.isASingle === true ? "Yes" : "No";
-
-                            let artist = "None";
-                            let album = "None";
-                            if (term.creator !== null && term.creator !== undefined)
-                                artist = term.creator.artistPersonalInfo.firstName + " " + term.creator.artistPersonalInfo.lastName;
-                            if (term.album !== null && term.album !== undefined)
-                                album = term.album.albumName;
-
                             return (
-                                <tr key={term.id} data-id={term.id}>
+                                <tr key={term.id} data-id={term.id}
+                                    className={`${(term['isASingle']) ? 'table-row-clickable' : ''}`}
+                                    onClick={() => fetchSongCover(term.id, term['isASingle'])}>
                                     <td>{term.songName}</td>
                                     <td>{term.songGenre}</td>
-                                    <td>{term.songLength.songLengthFormatted}</td>
-                                    <td>{isASingle}</td>
-                                    <td>{artist}</td>
-                                    <td>{album}</td>
+                                    <td>{term['songLength']['formattedString']}</td>
+                                    <td>{(term['isASingle']) ? 'Yes' : 'No'}</td>
+                                    <td>{(term['isPublished']) ? 'Yes' : 'No'}</td>
+                                    <td>{term['creator']['artistPersonalInfo'].fullName}</td>
+                                    <td>{(term['album']) ? term['album'].albumName : ''}</td>
                                     <td>
-                                        <button key={term.id} className={`play-pause-button bi bi-play`}
+                                        <button key={term.id} className={`table-item-button bi bi-play`}
                                                 onClick={fetchSong}/>
                                     </td>
                                 </tr>
@@ -97,8 +105,15 @@ const Songs = (props) => {
                     </table>
                 </div>
             </div>
+            <Modal show={showModal} onHide={() => setShowModal(false)}
+                   size="lg"
+                   aria-labelledby="contained-modal-title-vcenter"
+                   centered>
+                <img src={imageSource} alt={"Song cover image"}/>
+            </Modal>
         </div>
     )
+
 }
 
 export default Songs;

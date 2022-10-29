@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @SpringBootApplication
-@EnableConfigurationProperties({
-        FileProperties.class
-})
+//@EnableConfigurationProperties({
+//        FileProperties.class
+//})
 public class AlbumCatalogApplication {
 
     public static void main(String[] args) {

@@ -34,7 +34,6 @@ public class AlbumResponse {
         albumResponse.setId(encryptedId);
         albumResponse.setAlbumName(album.getAlbumName());
         albumResponse.setTotalLength(album.getTotalLength());
-        albumResponse.setIsPublished(album.getIsPublished());
         albumResponse.setGenre(album.getGenre());
         albumResponse.setAlbumInfo(album.getAlbumInfo());
         albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null

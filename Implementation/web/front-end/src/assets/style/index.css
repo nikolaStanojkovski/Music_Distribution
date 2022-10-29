@@ -12,13 +12,13 @@ code {
     monospace;
 }
 
-.play-pause-button {
+.table-item-button {
   border-radius: 50%;
   border-width: thin;
   transition: all 0.2s ease;
 }
 
-.play-pause-button:hover {
+.table-item-button:hover {
   background-color: black;
   border-color: white;
   color: white;

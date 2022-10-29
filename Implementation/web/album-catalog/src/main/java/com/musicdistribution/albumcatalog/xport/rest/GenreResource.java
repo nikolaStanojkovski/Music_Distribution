@@ -1,4 +1,4 @@
-package com.musicdistribution.albumcatalog.xport.rest.auxiliary;
+package com.musicdistribution.albumcatalog.xport.rest;
 
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.sharedkernel.util.ApiController;

@@ -68,7 +68,7 @@ const CreateSong = (props) => {
                         <div className="form-group">
                             <label className="upload-drop-container">
                                 <span className="upload-drop-title">Drop files here</span>
-                                <input type="file" id="songUpload" accept="audio/mpeg" required
+                                <input type="file" id="songUpload" accept="audio/mpeg"
                                        onChange={(e) => handleUpload(e.target.files[0])}/>
                                 <span className={"text-muted"}><b>mpeg</b> file format accepted</span>
                             </label>
@@ -81,7 +81,7 @@ const CreateSong = (props) => {
                                    id="songName"
                                    name="songName"
                                    required
-                                   placeholder="Song name"
+                                   placeholder="Enter the song name"
                                    onChange={handleChange}/>
                         </div>
                         <br/>
@@ -100,14 +100,14 @@ const CreateSong = (props) => {
                         <br/>
 
                         <div className="form-group">
-                            <input name="artistName" disabled={true}
+                            <input name="artistName" disabled={true} required={true}
                                    value={props.selectedArtist['artistPersonalInfo'].fullName}
                                    className="form-control disabled"/>
                         </div>
                         <br/>
 
                         <div className="form-group">
-                            <input name="songLength" disabled={true} id={"songLength"}
+                            <input name="songLength" disabled={true} id={"songLength"} required={true}
                                    value={(lengthInSeconds > 0) ? getFormattedSongLength(lengthInSeconds) : "-- Song length --"}
                                    className="form-control disabled"/>
                         </div>

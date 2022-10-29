@@ -11,7 +11,6 @@ import Albums from '../Albums/AlbumsList/albums';
 import AlbumCreate from '../Albums/AlbumCreate/createAlbum';
 
 import AlbumPublish from '../Albums/AlbumPublish/albumPublish';
-import AlbumUnpublish from '../Albums/AlbumUnpublish/albumUnpublish';
 import AlbumRaiseTier from '../Albums/AlbumRaiseTier/albumRaiseTier';
 
 import Songs from '../Songs/SongList/songs';
@@ -22,6 +21,7 @@ import AlbumPublishingService from "../../repository/albumStreamingRepository";
 import Footer from "../Footer/footer";
 import Register from "../Authentication/register";
 import Login from "../Authentication/login";
+import ScreenElementsUtil from "./screen-elements";
 
 class App extends Component {
 
@@ -39,76 +39,6 @@ class App extends Component {
             emailDomains: [],
             tiers: []
         }
-    }
-
-    resetNavbarItems(itemToCompare) {
-        Array.from(document.getElementsByClassName("nav-item dropdown")).forEach((item) => {
-            if (itemToCompare && item.isEqualNode(itemToCompare)) {
-                return;
-            }
-            item.classList.remove('show');
-            const itemDropdownMenu = item.querySelector(".dropdown-menu");
-            if (itemDropdownMenu && itemDropdownMenu instanceof HTMLElement) {
-                itemDropdownMenu.classList.remove('show');
-            }
-        });
-    }
-
-    setNavbarMobileMode() {
-        const togglerElement = document.querySelector('.navbar-toggler');
-        if (togglerElement && togglerElement instanceof HTMLElement) {
-            togglerElement.addEventListener('click', (e) => {
-                if (togglerElement && togglerElement instanceof HTMLElement) {
-                    togglerElement.classList.toggle('collapsed');
-                    const toggleNavContainer = togglerElement.parentElement.querySelector('.navbar-collapse.collapse');
-                    if (toggleNavContainer && toggleNavContainer instanceof HTMLElement) {
-                        toggleNavContainer.classList.toggle('show');
-                    }
-                }
-            });
-        }
-
-        const container = document.body;
-        const outsideNavContainer = container.querySelector('#authContainerOutside');
-        const insideNavContainer = container.querySelector('#authContainerInside');
-        if (outsideNavContainer && outsideNavContainer instanceof HTMLElement
-            && insideNavContainer && insideNavContainer instanceof HTMLElement
-            && container && container instanceof HTMLElement) {
-            window.addEventListener('resize', () => {
-                if (container.clientWidth < 992) {
-                    outsideNavContainer.hidden = true;
-                    insideNavContainer.hidden = false;
-                } else {
-                    outsideNavContainer.hidden = false;
-                    insideNavContainer.hidden = true;
-                }
-            });
-        }
-    }
-
-    toggleNavbarItems() {
-        document.addEventListener('click', (e) => {
-            const clickedElement = e.target;
-            if (clickedElement && clickedElement instanceof HTMLElement
-                && !clickedElement.classList.contains('dropdown-toggle')) {
-                this.resetNavbarItems();
-            }
-        });
-        Array.from(document.getElementsByClassName("nav-item dropdown")).forEach((item) => {
-            item.addEventListener('click', () => {
-                this.resetNavbarItems(item);
-                item.classList.toggle('show');
-                const itemDropdownMenu = item.querySelector(".dropdown-menu");
-                if (itemDropdownMenu && itemDropdownMenu instanceof HTMLElement) {
-                    itemDropdownMenu.classList.toggle('show');
-                }
-            });
-        });
-        this.setNavbarMobileMode();
-    }
-
-    getCurrentArtist() {
-        return JSON.parse(localStorage.getItem('loggedArtist'));
     }
 
     render() {
@@ -167,10 +97,6 @@ class App extends Component {
                                           tiers={this.state.tiers}
                                           musicDistributors={this.state.musicDistributors}
                                           publishAlbum={this.publishAlbum}/>}/>
-                        <Route path={"/albums/unPublish"} exact render={() =>
-                            <AlbumUnpublish selectedArtist={this.getCurrentArtist()}
-                                            publishedAlbums={this.state.publishedAlbums}
-                                            unPublishAlbum={this.unPublishAlbum}/>}/>
                         <Route path={"/albums/raiseAlbumTier"} exact render={() =>
                             <AlbumRaiseTier selectedArtist={this.getCurrentArtist()}
                                             publishedAlbums={this.state.publishedAlbums}
@@ -198,16 +124,7 @@ class App extends Component {
         this.loadGenres();
         this.loadTiers();
 
-        this.toggleNavbarItems();
-    }
-
-    loadAlbums = () => {
-        AlbumCatalogService.fetchAlbums()
-            .then((data) => {
-                this.setState({
-                    albums: data.data
-                })
-            });
+        ScreenElementsUtil.toggleNavbarItems();
     }
 
     loadEmailDomains = () => {
@@ -237,49 +154,21 @@ class App extends Component {
             });
     }
 
+    loadAlbums = () => {
+        AlbumCatalogService.fetchAlbums()
+            .then((data) => {
+                this.setState({
+                    albums: data.data
+                })
+            });
+    }
+
     loadSongs = () => {
         AlbumCatalogService.fetchSongs()
             .then((data) => {
                 this.setState({
                     songs: data.data
                 })
-            });
-    }
-
-    loadArtists = () => {
-        AlbumCatalogService.fetchArtists()
-            .then((data) => {
-                this.setState({
-                    artists: data.data
-                })
-            });
-    }
-
-    publishSong = (songId, songTier, subscriptionFee, transactionFee) => {
-        AlbumCatalogService.publishSong(songId, songTier, subscriptionFee, transactionFee)
-            .then(() => {
-                this.loadSongs();
-            })
-    }
-
-    publishAlbum = (albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
-        AlbumPublishingService.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee)
-            .then(() => {
-                this.loadAlbums();
-            });
-    }
-
-    unPublishAlbum = (publishedAlbumId) => {
-        AlbumPublishingService.unPublishAlbum(publishedAlbumId)
-            .then(() => {
-                this.loadAlbums();
-            });
-    }
-
-    raiseAlbumTier = (publishedAlbumId, albumTier, subscriptionFee, transactionFee) => {
-        AlbumPublishingService.raiseAlbumTier(publishedAlbumId, albumTier, subscriptionFee, transactionFee)
-            .then(() => {
-                this.loadAlbums();
             });
     }
 
@@ -293,6 +182,38 @@ class App extends Component {
                 this.loadSongs();
             });
     }
+
+    publishSong = (cover, songId, songTier, subscriptionFee, transactionFee) => {
+        AlbumCatalogService.publishSong(cover, songId, songTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadSongs();
+            })
+    }
+
+    loadArtists = () => {
+        AlbumCatalogService.fetchArtists()
+            .then((data) => {
+                this.setState({
+                    artists: data.data
+                })
+            });
+    }
+
+    publishAlbum = (albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
+        AlbumPublishingService.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadAlbums();
+            });
+    }
+
+    raiseAlbumTier = (publishedAlbumId, albumTier, subscriptionFee, transactionFee) => {
+        AlbumPublishingService.raiseAlbumTier(publishedAlbumId, albumTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadAlbums();
+            });
+    }
+
+
 
     createAlbum = (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {
         AlbumCatalogService.createAlbum(albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId)
@@ -312,10 +233,10 @@ class App extends Component {
     }
 
 
-    registerArtist = (username, emailDomain, telephoneNumber, firstName, lastName, artName, password) => {
-        AlbumCatalogService.registerArtist(username, emailDomain, telephoneNumber, firstName, lastName, artName, password)
+    registerArtist = (profilePicture, username, emailDomain, telephoneNumber, firstName, lastName, artName, password) => {
+        AlbumCatalogService.registerArtist(profilePicture, username, emailDomain, telephoneNumber, firstName, lastName, artName, password)
             .then(() => {
-                this.loadAlbums();
+                this.loadArtists();
             });
     }
 
@@ -324,11 +245,14 @@ class App extends Component {
         window.location.reload();
     }
 
+    getCurrentArtist() {
+        return JSON.parse(localStorage.getItem('loggedArtist'));
+    }
+
     getTransactionFee = () => {
         const locale = navigator.language;
         AlbumCatalogService.getTransactionFee(locale).then((data) => {
             this.state.transactionFee = `${data.data.amount}.00 ${data.data.currency}`;
-            console.log(this.state.transactionFee);
         });
     }
 

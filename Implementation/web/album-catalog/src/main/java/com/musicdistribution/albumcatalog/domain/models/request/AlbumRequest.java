@@ -1,13 +1,12 @@
 package com.musicdistribution.albumcatalog.domain.models.request;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 /**
  * An album object used to transfer data from the front-end user form to the backend.
@@ -20,8 +19,6 @@ public class AlbumRequest {
     private String albumName;
     @NotBlank
     private Integer totalLength;
-    @NotBlank
-    private Boolean isPublished;
     @NotNull
     private Genre genre;
 
@@ -32,5 +29,13 @@ public class AlbumRequest {
     @NotBlank
     private String composerName;
 
+    @NotBlank
+    private String subscriptionFee;
+    @NotBlank
+    private String transactionFee;
+    @NotBlank
+    private Tier tier;
+
+    @NotBlank
     private String creatorId;
 }

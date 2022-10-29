@@ -2,8 +2,9 @@ package com.musicdistribution.albumcatalog.domain.services.implementation;
 
 import com.musicdistribution.albumcatalog.config.FileProperties;
 import com.musicdistribution.albumcatalog.domain.exceptions.FileStorageException;
+import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,30 +16,18 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class FileSystemStorageService implements IFileSystemStorage {
-    private final Path dirLocation;
-
-    @Autowired
-    public FileSystemStorageService(FileProperties fileProperties) {
-        try {
-            URL resource = FileSystemStorageService.class.getResource("/");
-            String directoryPath = String.format("%s/%s", resource, fileProperties.getLocation());
-            Path path = Path.of(URI.create(directoryPath));
-            Files.createDirectories(path);
-            FileSystemStorageService.class.getResource(fileProperties.getLocation());
-
-            this.dirLocation = path;
-        } catch (Exception ex) {
-            throw new FileStorageException("Could not create the tenant files folder.");
-        }
-    }
+    private final FileProperties fileProperties;
 
     @Override
-    public String saveFile(MultipartFile file, String fileName) {
+    public String saveFile(MultipartFile file, String fileName, FileLocationType locationType) {
         try {
-            Path resolvedFile = this.dirLocation.resolve(fileName);
+            Path location = resolveLocation(locationType);
+            Path resolvedFile = location.resolve(fileName);
             if (Files.exists(resolvedFile)) {
                 throw new FileStorageException("File already exists with a name " + fileName);
             }
@@ -51,9 +40,9 @@ public class FileSystemStorageService implements IFileSystemStorage {
     }
 
     @Override
-    public Long loadFileSize(String fileName) {
+    public Long loadFileSize(String fileName, FileLocationType locationType) {
         try {
-            return Files.size(this.loadFilePath(fileName));
+            return Files.size(this.loadFilePath(fileName, locationType));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -61,8 +50,8 @@ public class FileSystemStorageService implements IFileSystemStorage {
     }
 
     @Override
-    public byte[] loadFileByteRange(String filename, long start, long end) {
-        Path path = this.loadFilePath(filename);
+    public byte[] loadFileByteRange(String filename, long start, long end, FileLocationType locationType) {
+        Path path = this.loadFilePath(filename, locationType);
         try (InputStream inputStream = (Files.newInputStream(path));
              ByteArrayOutputStream bufferedOutputStream = new ByteArrayOutputStream()) {
             byte[] data = new byte[128];
@@ -81,9 +70,10 @@ public class FileSystemStorageService implements IFileSystemStorage {
         }
     }
 
-    private Path loadFilePath(String fileName) {
+    private Path loadFilePath(String fileName, FileLocationType locationType) {
         try {
-            Path path = this.dirLocation.resolve(fileName).normalize();
+            Path location = resolveLocation(locationType);
+            Path path = location.resolve(fileName).normalize();
 
             if (Files.exists(path) && Files.isReadable(path)) {
                 return path;
@@ -92,6 +82,36 @@ public class FileSystemStorageService implements IFileSystemStorage {
             }
         } catch (Exception e) {
             throw new FileStorageException("Could not load the file with the specified file name.");
+        }
+    }
+
+    private Path resolveLocation(FileLocationType locationType) {
+        return Optional.ofNullable(getLocation(locationType)).map(location -> {
+            try {
+                URL resource = FileSystemStorageService.class.getResource("/");
+                String directoryPath = String.format("%s/%s", resource, location);
+                Path path = Path.of(URI.create(directoryPath));
+                Files.createDirectories(path);
+                FileSystemStorageService.class.getResource(location);
+                return path;
+            } catch (Exception ex) {
+                throw new FileStorageException("Could not create the files folder.");
+            }
+        }).orElse(null);
+    }
+
+    private String getLocation(FileLocationType locationType) {
+        switch (locationType) {
+            case SONGS:
+                return this.fileProperties.getSongsLocation();
+            case SONG_COVERS:
+                return this.fileProperties.getSongCoversLocation();
+            case ALBUM_COVERS:
+                return this.fileProperties.getAlbumCoversLocation();
+            case ARTIST_PROFILE_PICTURE:
+                return this.fileProperties.getProfilePicturesLocation();
+            default:
+                return null;
         }
     }
 }

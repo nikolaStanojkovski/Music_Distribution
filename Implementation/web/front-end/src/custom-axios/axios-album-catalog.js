@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt from 'jsonwebtoken';
-import {API_BASE_URL} from "../constants";
+import {API_BASE_URL} from "../constants/constants";
 
 function isExpired(token) {
     let decodedToken = jwt.decode(token, {complete: true});

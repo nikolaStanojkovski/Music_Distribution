@@ -25,8 +25,6 @@ const AuthHeader = (props) => {
                                     <div className="dropdown-divider"/>
                                     <Link to={"/albums/publish"} className="dropdown-item">Publish</Link>
                                     <div className="dropdown-divider"/>
-                                    <Link to={"/albums/unpublish"} className="dropdown-item">Unpublish</Link>
-                                    <div className="dropdown-divider"/>
                                     <Link to={"/albums/raise-tier"} className="dropdown-item">Raise Tier</Link>
                                 </div>
                             </li>
@@ -36,8 +34,6 @@ const AuthHeader = (props) => {
                                     <Link to={"/songs"} className="dropdown-item">View</Link>
                                     <div className="dropdown-divider"/>
                                     <Link to={"/songs/publish"} className="dropdown-item">Publish</Link>
-                                    <div className="dropdown-divider"/>
-                                    <Link to={"/songs/unpublish"} className="dropdown-item">Unpublish</Link>
                                 </div>
                             </li>
                             <li className="nav-item">

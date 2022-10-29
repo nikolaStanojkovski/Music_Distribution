@@ -7,7 +7,7 @@ import lombok.Getter;
 import javax.persistence.Embeddable;
 
 /**
- * Value object for an song length.
+ * Value object for a song length.
  */
 @Getter
 @Embeddable
@@ -60,7 +60,7 @@ public class SongLength implements ValueObject {
      *
      * @return the length of the song in the format mm:ss
      */
-    public String getSongLengthFormatted() {
+    public String getFormattedString() {
         String minutes = ((this.lengthInSeconds / 60) < 10)
                 ? String.format("0%s", this.lengthInSeconds / 60)
                 : String.valueOf(this.lengthInSeconds / 60);

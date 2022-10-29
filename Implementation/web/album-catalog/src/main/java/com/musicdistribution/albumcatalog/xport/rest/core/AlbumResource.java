@@ -1,6 +1,5 @@
-package com.musicdistribution.albumcatalog.xport.rest;
+package com.musicdistribution.albumcatalog.xport.rest.core;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
@@ -49,7 +48,7 @@ public class AlbumResource {
      */
     @GetMapping("/page")
     public List<AlbumResponse> getAllPage() {
-        return albumService.findAllPageable().stream().filter(Album::getIsPublished)
+        return albumService.findAllPageable().stream()
                 .map(album -> AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))

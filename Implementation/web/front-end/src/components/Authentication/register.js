@@ -4,6 +4,7 @@ import {Link, useHistory} from 'react-router-dom';
 const Register = (props) => {
 
     const History = useHistory();
+    const [profilePicture, updateProfilePicture] = React.useState(null);
     const [formData, updateFormData] = React.useState({
         username: "",
         emailDomain: 0,
@@ -33,22 +34,22 @@ const Register = (props) => {
         const password = formData.password;
         const repeatPassword = formData.repeatPassword;
 
-        if(password && repeatPassword && password !== repeatPassword) {
+        if (password && repeatPassword && password !== repeatPassword) {
             alert('The passwords do not match');
             return;
         }
 
-        props.registerArtist(username, emailDomain, telephoneNumber,
+        props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
             firstName, lastName, artName, password, repeatPassword);
         History.push("/");
     }
 
     const toggleAccordionItems = (e) => {
         const clickedElement = e.target;
-        if(clickedElement && clickedElement instanceof HTMLElement) {
+        if (clickedElement && clickedElement instanceof HTMLElement) {
             clickedElement.classList.toggle('collapsed');
             const accordionItemContainer = clickedElement.parentElement.parentElement.querySelector(".accordion-collapse.collapse");
-            if(accordionItemContainer && accordionItemContainer instanceof HTMLElement) {
+            if (accordionItemContainer && accordionItemContainer instanceof HTMLElement) {
                 accordionItemContainer.classList.toggle('show');
             }
         }
@@ -57,7 +58,7 @@ const Register = (props) => {
     return (
         <div className="container mm-4 my-5">
             <div className={"row"}>
-                <div className={"col-md-2"} />
+                <div className={"col-md-2"}/>
                 <div className="col-md-8 text-center p-5 rounded-4 auth-form border-bottom">
                     <h1 className="display-5">Sign Up</h1>
                     <p className="text-muted">Join us and become a part of the community.</p>
@@ -67,6 +68,17 @@ const Register = (props) => {
                     <br/>
 
                     <form onSubmit={onFormSubmit}>
+                        <div className={"form-group"}>
+                            <label className="upload-drop-container">
+                                <span className="upload-drop-title">Profile picture</span>
+                                <input type="file" id="songUpload" accept="image/png, image/jpeg" required={true}
+                                       onChange={(e) => updateProfilePicture(e.target.files[0])}/>
+                                <span
+                                    className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
+                            </label>
+                            <br />
+                        </div>
+
                         <div className="form-group">
                             <div className={"row"}>
                                 <div className="col-12 form-inline">
@@ -108,7 +120,7 @@ const Register = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <br />
+                        <br/>
 
                         <div className="form-group">
                             <div className={"row"}>
@@ -128,7 +140,8 @@ const Register = (props) => {
                         <div className="accordion" id="accordionExample">
                             <div className="accordion-item">
                                 <h2 className="accordion-header" id="headingOne">
-                                    <button className="accordion-button collapsed" type="button" onClick={toggleAccordionItems}>
+                                    <button className="accordion-button collapsed" type="button"
+                                            onClick={toggleAccordionItems}>
                                         Additional information
                                     </button>
                                 </h2>
@@ -139,7 +152,6 @@ const Register = (props) => {
                                                    className="form-control"
                                                    id="telephoneNumber"
                                                    name="telephoneNumber"
-                                                   required
                                                    placeholder="Enter your telephone number"
                                                    onChange={handleChange}/>
                                         </div>
@@ -151,7 +163,6 @@ const Register = (props) => {
                                                    className="form-control"
                                                    id="firstName"
                                                    name="firstName"
-                                                   required
                                                    placeholder="Enter your first name"
                                                    onChange={handleChange}/>
                                         </div>
@@ -163,7 +174,6 @@ const Register = (props) => {
                                                    className="form-control"
                                                    id="lastName"
                                                    name="lastName"
-                                                   required
                                                    placeholder="Enter your last name"
                                                    onChange={handleChange}/>
                                         </div>
@@ -175,7 +185,6 @@ const Register = (props) => {
                                                    className="form-control"
                                                    id="artName"
                                                    name="artName"
-                                                   required
                                                    placeholder="Enter your art name"
                                                    onChange={handleChange}/>
                                         </div>
@@ -195,7 +204,7 @@ const Register = (props) => {
                     <Link to={"/login"} className="btn btn-outline-dark w-100 mt-3">Sign In</Link>
 
                 </div>
-                <div className={"col-md-2"} />
+                <div className={"col-md-2"}/>
             </div>
         </div>
     );

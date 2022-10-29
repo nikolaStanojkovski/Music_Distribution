@@ -1,4 +1,4 @@
-package com.musicdistribution.albumcatalog.xport.rest.auxiliary;
+package com.musicdistribution.albumcatalog.xport.rest;
 
 import com.musicdistribution.albumcatalog.services.PaymentService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;

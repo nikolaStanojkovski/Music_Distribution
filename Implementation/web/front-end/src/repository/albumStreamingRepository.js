@@ -22,11 +22,6 @@ const AlbumPublishingService = {
             "transactionFee" : transactionFee
         });
     },
-    unPublishAlbum: (publishedAlbumId) => {
-        return axios.post("/distributors/unPublish", {
-            "id" : publishedAlbumId
-        });
-    },
     raiseAlbumTier: (publishedAlbumId, albumTier, subscriptionFee, transactionFee) => {
         return axios.post("/distributors/raiseAlbumTier", {
             "publishedAlbumId" : publishedAlbumId,

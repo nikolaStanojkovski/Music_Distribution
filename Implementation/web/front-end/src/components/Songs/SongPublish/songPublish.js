@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 const PublishSong = (props) => {
 
     const History = useHistory();
+    const [cover, updateCover] = React.useState(null);
     const [subscriptionFee, updateSubscriptionFee] = React.useState("");
     const [formData, updateFormData] = React.useState({
         songId: "",
@@ -35,17 +36,19 @@ const PublishSong = (props) => {
         const songId = formData.songId;
         const songTier = formData.songTier;
 
-        props.publishSong(songId, songTier, subscriptionFee, props.transactionFee);
+        if (songId && songTier && subscriptionFee && props.transactionFee) {
+            props.publishSong(cover, songId, songTier, subscriptionFee, props.transactionFee);
 
-        // TODO: navigate to a new checkout page
-        History.push("/");
+            // TODO: navigate to a new checkout page
+            History.push("/");
+        }
     }
 
     return (
         <div className="container mm-4 my-5">
             <div className={"row mb-5"}>
                 <div className={"col-md"}>
-                    <h1 className="display-5">Publish your new song in public</h1>
+                    <h1 className="display-5">Share your new song with the public</h1>
                     <p className="text-muted">Make your new music known to the general audience by sharing it.</p>
                 </div>
             </div>
@@ -54,6 +57,17 @@ const PublishSong = (props) => {
                 <div className="col-md">
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
+                            <div className="form-group">
+                                <label className="upload-drop-container">
+                                    <span className="upload-drop-title">Song cover picture</span>
+                                    <input type="file" id="songUpload" accept="image/png, image/jpeg" required
+                                           onChange={(e) => updateCover(e.target.files[0])}/>
+                                    <span
+                                        className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
+                                </label>
+                            </div>
+                            <br/>
+
                             <select onChange={handleChange} name="songId" className="form-control" required={true}>
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose a song --

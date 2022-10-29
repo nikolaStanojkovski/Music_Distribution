@@ -1,4 +1,4 @@
-package com.musicdistribution.albumcatalog.xport.rest;
+package com.musicdistribution.albumcatalog.xport.rest.core;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
@@ -146,7 +146,9 @@ public class SongResource {
      * @return the created song.
      */
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
-    public ResponseEntity<SongResponse> createSong(@RequestHeader(value = "Authorization") String authToken, @RequestPart MultipartFile file, @RequestPart @Valid SongRequest songRequest) {
+    public ResponseEntity<SongResponse> createSong(@RequestHeader(value = "Authorization") String authToken,
+                                                   @RequestPart MultipartFile file,
+                                                   @RequestPart @Valid SongRequest songRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
         return this.songService.createSong(songRequest, file, username)
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
@@ -165,27 +167,12 @@ public class SongResource {
      * @return the published song.
      */
     @PostMapping("/publish")
-    public ResponseEntity<SongResponse> publishSong(@RequestHeader(value = "Authorization") String authToken, @RequestBody @Valid SongTransactionRequest songTransactionRequest) {
+    public ResponseEntity<SongResponse> publishSong(@RequestHeader(value = "Authorization") String authToken,
+                                                    @RequestPart MultipartFile cover,
+                                                    @RequestPart @Valid SongTransactionRequest songTransactionRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
-        return this.songService.publishSong(songTransactionRequest, username, encryptionSystem.decrypt(songTransactionRequest.getSongId()))
-                .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
-                        encryptionSystem.encrypt(song.getId().getId()),
-                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
-                        encryptionSystem.encrypt(Optional.ofNullable(
-                                song.getAlbum()).map(album -> album.getId().getId())
-                                .orElse("")))))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    /**
-     * Method for unpublishing a song.
-     *
-     * @param id - the id of the song to be unpublished.
-     * @return the unpublished song.
-     */
-    @GetMapping("/unpublish/{id}")
-    public ResponseEntity<SongResponse> unpublishSong(@PathVariable String id) {
-        return this.songService.deleteSong(SongId.of(encryptionSystem.decrypt(id)))
+        return this.songService.publishSong(songTransactionRequest, cover,
+                username, encryptionSystem.decrypt(songTransactionRequest.getSongId()))
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),

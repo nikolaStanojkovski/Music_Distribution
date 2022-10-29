@@ -68,18 +68,4 @@ public interface AlbumService {
      * @return an optional with the found album.
      */
     Optional<Album> createAlbum(AlbumRequest album);
-
-    /**
-     * Method for making an album published.
-     *
-     * @param id - album's id.
-     */
-    void albumPublished(AlbumId id);
-
-    /**
-     * Method for making an album unpublished.
-     *
-     * @param id - album's id.
-     */
-    void albumUnpublished(AlbumId id);
 }

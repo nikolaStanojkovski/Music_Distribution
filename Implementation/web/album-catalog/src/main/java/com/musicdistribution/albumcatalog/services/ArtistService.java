@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,8 +63,9 @@ public interface ArtistService {
     /**
      * Method for registering a new artist in the database.
      *
-     * @param artist - artist's login form object containing artist's information needed for authentication.
+     * @param artist  - artist's login form object containing artist's information needed for authentication.
+     * @param profilePicture - the profile picture of the new artist to be registered.
      * @return the new registered artist.
      */
-    Optional<Artist> registerArtist(ArtistRequest artist);
+    Optional<Artist> registerArtist(MultipartFile profilePicture, ArtistRequest artist);
 }
