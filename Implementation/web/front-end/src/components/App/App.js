@@ -1,8 +1,7 @@
 import './App.css';
 import React, {Component} from "react";
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
-import Header from '../Header/header';
-import Home from '../Home/home';
+import Home from '../Design/Home/home';
 
 import AlbumCatalogService from "../../repository/albumCatalogRepository";
 
@@ -18,10 +17,12 @@ import SongCreate from '../Songs/SongCreate/songCreate';
 import SongPublish from '../Songs/SongPublish/songPublish';
 
 import AlbumPublishingService from "../../repository/albumStreamingRepository";
-import Footer from "../Footer/footer";
-import Register from "../Authentication/register";
-import Login from "../Authentication/login";
-import ScreenElementsUtil from "./screen-elements";
+import Register from "../Authentication/Register/register";
+import Login from "../Authentication/Login/login";
+import Header from "../Design/Header/header";
+import Footer from "../Design/Footer/footer";
+import SuccessfulCheckout from "../Design/Checkout/successful-checkout";
+import ScreenElementsUtil from "../../util/screen-elements-util";
 
 class App extends Component {
 
@@ -48,7 +49,7 @@ class App extends Component {
                 <main id={"main"}>
                     <div className="container">
 
-                        {/*Home Page / Index Page*/}
+                        {/* Home */}
 
                         <Route path={["/index", "home", "/"]} exact render={() =>
                             <Home/>}/>
@@ -62,7 +63,7 @@ class App extends Component {
                             <Login emailDomains={this.state.emailDomains}
                                    loginArtist={this.loginArtist}/>}/>
 
-                        {/* Album Catalog App */}
+                        {/* Main */}
 
                         <Route path={"/artists"} exact render={() =>
                             <Artists artists={this.state.artists}/>}/>
@@ -81,6 +82,8 @@ class App extends Component {
                                          transactionFee={this.state.transactionFee}
                                          subscriptionFee={this.getSubscriptionFee}
                                          publishSong={this.publishSong}/>}/>
+                        <Route path={"/checkout/success"} exact render={() =>
+                            <SuccessfulCheckout/>}/>
 
                         <Route path={"/albums"} exact render={() =>
                             <Albums albums={this.state.albums}/>}/>
@@ -88,8 +91,6 @@ class App extends Component {
                             <AlbumCreate genres={this.state.genres}
                                          selectedArtist={this.getCurrentArtist()}
                                          createAlbum={this.createAlbum}/>}/>
-
-                        {/* Album Publish Events */}
 
                         <Route path={"/albums/publish"} exact render={() =>
                             <AlbumPublish albums={this.state.albums}
@@ -212,7 +213,6 @@ class App extends Component {
                 this.loadAlbums();
             });
     }
-
 
 
     createAlbum = (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {

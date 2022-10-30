@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import logoSymbol from "../../assets/logo-white-symbol.png";
+import logoSymbol from "../../../assets/logo/logo-white-symbol.png";
 
 const AuthHeader = (props) => {
     return (

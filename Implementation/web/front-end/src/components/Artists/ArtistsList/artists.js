@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import {API_BASE_URL, ARTIST_PICTURE_URL} from "../../../constants/constants";
+import {API_BASE_URL, ARTIST_PICTURE_URL} from "../../../constants/endpoints";
 
 const Artists = (props) => {
 

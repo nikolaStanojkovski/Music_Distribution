@@ -39,8 +39,7 @@ const PublishSong = (props) => {
         if (songId && songTier && subscriptionFee && props.transactionFee) {
             props.publishSong(cover, songId, songTier, subscriptionFee, props.transactionFee);
 
-            // TODO: navigate to a new checkout page
-            History.push("/");
+            History.push("/checkout/success");
         }
     }
 

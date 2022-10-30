@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-import {API_BASE_URL, AUDIO_STREAM_URL, SONG_COVER_URL} from "../../../constants/constants";
+import {API_BASE_URL, AUDIO_STREAM_URL, SONG_COVER_URL} from "../../../constants/endpoints";
 
 const Songs = (props) => {
     const [showModal, setShowModal] = React.useState(false);

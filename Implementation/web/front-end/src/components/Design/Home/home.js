@@ -1,9 +1,9 @@
 import React from 'react';
 import Carousel from "react-bootstrap/Carousel";
-import logo from "../../assets/logo.png";
-import albumsWallpaper from "../../assets/img/albums-wallpaper.jpg";
-import songsWallpaper from "../../assets/img/songs-wallpaper.jpg";
-import artistsWallpaper from "../../assets/img/artists-wallpaper.jpg";
+import logo from "../../../assets/logo/logo.png";
+import albumsWallpaper from "../../../assets/img/albums-wallpaper.jpg";
+import songsWallpaper from "../../../assets/img/songs-wallpaper.jpg";
+import artistsWallpaper from "../../../assets/img/artists-wallpaper.jpg";
 import {Link} from "react-router-dom";
 
 const Home = () => {
