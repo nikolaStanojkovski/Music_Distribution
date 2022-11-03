@@ -65,6 +65,16 @@ const ScreenElementsUtil = {
             });
         });
         this.setNavbarMobileMode();
+    },
+    toggleAccordionItems(e) {
+        const clickedElement = e.target;
+        if (clickedElement && clickedElement instanceof HTMLElement) {
+            clickedElement.classList.toggle('collapsed');
+            const accordionItemContainer = clickedElement.parentElement.parentElement.querySelector(".accordion-collapse.collapse");
+            if (accordionItemContainer && accordionItemContainer instanceof HTMLElement) {
+                accordionItemContainer.classList.toggle('show');
+            }
+        }
     }
 }
 

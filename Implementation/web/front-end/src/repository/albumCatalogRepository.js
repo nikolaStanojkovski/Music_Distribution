@@ -70,26 +70,36 @@ const AlbumCatalogService = {
         const formData = new FormData();
         formData.append('cover', cover);
         formData.append('songTransactionRequest', new Blob([JSON.stringify({
-            "songId" : songId,
-            "songTier" : songTier,
-            "subscriptionFee" : subscriptionFee,
-            "transactionFee" : transactionFee,
+            "songId": songId,
+            "songTier": songTier,
+            "subscriptionFee": subscriptionFee,
+            "transactionFee": transactionFee,
         })], {
             type: "application/json"
         }));
         return axios.post("/resource/songs/publish", formData);
     },
 
-    createAlbum: (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {
-        return axios.post("/resource/albums/create", {
+    publishAlbum: (cover, songIdList,
+                   albumName, albumGenre, albumTier,
+                   subscriptionFee, transactionFee,
+                   artistName, producerName, composerName) => {
+        const formData = new FormData();
+        formData.append('cover', cover);
+        formData.append('albumTransactionRequest', new Blob([JSON.stringify({
+            "songIdList": songIdList,
             "albumName": albumName,
-            "genre": genre,
-            "isPublished": isPublished,
+            "albumGenre": albumGenre,
             "artistName": artistName,
             "producerName": producerName,
             "composerName": composerName,
-            "creatorId": creatorId
-        });
+            "albumTier": albumTier,
+            "subscriptionFee": subscriptionFee,
+            "transactionFee": transactionFee,
+        })], {
+            type: "application/json"
+        }));
+        return axios.post("/resource/albums/publish", formData);
     },
 
     getTransactionFee: (locale) => {

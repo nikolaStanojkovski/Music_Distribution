@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, useHistory} from 'react-router-dom';
+import ScreenElementsUtil from "../../../util/screen-elements-util";
 
 const Register = (props) => {
 
@@ -42,17 +43,6 @@ const Register = (props) => {
         props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
             firstName, lastName, artName, password, repeatPassword);
         History.push("/");
-    }
-
-    const toggleAccordionItems = (e) => {
-        const clickedElement = e.target;
-        if (clickedElement && clickedElement instanceof HTMLElement) {
-            clickedElement.classList.toggle('collapsed');
-            const accordionItemContainer = clickedElement.parentElement.parentElement.querySelector(".accordion-collapse.collapse");
-            if (accordionItemContainer && accordionItemContainer instanceof HTMLElement) {
-                accordionItemContainer.classList.toggle('show');
-            }
-        }
     }
 
     return (
@@ -137,11 +127,11 @@ const Register = (props) => {
                         </div>
                         <br/>
 
-                        <div className="accordion" id="accordionExample">
+                        <div className="accordion">
                             <div className="accordion-item">
-                                <h2 className="accordion-header" id="headingOne">
+                                <h2 className="accordion-header">
                                     <button className="accordion-button collapsed" type="button"
-                                            onClick={toggleAccordionItems}>
+                                            onClick={e => ScreenElementsUtil.toggleAccordionItems(e)}>
                                         Additional information
                                     </button>
                                 </h2>

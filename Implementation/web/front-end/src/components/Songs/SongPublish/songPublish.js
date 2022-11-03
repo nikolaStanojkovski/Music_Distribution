@@ -11,7 +11,7 @@ const PublishSong = (props) => {
         songTier: "",
     });
 
-    const getSubscriptionFee = (tier) => {
+    const handleSubscriptionFee = (tier) => {
         if (tier && tier !== "") {
             props.subscriptionFee(tier).then((data) => {
                 const formattedFee = `${data.data.amount}.00 ${data.data.currency}`;
@@ -27,7 +27,7 @@ const PublishSong = (props) => {
         });
 
         if (e.target.name === "songTier") {
-            getSubscriptionFee(e.target.value);
+            handleSubscriptionFee(e.target.value);
         }
     }
 
@@ -56,17 +56,17 @@ const PublishSong = (props) => {
                 <div className="col-md">
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
-                            <div className="form-group">
-                                <label className="upload-drop-container">
-                                    <span className="upload-drop-title">Song cover picture</span>
-                                    <input type="file" id="songUpload" accept="image/png, image/jpeg" required
-                                           onChange={(e) => updateCover(e.target.files[0])}/>
-                                    <span
-                                        className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
-                                </label>
-                            </div>
-                            <br/>
+                            <label className="upload-drop-container">
+                                <span className="upload-drop-title">Song cover picture</span>
+                                <input type="file" id="songUpload" accept="image/png, image/jpeg" required
+                                       onChange={(e) => updateCover(e.target.files[0])}/>
+                                <span
+                                    className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
+                            </label>
+                        </div>
+                        <br/>
 
+                        <div className={"form-group"}>
                             <select onChange={handleChange} name="songId" className="form-control" required={true}>
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose a song --

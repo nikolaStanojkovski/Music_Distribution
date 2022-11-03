@@ -2,15 +2,18 @@ package com.musicdistribution.albumcatalog.xport.rest.core;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.AlbumResponse;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
+import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
+import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.AlbumService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 public class AlbumResource {
 
     private final AlbumService albumService;
+    private final JwtUtils jwtUtils;
+    private final IFileSystemStorage systemStorage;
     private final IEncryptionSystem encryptionSystem;
 
     /**
@@ -118,15 +123,24 @@ public class AlbumResource {
     /**
      * Method for creating a new album.
      *
-     * @param albumRequest - dto object containing information for the album to be created.
+     * @param albumTransactionRequest - dto object containing information for the album to be created.
      * @return the created album.
      */
-    @PostMapping("/create")
-    public ResponseEntity<AlbumResponse> createAlbum(@RequestBody @Valid AlbumRequest albumRequest) {
-        return this.albumService.createAlbum(albumRequest)
+    @PostMapping("/publish")
+    public ResponseEntity<AlbumResponse> publishAlbum(
+            @RequestHeader(value = "Authorization") String authToken,
+            @RequestPart MultipartFile cover,
+            @RequestPart @Valid AlbumTransactionRequest albumTransactionRequest) {
+        String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
+        return this.albumService.publishAlbum(albumTransactionRequest, cover,
+                username, getDecryptedSongIds(albumTransactionRequest.getSongIdList()))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    private List<String> getDecryptedSongIds(List<String> songIdList) {
+        return songIdList.stream().map(encryptionSystem::decrypt).collect(Collectors.toList());
     }
 }

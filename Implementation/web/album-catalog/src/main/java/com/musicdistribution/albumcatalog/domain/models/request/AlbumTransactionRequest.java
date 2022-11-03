@@ -6,36 +6,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
- * An album object used to transfer data from the front-end user form to the backend.
+ * An album object used to transfer transaction data from the front-end user form to the backend.
  */
 @Data
 @NoArgsConstructor
-public class AlbumRequest {
+public class AlbumTransactionRequest {
 
     @NotBlank
     private String albumName;
     @NotBlank
-    private Integer totalLength;
-    @NotNull
-    private Genre genre;
-
-    @NotBlank
+    private Genre albumGenre;
     private String artistName;
-    @NotBlank
     private String producerName;
-    @NotBlank
     private String composerName;
 
+    @NotBlank
+    @NotEmpty
+    private List<String> songIdList;
+
+    @NotBlank
+    private Tier albumTier;
     @NotBlank
     private String subscriptionFee;
     @NotBlank
     private String transactionFee;
-    @NotBlank
-    private Tier tier;
-
-    @NotBlank
-    private String creatorId;
 }

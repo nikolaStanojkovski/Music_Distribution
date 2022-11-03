@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 /**
- * An song object used to transfer transaction data from the front-end user form to the backend.
+ * A song object used to transfer transaction data from the front-end user form to the backend.
  */
 @Data
 @NoArgsConstructor

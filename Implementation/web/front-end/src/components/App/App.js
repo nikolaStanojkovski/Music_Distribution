@@ -1,13 +1,12 @@
 import './App.css';
 import React, {Component} from "react";
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Switch} from 'react-router-dom'
 import Home from '../Design/Home/home';
 
 import AlbumCatalogService from "../../repository/albumCatalogRepository";
 
 import Artists from '../Artists/ArtistsList/artists';
 import Albums from '../Albums/AlbumsList/albums';
-import AlbumCreate from '../Albums/AlbumCreate/createAlbum';
 
 import AlbumPublish from '../Albums/AlbumPublish/albumPublish';
 import AlbumRaiseTier from '../Albums/AlbumRaiseTier/albumRaiseTier';
@@ -23,9 +22,10 @@ import Header from "../Design/Header/header";
 import Footer from "../Design/Footer/footer";
 import SuccessfulCheckout from "../Design/Checkout/successful-checkout";
 import ScreenElementsUtil from "../../util/screen-elements-util";
-import {ProtectedRoute} from "../Design/Protected/protectedRoute";
+import {ProtectedRoute} from "../Design/Route/Protected/protectedRoute";
 import Unauthorized from "../Design/Error/Unauthorized/unauthorized";
 import NotFound from "../Design/Error/NotFound/notFound";
+import NonProtectedRoute from "../Design/Route/NonProtected/nonProtectedRoute";
 
 class App extends Component {
 
@@ -55,25 +55,31 @@ class App extends Component {
                             <Switch>
                                 {/* Home */}
 
-                                <Route path={["/index", "/home", "/"]} exact component={Home}/>
+                                <NonProtectedRoute path={["/index", "/home", "/"]} exact component={Home}/>
 
                                 {/* Authentication */}
 
-                                <Route path={"/register"} exact render={() =>
-                                    <Register emailDomains={this.state.emailDomains}
-                                              registerArtist={this.registerArtist}/>}/>
-                                <Route path={"/login"} exact render={() =>
-                                    <Login emailDomains={this.state.emailDomains}
-                                           loginArtist={this.loginArtist}/>}/>
+                                <NonProtectedRoute path={"/register"} exact
+                                                   emailDomains={this.state.emailDomains}
+                                                   registerArtist={this.registerArtist}
+                                                   component={Register}/>
+                                <NonProtectedRoute path={"/login"} exact
+                                                   emailDomains={this.state.emailDomains}
+                                                   loginArtist={this.loginArtist}
+                                                   component={Login}/>
 
                                 {/* Main */}
 
-                                <Route path={"/artists"} exact render={() =>
-                                    <Artists artists={this.state.artists}/>}/>
-                                <Route path={"/songs"} exact render={() =>
-                                    <Songs songs={this.state.songs} fetchSong={this.fetchSong}/>}/>
-                                <Route path={"/albums"} exact render={() =>
-                                    <Albums albums={this.state.albums}/>}/>
+                                <NonProtectedRoute path={"/artists"} exact
+                                                   artists={this.state.artists}
+                                                   component={Artists}/>
+                                <NonProtectedRoute path={"/songs"} exact
+                                                   songs={this.state.songs}
+                                                   fetchSong={this.fetchSong}
+                                                   component={Songs}/>
+                                <NonProtectedRoute path={"/albums"} exact
+                                                   albums={this.state.albums}
+                                                   component={Albums}/>
 
                                 <ProtectedRoute path={"/songs/create"} exact albums={this.state.albums}
                                                 genres={this.state.genres}
@@ -89,14 +95,13 @@ class App extends Component {
                                                 publishSong={this.publishSong}
                                                 component={SongPublish}/>
 
-                                <ProtectedRoute path={"/albums/create"} exact genres={this.state.genres}
-                                                selectedArtist={this.getCurrentArtist()}
-                                                createAlbum={this.createAlbum}
-                                                component={AlbumCreate}/>
-                                <ProtectedRoute path={"/albums/publish"} exact albums={this.state.albums}
-                                                selectedArtist={this.getCurrentArtist()}
+                                <ProtectedRoute path={"/albums/publish"} exact
+                                                songs={this.state.songs}
+                                                genres={this.state.genres}
                                                 tiers={this.state.tiers}
-                                                musicDistributors={this.state.musicDistributors}
+                                                selectedArtist={this.getCurrentArtist()}
+                                                transactionFee={this.state.transactionFee}
+                                                subscriptionFee={this.getSubscriptionFee}
                                                 publishAlbum={this.publishAlbum}
                                                 component={AlbumPublish}/>
                                 <ProtectedRoute path={"/albums/raiseAlbumTier"} exact
@@ -110,8 +115,8 @@ class App extends Component {
 
                                 {/* Default */}
 
-                                <Route path={"/unauthorized"} component={Unauthorized}/>
-                                <Route path={"*"} component={NotFound}/>
+                                <NonProtectedRoute path={"/unauthorized"} exact component={Unauthorized}/>
+                                <NonProtectedRoute path={"*"} exact component={NotFound}/>
                             </Switch>
                         </div>
                     </main>
@@ -207,8 +212,8 @@ class App extends Component {
             });
     }
 
-    publishAlbum = (albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee) => {
-        AlbumPublishingService.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, albumTier, subscriptionFee, transactionFee)
+    publishAlbum = (cover, songIdList, albumTier, subscriptionFee, transactionFee) => {
+        AlbumCatalogService.publishAlbum(cover, songIdList, albumTier, subscriptionFee, transactionFee)
             .then(() => {
                 this.loadAlbums();
             });

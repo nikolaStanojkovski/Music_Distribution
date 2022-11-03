@@ -3,9 +3,10 @@ package com.musicdistribution.albumcatalog.services;
 import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,8 +65,12 @@ public interface AlbumService {
     /**
      * Method for creating a new album in the database.
      *
-     * @param album - album's dto object containing new album's information.
-     * @return an optional with the found album.
+     * @param album    - album's dto object containing new album's information.
+     * @param cover    - the album cover picture.
+     * @param username - the username of the artist who is publishing the album.
+     * @param songIds  - the IDs of the songs from which the album is consisted of.
+     * @return an optional with the published album.
      */
-    Optional<Album> createAlbum(AlbumRequest album);
+    Optional<Album> publishAlbum(AlbumTransactionRequest album, MultipartFile cover,
+                                 String username, List<String> songIds);
 }

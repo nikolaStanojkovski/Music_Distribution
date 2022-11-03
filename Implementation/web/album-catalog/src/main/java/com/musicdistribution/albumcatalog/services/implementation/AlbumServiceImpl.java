@@ -1,25 +1,27 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
-import com.musicdistribution.albumcatalog.domain.exceptions.ArtistNotFoundException;
-import com.musicdistribution.albumcatalog.domain.models.entity.Album;
-import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
+import com.musicdistribution.albumcatalog.domain.models.entity.*;
+import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
+import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
+import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the album service.
@@ -31,6 +33,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
+    private final SongService songService;
+
+    private final IFileSystemStorage fileSystemStorage;
 
     @Override
     public List<Album> findAll() {
@@ -63,19 +68,35 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Optional<Album> createAlbum(AlbumRequest form) {
-        ArtistId creatorId = ArtistId.of(form.getCreatorId());
-        Artist creator = artistRepository.findById(creatorId).orElseThrow(() -> new ArtistNotFoundException(creatorId));
-        PaymentInfo paymentInfo = PaymentInfo.build(form.getSubscriptionFee(), form.getTransactionFee(), form.getTier());
+    public Optional<Album> publishAlbum(AlbumTransactionRequest albumTransactionRequest, MultipartFile cover,
+                                        String username, List<String> songIds) {
+        Optional<Artist> artist = artistRepository.findByArtistUserInfo_Username(username);
+        List<Song> songs = songIds.stream()
+                .map(songId -> songService.findById(SongId.of(songId)).orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
-        Album newAlbum = Album.build(form.getAlbumName(),
-                form.getGenre(), AlbumInfo.build(form.getArtistName(),
-                        form.getProducerName(), form.getComposerName()), creator, paymentInfo);
-        albumRepository.save(newAlbum);
+        if (artist.isPresent() && songs.size() > 0) {
+            Album album = Album.build(albumTransactionRequest.getAlbumName(),
+                    albumTransactionRequest.getAlbumGenre(),
+                    AlbumInfo.build(albumTransactionRequest.getArtistName(),
+                            albumTransactionRequest.getProducerName(),
+                            albumTransactionRequest.getComposerName()),
+                    artist.get(),
+                    PaymentInfo.build(albumTransactionRequest.getSubscriptionFee(),
+                            albumTransactionRequest.getTransactionFee(),
+                            albumTransactionRequest.getAlbumTier()),
+                    songs);
 
-        creator.createAlbum(newAlbum);
-        artistRepository.save(creator);
-
-        return Optional.of(newAlbum);
+            return Optional.of(albumRepository.save(album))
+                    .map(a -> {
+                        if (!cover.isEmpty()) {
+                            String fileName = String.format("%s.png", a.getId().getId());
+                            fileSystemStorage.saveFile(cover, fileName, FileLocationType.ALBUM_COVERS);
+                        }
+                        return a;
+                    });
+        }
+        return Optional.empty();
     }
 }

@@ -20,14 +20,11 @@ public class AlbumResponse {
 
     private String id;
     private String albumName;
-    private SongLength totalLength;
-    private Boolean isPublished;
     private Genre genre;
-    private AlbumInfo albumInfo;
 
+    private SongLength totalLength;
+    private AlbumInfo albumInfo;
     private ArtistResponse creator;
-    private String artistId;
-    private String artistName;
 
     public static AlbumResponse from(Album album, String encryptedId, String encryptedArtistId) {
         AlbumResponse albumResponse = new AlbumResponse();
@@ -38,10 +35,6 @@ public class AlbumResponse {
         albumResponse.setAlbumInfo(album.getAlbumInfo());
         albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null
                 : ArtistResponse.from(album.getCreator(), encryptedArtistId));
-        albumResponse.setArtistId(Objects.isNull(album.getCreator()) ? null
-                : album.getCreator().getId().getId());
-        albumResponse.setArtistName(Objects.isNull(album.getCreator()) ? null
-                : album.getCreator().getArtistPersonalInfo().getFullName());
 
         return albumResponse;
     }

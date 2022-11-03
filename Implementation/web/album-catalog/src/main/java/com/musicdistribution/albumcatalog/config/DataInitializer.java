@@ -1,20 +1,8 @@
 package com.musicdistribution.albumcatalog.config;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.Album;
-import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
-import com.musicdistribution.albumcatalog.domain.models.entity.Song;
-import com.musicdistribution.albumcatalog.domain.models.request.AlbumRequest;
-import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
-import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
-import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
-import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistContactInfo;
-import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistPersonalInfo;
-import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.albumcatalog.services.AlbumService;
 import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.albumcatalog.services.SongService;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

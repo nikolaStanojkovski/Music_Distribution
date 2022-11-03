@@ -1,30 +1,29 @@
 import React from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import ScreenElementsUtil from "../../../util/screen-elements-util";
 
 const PublishAlbum = (props) => {
 
     const History = useHistory();
+    const [cover, updateCover] = React.useState(null);
+    const [subscriptionFee, updateSubscriptionFee] = React.useState("");
+    const [songIdList, updateSongIdList] = React.useState([]);
     const [formData, updateFormData] = React.useState({
-        albumId: 0,
-        musicPublisherId: 0,
-        tier: 0
+        albumName: "",
+        albumGenre: "",
+        albumTier: "",
+        artistName: "",
+        producerName: "",
+        composerName: ""
     });
 
-    const gettier = (inputValue) => {
-        switch (inputValue) {
-            case "Bronze":
-                return "10.00 EUR";
-            case "Silver":
-                return "20.00 EUR";
-            case "Gold":
-                return "50.00 EUR";
-            case "Platinum":
-                return "100.00 EUR";
-            case "Diamond":
-                return "500.00 EUR";
-            default:
-                return "0.00 EUR";
-        }
+    const handleSubscriptionFee = (tier) => {
+        props.subscriptionFee(tier).then((data) => {
+            const formattedFee = `${data.data.amount}.00 ${data.data.currency}`;
+            updateSubscriptionFee(formattedFee);
+        });
     }
 
     const handleChange = (e) => {
@@ -33,81 +32,102 @@ const PublishAlbum = (props) => {
             [e.target.name]: e.target.value.trim()
         });
 
-        if (e.target.name === "tier") {
-            let subFee = document.getElementById("subscriptionFee");
-
-            subFee.value = gettier(e.target.value);
+        if (e.target.name === "albumTier") {
+            handleSubscriptionFee(e.target.value);
         }
     }
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const album = formData.albumId.split(" ");
-        const albumId = album[0];
-        let albumName = "";
-        for (let i = 1; i < album.length; i++)
-            albumName = albumName + " " + album[i];
 
-        const artistId = props.selectedArtist.id;
-        const artistInformation = props.selectedArtist.artistPersonalInfo.fullName;
-        const musicPublisherId = formData.musicPublisherId;
-        const tier = formData.tier;
-        const subscriptionFee = document.getElementById("subscriptionFee").value.split(" ")[0];
-        const transactionFee = 5.00;
+        const albumName = formData.albumName;
+        const albumGenre = formData.albumGenre;
+        const albumTier = formData.albumTier;
 
-        props.publishAlbum(albumId, albumName, artistId, artistInformation, musicPublisherId, tier, subscriptionFee, transactionFee);
-        History.push("/albums");
+        if (songIdList && songIdList.length > 0
+            && albumName && albumGenre && albumTier
+            && subscriptionFee && props.transactionFee) {
+            props.publishAlbum(cover, songIdList.map(song => song.value),
+                albumName, albumGenre, albumTier,
+                subscriptionFee, props.transactionFee,
+                formData.artistName, formData.producerName, formData.composerName);
+
+            History.push("/checkout/success");
+        }
     }
 
     return (
-        <div className="container">
-            <h1 className={"text-center mt-4"}>Publish an album</h1>
-            <br/>
-            <div className={""}>
-                <div className="col-md-6">
-                    <br/>
+        <div className="container mm-4 my-5">
+            <div className={"row mb-5"}>
+                <div className={"col-md"}>
+                    <h1 className="display-5">Share your new album</h1>
+                    <p className="text-muted">Inform your fans and listeners about the emotional experience you
+                        documented.</p>
+                </div>
+            </div>
+            <div className={"row"}>
+                <div className="col-md">
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
-                            <label>Album</label>
-                            <select onChange={handleChange} name="albumId" className="form-control">
-                                <option value={null}>Select the album</option>
+                            <label className="upload-drop-container">
+                                <span className="upload-drop-title">Album cover picture</span>
+                                <input type="file" id="albumUpload" accept="image/png, image/jpeg" required
+                                       onChange={(e) => updateCover(e.target.files[0])}/>
+                                <span
+                                    className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
+                            </label>
+                        </div>
+                        <br/>
 
-                                {props.albums.map((term) => {
-                                        if (term.artistId === props.selectedArtist.id && term.isPublished === false) {
-                                            return <option value={term.id + " " + term.albumName}>{term.albumName}</option>;
+                        <div className="form-group">
+                            <input type="text"
+                                   className="form-control"
+                                   id="albumName"
+                                   name="albumName"
+                                   required
+                                   placeholder="Enter the album name"
+                                   onChange={handleChange}/>
+                        </div>
+                        <br/>
+
+                        <div className="form-group">
+                            <select onChange={handleChange} name="albumGenre" required={true} className="form-control">
+                                <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                                    -- Album genre --
+                                </option>
+                                {props.genres.map((term) => {
+                                        return <option key={term} value={term}>{term}</option>;
+                                    }
+                                )}
+                            </select>
+                        </div>
+                        <br/>
+
+                        <div className={"form-group"}>
+                            <Select
+                                closeMenuOnSelect={false}
+                                components={makeAnimated()}
+                                isMulti
+                                isSearchable
+                                onChange={(choice) => updateSongIdList(choice)}
+                                options={props.songs.map((term) => {
+                                        if (term['creator'].id === props.selectedArtist.id
+                                            && !term['album'] && !term['isPublished']) {
+                                            return {value: term.id, label: term.songName};
                                         }
                                     }
-                                )}
-                            </select>
+                                )} />
                         </div>
                         <br/>
 
                         <div className="form-group">
-                            <label>Artist</label>
-                            <input name="artistName" disabled={true}
-                                   value={props.selectedArtist.artistPersonalInfo.fullName}
-                                   className="form-control disabled"/>
-                        </div>
-                        <br/>
-
-                        <div className="form-group">
-                            <label>Music Publisher</label>
-                            <select onChange={handleChange} name="musicPublisherId" className="form-control">
-                                <option value={null}>Select the music distributor</option>
-                                {props.musicDistributors.map((term) => {
-                                        return <option value={term.id}>{term.distributorInfo}</option>;
-                                    }
-                                )}
-                            </select>
-                        </div>
-                        <br/>
-
-                        <div className="form-group">
-                            <label>Album Tier</label>
-                            <select onChange={handleChange} name="tier" className="form-control">
-                                <option value={null}>Select the album tier</option>
+                            <select onChange={handleChange}
+                                    name="albumTier" className="form-control" required={true}>
+                                <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                                    -- Choose a tier --
+                                </option>
                                 {props.tiers.map((term) => {
-                                        return <option value={term}>{term}</option>;
+                                        return <option key={term} value={term}>{term}</option>;
                                     }
                                 )}
                             </select>
@@ -115,31 +135,82 @@ const PublishAlbum = (props) => {
                         <br/>
 
                         <div className="form-group">
-                            <label htmlFor={"subscriptionFee"}>Subscription fee</label>
                             <span>
                                 <input name="subscriptionFee" disabled={true}
-                                       id="subscriptionFee"
+                                       id="subscriptionFee" value={subscriptionFee}
                                        className="form-control disabled"/>&nbsp;
                             </span>
-                            <span className={"text-muted"}>Subscription fee is based on the album tier you choose</span>
+                            <span className={"text-muted"}>Subscription fee is based on the tier our platform offers for distribution</span>
                         </div>
                         <br/>
 
                         <div className="form-group">
-                            <label>Transaction fee</label>
                             <input name="transactionFee" disabled={true}
-                                   value={"5.00 EUR"}
+                                   id={"transactionFee"} value={props.transactionFee}
                                    className="form-control disabled"/>
-                            <span className={"text-muted"}>Transaction fee is fixed and based on your location</span>
+                            <span className={"text-muted"}>Transaction fee is fixed and based on your location and country</span>
                         </div>
                         <br/>
 
-                        <button id="submit" type="submit" className="btn btn-primary">Submit</button>
+                        <div className="form-group">
+                            <input name="artistName" disabled={true}
+                                   value={props.selectedArtist['artistPersonalInfo'].fullName}
+                                   className="form-control disabled"/>
+                        </div>
+                        <br/>
+
+                        <div className="accordion">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header">
+                                    <button className="accordion-button collapsed" type="button"
+                                            onClick={e => ScreenElementsUtil.toggleAccordionItems(e)}>
+                                        Additional information
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" className="accordion-collapse collapse">
+                                    <div className={"row"}>
+                                        <div className="form-group form-group-inner mt-4">
+                                            <input type="tel"
+                                                   className="form-control"
+                                                   id="artistName"
+                                                   name="artistName"
+                                                   placeholder="Enter the artist name"
+                                                   onChange={handleChange}/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div className={"row"}>
+                                        <div className="form-group form-group-inner">
+                                            <input type="text"
+                                                   className="form-control"
+                                                   id="producerName"
+                                                   name="producerName"
+                                                   placeholder="Enter the producer name"
+                                                   onChange={handleChange}/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div className={"row"}>
+                                        <div className="form-group form-group-inner">
+                                            <input type="text"
+                                                   className="form-control"
+                                                   id="composerName"
+                                                   name="composerName"
+                                                   placeholder="Enter the composer name"
+                                                   onChange={handleChange}/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
 
                         <br/>
-                    </form>
 
-                    <Link type="button" className="btn btn-link" to={"/albums"}>Back to albums list</Link>
+                        <button id="submit" type="submit" className="btn btn-dark w-100">Submit</button>
+                        <br/>
+                    </form>
                 </div>
             </div>
         </div>

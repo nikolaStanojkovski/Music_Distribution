@@ -11,7 +11,6 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,24 +62,28 @@ public class Album extends AbstractEntity<AlbumId> {
     /**
      * Static method for creating a new album.
      *
-     * @param albumName - the album's name
-     * @param genre     - the album's genre
-     * @param albumInfo - the album's information
-     * @param creator   - the album's creator
+     * @param albumName   - the album's name
+     * @param genre       - the album's genre
+     * @param albumInfo   - the album's information
+     * @param creator     - the album's creator
      * @param paymentInfo - the album's payment information
+     * @param songs       - the album's songs
      * @return the created album.
      */
-    public static Album build(String albumName, Genre genre, AlbumInfo albumInfo, Artist creator, PaymentInfo paymentInfo) {
+    public static Album build(String albumName, Genre genre, AlbumInfo albumInfo,
+                              Artist creator, PaymentInfo paymentInfo, List<Song> songs) {
         Album album = new Album();
 
         album.albumName = albumName;
         album.genre = genre;
         album.albumInfo = albumInfo;
         album.creator = creator;
-        album.totalLength = SongLength.build(0);
         album.paymentInfo = paymentInfo;
 
-        album.songs = new ArrayList<>();
+        album.songs = songs;
+        album.totalLength = SongLength.build(songs.stream()
+                .mapToInt(song -> song.getSongLength().getLengthInSeconds())
+                .sum());
 
         return album;
     }
@@ -103,14 +106,5 @@ public class Album extends AbstractEntity<AlbumId> {
     public void removeSong(Song song) {
         this.songs.remove(song);
         this.totalLength.removeSecondsFromSongLength(song.getSongLength().getLengthInSeconds());
-    }
-
-    /**
-     * Method for calculating the total song length of an album.
-     *
-     * @return the song length of an album.
-     */
-    public SongLength totalLength() {
-        return SongLength.build(this.songs.size() != 0 ? this.songs.stream().mapToInt(i -> i.getSongLength().getLengthInSeconds()).sum() : 0);
     }
 }
