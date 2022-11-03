@@ -1,8 +1,10 @@
 import React from 'react';
 
 const albums = (props) => {
-    return (
 
+    console.log(props);
+    console.log(props.albums);
+    return (
         <div className={"container mm-4 my-5"}>
             <div className={"row mb-5"}>
                 <h1 className="display-5">Distribute your albums</h1>

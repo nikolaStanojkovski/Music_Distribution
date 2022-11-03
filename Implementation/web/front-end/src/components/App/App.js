@@ -1,6 +1,6 @@
 import './App.css';
 import React, {Component} from "react";
-import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Home from '../Design/Home/home';
 
 import AlbumCatalogService from "../../repository/albumCatalogRepository";
@@ -23,6 +23,9 @@ import Header from "../Design/Header/header";
 import Footer from "../Design/Footer/footer";
 import SuccessfulCheckout from "../Design/Checkout/successful-checkout";
 import ScreenElementsUtil from "../../util/screen-elements-util";
+import {ProtectedRoute} from "../Design/Protected/protectedRoute";
+import Unauthorized from "../Design/Error/Unauthorized/unauthorized";
+import NotFound from "../Design/Error/NotFound/notFound";
 
 class App extends Component {
 
@@ -44,73 +47,77 @@ class App extends Component {
 
     render() {
         return (
-            <Router>
-                <Header logoutArtist={this.logoutArtist}/>
-                <main id={"main"}>
-                    <div className="container">
+            <div className={"app"}>
+                <BrowserRouter>
+                    <Header logoutArtist={this.logoutArtist}/>
+                    <main id={"main"}>
+                        <div className="container">
+                            <Switch>
+                                {/* Home */}
 
-                        {/* Home */}
+                                <Route path={["/index", "/home", "/"]} exact component={Home}/>
 
-                        <Route path={["/index", "home", "/"]} exact render={() =>
-                            <Home/>}/>
+                                {/* Authentication */}
 
-                        {/* Authentication */}
+                                <Route path={"/register"} exact render={() =>
+                                    <Register emailDomains={this.state.emailDomains}
+                                              registerArtist={this.registerArtist}/>}/>
+                                <Route path={"/login"} exact render={() =>
+                                    <Login emailDomains={this.state.emailDomains}
+                                           loginArtist={this.loginArtist}/>}/>
 
-                        <Route path={"/register"} exact render={() =>
-                            <Register emailDomains={this.state.emailDomains}
-                                      registerArtist={this.registerArtist}/>}/>
-                        <Route path={"/login"} exact render={() =>
-                            <Login emailDomains={this.state.emailDomains}
-                                   loginArtist={this.loginArtist}/>}/>
+                                {/* Main */}
 
-                        {/* Main */}
+                                <Route path={"/artists"} exact render={() =>
+                                    <Artists artists={this.state.artists}/>}/>
+                                <Route path={"/songs"} exact render={() =>
+                                    <Songs songs={this.state.songs} fetchSong={this.fetchSong}/>}/>
+                                <Route path={"/albums"} exact render={() =>
+                                    <Albums albums={this.state.albums}/>}/>
 
-                        <Route path={"/artists"} exact render={() =>
-                            <Artists artists={this.state.artists}/>}/>
+                                <ProtectedRoute path={"/songs/create"} exact albums={this.state.albums}
+                                                genres={this.state.genres}
+                                                selectedArtist={this.getCurrentArtist()}
+                                                createSong={this.createSong}
+                                                component={SongCreate}/>
+                                <ProtectedRoute path={"/songs/publish"}
+                                                songs={this.state.songs}
+                                                tiers={this.state.tiers}
+                                                selectedArtist={this.getCurrentArtist()}
+                                                transactionFee={this.state.transactionFee}
+                                                subscriptionFee={this.getSubscriptionFee}
+                                                publishSong={this.publishSong}
+                                                component={SongPublish}/>
 
-                        <Route path={"/songs"} exact render={() =>
-                            <Songs songs={this.state.songs} fetchSong={this.fetchSong}/>}/>
-                        <Route path={"/songs/create"} exact render={() =>
-                            <SongCreate albums={this.state.albums}
-                                        genres={this.state.genres}
-                                        selectedArtist={this.getCurrentArtist()}
-                                        createSong={this.createSong}/>}/>
-                        <Route path={"/songs/publish"} exact render={() =>
-                            <SongPublish songs={this.state.songs}
-                                         tiers={this.state.tiers}
-                                         selectedArtist={this.getCurrentArtist()}
-                                         transactionFee={this.state.transactionFee}
-                                         subscriptionFee={this.getSubscriptionFee}
-                                         publishSong={this.publishSong}/>}/>
-                        <Route path={"/checkout/success"} exact render={() =>
-                            <SuccessfulCheckout/>}/>
+                                <ProtectedRoute path={"/albums/create"} exact genres={this.state.genres}
+                                                selectedArtist={this.getCurrentArtist()}
+                                                createAlbum={this.createAlbum}
+                                                component={AlbumCreate}/>
+                                <ProtectedRoute path={"/albums/publish"} exact albums={this.state.albums}
+                                                selectedArtist={this.getCurrentArtist()}
+                                                tiers={this.state.tiers}
+                                                musicDistributors={this.state.musicDistributors}
+                                                publishAlbum={this.publishAlbum}
+                                                component={AlbumPublish}/>
+                                <ProtectedRoute path={"/albums/raiseAlbumTier"} exact
+                                                selectedArtist={this.getCurrentArtist()}
+                                                publishedAlbums={this.state.publishedAlbums}
+                                                tiers={this.state.tiers}
+                                                raiseAlbumTier={this.raiseAlbumTier}
+                                                component={AlbumRaiseTier}/>
 
-                        <Route path={"/albums"} exact render={() =>
-                            <Albums albums={this.state.albums}/>}/>
-                        <Route path={"/albums/create"} exact render={() =>
-                            <AlbumCreate genres={this.state.genres}
-                                         selectedArtist={this.getCurrentArtist()}
-                                         createAlbum={this.createAlbum}/>}/>
+                                <ProtectedRoute path={"/checkout/success"} exact component={SuccessfulCheckout}/>
 
-                        <Route path={"/albums/publish"} exact render={() =>
-                            <AlbumPublish albums={this.state.albums}
-                                          selectedArtist={this.getCurrentArtist()}
-                                          tiers={this.state.tiers}
-                                          musicDistributors={this.state.musicDistributors}
-                                          publishAlbum={this.publishAlbum}/>}/>
-                        <Route path={"/albums/raiseAlbumTier"} exact render={() =>
-                            <AlbumRaiseTier selectedArtist={this.getCurrentArtist()}
-                                            publishedAlbums={this.state.publishedAlbums}
-                                            tiers={this.state.tiers}
-                                            raiseAlbumTier={this.raiseAlbumTier}/>}/>
+                                {/* Default */}
 
-                        {/* Default */}
-
-                        <Redirect to={"/"}/>
-                    </div>
-                </main>
-                <Footer/>
-            </Router>
+                                <Route path={"/unauthorized"} component={Unauthorized}/>
+                                <Route path={"*"} component={NotFound}/>
+                            </Switch>
+                        </div>
+                    </main>
+                    <Footer/>
+                </BrowserRouter>
+            </div>
         );
     }
 
