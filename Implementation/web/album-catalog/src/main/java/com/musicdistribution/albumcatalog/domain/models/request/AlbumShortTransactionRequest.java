@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 /**
- * A song object used to transfer transaction data from the front-end user form to the backend.
+ * An album object used to transfer data from the front-end user form to the backend.
  */
 @Data
 @NoArgsConstructor
-public class SongTransactionRequest {
+public class AlbumShortTransactionRequest {
 
     @NotBlank
-    private String songId;
+    private String albumId;
     @NotBlank
-    private Tier songTier;
+    private Tier albumTier;
     @NotBlank
     private Money subscriptionFee;
     @NotBlank

@@ -3,6 +3,7 @@ package com.musicdistribution.albumcatalog.domain.models.entity;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
+import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.Getter;
 import org.hibernate.annotations.LazyCollection;
@@ -28,8 +29,10 @@ public class Song extends AbstractEntity<SongId> {
     private Genre songGenre;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "subscriptionFee", column = @Column(name = "payment_subscription_fee")),
-            @AttributeOverride(name = "transactionFee", column = @Column(name = "payment_transaction_fee")),
+            @AttributeOverride(name = "subscriptionFee.amount", column = @Column(name = "payment_subscription_fee_amount")),
+            @AttributeOverride(name = "subscriptionFee.currency", column = @Column(name = "payment_subscription_fee_amount_currency")),
+            @AttributeOverride(name = "transactionFee.amount", column = @Column(name = "payment_transaction_fee_amount")),
+            @AttributeOverride(name = "transactionFee.currency", column = @Column(name = "payment_transaction_fee_currency")),
             @AttributeOverride(name = "tier", column = @Column(name = "payment_tier"))
     })
     private PaymentInfo paymentInfo;
@@ -80,16 +83,42 @@ public class Song extends AbstractEntity<SongId> {
     }
 
     /**
-     * Method for publishing a song.
+     * Method for publishing a song as a single.
      *
      * @param paymentInfo - the information about the payment for the song that is being published.
      * @return the published song.
      */
-    public Song publish(PaymentInfo paymentInfo) {
+    public Song publishAsSingle(PaymentInfo paymentInfo) {
         this.isASingle = true;
         this.isPublished = true;
         this.paymentInfo = paymentInfo;
 
         return this;
+    }
+
+    /**
+     * Method for publishing a song as non-single single, part of an album.
+     *
+     * @param album - the album in which the song is put into.
+     * @return the published song.
+     */
+    public Song publishAsNonSingle(Album album) {
+        this.isASingle = false;
+        this.isPublished = true;
+        this.album = album;
+
+        return this;
+    }
+
+    /**
+     * Method used for raising song's tier.
+     *
+     * @param paymentInfo - the payment information for raising song's tier.
+     */
+    public void raiseTier(PaymentInfo paymentInfo) {
+        Money subscriptionFeeSum = this.paymentInfo.getSubscriptionFee().add(paymentInfo.getSubscriptionFee());
+        Money transactionFeeSum = this.paymentInfo.getTransactionFee().add(paymentInfo.getTransactionFee());
+
+        this.paymentInfo = PaymentInfo.build(subscriptionFeeSum, transactionFeeSum, paymentInfo.getTier());
     }
 }

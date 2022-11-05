@@ -2,43 +2,70 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 import StringUtil from "../../../util/string-util";
 
-const PublishSong = (props) => {
+const SongRaiseTier = (props) => {
 
     const History = useHistory();
-    const [cover, updateCover] = React.useState(null);
-    const [subscriptionFee, updateSubscriptionFee] = React.useState("");
-    const [formData, updateFormData] = React.useState({
-        songId: "",
-        songTier: "",
-    });
+    const [song, updateSong] = React.useState({});
+    const [songTier, updateSongTier] = React.useState("");
+    const [subscriptionFee, updateSubscriptionFee] = React.useState({});
 
-    const handleSubscriptionFee = (tier) => {
-        if (tier && tier !== "") {
-            props.subscriptionFee(tier).then((data) => {
-                updateSubscriptionFee(data.data);
-            })
+    const handleCalculatedFee = (existingSubscriptionFee, currentSubscriptionFee,
+                                 tier, songTier) => {
+        if (existingSubscriptionFee.amount > currentSubscriptionFee.amount) {
+            updateSongTier(songTier);
+            return {amount: 0.0, currency: existingSubscriptionFee.currency};
+        } else {
+            updateSongTier(tier);
+            return {
+                amount: currentSubscriptionFee.amount - existingSubscriptionFee.amount,
+                currency: existingSubscriptionFee.currency
+            };
         }
     }
 
-    const handleChange = (e) => {
-        updateFormData({
-            ...formData,
-            [e.target.name]: e.target.value.trim()
-        });
+    const handleSubscriptionFee = (tier, songTier) => {
+        props.subscriptionFee(tier).then((data) => {
+            const currentSubscriptionFee = data.data;
+            console.log(currentSubscriptionFee);
+            props.subscriptionFee(songTier).then((data) => {
+                const existingSubscriptionFee = data.data;
 
-        if (e.target.name === "songTier") {
-            handleSubscriptionFee(e.target.value);
+                console.log(existingSubscriptionFee);
+                const calculatedFee = handleCalculatedFee(existingSubscriptionFee,
+                    currentSubscriptionFee, tier, songTier);
+                updateSubscriptionFee(calculatedFee);
+            });
+        });
+    }
+
+    const handleSongChange = (e) => {
+        const songId = e.target.value;
+        if (songId) {
+            const filteredSongs = props.songs.filter(song => song.id === songId);
+            if (filteredSongs && filteredSongs.length > 0) {
+                updateSong(filteredSongs[0]);
+                handleSongTier(songTier);
+            }
+        }
+    }
+
+    const handleSongTier = (tier) => {
+        const paymentInfo = song['paymentInfo'];
+        if (paymentInfo) {
+            const songTier = paymentInfo['tier'];
+            if (tier && paymentInfo) {
+                handleSubscriptionFee(tier, songTier);
+            }
         }
     }
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const songId = formData.songId;
-        const songTier = formData.songTier;
 
-        if (songId && songTier && subscriptionFee && props.transactionFee) {
-            props.publishSong(cover, songId, songTier, subscriptionFee, props.transactionFee);
-
+        const songId = song.id;
+        if (songId && songTier && subscriptionFee &&
+            subscriptionFee.amount > 0 && props.transactionFee) {
+            props.raiseTierSong(songId, songTier, subscriptionFee, props.transactionFee);
             History.push("/checkout/success");
         }
     }
@@ -47,8 +74,9 @@ const PublishSong = (props) => {
         <div className="container mm-4 my-5">
             <div className={"row mb-5"}>
                 <div className={"col-md"}>
-                    <h1 className="display-5">Share your new song with the public</h1>
-                    <p className="text-muted">Make your new music known to the general audience by sharing it.</p>
+                    <h1 className="display-5">Raise an song's tier</h1>
+                    <p className="text-muted">Increase the popularity of the music in your song by raising its
+                        tier.</p>
                 </div>
             </div>
 
@@ -56,24 +84,13 @@ const PublishSong = (props) => {
                 <div className="col-md">
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
-                            <label className="upload-drop-container">
-                                <span className="upload-drop-title">Song cover picture</span>
-                                <input type="file" id="songUpload" accept="image/png, image/jpeg" required
-                                       onChange={(e) => updateCover(e.target.files[0])}/>
-                                <span
-                                    className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
-                            </label>
-                        </div>
-                        <br/>
-
-                        <div className={"form-group"}>
-                            <select onChange={handleChange} name="songId" className="form-control" required={true}>
+                            <select onChange={handleSongChange}
+                                    name="song" className="form-control">
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose song --
                                 </option>
                                 {props.songs.map((term) => {
-                                        if (term['creator'].id === props.selectedArtist.id
-                                            && !term['album'] && !term['isPublished']) {
+                                        if (term['isPublished'] && term['isASingle']) {
                                             return <option key={term.id} value={term.id}>{term.songName}</option>;
                                         }
                                     }
@@ -83,7 +100,8 @@ const PublishSong = (props) => {
                         <br/>
 
                         <div className="form-group">
-                            <select onChange={handleChange} name="songTier" className="form-control" required={true}>
+                            <select onChange={(e) => handleSongTier(e.target.value)}
+                                    name="songTier" className="form-control" required={true}>
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose tier --
                                 </option>
@@ -99,7 +117,8 @@ const PublishSong = (props) => {
                             <span>
                                 <input name="subscriptionFee" disabled={true}
                                        id="subscriptionFee"
-                                       value={StringUtil.formatCurrency(subscriptionFee.amount, subscriptionFee.currency)}
+                                       value={StringUtil.formatCurrency(subscriptionFee.amount,
+                                           subscriptionFee.currency)}
                                        className="form-control disabled"/>&nbsp;
                             </span>
                             <span className={"text-muted"}>Subscription fee is based on the tier our platform offers for distribution</span>
@@ -116,13 +135,6 @@ const PublishSong = (props) => {
                         </div>
                         <br/>
 
-                        <div className="form-group">
-                            <input name="artistName" disabled={true}
-                                   value={props.selectedArtist['artistPersonalInfo'].fullName}
-                                   className="form-control disabled"/>
-                        </div>
-                        <br/>
-
                         <br/>
 
                         <button id="submit" type="submit" className="btn btn-dark w-100">Submit</button>
@@ -135,4 +147,4 @@ const PublishSong = (props) => {
     );
 };
 
-export default PublishSong;
+export default SongRaiseTier;

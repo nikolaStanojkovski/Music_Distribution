@@ -2,10 +2,10 @@ package com.musicdistribution.albumcatalog.xport.rest.core;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.AlbumResponse;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
-import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.AlbumService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
@@ -27,9 +27,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/resource/albums")
 public class AlbumResource {
 
-    private final AlbumService albumService;
     private final JwtUtils jwtUtils;
-    private final IFileSystemStorage systemStorage;
+    private final AlbumService albumService;
     private final IEncryptionSystem encryptionSystem;
 
     /**
@@ -142,5 +141,22 @@ public class AlbumResource {
 
     private List<String> getDecryptedSongIds(List<String> songIdList) {
         return songIdList.stream().map(encryptionSystem::decrypt).collect(Collectors.toList());
+    }
+
+    /**
+     * Method for raising an existing album's tier.
+     *
+     * @param albumShortTransactionRequest - dto object containing information for the album to be updated.
+     * @return the created album.
+     */
+    @PostMapping("/raise-tier")
+    public ResponseEntity<AlbumResponse> raiseTierAlbum(
+            @RequestBody @Valid AlbumShortTransactionRequest albumShortTransactionRequest) {
+        return this.albumService.raiseTierAlbum(albumShortTransactionRequest,
+                AlbumId.of(encryptionSystem.decrypt(albumShortTransactionRequest.getAlbumId())))
+                .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
+                        encryptionSystem.encrypt(album.getId().getId()),
+                        encryptionSystem.encrypt(album.getCreator().getId().getId()))))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

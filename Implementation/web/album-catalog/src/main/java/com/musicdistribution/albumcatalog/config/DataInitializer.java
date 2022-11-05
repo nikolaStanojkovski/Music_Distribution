@@ -31,9 +31,9 @@ public class DataInitializer {
 //            Artist artist2 = artistService.registerArtist(ArtistRequest.build(Artist.build(ArtistContactInfo.build("077-911-998", "trajko.trajanovski", EmailDomain.gmail),
 //                    ArtistPersonalInfo.build("Trajko", "Trajkovski", "Higretorta"), "mst-4"))).orElse(null);
 //
-//            Album album1 = albumService.createAlbum(AlbumRequest.build(Album.build("Album 1", Genre.Jazz, AlbumInfo.build("Agro", "Agro", "Agro"), artist1))).orElse(null);
-//            albumService.createAlbum(AlbumRequest.build(Album.build("Album 2", Genre.Rock, AlbumInfo.build("Wa", "Ki", "Ca"), artist2)));
-//            albumService.createAlbum(AlbumRequest.build(Album.build("Album 3", Genre.Pop, AlbumInfo.build("Mk", "Mk", "Mk"), artist1)));
+//            Album album1 = albumService.createAlbum(AlbumShortTransactionRequest.build(Album.build("Album 1", Genre.Jazz, AlbumInfo.build("Agro", "Agro", "Agro"), artist1))).orElse(null);
+//            albumService.createAlbum(AlbumShortTransactionRequest.build(Album.build("Album 2", Genre.Rock, AlbumInfo.build("Wa", "Ki", "Ca"), artist2)));
+//            albumService.createAlbum(AlbumShortTransactionRequest.build(Album.build("Album 3", Genre.Pop, AlbumInfo.build("Mk", "Mk", "Mk"), artist1)));
 
 //            Song song1 = Song.build("Forandra", artist1, album1, SongLength.build(187), Genre.Funk, "/files/0000000001.zip");
 //            Song song2 = Song.build("Jokawa", artist1, album1, SongLength.build(201), Genre.Jazz, "/files/0000000002.zip");

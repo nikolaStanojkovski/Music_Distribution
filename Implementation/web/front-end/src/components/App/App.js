@@ -15,7 +15,6 @@ import Songs from '../Songs/SongList/songs';
 import SongCreate from '../Songs/SongCreate/songCreate';
 import SongPublish from '../Songs/SongPublish/songPublish';
 
-import AlbumPublishingService from "../../repository/albumStreamingRepository";
 import Register from "../Authentication/Register/register";
 import Login from "../Authentication/Login/login";
 import Header from "../Design/Header/header";
@@ -26,6 +25,7 @@ import {ProtectedRoute} from "../Design/Route/Protected/protectedRoute";
 import Unauthorized from "../Design/Error/Unauthorized/unauthorized";
 import NotFound from "../Design/Error/NotFound/notFound";
 import NonProtectedRoute from "../Design/Route/NonProtected/nonProtectedRoute";
+import SongRaiseTier from "../Songs/SongRaiseTier/songRaiseTier";
 
 class App extends Component {
 
@@ -37,11 +37,11 @@ class App extends Component {
             songs: [],
             selectedAlbum: {},
 
-            transactionFee: "",
-
             genres: [],
             emailDomains: [],
-            tiers: []
+            tiers: [],
+
+            transactionFee: {}
         }
     }
 
@@ -73,14 +73,11 @@ class App extends Component {
                                 <NonProtectedRoute path={"/artists"} exact
                                                    artists={this.state.artists}
                                                    component={Artists}/>
+
                                 <NonProtectedRoute path={"/songs"} exact
                                                    songs={this.state.songs}
                                                    fetchSong={this.fetchSong}
                                                    component={Songs}/>
-                                <NonProtectedRoute path={"/albums"} exact
-                                                   albums={this.state.albums}
-                                                   component={Albums}/>
-
                                 <ProtectedRoute path={"/songs/create"} exact albums={this.state.albums}
                                                 genres={this.state.genres}
                                                 selectedArtist={this.getCurrentArtist()}
@@ -94,7 +91,17 @@ class App extends Component {
                                                 subscriptionFee={this.getSubscriptionFee}
                                                 publishSong={this.publishSong}
                                                 component={SongPublish}/>
+                                <ProtectedRoute path={"/songs/raise-tier"}
+                                                songs={this.state.songs}
+                                                tiers={this.state.tiers}
+                                                transactionFee={this.state.transactionFee}
+                                                subscriptionFee={this.getSubscriptionFee}
+                                                raiseTierSong={this.raiseTierSong}
+                                                component={SongRaiseTier}/>
 
+                                <NonProtectedRoute path={"/albums"} exact
+                                                   albums={this.state.albums}
+                                                   component={Albums}/>
                                 <ProtectedRoute path={"/albums/publish"} exact
                                                 songs={this.state.songs}
                                                 genres={this.state.genres}
@@ -104,11 +111,12 @@ class App extends Component {
                                                 subscriptionFee={this.getSubscriptionFee}
                                                 publishAlbum={this.publishAlbum}
                                                 component={AlbumPublish}/>
-                                <ProtectedRoute path={"/albums/raiseAlbumTier"} exact
-                                                selectedArtist={this.getCurrentArtist()}
-                                                publishedAlbums={this.state.publishedAlbums}
+                                <ProtectedRoute path={"/albums/raise-tier"} exact
+                                                albums={this.state.albums}
                                                 tiers={this.state.tiers}
-                                                raiseAlbumTier={this.raiseAlbumTier}
+                                                transactionFee={this.state.transactionFee}
+                                                subscriptionFee={this.getSubscriptionFee}
+                                                raiseTierAlbum={this.raiseTierAlbum}
                                                 component={AlbumRaiseTier}/>
 
                                 <ProtectedRoute path={"/checkout/success"} exact component={SuccessfulCheckout}/>
@@ -203,34 +211,39 @@ class App extends Component {
             })
     }
 
+    raiseTierSong = (songId, songTier, subscriptionFee, transactionFee) => {
+        AlbumCatalogService.raiseTierSong(songId, songTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadSongs();
+            });
+    }
+
+    publishAlbum = (cover, songIdList,
+                    albumName, albumGenre, albumTier,
+                    subscriptionFee, transactionFee,
+                    artistName, producerName, composerName) => {
+        AlbumCatalogService.publishAlbum(cover, songIdList,
+            albumName, albumGenre, albumTier,
+            subscriptionFee, transactionFee,
+            artistName, producerName, composerName)
+            .then(() => {
+                this.loadAlbums();
+            });
+    }
+
+    raiseTierAlbum = (albumId, albumTier, subscriptionFee, transactionFee) => {
+        AlbumCatalogService.raiseTierAlbum(albumId, albumTier, subscriptionFee, transactionFee)
+            .then(() => {
+                this.loadAlbums();
+            });
+    }
+
     loadArtists = () => {
         AlbumCatalogService.fetchArtists()
             .then((data) => {
                 this.setState({
                     artists: data.data
                 })
-            });
-    }
-
-    publishAlbum = (cover, songIdList, albumTier, subscriptionFee, transactionFee) => {
-        AlbumCatalogService.publishAlbum(cover, songIdList, albumTier, subscriptionFee, transactionFee)
-            .then(() => {
-                this.loadAlbums();
-            });
-    }
-
-    raiseAlbumTier = (publishedAlbumId, albumTier, subscriptionFee, transactionFee) => {
-        AlbumPublishingService.raiseAlbumTier(publishedAlbumId, albumTier, subscriptionFee, transactionFee)
-            .then(() => {
-                this.loadAlbums();
-            });
-    }
-
-
-    createAlbum = (albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId) => {
-        AlbumCatalogService.createAlbum(albumName, genre, totalLength, isPublished, artistName, producerName, composerName, creatorId)
-            .then(() => {
-                this.loadAlbums();
             });
     }
 
@@ -264,7 +277,7 @@ class App extends Component {
     getTransactionFee = () => {
         const locale = navigator.language;
         AlbumCatalogService.getTransactionFee(locale).then((data) => {
-            this.state.transactionFee = `${data.data.amount}.00 ${data.data.currency}`;
+            this.state.transactionFee = data.data;
         });
     }
 

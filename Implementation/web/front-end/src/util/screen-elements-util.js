@@ -13,7 +13,7 @@ const ScreenElementsUtil = {
             }
         });
     },
-    setNavbarMobileMode() {
+    resetCollapseNavbarItems() {
         const toggleElement = document.querySelector('.navbar-toggler');
         if (toggleElement && toggleElement instanceof HTMLElement) {
             toggleElement.addEventListener('click', () => {
@@ -26,6 +26,9 @@ const ScreenElementsUtil = {
                 }
             });
         }
+    },
+    setNavbarMobileMode() {
+        ScreenElementsUtil.resetCollapseNavbarItems();
 
         const container = document.body;
         const outsideNavContainer = container.querySelector('#authContainerOutside');
@@ -33,7 +36,7 @@ const ScreenElementsUtil = {
         if (outsideNavContainer && outsideNavContainer instanceof HTMLElement
             && insideNavContainer && insideNavContainer instanceof HTMLElement
             && container && container instanceof HTMLElement) {
-            ['resize', 'load'].forEach(event => {
+            ['resize', 'load', 'unload', 'beforeprint'].forEach(event => {
                 window.addEventListener(event, () => {
                     if (container.clientWidth < 992) {
                         outsideNavContainer.hidden = true;

@@ -79,6 +79,14 @@ const AlbumCatalogService = {
         }));
         return axios.post("/resource/songs/publish", formData);
     },
+    raiseTierSong: (songId, songTier, subscriptionFee, transactionFee) => {
+        return axios.post("/resource/songs/raise-tier", {
+            "songId" : songId,
+            "songTier" : songTier,
+            "subscriptionFee" : subscriptionFee,
+            "transactionFee" : transactionFee,
+        });
+    },
 
     publishAlbum: (cover, songIdList,
                    albumName, albumGenre, albumTier,
@@ -90,16 +98,24 @@ const AlbumCatalogService = {
             "songIdList": songIdList,
             "albumName": albumName,
             "albumGenre": albumGenre,
-            "artistName": artistName,
-            "producerName": producerName,
-            "composerName": composerName,
             "albumTier": albumTier,
             "subscriptionFee": subscriptionFee,
             "transactionFee": transactionFee,
+            "artistName": artistName,
+            "producerName": producerName,
+            "composerName": composerName,
         })], {
             type: "application/json"
         }));
         return axios.post("/resource/albums/publish", formData);
+    },
+    raiseTierAlbum: (albumId, albumTier, subscriptionFee, transactionFee) => {
+        return axios.post("/resource/albums/raise-tier", {
+            "albumId" : albumId,
+            "albumTier" : albumTier,
+            "subscriptionFee" : subscriptionFee,
+            "transactionFee" : transactionFee,
+        });
     },
 
     getTransactionFee: (locale) => {

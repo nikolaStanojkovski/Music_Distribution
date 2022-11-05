@@ -2,14 +2,15 @@ package com.musicdistribution.albumcatalog.services.implementation;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
+import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
-import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
-    private final SongService songService;
+    private final SongRepository songRepository;
 
     private final IFileSystemStorage fileSystemStorage;
 
@@ -72,7 +73,8 @@ public class AlbumServiceImpl implements AlbumService {
                                         String username, List<String> songIds) {
         Optional<Artist> artist = artistRepository.findByArtistUserInfo_Username(username);
         List<Song> songs = songIds.stream()
-                .map(songId -> songService.findById(SongId.of(songId)).orElse(null))
+                .map(songId -> songRepository.findById(SongId.of(songId))
+                        .orElse(null))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -88,15 +90,33 @@ public class AlbumServiceImpl implements AlbumService {
                             albumTransactionRequest.getAlbumTier()),
                     songs);
 
-            return Optional.of(albumRepository.save(album))
-                    .map(a -> {
-                        if (!cover.isEmpty()) {
-                            String fileName = String.format("%s.png", a.getId().getId());
-                            fileSystemStorage.saveFile(cover, fileName, FileLocationType.ALBUM_COVERS);
-                        }
-                        return a;
-                    });
+            return saveAlbum(album, cover);
         }
         return Optional.empty();
+    }
+
+    private Optional<Album> saveAlbum(Album album, MultipartFile cover) {
+        return Optional.of(albumRepository.save(album))
+                .map(a -> {
+                    if (!cover.isEmpty()) {
+                        String fileName = String.format("%s.png", a.getId().getId());
+                        fileSystemStorage.saveFile(cover, fileName, FileLocationType.ALBUM_COVERS);
+                    }
+                    albumRepository.flush();
+                    a.getSongs().forEach(song -> songRepository.save(song.publishAsNonSingle(album)));
+
+                    return a;
+                });
+    }
+
+    @Override
+    public Optional<Album> raiseTierAlbum(AlbumShortTransactionRequest albumShortTransactionRequest, AlbumId id) {
+        return albumRepository.findById(id).map(album -> {
+            PaymentInfo paymentInfo = PaymentInfo.build(albumShortTransactionRequest.getSubscriptionFee(),
+                    albumShortTransactionRequest.getTransactionFee(),
+                    albumShortTransactionRequest.getAlbumTier());
+            album.raiseTier(paymentInfo);
+            return albumRepository.save(album);
+        });
     }
 }

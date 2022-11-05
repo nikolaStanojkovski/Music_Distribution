@@ -49,8 +49,10 @@ const CreateSong = (props) => {
         const songName = formData.songName;
         const songGenre = formData.songGenre;
 
-        props.createSong(song, songName, lengthInSeconds, songGenre);
-        History.push("/");
+        if(songName && songGenre && lengthInSeconds && songGenre) {
+            props.createSong(song, songName, lengthInSeconds, songGenre);
+            History.push("/");
+        }
     }
 
     return (
@@ -89,7 +91,7 @@ const CreateSong = (props) => {
                         <div className="form-group">
                             <select onChange={handleChange} name="songGenre" className="form-control">
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
-                                    -- Song genre --
+                                    -- Choose song genre --
                                 </option>
                                 {props.genres.map((term) => {
                                         return <option key={term} value={term}>{term}</option>;

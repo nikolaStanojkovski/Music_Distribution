@@ -90,8 +90,8 @@ const Songs = (props) => {
                                     <td>{term.songName}</td>
                                     <td>{term.songGenre}</td>
                                     <td>{term['songLength']['formattedString']}</td>
-                                    <td>{(term['isASingle']) ? 'Yes' : 'No'}</td>
                                     <td>{(term['isPublished']) ? 'Yes' : 'No'}</td>
+                                    <td>{(term['isASingle']) ? 'Yes' : 'No'}</td>
                                     <td>{term['creator']['artistPersonalInfo'].fullName}</td>
                                     <td>{(term['album']) ? term['album'].albumName : ''}</td>
                                     <td>

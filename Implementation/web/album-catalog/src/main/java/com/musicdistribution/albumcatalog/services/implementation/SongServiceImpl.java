@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.exceptions.FileStorageException
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.SongShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
@@ -108,7 +109,7 @@ public class SongServiceImpl implements SongService {
                     fileSystemStorage.saveFile(cover, fileName, FileLocationType.SONG_COVERS);
                 }
 
-                return s.publish(PaymentInfo.build(songTransactionRequest.getSubscriptionFee(),
+                return s.publishAsSingle(PaymentInfo.build(songTransactionRequest.getSubscriptionFee(),
                         songTransactionRequest.getTransactionFee(),
                         songTransactionRequest.getSongTier()));
             });
@@ -130,5 +131,16 @@ public class SongServiceImpl implements SongService {
             artistRepository.save(s.getCreator());
         });
         return song;
+    }
+
+    @Override
+    public Optional<Song> raiseTierSong(SongShortTransactionRequest songShortTransactionRequest, SongId id) {
+        return songRepository.findById(id).map(song -> {
+            PaymentInfo paymentInfo = PaymentInfo.build(songShortTransactionRequest.getSubscriptionFee(),
+                    songShortTransactionRequest.getTransactionFee(),
+                    songShortTransactionRequest.getSongTier());
+            song.raiseTier(paymentInfo);
+            return songRepository.save(song);
+        });
     }
 }

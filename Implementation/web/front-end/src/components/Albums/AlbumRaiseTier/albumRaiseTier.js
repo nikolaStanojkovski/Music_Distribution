@@ -1,73 +1,95 @@
 import React from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import StringUtil from "../../../util/string-util";
 
-const RaiseAlbumTier = (props) => {
+const AlbumRaiseTier = (props) => {
 
     const History = useHistory();
-    const [formData, updateFormData] = React.useState({
-        albumId: 0,
-        albumTier: 0
-    });
+    const [album, updateAlbum] = React.useState({});
+    const [albumTier, updateAlbumTier] = React.useState("");
+    const [subscriptionFee, updateSubscriptionFee] = React.useState({});
 
-    const getAlbumTier = (inputValue) => {
-        switch (inputValue) {
-            case "Bronze":
-                return "10.00 EUR";
-            case "Silver":
-                return "20.00 EUR";
-            case "Gold":
-                return "50.00 EUR";
-            case "Platinum":
-                return "100.00 EUR";
-            case "Diamond":
-                return "500.00 EUR";
-            default:
-                return "0.00 EUR";
+    const handleCalculatedFee = (existingSubscriptionFee, currentSubscriptionFee,
+                                 tier, albumTier) => {
+        if (existingSubscriptionFee.amount > currentSubscriptionFee.amount) {
+            updateAlbumTier(albumTier);
+            return {amount: 0.0, currency: existingSubscriptionFee.currency};
+        } else {
+            updateAlbumTier(tier);
+            return {
+                amount: currentSubscriptionFee.amount - existingSubscriptionFee.amount,
+                currency: existingSubscriptionFee.currency
+            };
         }
     }
 
-    const handleChange = (e) => {
-        updateFormData({
-            ...formData,
-            [e.target.name]: e.target.value.trim()
+    const handleSubscriptionFee = (tier, albumTier) => {
+        props.subscriptionFee(tier).then((data) => {
+            const currentSubscriptionFee = data.data;
+            console.log(currentSubscriptionFee);
+            props.subscriptionFee(albumTier).then((data) => {
+                const existingSubscriptionFee = data.data;
+
+                console.log(existingSubscriptionFee);
+                const calculatedFee = handleCalculatedFee(existingSubscriptionFee,
+                    currentSubscriptionFee, tier, albumTier);
+                updateSubscriptionFee(calculatedFee);
+            });
         });
+    }
 
-        if (e.target.name === "albumTier") {
-            let subFee = document.getElementById("subscriptionFee");
+    const handleAlbumChange = (e) => {
+        const albumId = e.target.value;
+        if (albumId) {
+            const filteredAlbums = props.albums.filter(album => album.id === albumId);
+            if (filteredAlbums && filteredAlbums.length > 0) {
+                updateAlbum(filteredAlbums[0]);
+                handleAlbumTier(albumTier);
+            }
+        }
+    }
 
-            subFee.value = getAlbumTier(e.target.value);
+    const handleAlbumTier = (tier) => {
+        const paymentInfo = album['paymentInfo'];
+        if(paymentInfo) {
+            const albumTier = paymentInfo['tier'];
+            if (tier && paymentInfo) {
+                handleSubscriptionFee(tier, albumTier);
+            }
         }
     }
 
     const onFormSubmit = (e) => {
         e.preventDefault();
 
-        const publishedAlbumId = formData.albumId;
-        const albumTier = formData.albumTier;
-        const subscriptionFee = document.getElementById("subscriptionFee").value.split(" ")[0];
-        const transactionFee = 5.00;
-
-        props.raiseAlbumTier(publishedAlbumId, albumTier, subscriptionFee, transactionFee);
-        History.push("/albums");
+        const albumId = album.id;
+        if (albumId && albumTier && subscriptionFee &&
+            subscriptionFee.amount > 0 && props.transactionFee) {
+            props.raiseTierAlbum(albumId, albumTier, subscriptionFee, props.transactionFee);
+            History.push("/checkout/success");
+        }
     }
 
     return (
-        <div className="container">
-            <h1 className={"text-center mt-4"}>Raise album tier</h1>
-            <br/>
-            <div className={""}>
-                <div className="col-md-6">
-                    <br/>
+        <div className="container mm-4 my-5">
+            <div className={"row mb-5"}>
+                <div className={"col-md"}>
+                    <h1 className="display-5">Raise an album's tier</h1>
+                    <p className="text-muted">Increase the popularity of the music in your album by raising its tier.</p>
+                </div>
+            </div>
+
+            <div className={"row"}>
+                <div className="col-md">
                     <form onSubmit={onFormSubmit}>
                         <div className="form-group">
-                            <label>Published Albums</label>
-                            <select onChange={handleChange} name="albumId" className="form-control">
-                                <option value={null}>Select the published album to raise the tier to</option>
-
-                                {props.publishedAlbums.map((term) => {
-                                        if (term.artistId === props.selectedArtist.id) {
-                                            return <option value={term.publishedAlbumId}>{term.albumName}</option>;
-                                        }
+                            <select onChange={handleAlbumChange}
+                                    name="album" className="form-control">
+                                <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                                    -- Choose album --
+                                </option>
+                                {props.albums.map((term) => {
+                                        return <option key={term.id} value={term.id}>{term.albumName}</option>;
                                     }
                                 )}
                             </select>
@@ -75,11 +97,13 @@ const RaiseAlbumTier = (props) => {
                         <br/>
 
                         <div className="form-group">
-                            <label>Album Tier</label>
-                            <select onChange={handleChange} name="albumTier" className="form-control">
-                                <option value={null}>Select the album tier</option>
-                                {props.albumTiers.map((term) => {
-                                        return <option value={term}>{term}</option>;
+                            <select onChange={(e) => handleAlbumTier(e.target.value)}
+                                    name="albumTier" className="form-control" required={true}>
+                                <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                                    -- Choose tier --
+                                </option>
+                                {props.tiers.map((term) => {
+                                        return <option key={term} value={term}>{term}</option>;
                                     }
                                 )}
                             </select>
@@ -87,35 +111,37 @@ const RaiseAlbumTier = (props) => {
                         <br/>
 
                         <div className="form-group">
-                            <label htmlFor={"subscriptionFee"}>Subscription fee</label>
                             <span>
                                 <input name="subscriptionFee" disabled={true}
                                        id="subscriptionFee"
+                                       value={StringUtil.formatCurrency(subscriptionFee.amount,
+                                           subscriptionFee.currency)}
                                        className="form-control disabled"/>&nbsp;
                             </span>
-                            <span className={"text-muted"}>Subscription fee is based on the album tier you choose</span>
+                            <span className={"text-muted"}>Subscription fee is based on the tier our platform offers for distribution</span>
                         </div>
                         <br/>
 
                         <div className="form-group">
-                            <label>Transaction fee</label>
                             <input name="transactionFee" disabled={true}
-                                   value={"5.00 EUR"}
+                                   id={"transactionFee"}
+                                   value={StringUtil.formatCurrency(props.transactionFee.amount,
+                                       props.transactionFee.currency)}
                                    className="form-control disabled"/>
-                            <span className={"text-muted"}>Transaction fee is fixed and based on your location</span>
+                            <span className={"text-muted"}>Transaction fee is fixed and based on your location and country</span>
                         </div>
                         <br/>
 
-                        <button id="submit" type="submit" className="btn btn-primary">Submit</button>
+                        <br/>
 
+                        <button id="submit" type="submit" className="btn btn-dark w-100">Submit</button>
                         <br/>
                     </form>
 
-                    <Link type="button" className="btn btn-link" to={"/albums"}>Back to albums list</Link>
                 </div>
             </div>
         </div>
     );
 };
 
-export default RaiseAlbumTier;
+export default AlbumRaiseTier;

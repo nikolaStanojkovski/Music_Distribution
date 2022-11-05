@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.SongShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.SongResponse;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
@@ -176,9 +177,25 @@ public class SongResource {
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
-                        encryptionSystem.encrypt(Optional.ofNullable(
-                                song.getAlbum()).map(album -> album.getId().getId())
-                                .orElse("")))))
+                        null)))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    /**
+     * Method for raising an existing song's tier.
+     *
+     * @param songShortTransactionRequest - dto object containing information for the song to be updated.
+     * @return the created song.
+     */
+    @PostMapping("/raise-tier")
+    public ResponseEntity<SongResponse> raiseTierSong(
+            @RequestBody @Valid SongShortTransactionRequest songShortTransactionRequest) {
+        return this.songService.raiseTierSong(songShortTransactionRequest,
+                SongId.of(encryptionSystem.decrypt(songShortTransactionRequest.getSongId())))
+                .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
+                        encryptionSystem.encrypt(song.getId().getId()),
+                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
+                        null)))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

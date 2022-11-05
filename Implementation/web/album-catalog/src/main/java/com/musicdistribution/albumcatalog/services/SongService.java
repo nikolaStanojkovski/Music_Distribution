@@ -1,10 +1,9 @@
 package com.musicdistribution.albumcatalog.services;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.albumcatalog.domain.models.entity.Song;
-import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
+import com.musicdistribution.albumcatalog.domain.models.entity.*;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
+import com.musicdistribution.albumcatalog.domain.models.request.SongShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -88,4 +87,13 @@ public interface SongService {
      * @return an optional with the song that was deleted.
      */
     Optional<Song> deleteSong(SongId id);
+
+    /**
+     * Method for raising an existing song tier in the database.
+     *
+     * @param song - song's dto object containing song's information.
+     * @param id    - song's id.
+     * @return an optional with the updated song.
+     */
+    Optional<Song> raiseTierSong(SongShortTransactionRequest song, SongId id);
 }

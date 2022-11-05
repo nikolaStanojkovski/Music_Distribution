@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
+import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,8 +31,10 @@ public class Album extends AbstractEntity<AlbumId> {
     private Genre genre;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "subscriptionFee", column = @Column(name = "payment_subscription_fee")),
-            @AttributeOverride(name = "transactionFee", column = @Column(name = "payment_transaction_fee")),
+            @AttributeOverride(name = "subscriptionFee.amount", column = @Column(name = "payment_subscription_fee_amount")),
+            @AttributeOverride(name = "subscriptionFee.currency", column = @Column(name = "payment_subscription_fee_amount_currency")),
+            @AttributeOverride(name = "transactionFee.amount", column = @Column(name = "payment_transaction_fee_amount")),
+            @AttributeOverride(name = "transactionFee.currency", column = @Column(name = "payment_transaction_fee_currency")),
             @AttributeOverride(name = "tier", column = @Column(name = "payment_tier"))
     })
     private PaymentInfo paymentInfo;
@@ -106,5 +109,17 @@ public class Album extends AbstractEntity<AlbumId> {
     public void removeSong(Song song) {
         this.songs.remove(song);
         this.totalLength.removeSecondsFromSongLength(song.getSongLength().getLengthInSeconds());
+    }
+
+    /**
+     * Method used for raising album's tier.
+     *
+     * @param paymentInfo - the payment information for raising album's tier.
+     */
+    public void raiseTier(PaymentInfo paymentInfo) {
+        Money subscriptionFeeSum = this.paymentInfo.getSubscriptionFee().add(paymentInfo.getSubscriptionFee());
+        Money transactionFeeSum = this.paymentInfo.getTransactionFee().add(paymentInfo.getTransactionFee());
+
+        this.paymentInfo = PaymentInfo.build(subscriptionFeeSum, transactionFeeSum, paymentInfo.getTier());
     }
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Embeddable
 @AllArgsConstructor
-public class Money implements ValueObject {
+public class Money implements ValueObject, Serializable {
 
     @Enumerated(value = EnumType.STRING)
     private final Currency currency;

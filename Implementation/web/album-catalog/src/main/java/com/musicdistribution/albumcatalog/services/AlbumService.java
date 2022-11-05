@@ -3,6 +3,7 @@ package com.musicdistribution.albumcatalog.services;
 import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
+import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import org.springframework.data.domain.Page;
@@ -73,4 +74,13 @@ public interface AlbumService {
      */
     Optional<Album> publishAlbum(AlbumTransactionRequest album, MultipartFile cover,
                                  String username, List<String> songIds);
+
+    /**
+     * Method for raising an existing album tier in the database.
+     *
+     * @param album - album's dto object containing album's information.
+     * @param id    - album's id.
+     * @return an optional with the updated album.
+     */
+    Optional<Album> raiseTierAlbum(AlbumShortTransactionRequest album, AlbumId id);
 }

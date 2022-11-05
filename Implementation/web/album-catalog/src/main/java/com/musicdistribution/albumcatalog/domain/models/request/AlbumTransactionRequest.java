@@ -1,5 +1,6 @@
 package com.musicdistribution.albumcatalog.domain.models.request;
 
+import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -18,8 +20,9 @@ public class AlbumTransactionRequest {
 
     @NotBlank
     private String albumName;
-    @NotBlank
+    @NotNull
     private Genre albumGenre;
+
     private String artistName;
     private String producerName;
     private String composerName;
@@ -28,10 +31,10 @@ public class AlbumTransactionRequest {
     @NotEmpty
     private List<String> songIdList;
 
-    @NotBlank
+    @NotNull
     private Tier albumTier;
-    @NotBlank
-    private String subscriptionFee;
-    @NotBlank
-    private String transactionFee;
+    @NotNull
+    private Money subscriptionFee;
+    @NotNull
+    private Money transactionFee;
 }

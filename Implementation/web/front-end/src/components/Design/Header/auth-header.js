@@ -34,6 +34,8 @@ const AuthHeader = (props) => {
                                     <Link to={"/songs"} className="dropdown-item">View</Link>
                                     <div className="dropdown-divider"/>
                                     <Link to={"/songs/publish"} className="dropdown-item">Publish</Link>
+                                    <div className="dropdown-divider"/>
+                                    <Link to={"/songs/raise-tier"} className="dropdown-item">Raise Tier</Link>
                                 </div>
                             </li>
                             <li className="nav-item">

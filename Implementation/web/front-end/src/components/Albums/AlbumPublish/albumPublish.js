@@ -3,12 +3,13 @@ import {useHistory} from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import ScreenElementsUtil from "../../../util/screen-elements-util";
+import StringUtil from "../../../util/string-util";
 
 const PublishAlbum = (props) => {
 
     const History = useHistory();
     const [cover, updateCover] = React.useState(null);
-    const [subscriptionFee, updateSubscriptionFee] = React.useState("");
+    const [subscriptionFee, updateSubscriptionFee] = React.useState({});
     const [songIdList, updateSongIdList] = React.useState([]);
     const [formData, updateFormData] = React.useState({
         albumName: "",
@@ -21,12 +22,13 @@ const PublishAlbum = (props) => {
 
     const handleSubscriptionFee = (tier) => {
         props.subscriptionFee(tier).then((data) => {
-            const formattedFee = `${data.data.amount}.00 ${data.data.currency}`;
-            updateSubscriptionFee(formattedFee);
+            updateSubscriptionFee(data.data);
         });
     }
 
     const handleChange = (e) => {
+        console.log(formData.artistName, formData.producerName, formData.composerName);
+
         updateFormData({
             ...formData,
             [e.target.name]: e.target.value.trim()
@@ -47,7 +49,8 @@ const PublishAlbum = (props) => {
         if (songIdList && songIdList.length > 0
             && albumName && albumGenre && albumTier
             && subscriptionFee && props.transactionFee) {
-            props.publishAlbum(cover, songIdList.map(song => song.value),
+            props.publishAlbum(cover, songIdList.map(song => song.value)
+                    .filter(term => term !== undefined),
                 albumName, albumGenre, albumTier,
                 subscriptionFee, props.transactionFee,
                 formData.artistName, formData.producerName, formData.composerName);
@@ -93,7 +96,7 @@ const PublishAlbum = (props) => {
                         <div className="form-group">
                             <select onChange={handleChange} name="albumGenre" required={true} className="form-control">
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
-                                    -- Album genre --
+                                    -- Choose album genre --
                                 </option>
                                 {props.genres.map((term) => {
                                         return <option key={term} value={term}>{term}</option>;
@@ -109,14 +112,14 @@ const PublishAlbum = (props) => {
                                 components={makeAnimated()}
                                 isMulti
                                 isSearchable
+                                defaultValue={"-- Select songs --"}
                                 onChange={(choice) => updateSongIdList(choice)}
                                 options={props.songs.map((term) => {
-                                        if (term['creator'].id === props.selectedArtist.id
-                                            && !term['album'] && !term['isPublished']) {
-                                            return {value: term.id, label: term.songName};
-                                        }
+                                    if(term && term['creator'].id === props.selectedArtist.id
+                                        && !term['album'] && !term['isPublished']) {
+                                        return {value: term.id, label: term.songName};
                                     }
-                                )} />
+                                }).filter(term => term !== undefined)}/>
                         </div>
                         <br/>
 
@@ -124,7 +127,7 @@ const PublishAlbum = (props) => {
                             <select onChange={handleChange}
                                     name="albumTier" className="form-control" required={true}>
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
-                                    -- Choose a tier --
+                                    -- Choose tier --
                                 </option>
                                 {props.tiers.map((term) => {
                                         return <option key={term} value={term}>{term}</option>;
@@ -137,7 +140,9 @@ const PublishAlbum = (props) => {
                         <div className="form-group">
                             <span>
                                 <input name="subscriptionFee" disabled={true}
-                                       id="subscriptionFee" value={subscriptionFee}
+                                       id="subscriptionFee"
+                                       value={StringUtil.formatCurrency(subscriptionFee.amount,
+                                           subscriptionFee.currency)}
                                        className="form-control disabled"/>&nbsp;
                             </span>
                             <span className={"text-muted"}>Subscription fee is based on the tier our platform offers for distribution</span>
@@ -146,7 +151,9 @@ const PublishAlbum = (props) => {
 
                         <div className="form-group">
                             <input name="transactionFee" disabled={true}
-                                   id={"transactionFee"} value={props.transactionFee}
+                                   id={"transactionFee"}
+                                   value={StringUtil.formatCurrency(props.transactionFee.amount,
+                                       props.transactionFee.currency)}
                                    className="form-control disabled"/>
                             <span className={"text-muted"}>Transaction fee is fixed and based on your location and country</span>
                         </div>
