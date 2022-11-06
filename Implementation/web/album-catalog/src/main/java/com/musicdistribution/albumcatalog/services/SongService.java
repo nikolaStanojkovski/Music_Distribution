@@ -1,11 +1,12 @@
 package com.musicdistribution.albumcatalog.services;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.*;
-import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
+import com.musicdistribution.albumcatalog.domain.models.entity.Song;
+import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -21,36 +22,17 @@ public interface SongService {
      *
      * @return a list of the songs.
      */
-    List<Song> findAll();
-
-    /**
-     * Method for getting all the songs with the specified artist id from the database.
-     *
-     * @return a list of the songs.
-     */
-    List<Song> findAllByArtist(ArtistId artistId);
-
-    /**
-     * Method for getting all the songs with the specified album id from the database.
-     *
-     * @return a list of the songs.
-     */
-    List<Song> findAllByAlbum(AlbumId artistId);
-
-    /**
-     * Method for a page of songs from the database.
-     *
-     * @return a page of the songs.
-     */
-    Page<Song> findAllPageable();
+    Page<Song> findAll(Pageable pageable);
 
     /**
      * Method for searching songs.
      *
-     * @param searchTerm - the term used for filtering
+     * @param searchParams - the object parameters by which a filtering will be done
+     * @param searchTerm   - the search term by which the filtering will be done
+     * @param pageable     - the wrapper for paging/sorting/filtering
      * @return a list of the filtered songs.
      */
-    List<Song> searchSongs(String searchTerm);
+    Page<Song> search(List<String> searchParams, String searchTerm, Pageable pageable);
 
     /**
      * Method for getting a song from the database.
@@ -67,7 +49,7 @@ public interface SongService {
      * @param username - the username of the user which is creating the song.
      * @return an optional with the found song.
      */
-    Optional<Song> createSong(SongRequest song, MultipartFile file, String username);
+    Optional<Song> create(SongRequest song, MultipartFile file, String username);
 
     /**
      * Method for publishing a song.
@@ -78,22 +60,14 @@ public interface SongService {
      * @param id          - the id of the selected song.
      * @return an optional with the published song.
      */
-    Optional<Song> publishSong(SongTransactionRequest songRequest, MultipartFile cover, String username, String id);
-
-    /**
-     * Method for deleting a song.
-     *
-     * @param id - the id of the song to be deleted.
-     * @return an optional with the song that was deleted.
-     */
-    Optional<Song> deleteSong(SongId id);
+    Optional<Song> publish(SongTransactionRequest songRequest, MultipartFile cover, String username, String id);
 
     /**
      * Method for raising an existing song tier in the database.
      *
      * @param song - song's dto object containing song's information.
-     * @param id    - song's id.
+     * @param id   - song's id.
      * @return an optional with the updated song.
      */
-    Optional<Song> raiseTierSong(SongShortTransactionRequest song, SongId id);
+    Optional<Song> raiseTier(SongShortTransactionRequest song, SongId id);
 }

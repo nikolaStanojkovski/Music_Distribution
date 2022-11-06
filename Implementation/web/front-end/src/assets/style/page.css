@@ -41,6 +41,10 @@
     padding-right: 2rem !important;
 }
 
+.table-row-clickable {
+    transition: all 0.2s ease;
+}
+
 .table-row-clickable:hover {
     background-color: #e8e8e8;
     cursor: pointer;

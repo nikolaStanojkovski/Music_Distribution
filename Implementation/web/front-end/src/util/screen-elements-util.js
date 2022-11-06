@@ -78,6 +78,18 @@ const ScreenElementsUtil = {
                 accordionItemContainer.classList.toggle('show');
             }
         }
+    },
+    isClickableTableRow(e, id) {
+        const element = e.target;
+        if (element instanceof HTMLElement) {
+            const cellElement = element.parentElement;
+            if (cellElement && cellElement instanceof HTMLElement) {
+                if (id && !cellElement.classList.contains('table-cell-clickable')) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 

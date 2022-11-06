@@ -92,26 +92,6 @@ public class Album extends AbstractEntity<AlbumId> {
     }
 
     /**
-     * Method for adding a song to an album.
-     *
-     * @param song - the song to be added to the album.
-     */
-    public void addSong(Song song) {
-        this.songs.add(song);
-        this.totalLength.addSecondsToSongLength(song.getSongLength().getLengthInSeconds());
-    }
-
-    /**
-     * Method for removing a song from an album.
-     *
-     * @param song - the song to be added to the album.
-     */
-    public void removeSong(Song song) {
-        this.songs.remove(song);
-        this.totalLength.removeSecondsFromSongLength(song.getSongLength().getLengthInSeconds());
-    }
-
-    /**
      * Method used for raising album's tier.
      *
      * @param paymentInfo - the payment information for raising album's tier.

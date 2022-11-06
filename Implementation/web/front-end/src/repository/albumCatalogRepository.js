@@ -51,6 +51,9 @@ const AlbumCatalogService = {
         return axios.get("/tiers");
     },
 
+    filterSongs: (key, value) => {
+        return axios.get(`/resource/songs/search?searchParams=${key}&searchTerm=${value}`);
+    },
     fetchSong: (id) => {
         return axios.get(`/resource/songs/file/${id}`);
     },
@@ -81,13 +84,16 @@ const AlbumCatalogService = {
     },
     raiseTierSong: (songId, songTier, subscriptionFee, transactionFee) => {
         return axios.post("/resource/songs/raise-tier", {
-            "songId" : songId,
-            "songTier" : songTier,
-            "subscriptionFee" : subscriptionFee,
-            "transactionFee" : transactionFee,
+            "songId": songId,
+            "songTier": songTier,
+            "subscriptionFee": subscriptionFee,
+            "transactionFee": transactionFee,
         });
     },
 
+    filterAlbums: (key, value) => {
+        return axios.get(`/resource/albums/search?searchParams=${key}&searchTerm=${value}`);
+    },
     publishAlbum: (cover, songIdList,
                    albumName, albumGenre, albumTier,
                    subscriptionFee, transactionFee,
@@ -111,10 +117,10 @@ const AlbumCatalogService = {
     },
     raiseTierAlbum: (albumId, albumTier, subscriptionFee, transactionFee) => {
         return axios.post("/resource/albums/raise-tier", {
-            "albumId" : albumId,
-            "albumTier" : albumTier,
-            "subscriptionFee" : subscriptionFee,
-            "transactionFee" : transactionFee,
+            "albumId": albumId,
+            "albumTier": albumTier,
+            "subscriptionFee": subscriptionFee,
+            "transactionFee": transactionFee,
         });
     },
 

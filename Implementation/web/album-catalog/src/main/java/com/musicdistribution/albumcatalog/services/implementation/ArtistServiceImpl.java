@@ -12,7 +12,7 @@ import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,28 +35,19 @@ public class ArtistServiceImpl implements ArtistService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<Artist> findAll() {
-        return artistRepository.findAll();
+    public Page<Artist> findAll(Pageable pageable) {
+        return artistRepository.findAll(pageable);
     }
 
     @Override
-    public Page<Artist> findAllPageable() {
-        return artistRepository.findAll(PageRequest.of(0, 10));
-    }
-
-    @Override
-    public List<Artist> searchArtists(String searchTerm) {
-        return artistRepository.findAllByArtistPersonalInfo_ArtNameIgnoreCaseOrArtistPersonalInfo_FirstNameIgnoreCaseOrArtistPersonalInfo_LastNameIgnoreCase(searchTerm, searchTerm, searchTerm);
+    public Page<Artist> search(List<String> searchParams, String searchTerm, Pageable pageable) {
+        // TODO: Implement the search logic
+        return findAll(pageable);
     }
 
     @Override
     public Optional<Artist> findById(ArtistId id) {
         return artistRepository.findById(id);
-    }
-
-    @Override
-    public Optional<Artist> findByEmail(ArtistRequest artistRequest) {
-        return artistRepository.findByArtistContactInfo_Email(Email.createEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()));
     }
 
     @Override
@@ -66,18 +57,26 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Optional<Artist> registerArtist(MultipartFile profilePicture, ArtistRequest artistRequest) {
-        if(findByEmail(artistRequest).isPresent() ||
-                artistRepository.findByArtistUserInfo_Username(artistRequest.getUsername()).isPresent())
+        if (findByEmail(artistRequest).isPresent() ||
+                findByUsername(artistRequest.getUsername()).isPresent())
             return Optional.empty();
 
         Artist artist = artistRepository.save(Artist.build(ArtistContactInfo.build(artistRequest.getTelephoneNumber(), artistRequest.getUsername(), artistRequest.getEmailDomain()),
                 ArtistPersonalInfo.build(artistRequest.getFirstName(), artistRequest.getLastName(), artistRequest.getArtName()), passwordEncoder.encode(artistRequest.getPassword())));
 
-        if(Objects.nonNull(profilePicture) && !profilePicture.isEmpty()) {
+        if (Objects.nonNull(profilePicture) && !profilePicture.isEmpty()) {
             String fileName = String.format("%s.png", artist.getId().getId());
             fileSystemStorage.saveFile(profilePicture, fileName, FileLocationType.ARTIST_PROFILE_PICTURE);
         }
 
         return Optional.of(artist);
+    }
+
+    private Optional<Artist> findByUsername(String username) {
+        return artistRepository.findByArtistUserInfo_Username(username);
+    }
+
+    private Optional<Artist> findByEmail(ArtistRequest artistRequest) {
+        return artistRepository.findByArtistContactInfo_Email(Email.createEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()));
     }
 }

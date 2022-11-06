@@ -2,12 +2,12 @@ package com.musicdistribution.albumcatalog.domain.repository;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * JPA Repository for an album.
@@ -16,26 +16,14 @@ import java.util.List;
 public interface AlbumRepository extends JpaRepository<Album, AlbumId> {
 
     /**
-     * Method for finding all albums by artist's id.
+     * Method used for searching albums.
      *
-     * @param creator_id - artist's id by which the filtering will be done.
-     * @return the filtered list of albums.
+     * @param searchParams - the parameters by which a search will be made.
+     * @param searchTerm   - the search term that will be used for filtering.
+     * @return a list of the found albums that match the search criteria.
      */
-    List<Album> findAllByCreatorId(ArtistId creator_id);
-
-    /**
-     * Method for finding all albums by genre.
-     *
-     * @param genre - album's genre by which the filtering will be done.
-     * @return the filtered list of albums.
-     */
-    List<Album> findAllByGenre(Genre genre);
-
-    /**
-     * Method for searching albums.
-     *
-     * @param searchTerm - the search term by which the filtering will be done.
-     * @return the filtered list of albums.
-     */
-    List<Album> findAllByAlbumNameIgnoreCase(String searchTerm);
+    @Query("SELECT a FROM Album a WHERE CONCAT(:params) LIKE %:term%")
+    Page<Album> search(@Param("params") String searchParams,
+                       @Param("term") String searchTerm,
+                       Pageable pageable);
 }

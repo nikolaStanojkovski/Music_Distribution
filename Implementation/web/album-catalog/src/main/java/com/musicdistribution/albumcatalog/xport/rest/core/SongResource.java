@@ -1,18 +1,16 @@
 package com.musicdistribution.albumcatalog.xport.rest.core;
 
-import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.entity.SongId;
 import com.musicdistribution.albumcatalog.domain.models.request.SongRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.SongResponse;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
-import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,17 +30,16 @@ public class SongResource {
 
     private final JwtUtils jwtUtils;
     private final SongService songService;
-    private final IFileSystemStorage systemStorage;
     private final IEncryptionSystem encryptionSystem;
 
     /**
      * Method for getting information about all songs.
      *
-     * @return the list of all songs.
+     * @return a page of the filtered songs.
      */
     @GetMapping
-    public List<SongResponse> getAll() {
-        return songService.findAll().stream()
+    public List<SongResponse> findAll(Pageable pageable) {
+        return songService.findAll(pageable).stream()
                 .map(song -> SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
@@ -53,47 +50,18 @@ public class SongResource {
     }
 
     /**
-     * Method for getting information about all songs by a particular artist.
+     * Method for searching songs.
      *
-     * @return the list of all albums.
+     * @param searchParams - the object parameters by which a filtering will be done
+     * @param searchTerm   - the search term by which the filtering will be done
+     * @param pageable     - the wrapper for paging/sorting/filtering
+     * @return the page of the filtered songs.
      */
-    @GetMapping("/artist/{artistId}")
-    public List<SongResponse> getAllByArtist(@PathVariable String artistId) {
-        return songService.findAllByArtist(ArtistId.of(encryptionSystem.decrypt(artistId)))
-                .stream().map(song -> SongResponse.from(song,
-                        encryptionSystem.encrypt(song.getId().getId()),
-                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
-                        encryptionSystem.encrypt(Optional.ofNullable(
-                                song.getAlbum()).map(album -> album.getId().getId())
-                                .orElse(""))))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Method for getting information about all songs by a particular artist.
-     *
-     * @return the list of all albums.
-     */
-    @GetMapping("/album/{albumId}")
-    public List<SongResponse> getAllByAlbum(@PathVariable String albumId) {
-        return songService.findAllByAlbum(AlbumId.of(encryptionSystem.decrypt(albumId)))
-                .stream().map(song -> SongResponse.from(song,
-                        encryptionSystem.encrypt(song.getId().getId()),
-                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
-                        encryptionSystem.encrypt(Optional.ofNullable(
-                                song.getAlbum()).map(album -> album.getId().getId())
-                                .orElse(""))))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Method for getting a page of information about all songs.
-     *
-     * @return the list of all songs.
-     */
-    @GetMapping("/page")
-    public List<SongResponse> getAllPage() {
-        return songService.findAllPageable().stream()
+    @GetMapping("/search")
+    public List<SongResponse> search(@RequestParam String[] searchParams,
+                                     @RequestParam String searchTerm,
+                                     Pageable pageable) {
+        return songService.search(List.of(searchParams), searchTerm, pageable).stream()
                 .map(song -> SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
@@ -102,25 +70,6 @@ public class SongResource {
                                 .orElse(""))))
                 .collect(Collectors.toList());
     }
-
-    /**
-     * Method for search songs.
-     *
-     * @param searchTerm - the search term by which the filtering will be done
-     * @return the list of all filtered songs.
-     */
-    @GetMapping("/search/{searchTerm}")
-    public List<SongResponse> searchSongs(@PathVariable String searchTerm) {
-        return songService.searchSongs(searchTerm).stream()
-                .map(song -> SongResponse.from(song,
-                        encryptionSystem.encrypt(song.getId().getId()),
-                        encryptionSystem.encrypt(song.getCreator().getId().getId()),
-                        encryptionSystem.encrypt(Optional.ofNullable(
-                                song.getAlbum()).map(album -> album.getId().getId())
-                                .orElse(""))))
-                .collect(Collectors.toList());
-    }
-
 
     /**
      * Method for getting information about a specific song.
@@ -147,17 +96,15 @@ public class SongResource {
      * @return the created song.
      */
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
-    public ResponseEntity<SongResponse> createSong(@RequestHeader(value = "Authorization") String authToken,
-                                                   @RequestPart MultipartFile file,
-                                                   @RequestPart @Valid SongRequest songRequest) {
+    public ResponseEntity<SongResponse> create(@RequestHeader(value = "Authorization") String authToken,
+                                               @RequestPart MultipartFile file,
+                                               @RequestPart @Valid SongRequest songRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
-        return this.songService.createSong(songRequest, file, username)
+        return this.songService.create(songRequest, file, username)
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
-                        encryptionSystem.encrypt(Optional.ofNullable(
-                                song.getAlbum()).map(album -> album.getId().getId())
-                                .orElse("")))))
+                        null)))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -168,11 +115,11 @@ public class SongResource {
      * @return the published song.
      */
     @PostMapping("/publish")
-    public ResponseEntity<SongResponse> publishSong(@RequestHeader(value = "Authorization") String authToken,
-                                                    @RequestPart MultipartFile cover,
-                                                    @RequestPart @Valid SongTransactionRequest songTransactionRequest) {
+    public ResponseEntity<SongResponse> publish(@RequestHeader(value = "Authorization") String authToken,
+                                                @RequestPart MultipartFile cover,
+                                                @RequestPart @Valid SongTransactionRequest songTransactionRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
-        return this.songService.publishSong(songTransactionRequest, cover,
+        return this.songService.publish(songTransactionRequest, cover,
                 username, encryptionSystem.decrypt(songTransactionRequest.getSongId()))
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
@@ -188,9 +135,9 @@ public class SongResource {
      * @return the created song.
      */
     @PostMapping("/raise-tier")
-    public ResponseEntity<SongResponse> raiseTierSong(
+    public ResponseEntity<SongResponse> raiseTier(
             @RequestBody @Valid SongShortTransactionRequest songShortTransactionRequest) {
-        return this.songService.raiseTierSong(songShortTransactionRequest,
+        return this.songService.raiseTier(songShortTransactionRequest,
                 SongId.of(encryptionSystem.decrypt(songShortTransactionRequest.getSongId())))
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),

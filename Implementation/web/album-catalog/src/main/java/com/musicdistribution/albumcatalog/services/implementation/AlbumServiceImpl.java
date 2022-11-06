@@ -1,5 +1,6 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
+import com.musicdistribution.albumcatalog.domain.constants.EntityConstants;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
@@ -7,14 +8,16 @@ import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransaction
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
+import com.musicdistribution.albumcatalog.domain.repository.cusotm.CustomAlbumRepository;
+import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
+import com.musicdistribution.albumcatalog.domain.util.SearchUtil;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,33 +37,24 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
+    private final CustomAlbumRepository customAlbumRepository;
     private final SongRepository songRepository;
 
+    private final IEncryptionSystem encryptionSystem;
     private final IFileSystemStorage fileSystemStorage;
 
     @Override
-    public List<Album> findAll() {
-        return albumRepository.findAll();
+    public Page<Album> findAll(Pageable pageable) {
+        return albumRepository.findAll(pageable);
     }
 
     @Override
-    public List<Album> findAllByArtist(ArtistId artistId) {
-        return albumRepository.findAllByCreatorId(artistId);
-    }
-
-    @Override
-    public List<Album> findAllByGenre(Genre genre) {
-        return albumRepository.findAllByGenre(genre);
-    }
-
-    @Override
-    public List<Album> searchAlbums(String searchTerm) {
-        return albumRepository.findAllByAlbumNameIgnoreCase(searchTerm);
-    }
-
-    @Override
-    public Page<Album> findAllPageable() {
-        return albumRepository.findAll(PageRequest.of(0, 10));
+    public Page<Album> search(List<String> searchParams, String searchTerm, Pageable pageable) {
+        String formattedSearchParams = SearchUtil.getAlbumSearchParams(searchParams);
+        return customAlbumRepository.search(formattedSearchParams,
+                (formattedSearchParams.contains(EntityConstants.ID))
+                        ? encryptionSystem.decrypt(searchTerm) : searchTerm,
+                pageable);
     }
 
     @Override
@@ -69,14 +63,10 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Optional<Album> publishAlbum(AlbumTransactionRequest albumTransactionRequest, MultipartFile cover,
-                                        String username, List<String> songIds) {
+    public Optional<Album> publish(AlbumTransactionRequest albumTransactionRequest, MultipartFile cover,
+                                   String username, List<String> songIds) {
         Optional<Artist> artist = artistRepository.findByArtistUserInfo_Username(username);
-        List<Song> songs = songIds.stream()
-                .map(songId -> songRepository.findById(SongId.of(songId))
-                        .orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<Song> songs = filterSongs(songIds);
 
         if (artist.isPresent() && songs.size() > 0) {
             Album album = Album.build(albumTransactionRequest.getAlbumName(),
@@ -90,12 +80,20 @@ public class AlbumServiceImpl implements AlbumService {
                             albumTransactionRequest.getAlbumTier()),
                     songs);
 
-            return saveAlbum(album, cover);
+            return this.save(album, cover);
         }
         return Optional.empty();
     }
 
-    private Optional<Album> saveAlbum(Album album, MultipartFile cover) {
+    private List<Song> filterSongs(List<String> songIds) {
+        return songIds.stream()
+                .map(songId -> songRepository.findById(SongId.of(songId))
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private Optional<Album> save(Album album, MultipartFile cover) {
         return Optional.of(albumRepository.save(album))
                 .map(a -> {
                     if (!cover.isEmpty()) {
@@ -110,7 +108,7 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Optional<Album> raiseTierAlbum(AlbumShortTransactionRequest albumShortTransactionRequest, AlbumId id) {
+    public Optional<Album> raiseTier(AlbumShortTransactionRequest albumShortTransactionRequest, AlbumId id) {
         return albumRepository.findById(id).map(album -> {
             PaymentInfo paymentInfo = PaymentInfo.build(albumShortTransactionRequest.getSubscriptionFee(),
                     albumShortTransactionRequest.getTransactionFee(),

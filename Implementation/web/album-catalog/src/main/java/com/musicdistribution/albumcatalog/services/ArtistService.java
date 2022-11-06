@@ -4,6 +4,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.Artist;
 import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,24 +18,20 @@ public interface ArtistService {
     /**
      * Method for getting all the artists from the database.
      *
+     * @param pageable - the wrapper for paging/sorting/filtering
      * @return a list of the artists.
      */
-    List<Artist> findAll();
-
-    /**
-     * Method for a page of artists from the database.
-     *
-     * @return a page of the artists.
-     */
-    Page<Artist> findAllPageable();
+    Page<Artist> findAll(Pageable pageable);
 
     /**
      * Method for searching artists.
      *
-     * @param searchTerm - the term used for filtering
+     * @param searchParams - the object parameters by which a filtering will be done
+     * @param searchTerm   - the search term by which the filtering will be done
+     * @param pageable     - the wrapper for paging/sorting/filtering
      * @return a list of the filtered artists.
      */
-    List<Artist> searchArtists(String searchTerm);
+    Page<Artist> search(List<String> searchParams, String searchTerm, Pageable pageable);
 
     /**
      * Method for getting an artist from the database.
@@ -43,14 +40,6 @@ public interface ArtistService {
      * @return an optional with the found artist.
      */
     Optional<Artist> findById(ArtistId id);
-
-    /**
-     * Method for getting an artist from the database.
-     *
-     * @param email - artist's email.
-     * @return an optional with the found artist.
-     */
-    Optional<Artist> findByEmail(ArtistRequest email);
 
     /**
      * Method for authenticating an existing artist from the database.
@@ -63,7 +52,7 @@ public interface ArtistService {
     /**
      * Method for registering a new artist in the database.
      *
-     * @param artist  - artist's login form object containing artist's information needed for authentication.
+     * @param artist         - artist's login form object containing artist's information needed for authentication.
      * @param profilePicture - the profile picture of the new artist to be registered.
      * @return the new registered artist.
      */

@@ -24,8 +24,7 @@ public class DataInitializer {
      */
     @PostConstruct
     public void initData() {
-
-        if (artistService.findAll().size() == 0) {
+//        if (artistService.findAll().size() == 0) {
 //            Artist artist1 = artistService.registerArtist(ArtistRequest.build(Artist.build(ArtistContactInfo.build("078-916-999", "nikola.stanojkovski", EmailDomain.gmail),
 //                    ArtistPersonalInfo.build("Nikola", "Stanojkovski", "Agremorta"), "mst-2"))).orElse(null);
 //            Artist artist2 = artistService.registerArtist(ArtistRequest.build(Artist.build(ArtistContactInfo.build("077-911-998", "trajko.trajanovski", EmailDomain.gmail),
@@ -47,6 +46,5 @@ public class DataInitializer {
 //            songService.createSong(SongRequest.build(song4));
 //            songService.createSong(SongRequest.build(song5));
 //            songService.createSong(SongRequest.build(song6));
-        }
     }
 }

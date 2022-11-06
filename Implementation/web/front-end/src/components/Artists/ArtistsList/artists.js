@@ -1,14 +1,16 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {API_BASE_URL, ARTIST_PICTURE_URL} from "../../../constants/endpoints";
+import {Link} from "react-router-dom";
+import ScreenElementsUtil from "../../../util/screen-elements-util";
 
 const Artists = (props) => {
 
     const [showModal, setShowModal] = React.useState(false);
     const [profilePictureSource, updateProfilePictureSource] = React.useState(null);
 
-    const fetchArtistPicture = (id) => {
-        if (id) {
+    const fetchArtistPicture = (e, id) => {
+        if (ScreenElementsUtil.isClickableTableRow(e, id)) {
             updateProfilePictureSource(`${API_BASE_URL}${ARTIST_PICTURE_URL}/${id}.png`);
             setShowModal(true);
         }
@@ -38,20 +40,21 @@ const Artists = (props) => {
                         <tbody>
                         {props.artists.map((term) => {
                             return (
-                                <tr key={term.id} className={"table-row-clickable"} onClick={() => fetchArtistPicture(term.id)}>
+                                <tr key={term.id} className={"table-row-clickable align-middle"}
+                                    onClick={(e) => fetchArtistPicture(e, term.id)}>
                                     <td>{term['artistContactInfo'].email['fullAddress']}</td>
                                     <td>{term['artistContactInfo'].telephoneNumber}</td>
                                     <td>{term['artistPersonalInfo'].fullName}</td>
                                     <td>{term['artistPersonalInfo'].artName}</td>
-                                    <td>
-                                        <button key={term.id}
-                                                className={`table-item-button bi bi-list`}
-                                                onClick={() => {}}/>
+                                    <td className={"table-cell-clickable"}>
+                                        <Link to={"/albums?creator-id=" + term.id}
+                                              className={`btn btn-outline-secondary btn-block bi bi-list`}>
+                                        </Link>
                                     </td>
-                                    <td>
-                                        <button key={term.id}
-                                                className={`table-item-button bi bi-list`}
-                                                onClick={() => {}}/>
+                                    <td className={"table-cell-clickable"}>
+                                        <Link to={"/songs?creator-id=" + term.id}
+                                              className={`btn btn-outline-secondary btn-block bi bi-list`}>
+                                        </Link>
                                     </td>
                                 </tr>
                             );

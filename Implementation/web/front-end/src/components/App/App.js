@@ -76,6 +76,7 @@ class App extends Component {
 
                                 <NonProtectedRoute path={"/songs"} exact
                                                    songs={this.state.songs}
+                                                   filterSongs={this.filterSongs}
                                                    fetchSong={this.fetchSong}
                                                    component={Songs}/>
                                 <ProtectedRoute path={"/songs/create"} exact albums={this.state.albums}
@@ -101,6 +102,7 @@ class App extends Component {
 
                                 <NonProtectedRoute path={"/albums"} exact
                                                    albums={this.state.albums}
+                                                   filterAlbums={this.filterAlbums}
                                                    component={Albums}/>
                                 <ProtectedRoute path={"/albums/publish"} exact
                                                 songs={this.state.songs}
@@ -158,21 +160,25 @@ class App extends Component {
     }
 
     loadGenres = () => {
-        AlbumCatalogService.fetchGenres()
-            .then((data) => {
-                this.setState({
-                    genres: data.data
-                })
-            });
+        if (this.getCurrentArtist()) {
+            AlbumCatalogService.fetchGenres()
+                .then((data) => {
+                    this.setState({
+                        genres: data.data
+                    })
+                });
+        }
     }
 
     loadTiers = () => {
-        AlbumCatalogService.fetchTiers()
-            .then((data) => {
-                this.setState({
-                    tiers: data.data
-                })
-            });
+        if (this.getCurrentArtist()) {
+            AlbumCatalogService.fetchTiers()
+                .then((data) => {
+                    this.setState({
+                        tiers: data.data
+                    })
+                });
+        }
     }
 
     loadAlbums = () => {
@@ -184,8 +190,26 @@ class App extends Component {
             });
     }
 
+    filterAlbums = (key, value) => {
+        AlbumCatalogService.filterAlbums(key, value)
+            .then((data) => {
+                this.setState({
+                    albums: data.data
+                })
+            });
+    }
+
     loadSongs = () => {
         AlbumCatalogService.fetchSongs()
+            .then((data) => {
+                this.setState({
+                    songs: data.data
+                })
+            });
+    }
+
+    filterSongs = (key, value) => {
+        AlbumCatalogService.filterSongs(key, value)
             .then((data) => {
                 this.setState({
                     songs: data.data
@@ -275,10 +299,12 @@ class App extends Component {
     }
 
     getTransactionFee = () => {
-        const locale = navigator.language;
-        AlbumCatalogService.getTransactionFee(locale).then((data) => {
-            this.state.transactionFee = data.data;
-        });
+        if(this.getCurrentArtist()) {
+            const locale = navigator.language;
+            AlbumCatalogService.getTransactionFee(locale).then((data) => {
+                this.state.transactionFee = data.data;
+            });
+        }
     }
 
     getSubscriptionFee = (tier) => {

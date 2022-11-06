@@ -2,11 +2,10 @@ package com.musicdistribution.albumcatalog.services;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.Album;
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,38 +21,17 @@ public interface AlbumService {
      *
      * @return a list of the albums.
      */
-    List<Album> findAll();
-
-    /**
-     * Method for getting a page of published albums from the database.
-     *
-     * @return a page of the filtered albums.
-     */
-    Page<Album> findAllPageable();
-
-    /**
-     * Method for getting all the albums by a particular artist from the database.
-     *
-     * @param artistId - artist's id
-     * @return a list of the filtered albums.
-     */
-    List<Album> findAllByArtist(ArtistId artistId);
-
-    /**
-     * Method for getting all the albums filtered by genre from the database.
-     *
-     * @param genre - album's genre used for filtering
-     * @return a list of the filtered albums.
-     */
-    List<Album> findAllByGenre(Genre genre);
+    Page<Album> findAll(Pageable pageable);
 
     /**
      * Method for searching albums.
      *
-     * @param searchTerm - the term used for filtering
+     * @param searchParams - the object parameters by which a filtering will be done
+     * @param searchTerm   - the search term by which the filtering will be done
+     * @param pageable     - the wrapper for paging/sorting/filtering
      * @return a list of the filtered albums.
      */
-    List<Album> searchAlbums(String searchTerm);
+    Page<Album> search(List<String> searchParams, String searchTerm, Pageable pageable);
 
     /**
      * Method for getting an album from the database.
@@ -72,8 +50,8 @@ public interface AlbumService {
      * @param songIds  - the IDs of the songs from which the album is consisted of.
      * @return an optional with the published album.
      */
-    Optional<Album> publishAlbum(AlbumTransactionRequest album, MultipartFile cover,
-                                 String username, List<String> songIds);
+    Optional<Album> publish(AlbumTransactionRequest album, MultipartFile cover,
+                            String username, List<String> songIds);
 
     /**
      * Method for raising an existing album tier in the database.
@@ -82,5 +60,5 @@ public interface AlbumService {
      * @param id    - album's id.
      * @return an optional with the updated album.
      */
-    Optional<Album> raiseTierAlbum(AlbumShortTransactionRequest album, AlbumId id);
+    Optional<Album> raiseTier(AlbumShortTransactionRequest album, AlbumId id);
 }

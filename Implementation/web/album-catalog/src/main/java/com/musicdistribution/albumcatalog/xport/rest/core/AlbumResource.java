@@ -1,16 +1,15 @@
 package com.musicdistribution.albumcatalog.xport.rest.core;
 
 import com.musicdistribution.albumcatalog.domain.models.entity.AlbumId;
-import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.models.response.AlbumResponse;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.AlbumService;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,8 +36,8 @@ public class AlbumResource {
      * @return the list of all albums.
      */
     @GetMapping
-    public List<AlbumResponse> getAll() {
-        return albumService.findAll().stream()
+    public List<AlbumResponse> findAll(Pageable pageable) {
+        return albumService.findAll(pageable).stream()
                 .map(album -> AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))
@@ -46,58 +45,18 @@ public class AlbumResource {
     }
 
     /**
-     * Method for getting a page of information about published albums.
+     * Method for searching albums.
      *
-     * @return the list of all albums.
+     * @param searchParams - the object parameters by which a filtering will be done
+     * @param searchTerm   - the search term by which the filtering will be done
+     * @param pageable     - the wrapper for paging/sorting/filtering
+     * @return the page of the filtered albums.
      */
-    @GetMapping("/page")
-    public List<AlbumResponse> getAllPage() {
-        return albumService.findAllPageable().stream()
-                .map(album -> AlbumResponse.from(album,
-                        encryptionSystem.encrypt(album.getId().getId()),
-                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Method for getting information about all albums by a particular artist.
-     *
-     * @param artistId - artist's id
-     * @return the list of all filtered albums.
-     */
-    @GetMapping("/artist/{artistId}")
-    public List<AlbumResponse> getAllByArtist(@PathVariable String artistId) {
-        return albumService.findAllByArtist(ArtistId.of(encryptionSystem.decrypt(artistId)))
-                .stream().map(album -> AlbumResponse.from(album,
-                        encryptionSystem.encrypt(album.getId().getId()),
-                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Method for getting information about all albums filtered by a particular genre.
-     *
-     * @param genre - the genre by which the filtering will be done
-     * @return the list of all filtered albums.
-     */
-    @GetMapping("/genre/{genre}")
-    public List<AlbumResponse> getAllByGenre(@PathVariable String genre) {
-        return albumService.findAllByGenre(Genre.valueOf(genre)).stream()
-                .map(album -> AlbumResponse.from(album,
-                        encryptionSystem.encrypt(album.getId().getId()),
-                        encryptionSystem.encrypt(album.getCreator().getId().getId())))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Method for search albums.
-     *
-     * @param searchTerm - the search term by which the filtering will be done
-     * @return the list of all filtered albums.
-     */
-    @GetMapping("/search/{searchTerm}")
-    public List<AlbumResponse> searchAlbums(@PathVariable String searchTerm) {
-        return albumService.searchAlbums(searchTerm).stream()
+    @GetMapping("/search")
+    public List<AlbumResponse> search(@RequestParam String[] searchParams,
+                                      @RequestParam String searchTerm,
+                                      Pageable pageable) {
+        return albumService.search(List.of(searchParams), searchTerm, pageable).stream()
                 .map(album -> AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))
@@ -126,12 +85,12 @@ public class AlbumResource {
      * @return the created album.
      */
     @PostMapping("/publish")
-    public ResponseEntity<AlbumResponse> publishAlbum(
+    public ResponseEntity<AlbumResponse> publish(
             @RequestHeader(value = "Authorization") String authToken,
             @RequestPart MultipartFile cover,
             @RequestPart @Valid AlbumTransactionRequest albumTransactionRequest) {
         String username = jwtUtils.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
-        return this.albumService.publishAlbum(albumTransactionRequest, cover,
+        return this.albumService.publish(albumTransactionRequest, cover,
                 username, getDecryptedSongIds(albumTransactionRequest.getSongIdList()))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
@@ -150,9 +109,9 @@ public class AlbumResource {
      * @return the created album.
      */
     @PostMapping("/raise-tier")
-    public ResponseEntity<AlbumResponse> raiseTierAlbum(
+    public ResponseEntity<AlbumResponse> raiseTier(
             @RequestBody @Valid AlbumShortTransactionRequest albumShortTransactionRequest) {
-        return this.albumService.raiseTierAlbum(albumShortTransactionRequest,
+        return this.albumService.raiseTier(albumShortTransactionRequest,
                 AlbumId.of(encryptionSystem.decrypt(albumShortTransactionRequest.getAlbumId())))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),

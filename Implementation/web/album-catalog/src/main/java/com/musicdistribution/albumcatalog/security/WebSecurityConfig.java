@@ -57,8 +57,11 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/email-domains", "/api/genres",
-                        "/api/resource/albums", "/api/resource/artists", "/api/resource/songs", "/api/resource/stream/**").permitAll()
+                .antMatchers("/api/email-domains",
+                        "/api/resource/albums", "/api/resource/albums/search",
+                        "/api/resource/artists", "/api/resource/artists/search",
+                        "/api/resource/songs", "/api/resource/songs/search",
+                        "/api/resource/stream/**").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic();
 
