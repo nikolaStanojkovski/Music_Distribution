@@ -10,6 +10,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Song domain entity.
@@ -17,7 +18,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "Song")
-public class Song extends AbstractEntity<SongId> {
+public class Song extends AbstractEntity<SongId> implements Serializable {
 
     private String songName;
 

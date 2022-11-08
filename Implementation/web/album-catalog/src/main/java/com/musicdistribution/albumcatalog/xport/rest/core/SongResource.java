@@ -61,7 +61,11 @@ public class SongResource {
     public List<SongResponse> search(@RequestParam String[] searchParams,
                                      @RequestParam String searchTerm,
                                      Pageable pageable) {
-        return songService.search(List.of(searchParams), searchTerm, pageable).stream()
+        return songService.search(List.of(searchParams),
+                (List.of(searchParams).stream().filter(param ->
+                        param.contains("id")).count() == searchParams.length)
+                        ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable)
+                .stream()
                 .map(song -> SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),

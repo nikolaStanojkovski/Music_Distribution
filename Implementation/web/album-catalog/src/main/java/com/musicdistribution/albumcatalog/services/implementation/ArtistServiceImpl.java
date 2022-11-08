@@ -5,6 +5,7 @@ import com.musicdistribution.albumcatalog.domain.models.entity.ArtistId;
 import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
 import com.musicdistribution.albumcatalog.domain.models.request.ArtistRequest;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
+import com.musicdistribution.albumcatalog.domain.repository.custom.SearchRepository;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistContactInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.ArtistPersonalInfo;
@@ -31,6 +32,8 @@ import java.util.Optional;
 public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
+    private final SearchRepository<Artist> searchRepository;
+
     private final IFileSystemStorage fileSystemStorage;
     private final PasswordEncoder passwordEncoder;
 
@@ -41,8 +44,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<Artist> search(List<String> searchParams, String searchTerm, Pageable pageable) {
-        // TODO: Implement the search logic
-        return findAll(pageable);
+        return searchRepository.search(searchParams, searchTerm, pageable);
     }
 
     @Override

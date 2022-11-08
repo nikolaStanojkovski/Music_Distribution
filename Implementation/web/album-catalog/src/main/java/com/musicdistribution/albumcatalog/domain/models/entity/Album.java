@@ -12,6 +12,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ import java.util.List;
 @Entity
 @Table(name = "album")
 @EqualsAndHashCode(callSuper = true)
-public class Album extends AbstractEntity<AlbumId> {
+public class Album extends AbstractEntity<AlbumId> implements Serializable {
 
     private String albumName;
 

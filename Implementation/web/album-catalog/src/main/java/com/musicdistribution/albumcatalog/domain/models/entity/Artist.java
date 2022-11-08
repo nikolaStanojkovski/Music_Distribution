@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "artist")
-public class Artist extends AbstractEntity<ArtistId> {
+public class Artist extends AbstractEntity<ArtistId> implements Serializable {
 
     @AttributeOverrides({
             @AttributeOverride(name = "username", column = @Column(name = "artist_username")),

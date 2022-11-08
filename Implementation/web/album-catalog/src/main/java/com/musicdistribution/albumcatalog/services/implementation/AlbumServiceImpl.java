@@ -1,6 +1,5 @@
 package com.musicdistribution.albumcatalog.services.implementation;
 
-import com.musicdistribution.albumcatalog.domain.constants.EntityConstants;
 import com.musicdistribution.albumcatalog.domain.models.entity.*;
 import com.musicdistribution.albumcatalog.domain.models.enums.FileLocationType;
 import com.musicdistribution.albumcatalog.domain.models.request.AlbumShortTransactionRequest;
@@ -8,10 +7,9 @@ import com.musicdistribution.albumcatalog.domain.models.request.AlbumTransaction
 import com.musicdistribution.albumcatalog.domain.repository.AlbumRepository;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
-import com.musicdistribution.albumcatalog.domain.repository.cusotm.CustomAlbumRepository;
+import com.musicdistribution.albumcatalog.domain.repository.custom.SearchRepository;
 import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
-import com.musicdistribution.albumcatalog.domain.util.SearchUtil;
 import com.musicdistribution.albumcatalog.domain.valueobjects.AlbumInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.services.AlbumService;
@@ -37,10 +35,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
-    private final CustomAlbumRepository customAlbumRepository;
     private final SongRepository songRepository;
+    private final SearchRepository<Album> searchRepository;
 
-    private final IEncryptionSystem encryptionSystem;
     private final IFileSystemStorage fileSystemStorage;
 
     @Override
@@ -50,11 +47,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Page<Album> search(List<String> searchParams, String searchTerm, Pageable pageable) {
-        String formattedSearchParams = SearchUtil.getAlbumSearchParams(searchParams);
-        return customAlbumRepository.search(formattedSearchParams,
-                (formattedSearchParams.contains(EntityConstants.ID))
-                        ? encryptionSystem.decrypt(searchTerm) : searchTerm,
-                pageable);
+        return searchRepository.search(searchParams, searchTerm, pageable);
     }
 
     @Override

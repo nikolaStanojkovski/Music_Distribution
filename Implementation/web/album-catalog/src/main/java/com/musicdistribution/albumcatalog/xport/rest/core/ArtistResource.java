@@ -53,7 +53,11 @@ public class ArtistResource {
     public List<ArtistResponse> search(@RequestParam String[] searchParams,
                                        @RequestParam String searchTerm,
                                        Pageable pageable) {
-        return artistService.search(List.of(searchParams), searchTerm, pageable).stream()
+        return artistService.search(List.of(searchParams),
+                (List.of(searchParams).stream().filter(param ->
+                        param.contains("id")).count() == searchParams.length)
+                        ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable)
+                .stream()
                 .map(album -> ArtistResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId())))
                 .collect(Collectors.toList());

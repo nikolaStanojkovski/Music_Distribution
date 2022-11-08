@@ -47,12 +47,12 @@ const Artists = (props) => {
                                     <td>{term['artistPersonalInfo'].fullName}</td>
                                     <td>{term['artistPersonalInfo'].artName}</td>
                                     <td className={"table-cell-clickable"}>
-                                        <Link to={"/albums?creator-id=" + term.id}
+                                        <Link to={"/albums?creator_id=" + term.id}
                                               className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                         </Link>
                                     </td>
                                     <td className={"table-cell-clickable"}>
-                                        <Link to={"/songs?creator-id=" + term.id}
+                                        <Link to={"/songs?creator_id=" + term.id}
                                               className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                         </Link>
                                     </td>

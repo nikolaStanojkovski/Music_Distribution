@@ -56,7 +56,11 @@ public class AlbumResource {
     public List<AlbumResponse> search(@RequestParam String[] searchParams,
                                       @RequestParam String searchTerm,
                                       Pageable pageable) {
-        return albumService.search(List.of(searchParams), searchTerm, pageable).stream()
+        return albumService.search(List.of(searchParams),
+                (List.of(searchParams).stream().filter(param ->
+                        param.contains("id")).count() == searchParams.length)
+                        ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable)
+                .stream()
                 .map(album -> AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))

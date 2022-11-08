@@ -10,6 +10,7 @@ import com.musicdistribution.albumcatalog.domain.models.request.SongShortTransac
 import com.musicdistribution.albumcatalog.domain.models.request.SongTransactionRequest;
 import com.musicdistribution.albumcatalog.domain.repository.ArtistRepository;
 import com.musicdistribution.albumcatalog.domain.repository.SongRepository;
+import com.musicdistribution.albumcatalog.domain.repository.custom.SearchRepository;
 import com.musicdistribution.albumcatalog.domain.services.IFileSystemStorage;
 import com.musicdistribution.albumcatalog.domain.valueobjects.PaymentInfo;
 import com.musicdistribution.albumcatalog.domain.valueobjects.SongLength;
@@ -34,6 +35,8 @@ public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
     private final ArtistRepository artistRepository;
+    private final SearchRepository<Song> searchRepository;
+
     private final IFileSystemStorage fileSystemStorage;
 
     @Override
@@ -43,8 +46,7 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Page<Song> search(List<String> searchParams, String searchTerm, Pageable pageable) {
-        // TODO: Implement the search logic
-        return findAll(pageable);
+        return searchRepository.search(searchParams, searchTerm, pageable);
     }
 
     @Override

@@ -58,7 +58,7 @@ const Albums = (props) => {
                                     <td>{(term['albumInfo']) ? term['albumInfo']['producerName'] : ''}</td>
                                     <td>{(term['albumInfo']) ? term['albumInfo']['composerName'] : ''}</td>
                                     <td className={"table-cell-clickable"}>
-                                        <Link to={"/songs?album-id=" + term.id}
+                                        <Link to={"/songs?album_id=" + term.id}
                                               className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                         </Link>
                                     </td>
