@@ -16,11 +16,11 @@
 
 .upload-drop-container:hover {
     background: #eee;
-    border-color: #111;
+    border-color: #161c2d;
 }
 
 .upload-container:hover .upload-drop-title {
-    color: #222;
+    background: #161c2d;
 }
 
 .upload-drop-title {

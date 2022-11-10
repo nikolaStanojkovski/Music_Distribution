@@ -9,6 +9,8 @@ import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.AlbumService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/resource/albums")
 public class AlbumResource {
 
-    private final JwtUtils jwtUtils;
     private final AlbumService albumService;
+
+    private final JwtUtils jwtUtils;
     private final IEncryptionSystem encryptionSystem;
 
     /**
@@ -36,12 +39,13 @@ public class AlbumResource {
      * @return the list of all albums.
      */
     @GetMapping
-    public List<AlbumResponse> findAll(Pageable pageable) {
-        return albumService.findAll(pageable).stream()
+    public Page<AlbumResponse> findAll(Pageable pageable) {
+        List<AlbumResponse> albums = albumService.findAll(pageable).stream()
                 .map(album -> AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))
                 .collect(Collectors.toList());
+        return new PageImpl<>(albums, pageable, albumService.findTotalSize());
     }
 
     /**
@@ -53,10 +57,10 @@ public class AlbumResource {
      * @return the page of the filtered albums.
      */
     @GetMapping("/search")
-    public List<AlbumResponse> search(@RequestParam String[] searchParams,
+    public Page<AlbumResponse> search(@RequestParam String[] searchParams,
                                       @RequestParam String searchTerm,
                                       Pageable pageable) {
-        return albumService.search(List.of(searchParams),
+        List<AlbumResponse> filteredAlbums = albumService.search(List.of(searchParams),
                 (List.of(searchParams).stream().filter(param ->
                         param.contains("id")).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable)
@@ -65,6 +69,7 @@ public class AlbumResource {
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))
                 .collect(Collectors.toList());
+        return new PageImpl<>(filteredAlbums, pageable, albumService.findTotalSize());
     }
 
     /**

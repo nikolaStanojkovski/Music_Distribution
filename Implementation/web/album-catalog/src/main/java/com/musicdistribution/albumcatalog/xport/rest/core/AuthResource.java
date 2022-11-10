@@ -29,9 +29,10 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthResource {
 
+    private final ArtistService artistService;
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final ArtistService artistService;
     private final IEncryptionSystem encryptionSystem;
 
     /**

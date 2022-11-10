@@ -48,6 +48,11 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    public Long findTotalSize() {
+        return artistRepository.count();
+    }
+
+    @Override
     public Optional<Artist> findById(ArtistId id) {
         return artistRepository.findById(id);
     }

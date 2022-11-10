@@ -51,6 +51,11 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
+    public Long findTotalSize() {
+        return albumRepository.count();
+    }
+
+    @Override
     public Optional<Album> findById(AlbumId id) {
         return albumRepository.findById(id);
     }

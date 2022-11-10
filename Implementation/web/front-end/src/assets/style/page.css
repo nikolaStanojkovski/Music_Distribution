@@ -46,7 +46,16 @@
 }
 
 .table-row-clickable:hover {
-    background-color: #e8e8e8;
+    background-color: #d4d4d4;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.page-link:not(.active) {
+    color: #161c2d !important;
+}
+
+.page-item.active .page-link {
+    color: white !important;
+    background-color: #161c2d !important;
 }

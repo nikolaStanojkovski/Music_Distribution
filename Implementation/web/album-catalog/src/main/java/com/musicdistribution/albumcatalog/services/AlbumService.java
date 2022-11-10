@@ -34,6 +34,13 @@ public interface AlbumService {
     Page<Album> search(List<String> searchParams, String searchTerm, Pageable pageable);
 
     /**
+     * Method for reading the total number of entities in the database.
+     *
+     * @return the total number of albums in the database.
+     */
+    Long findTotalSize();
+
+    /**
      * Method for getting an album from the database.
      *
      * @param id - album's id.

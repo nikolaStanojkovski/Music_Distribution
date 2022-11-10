@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import {API_BASE_URL, ARTIST_PICTURE_URL} from "../../../constants/endpoints";
 import {Link} from "react-router-dom";
 import ScreenElementsUtil from "../../../util/screen-elements-util";
+import Pagination from "../../Design/Pagination/pagination";
 
 const Artists = (props) => {
 
@@ -38,7 +39,7 @@ const Artists = (props) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {props.artists.map((term) => {
+                        {props.artists.content.map((term) => {
                             return (
                                 <tr key={term.id} className={"table-row-clickable align-middle"}
                                     onClick={(e) => fetchArtistPicture(e, term.id)}>
@@ -63,6 +64,9 @@ const Artists = (props) => {
                     </table>
                 </div>
             </div>
+            <Pagination changePage={(pageNumber) => props.loadArtists(pageNumber)}
+                        totalPages={props.artists['totalPages']}
+                        pageNumber={props.artists['pageable'].pageNumber}/>
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"

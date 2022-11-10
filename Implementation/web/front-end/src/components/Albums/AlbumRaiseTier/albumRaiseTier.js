@@ -41,8 +41,8 @@ const AlbumRaiseTier = (props) => {
     const handleAlbumChange = (e) => {
         const albumId = e.target.value;
         if (albumId) {
-            const filteredAlbums = props.albums.filter(album => album.id === albumId);
-            if (filteredAlbums && filteredAlbums.length > 0) {
+            const filteredAlbums = props.albums.content.filter(album => album.id === albumId);
+            if (filteredAlbums && filteredAlbums.content.length > 0) {
                 updateAlbum(filteredAlbums[0]);
                 handleAlbumTier(albumTier);
             }
@@ -88,7 +88,7 @@ const AlbumRaiseTier = (props) => {
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose album --
                                 </option>
-                                {props.albums.map((term) => {
+                                {props.albums.content.map((term) => {
                                         return <option key={term.id} value={term.id}>{term.albumName}</option>;
                                     }
                                 )}

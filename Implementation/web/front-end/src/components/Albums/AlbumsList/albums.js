@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import {ALBUM_COVER_URL, API_BASE_URL} from "../../../constants/endpoints";
 import {Link} from "react-router-dom";
 import ScreenElementsUtil from "../../../util/screen-elements-util";
+import Pagination from "../../Design/Pagination/pagination";
 
 const Albums = (props) => {
 
@@ -45,7 +46,7 @@ const Albums = (props) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {props.albums.map((term) => {
+                        {props.albums.content.map((term) => {
                             return (
                                 <tr key={term.id} className={'table-row-clickable align-middle'}
                                     onClick={(e) => fetchAlbumCover(e, term.id)}>
@@ -69,6 +70,9 @@ const Albums = (props) => {
                     </table>
                 </div>
             </div>
+            <Pagination changePage={(pageNumber) => props.loadAlbums(pageNumber)}
+                        totalPages={props.albums['totalPages']}
+                        pageNumber={props.albums['pageable'].pageNumber}/>
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"

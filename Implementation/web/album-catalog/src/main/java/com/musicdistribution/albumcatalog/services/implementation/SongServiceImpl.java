@@ -50,6 +50,11 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    public Long findTotalSize() {
+        return songRepository.count();
+    }
+
+    @Override
     public Optional<Song> findById(SongId id) {
         return songRepository.findById(id);
     }

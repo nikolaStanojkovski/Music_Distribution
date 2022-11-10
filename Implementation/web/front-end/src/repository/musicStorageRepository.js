@@ -1,4 +1,5 @@
-import axios from '../custom-axios/axios-album-catalog';
+import axios from '../custom-axios/axiosMusicStorage';
+import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../constants/pagination";
 
 const AlbumCatalogService = {
     loginArtist: (username, domainName, password) => {
@@ -31,16 +32,6 @@ const AlbumCatalogService = {
         }
     },
 
-    fetchAlbums: () => {
-        return axios.get("/resource/albums");
-    },
-    fetchArtists: () => {
-        return axios.get("/resource/artists");
-    },
-    fetchSongs: () => {
-        return axios.get("/resource/songs");
-    },
-
     fetchEmailDomains: () => {
         return axios.get("/email-domains");
     },
@@ -49,6 +40,16 @@ const AlbumCatalogService = {
     },
     fetchTiers: () => {
         return axios.get("/tiers");
+    },
+
+    fetchAlbums: (pageNumber) => {
+        return axios.get(`/resource/albums?page=${pageNumber || DEFAULT_PAGE_NUMBER}&size=${DEFAULT_PAGE_SIZE}`);
+    },
+    fetchArtists: (pageNumber) => {
+        return axios.get(`/resource/artists?page=${pageNumber || DEFAULT_PAGE_NUMBER}&size=${DEFAULT_PAGE_SIZE}`);
+    },
+    fetchSongs: (pageNumber) => {
+        return axios.get(`/resource/songs?page=${pageNumber || DEFAULT_PAGE_NUMBER}&size=${DEFAULT_PAGE_SIZE}`);
     },
 
     filterSongs: (key, value) => {

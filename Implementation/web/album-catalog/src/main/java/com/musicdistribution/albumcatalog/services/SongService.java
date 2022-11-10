@@ -35,6 +35,13 @@ public interface SongService {
     Page<Song> search(List<String> searchParams, String searchTerm, Pageable pageable);
 
     /**
+     * Method for reading the total number of entities in the database.
+     *
+     * @return the total number of songs in the database.
+     */
+    Long findTotalSize();
+
+    /**
      * Method for getting a song from the database.
      *
      * @param id - song's id.

@@ -71,7 +71,7 @@ const PublishSong = (props) => {
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose song --
                                 </option>
-                                {props.songs.map((term) => {
+                                {props.songs.content.map((term) => {
                                         if (term['creator'].id === props.selectedArtist.id
                                             && !term['album'] && !term['isPublished']) {
                                             return <option key={term.id} value={term.id}>{term.songName}</option>;

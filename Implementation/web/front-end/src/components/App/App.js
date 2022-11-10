@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {BrowserRouter, Switch} from 'react-router-dom'
 import Home from '../Design/Home/home';
 
-import AlbumCatalogService from "../../repository/albumCatalogRepository";
+import AlbumCatalogService from "../../repository/musicStorageRepository";
 
 import Artists from '../Artists/ArtistsList/artists';
 import Albums from '../Albums/AlbumsList/albums';
@@ -26,6 +26,7 @@ import Unauthorized from "../Design/Error/Unauthorized/unauthorized";
 import NotFound from "../Design/Error/NotFound/notFound";
 import NonProtectedRoute from "../Design/Route/NonProtected/nonProtectedRoute";
 import SongRaiseTier from "../Songs/SongRaiseTier/songRaiseTier";
+import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../constants/pagination";
 
 class App extends Component {
 
@@ -35,6 +36,7 @@ class App extends Component {
             albums: [],
             artists: [],
             songs: [],
+
             selectedAlbum: {},
 
             genres: [],
@@ -72,12 +74,14 @@ class App extends Component {
 
                                 <NonProtectedRoute path={"/artists"} exact
                                                    artists={this.state.artists}
+                                                   loadArtists={this.loadArtists}
                                                    component={Artists}/>
 
                                 <NonProtectedRoute path={"/songs"} exact
                                                    songs={this.state.songs}
                                                    filterSongs={this.filterSongs}
                                                    fetchSong={this.fetchSong}
+                                                   loadSongs={this.loadSongs}
                                                    component={Songs}/>
                                 <ProtectedRoute path={"/songs/create"} exact albums={this.state.albums}
                                                 genres={this.state.genres}
@@ -103,6 +107,7 @@ class App extends Component {
                                 <NonProtectedRoute path={"/albums"} exact
                                                    albums={this.state.albums}
                                                    filterAlbums={this.filterAlbums}
+                                                   loadAlbums={this.loadAlbums}
                                                    component={Albums}/>
                                 <ProtectedRoute path={"/albums/publish"} exact
                                                 songs={this.state.songs}
@@ -181,11 +186,29 @@ class App extends Component {
         }
     }
 
-    loadAlbums = () => {
-        AlbumCatalogService.fetchAlbums()
+    loadArtists = (pageNumber) => {
+        AlbumCatalogService.fetchArtists(pageNumber)
             .then((data) => {
                 this.setState({
-                    albums: data.data
+                    artists: data.data,
+                })
+            });
+    }
+
+    loadAlbums = (pageNumber) => {
+        AlbumCatalogService.fetchAlbums(pageNumber)
+            .then((data) => {
+                this.setState({
+                    albums: data.data,
+                })
+            });
+    }
+
+    loadSongs = (pageNumber) => {
+        AlbumCatalogService.fetchSongs(pageNumber)
+            .then((data) => {
+                this.setState({
+                    songs: data.data,
                 })
             });
     }
@@ -194,16 +217,7 @@ class App extends Component {
         AlbumCatalogService.filterAlbums(key, value)
             .then((data) => {
                 this.setState({
-                    albums: data.data
-                })
-            });
-    }
-
-    loadSongs = () => {
-        AlbumCatalogService.fetchSongs()
-            .then((data) => {
-                this.setState({
-                    songs: data.data
+                    albums: data.data,
                 })
             });
     }
@@ -212,7 +226,7 @@ class App extends Component {
         AlbumCatalogService.filterSongs(key, value)
             .then((data) => {
                 this.setState({
-                    songs: data.data
+                    songs: data.data,
                 })
             });
     }
@@ -224,21 +238,21 @@ class App extends Component {
     createSong = (file, songName, lengthInSeconds, songGenre) => {
         AlbumCatalogService.createSong(file, songName, lengthInSeconds, songGenre)
             .then(() => {
-                this.loadSongs();
+                this.loadSongs(this.state.songs['pageable'].pageNumber);
             });
     }
 
     publishSong = (cover, songId, songTier, subscriptionFee, transactionFee) => {
         AlbumCatalogService.publishSong(cover, songId, songTier, subscriptionFee, transactionFee)
             .then(() => {
-                this.loadSongs();
+                this.loadSongs(this.state.songs['pageable'].pageNumber);
             })
     }
 
     raiseTierSong = (songId, songTier, subscriptionFee, transactionFee) => {
         AlbumCatalogService.raiseTierSong(songId, songTier, subscriptionFee, transactionFee)
             .then(() => {
-                this.loadSongs();
+                this.loadSongs(this.state.songs['pageable'].pageNumber);
             });
     }
 
@@ -251,23 +265,14 @@ class App extends Component {
             subscriptionFee, transactionFee,
             artistName, producerName, composerName)
             .then(() => {
-                this.loadAlbums();
+                this.loadAlbums(this.state.albums['pageable'].pageNumber);
             });
     }
 
     raiseTierAlbum = (albumId, albumTier, subscriptionFee, transactionFee) => {
         AlbumCatalogService.raiseTierAlbum(albumId, albumTier, subscriptionFee, transactionFee)
             .then(() => {
-                this.loadAlbums();
-            });
-    }
-
-    loadArtists = () => {
-        AlbumCatalogService.fetchArtists()
-            .then((data) => {
-                this.setState({
-                    artists: data.data
-                })
+                this.loadAlbums(this.state.albums['pageable'].pageNumber);
             });
     }
 
@@ -285,7 +290,7 @@ class App extends Component {
     registerArtist = (profilePicture, username, emailDomain, telephoneNumber, firstName, lastName, artName, password) => {
         AlbumCatalogService.registerArtist(profilePicture, username, emailDomain, telephoneNumber, firstName, lastName, artName, password)
             .then(() => {
-                this.loadArtists();
+                this.loadArtists(this.state.artists['pageable'].pageNumber);
             });
     }
 
@@ -299,7 +304,7 @@ class App extends Component {
     }
 
     getTransactionFee = () => {
-        if(this.getCurrentArtist()) {
+        if (this.getCurrentArtist()) {
             const locale = navigator.language;
             AlbumCatalogService.getTransactionFee(locale).then((data) => {
                 this.state.transactionFee = data.data;

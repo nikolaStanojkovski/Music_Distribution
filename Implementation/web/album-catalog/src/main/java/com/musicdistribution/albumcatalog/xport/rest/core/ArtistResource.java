@@ -6,6 +6,8 @@ import com.musicdistribution.albumcatalog.domain.services.IEncryptionSystem;
 import com.musicdistribution.albumcatalog.services.ArtistService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class ArtistResource {
 
     private final ArtistService artistService;
+
     private final IEncryptionSystem encryptionSystem;
 
     /**
@@ -34,11 +37,12 @@ public class ArtistResource {
      * @return the list of all artists.
      */
     @GetMapping
-    public List<ArtistResponse> findAll(Pageable pageable) {
-        return artistService.findAll(pageable).stream()
+    public Page<ArtistResponse> findAll(Pageable pageable) {
+        List<ArtistResponse> artists = artistService.findAll(pageable).stream()
                 .map(artist -> ArtistResponse.from(artist,
                         encryptionSystem.encrypt(artist.getId().getId())))
                 .collect(Collectors.toList());
+        return new PageImpl<>(artists, pageable, artistService.findTotalSize());
     }
 
     /**
@@ -50,10 +54,10 @@ public class ArtistResource {
      * @return the page of the filtered albums.
      */
     @GetMapping("/search")
-    public List<ArtistResponse> search(@RequestParam String[] searchParams,
+    public Page<ArtistResponse> search(@RequestParam String[] searchParams,
                                        @RequestParam String searchTerm,
                                        Pageable pageable) {
-        return artistService.search(List.of(searchParams),
+        List<ArtistResponse> filteredArtists = artistService.search(List.of(searchParams),
                 (List.of(searchParams).stream().filter(param ->
                         param.contains("id")).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable)
@@ -61,6 +65,7 @@ public class ArtistResource {
                 .map(album -> ArtistResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId())))
                 .collect(Collectors.toList());
+        return new PageImpl<>(filteredArtists, pageable, artistService.findTotalSize());
     }
 
     /**

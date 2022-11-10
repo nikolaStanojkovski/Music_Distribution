@@ -41,7 +41,7 @@ const SongRaiseTier = (props) => {
     const handleSongChange = (e) => {
         const songId = e.target.value;
         if (songId) {
-            const filteredSongs = props.songs.filter(song => song.id === songId);
+            const filteredSongs = props.songs.content.filter(song => song.id === songId);
             if (filteredSongs && filteredSongs.length > 0) {
                 updateSong(filteredSongs[0]);
                 handleSongTier(songTier);
@@ -89,7 +89,7 @@ const SongRaiseTier = (props) => {
                                 <option className={"text-muted"} value={null} disabled={true} selected={true}>
                                     -- Choose song --
                                 </option>
-                                {props.songs.map((term) => {
+                                {props.songs.content.map((term) => {
                                         if (term['isPublished'] && term['isASingle']) {
                                             return <option key={term.id} value={term.id}>{term.songName}</option>;
                                         }

@@ -114,7 +114,7 @@ const PublishAlbum = (props) => {
                                 isSearchable
                                 defaultValue={"-- Select songs --"}
                                 onChange={(choice) => updateSongIdList(choice)}
-                                options={props.songs.map((term) => {
+                                options={props.songs.content.map((term) => {
                                     if(term && term['creator'].id === props.selectedArtist.id
                                         && !term['album'] && !term['isPublished']) {
                                         return {value: term.id, label: term.songName};

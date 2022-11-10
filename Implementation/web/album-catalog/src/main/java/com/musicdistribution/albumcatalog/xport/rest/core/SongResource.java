@@ -10,6 +10,8 @@ import com.musicdistribution.albumcatalog.security.jwt.JwtUtils;
 import com.musicdistribution.albumcatalog.services.SongService;
 import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +30,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/resource/songs")
 public class SongResource {
 
-    private final JwtUtils jwtUtils;
     private final SongService songService;
+
+    private final JwtUtils jwtUtils;
     private final IEncryptionSystem encryptionSystem;
 
     /**
@@ -38,8 +41,8 @@ public class SongResource {
      * @return a page of the filtered songs.
      */
     @GetMapping
-    public List<SongResponse> findAll(Pageable pageable) {
-        return songService.findAll(pageable).stream()
+    public Page<SongResponse> findAll(Pageable pageable) {
+        List<SongResponse> songs = songService.findAll(pageable).stream()
                 .map(song -> SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
@@ -47,6 +50,7 @@ public class SongResource {
                                 song.getAlbum()).map(album -> album.getId().getId())
                                 .orElse(""))))
                 .collect(Collectors.toList());
+        return new PageImpl<>(songs, pageable, songService.findTotalSize());
     }
 
     /**
@@ -58,10 +62,10 @@ public class SongResource {
      * @return the page of the filtered songs.
      */
     @GetMapping("/search")
-    public List<SongResponse> search(@RequestParam String[] searchParams,
+    public Page<SongResponse> search(@RequestParam String[] searchParams,
                                      @RequestParam String searchTerm,
                                      Pageable pageable) {
-        return songService.search(List.of(searchParams),
+        List<SongResponse> filteredSongs = songService.search(List.of(searchParams),
                 (List.of(searchParams).stream().filter(param ->
                         param.contains("id")).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable)
@@ -73,6 +77,7 @@ public class SongResource {
                                 song.getAlbum()).map(album -> album.getId().getId())
                                 .orElse(""))))
                 .collect(Collectors.toList());
+        return new PageImpl<>(filteredSongs, pageable, songService.findTotalSize());
     }
 
     /**

@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import {API_BASE_URL, AUDIO_STREAM_URL, SONG_COVER_URL} from "../../../constants/endpoints";
 import ScreenElementsUtil from "../../../util/screen-elements-util";
+import Pagination from "../../Design/Pagination/pagination";
 
 const Songs = (props) => {
     const [showModal, setShowModal] = React.useState(false);
@@ -97,7 +98,7 @@ const Songs = (props) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {props.songs.map((term) => {
+                        {props.songs.content.map((term) => {
                             return (
                                 <tr key={term.id} data-id={term.id}
                                     className={`${(term['isASingle']) ? 'table-row-clickable' : ''} align-middle`}
@@ -121,6 +122,9 @@ const Songs = (props) => {
                     </table>
                 </div>
             </div>
+            <Pagination changePage={(pageNumber) => props.loadSongs(pageNumber)}
+                        totalPages={props.songs['totalPages']}
+                        pageNumber={props.songs['pageable'].pageNumber}/>
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
