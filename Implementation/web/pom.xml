@@ -10,8 +10,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>album-catalog</module>
-        <module>shared-kernel</module>
+        <module>md-storage-service</module>
+        <module>md-shared-kernel</module>
+        <module>md-streaming-service</module>
     </modules>
 
 </project>

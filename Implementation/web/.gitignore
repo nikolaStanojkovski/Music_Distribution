@@ -1,7 +1,7 @@
 .idea
-album-catalog/.mvn
-album-publishing/.mvn
-shared-kernel/.mvn
-album-catalog/target
-album-publishing/target
-shared-kernel/target
+md-storage-service/.mvn
+md-streaming-service/.mvn
+md-shared-kernel/.mvn
+md-storage-service/target
+md-streaming-service/target
+md-shared-kernel/target
