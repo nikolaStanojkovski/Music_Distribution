@@ -1,10 +1,12 @@
 package com.musicdistribution.storageservice.xport.rest.core;
 
 import com.musicdistribution.sharedkernel.util.ApiController;
-import com.musicdistribution.storageservice.domain.model.SearchResult;
+import com.musicdistribution.storageservice.constant.EntityConstants;
+import com.musicdistribution.storageservice.constant.PathConstants;
 import com.musicdistribution.storageservice.domain.model.entity.Artist;
 import com.musicdistribution.storageservice.domain.model.entity.ArtistId;
 import com.musicdistribution.storageservice.domain.model.response.ArtistResponse;
+import com.musicdistribution.storageservice.domain.model.response.SearchResultResponse;
 import com.musicdistribution.storageservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.storageservice.service.ArtistService;
 import lombok.AllArgsConstructor;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/resource/artists")
+@RequestMapping(PathConstants.API_ARTISTS)
 public class ArtistResource {
 
     private final ArtistService artistService;
@@ -33,10 +35,10 @@ public class ArtistResource {
     private final IEncryptionSystem encryptionSystem;
 
     /**
-     * Method for getting information about all artists.
+     * Method used for fetching a page with artists.
      *
-     * @param pageable - the wrapper for paging/sorting/filtering
-     * @return the list of all artists.
+     * @param pageable - the wrapper object containing pagination data.
+     * @return the page of the filtered artists.
      */
     @GetMapping
     public Page<ArtistResponse> findAll(Pageable pageable) {
@@ -48,35 +50,35 @@ public class ArtistResource {
     }
 
     /**
-     * Method for searching albums.
+     * Method used for searching artists.
      *
-     * @param searchParams - the object parameters by which a filtering will be done
-     * @param searchTerm   - the search term by which the filtering will be done
-     * @param pageable     - the wrapper for paging/sorting/filtering
-     * @return the page of the filtered albums.
+     * @param searchParams - the object parameters by which a filtering is to be done.
+     * @param searchTerm   - the search term by which the filtering is to be done.
+     * @param pageable     - the wrapper object containing pagination data.
+     * @return the page with the filtered artists.
      */
-    @GetMapping("/search")
+    @GetMapping(PathConstants.SEARCH)
     public Page<ArtistResponse> search(@RequestParam String[] searchParams,
                                        @RequestParam String searchTerm,
                                        Pageable pageable) {
-        SearchResult<Artist> artistSearchResult = artistService.search(List.of(searchParams),
+        SearchResultResponse<Artist> artistSearchResultResponse = artistService.search(List.of(searchParams),
                 (List.of(searchParams).stream().filter(param ->
-                        param.contains("id")).count() == searchParams.length)
+                        param.contains(EntityConstants.ID)).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable);
-        return new PageImpl<>(artistSearchResult.getResultPage()
+        return new PageImpl<>(artistSearchResultResponse.getResultPage()
                 .stream()
                 .map(album -> ArtistResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId())))
-                .collect(Collectors.toList()), pageable, artistSearchResult.getResultSize());
+                .collect(Collectors.toList()), pageable, artistSearchResultResponse.getResultSize());
     }
 
     /**
-     * Method for getting information about a specific artist.
+     * Method used for fetching information about a specific artist.
      *
-     * @param id - artist's id.
+     * @param id - artist's ID.
      * @return the found artist.
      */
-    @GetMapping("/{id}")
+    @GetMapping(PathConstants.FORMATTED_ID)
     public ResponseEntity<ArtistResponse> findById(@PathVariable String id) {
         return this.artistService.findById(ArtistId.of(encryptionSystem.decrypt(id)))
                 .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist,

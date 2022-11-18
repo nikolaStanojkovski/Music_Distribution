@@ -1,9 +1,10 @@
 package com.musicdistribution.storageservice.xport.rest;
 
-import com.musicdistribution.storageservice.service.PaymentService;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.storageservice.constant.PathConstants;
+import com.musicdistribution.storageservice.service.PaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,29 +15,29 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/payment")
+@RequestMapping(PathConstants.API_PAYMENT)
 public class PaymentResource {
 
     private final PaymentService paymentService;
 
     /**
-     * Method for getting the subscription fee based on the given tier
+     * Method used for fetching the subscription fee based on a given tier.
      *
-     * @param tier - the tier by which the subscription fee will be determined
-     * @return the given subscription fee.
+     * @param tier - the tier by which the subscription fee will be determined.
+     * @return the calculated subscription fee.
      */
-    @GetMapping("/subscription")
+    @GetMapping(PathConstants.SUBSCRIPTION)
     public Money getSubscriptionFee(@RequestParam Tier tier) {
         return paymentService.getSubscriptionFee(tier);
     }
 
     /**
-     * Method for getting the transaction fee based on the given locale
+     * Method used for fetching the transaction fee based on a given locale.
      *
-     * @param locale - the locale by which the transaction fee will be determined
-     * @return the given transaction fee.
+     * @param locale - the locale by which the transaction fee will be determined.
+     * @return the calculated transaction fee.
      */
-    @GetMapping("/transaction")
+    @GetMapping(PathConstants.TRANSACTION)
     public Money getTransactionFee(@RequestParam String locale) {
         return paymentService.getTransactionFee(locale);
     }

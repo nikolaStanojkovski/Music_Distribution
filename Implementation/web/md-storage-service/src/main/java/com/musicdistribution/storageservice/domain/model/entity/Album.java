@@ -1,11 +1,12 @@
 package com.musicdistribution.storageservice.domain.model.entity;
 
-import com.musicdistribution.storageservice.domain.valueobject.AlbumInfo;
-import com.musicdistribution.storageservice.domain.valueobject.PaymentInfo;
-import com.musicdistribution.storageservice.domain.valueobject.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
+import com.musicdistribution.storageservice.constant.EntityConstants;
+import com.musicdistribution.storageservice.domain.valueobject.AlbumInfo;
+import com.musicdistribution.storageservice.domain.valueobject.PaymentInfo;
+import com.musicdistribution.storageservice.domain.valueobject.SongLength;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.LazyCollection;
@@ -20,8 +21,8 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "album")
 @EqualsAndHashCode(callSuper = true)
+@Table(name = EntityConstants.ALBUM)
 public class Album extends AbstractEntity<AlbumId> implements Serializable {
 
     private String albumName;
@@ -32,18 +33,26 @@ public class Album extends AbstractEntity<AlbumId> implements Serializable {
     private Genre genre;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "subscriptionFee.amount", column = @Column(name = "payment_subscription_fee_amount")),
-            @AttributeOverride(name = "subscriptionFee.currency", column = @Column(name = "payment_subscription_fee_amount_currency")),
-            @AttributeOverride(name = "transactionFee.amount", column = @Column(name = "payment_transaction_fee_amount")),
-            @AttributeOverride(name = "transactionFee.currency", column = @Column(name = "payment_transaction_fee_currency")),
-            @AttributeOverride(name = "tier", column = @Column(name = "payment_tier"))
+            @AttributeOverride(name = EntityConstants.SUBSCRIPTION_FEE_AMOUNT,
+                    column = @Column(name = EntityConstants.ALBUM_SUBSCRIPTION_FEE_AMOUNT)),
+            @AttributeOverride(name = EntityConstants.SUBSCRIPTION_FEE_CURRENCY,
+                    column = @Column(name = EntityConstants.ALBUM_SUBSCRIPTION_FEE_CURRENCY)),
+            @AttributeOverride(name = EntityConstants.TRANSACTION_FEE_AMOUNT,
+                    column = @Column(name = EntityConstants.ALBUM_TRANSACTION_FEE_AMOUNT)),
+            @AttributeOverride(name = EntityConstants.TRANSACTION_FEE_CURRENCY,
+                    column = @Column(name = EntityConstants.ALBUM_TRANSACTION_FEE_CURRENCY)),
+            @AttributeOverride(name = EntityConstants.TIER,
+                    column = @Column(name = EntityConstants.ALBUM_PAYMENT_TIER))
     })
     private PaymentInfo paymentInfo;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "artistName", column = @Column(name = "album_artistName")),
-            @AttributeOverride(name = "producerName", column = @Column(name = "album_producerName")),
-            @AttributeOverride(name = "composerName", column = @Column(name = "album_composerName"))
+            @AttributeOverride(name = EntityConstants.ARTIST_NAME,
+                    column = @Column(name = EntityConstants.ALBUM_ARTIST_NAME)),
+            @AttributeOverride(name = EntityConstants.PRODUCER_NAME,
+                    column = @Column(name = EntityConstants.ALBUM_PRODUCER_NAME)),
+            @AttributeOverride(name = EntityConstants.COMPOSER_NAME,
+                    column = @Column(name = EntityConstants.ALBUM_COMPOSER_NAME))
     })
     private AlbumInfo albumInfo;
 
@@ -64,14 +73,14 @@ public class Album extends AbstractEntity<AlbumId> implements Serializable {
     }
 
     /**
-     * Static method for creating a new album.
+     * Static builder method for creating a new album.
      *
-     * @param albumName   - the album's name
-     * @param genre       - the album's genre
-     * @param albumInfo   - the album's information
-     * @param creator     - the album's creator
-     * @param paymentInfo - the album's payment information
-     * @param songs       - the album's songs
+     * @param albumName   - album's name
+     * @param genre       - album's genre
+     * @param albumInfo   - album's information
+     * @param creator     - album's creator
+     * @param paymentInfo - album's payment information
+     * @param songs       - album's songs
      * @return the created album.
      */
     public static Album build(String albumName, Genre genre, AlbumInfo albumInfo,
@@ -85,7 +94,7 @@ public class Album extends AbstractEntity<AlbumId> implements Serializable {
         album.paymentInfo = paymentInfo;
 
         album.songs = songs;
-        album.totalLength = SongLength.build(songs.stream()
+        album.totalLength = SongLength.from(songs.stream()
                 .mapToInt(song -> song.getSongLength().getLengthInSeconds())
                 .sum());
 
@@ -93,14 +102,14 @@ public class Album extends AbstractEntity<AlbumId> implements Serializable {
     }
 
     /**
-     * Method used for raising album's tier.
+     * Method used for raising an album's tier.
      *
-     * @param paymentInfo - the payment information for raising album's tier.
+     * @param paymentInfo - the information about a payment when raising an album's tier.
      */
     public void raiseTier(PaymentInfo paymentInfo) {
         Money subscriptionFeeSum = this.paymentInfo.getSubscriptionFee().add(paymentInfo.getSubscriptionFee());
         Money transactionFeeSum = this.paymentInfo.getTransactionFee().add(paymentInfo.getTransactionFee());
 
-        this.paymentInfo = PaymentInfo.build(subscriptionFeeSum, transactionFeeSum, paymentInfo.getTier());
+        this.paymentInfo = PaymentInfo.from(subscriptionFeeSum, transactionFeeSum, paymentInfo.getTier());
     }
 }

@@ -1,34 +1,28 @@
 package com.musicdistribution.storageservice.domain.model.entity;
 
 import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
-import org.springframework.lang.NonNull;
+import lombok.NoArgsConstructor;
 
 /**
  * SongId value object used as the song identifier.
  */
+@NoArgsConstructor
 public class SongId extends DomainObjectId {
 
     /**
-     * Protected no-args constructor for a song id.
-     */
-    protected SongId() {
-        super(randomId(ArtistId.class).getId());
-    }
-
-    /**
-     * Constructor for the song id.
+     * Public constructor used for creating a new song unique ID.
      *
-     * @param uuid - the id that is used for the creation of the song id.
+     * @param uuid - the value of the identifier to be created.
      */
-    public SongId(@NonNull String uuid) {
+    public SongId(String uuid) {
         super(uuid);
     }
 
     /**
-     * Static method for creating a song id.
+     * Static method for creating a new song ID.
      *
-     * @param uuid - the id that is used for the creation of the song id.
-     * @return the song id.
+     * @param uuid - the unique identifier for a song.
+     * @return the created song ID.
      */
     public static SongId of(String uuid) {
         return new SongId(uuid);

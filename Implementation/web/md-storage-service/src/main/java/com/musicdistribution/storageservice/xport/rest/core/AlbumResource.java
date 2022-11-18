@@ -1,16 +1,21 @@
 package com.musicdistribution.storageservice.xport.rest.core;
 
-import com.musicdistribution.storageservice.domain.model.SearchResult;
+import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.storageservice.constant.AuthConstants;
+import com.musicdistribution.storageservice.constant.EntityConstants;
+import com.musicdistribution.storageservice.constant.PathConstants;
+import com.musicdistribution.storageservice.constant.ServletConstants;
 import com.musicdistribution.storageservice.domain.model.entity.Album;
 import com.musicdistribution.storageservice.domain.model.entity.AlbumId;
 import com.musicdistribution.storageservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.storageservice.domain.model.request.AlbumTransactionRequest;
 import com.musicdistribution.storageservice.domain.model.response.AlbumResponse;
+import com.musicdistribution.storageservice.domain.model.response.SearchResultResponse;
 import com.musicdistribution.storageservice.domain.service.IEncryptionSystem;
-import com.musicdistribution.storageservice.security.jwt.JwtUtil;
 import com.musicdistribution.storageservice.service.AlbumService;
-import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.storageservice.util.JwtUtil;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/resource/albums")
+@RequestMapping(PathConstants.API_ALBUMS)
 public class AlbumResource {
 
     private final AlbumService albumService;
@@ -36,9 +41,10 @@ public class AlbumResource {
     private final IEncryptionSystem encryptionSystem;
 
     /**
-     * Method for getting information about all albums.
+     * Method used for fetching a page with albums.
      *
-     * @return the list of all albums.
+     * @param pageable - the wrapper object containing pagination data.
+     * @return the page with the filtered albums.
      */
     @GetMapping
     public Page<AlbumResponse> findAll(Pageable pageable) {
@@ -51,35 +57,35 @@ public class AlbumResource {
     }
 
     /**
-     * Method for searching albums.
+     * Method used for searching albums.
      *
-     * @param searchParams - the object parameters by which a filtering will be done
-     * @param searchTerm   - the search term by which the filtering will be done
-     * @param pageable     - the wrapper for paging/sorting/filtering
-     * @return the page of the filtered albums.
+     * @param searchParams - the object parameters by which a filtering is to be done.
+     * @param searchTerm   - the search term by which the filtering is to be done.
+     * @param pageable     - the wrapper object containing pagination data.
+     * @return the page with the filtered albums.
      */
-    @GetMapping("/search")
+    @GetMapping(PathConstants.SEARCH)
     public Page<AlbumResponse> search(@RequestParam String[] searchParams,
                                       @RequestParam String searchTerm,
                                       Pageable pageable) {
-        SearchResult<Album> albumSearchResult = albumService.search(List.of(searchParams),
+        SearchResultResponse<Album> albumSearchResultResponse = albumService.search(List.of(searchParams),
                 (List.of(searchParams).stream().filter(param ->
-                        param.contains("id")).count() == searchParams.length)
+                        param.contains(EntityConstants.ID)).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable);
-        return new PageImpl<>( albumSearchResult.getResultPage().stream()
+        return new PageImpl<>(albumSearchResultResponse.getResultPage().stream()
                 .map(album -> AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId())))
-                .collect(Collectors.toList()), pageable, albumSearchResult.getResultSize());
+                .collect(Collectors.toList()), pageable, albumSearchResultResponse.getResultSize());
     }
 
     /**
-     * Method for getting information about a specific album.
+     * Method used for fetching information about a specific album.
      *
-     * @param id - album's id.
+     * @param id - album's ID.
      * @return the found album.
      */
-    @GetMapping("/{id}")
+    @GetMapping(PathConstants.FORMATTED_ID)
     public ResponseEntity<AlbumResponse> findById(@PathVariable String id) {
         return this.albumService.findById(AlbumId.of(encryptionSystem.decrypt(id)))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
@@ -89,17 +95,18 @@ public class AlbumResource {
     }
 
     /**
-     * Method for creating a new album.
+     * Method used for publishing an album.
      *
-     * @param albumTransactionRequest - dto object containing information for the album to be created.
-     * @return the created album.
+     * @param albumTransactionRequest - an object wrapper containing information for the album to be published.
+     * @return the published album.
      */
-    @PostMapping("/publish")
+    @PostMapping(PathConstants.PUBLISH)
     public ResponseEntity<AlbumResponse> publish(
-            @RequestHeader(value = "Authorization") String authToken,
+            @RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
             @RequestPart MultipartFile cover,
             @RequestPart @Valid AlbumTransactionRequest albumTransactionRequest) {
-        String username = jwtUtil.getUserNameFromJwtToken(authToken.replace("Bearer ", ""));
+        String username = jwtUtil.getUserNameFromJwtToken(authToken
+                .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX), StringUtils.EMPTY));
         return this.albumService.publish(albumTransactionRequest, cover,
                 username, getDecryptedSongIds(albumTransactionRequest.getSongIdList()))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
@@ -108,17 +115,23 @@ public class AlbumResource {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    /**
+     * Method used for decrypting the song IDs from a given list.
+     *
+     * @param songIdList - the list of the IDs to be decrypted.
+     * @return a list of decrypted song IDs.
+     */
     private List<String> getDecryptedSongIds(List<String> songIdList) {
         return songIdList.stream().map(encryptionSystem::decrypt).collect(Collectors.toList());
     }
 
     /**
-     * Method for raising an existing album's tier.
+     * Method used for raising an album's tier.
      *
-     * @param albumShortTransactionRequest - dto object containing information for the album to be updated.
-     * @return the created album.
+     * @param albumShortTransactionRequest - an object wrapper containing information for the album to be updated.
+     * @return the updated album.
      */
-    @PostMapping("/raise-tier")
+    @PostMapping(PathConstants.RAISE_TIER)
     public ResponseEntity<AlbumResponse> raiseTier(
             @RequestBody @Valid AlbumShortTransactionRequest albumShortTransactionRequest) {
         return this.albumService.raiseTier(albumShortTransactionRequest,

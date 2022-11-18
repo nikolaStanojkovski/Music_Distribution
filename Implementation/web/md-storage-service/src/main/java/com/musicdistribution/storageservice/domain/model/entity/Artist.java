@@ -1,9 +1,10 @@
 package com.musicdistribution.storageservice.domain.model.entity;
 
+import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
+import com.musicdistribution.storageservice.constant.EntityConstants;
 import com.musicdistribution.storageservice.domain.valueobject.ArtistContactInfo;
 import com.musicdistribution.storageservice.domain.valueobject.ArtistPersonalInfo;
 import com.musicdistribution.storageservice.domain.valueobject.ArtistUserInfo;
-import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import lombok.Getter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -18,25 +19,34 @@ import java.util.List;
  */
 @Entity
 @Getter
-@Table(name = "artist")
+@Table(name = EntityConstants.ARTIST)
 public class Artist extends AbstractEntity<ArtistId> implements Serializable {
 
     @AttributeOverrides({
-            @AttributeOverride(name = "username", column = @Column(name = "artist_username")),
-            @AttributeOverride(name = "password", column = @Column(name = "artist_password"))
+            @AttributeOverride(name = EntityConstants.USERNAME,
+                    column = @Column(name = EntityConstants.ARTIST_USERNAME)),
+            @AttributeOverride(name = EntityConstants.PASSWORD,
+                    column = @Column(name = EntityConstants.ARTIST_PASSWORD))
     })
     private ArtistUserInfo artistUserInfo;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "email", column = @Column(name = "artist_email")),
-            @AttributeOverride(name = "telephoneNumber", column = @Column(name = "artist_telephoneNumber"))
+            @AttributeOverride(name = EntityConstants.EMAIL_DOMAIN_USERNAME,
+                    column = @Column(name = EntityConstants.ARTIST_EMAIL_DOMAIN_USERNAME)),
+            @AttributeOverride(name = EntityConstants.EMAIL_DOMAIN_NAME,
+                    column = @Column(name = EntityConstants.ARTIST_EMAIL_DOMAIN_NAME)),
+            @AttributeOverride(name = EntityConstants.TELEPHONE_NUMBER,
+                    column = @Column(name = EntityConstants.ARTIST_TELEPHONE_NUMBER))
     })
     private ArtistContactInfo artistContactInfo;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "firstName", column = @Column(name = "artist_firstName")),
-            @AttributeOverride(name = "lastName", column = @Column(name = "artist_lastName")),
-            @AttributeOverride(name = "artName", column = @Column(name = "artist_artName"))
+            @AttributeOverride(name = EntityConstants.FIRST_NAME,
+                    column = @Column(name = EntityConstants.ARTIST_FIRST_NAME)),
+            @AttributeOverride(name = EntityConstants.LAST_NAME,
+                    column = @Column(name = EntityConstants.ARTIST_LAST_NAME)),
+            @AttributeOverride(name = EntityConstants.ART_NAME,
+                    column = @Column(name = EntityConstants.ARTIST_ART_NAME))
     })
     private ArtistPersonalInfo artistPersonalInfo;
 
@@ -49,25 +59,27 @@ public class Artist extends AbstractEntity<ArtistId> implements Serializable {
     private List<Song> songs;
 
     /**
-     * Protected no args constructor for the Artist entity.
+     * Protected no args constructor used for creating a new Artist entity.
      */
     protected Artist() {
         super(ArtistId.randomId(ArtistId.class));
     }
 
     /**
-     * Static method for creating a new album.
+     * Static method for creating a new artist.
      *
      * @param artistContactInfo  - artist's contact information.
-     * @param artistPersonalInfo - artist's contact information.
+     * @param artistPersonalInfo - artist's personal information.
      * @param password           - artist's password.
      * @return the created artist.
      */
-    public static Artist build(ArtistContactInfo artistContactInfo, ArtistPersonalInfo artistPersonalInfo, String password) {
+    public static Artist build(ArtistContactInfo artistContactInfo,
+                               ArtistPersonalInfo artistPersonalInfo,
+                               String password) {
         Artist artist = new Artist();
         artist.artistContactInfo = artistContactInfo;
         artist.artistPersonalInfo = artistPersonalInfo;
-        artist.artistUserInfo = ArtistUserInfo.build(artistContactInfo.getEmail().getDomainUsername(), password);
+        artist.artistUserInfo = ArtistUserInfo.from(artistContactInfo.getEmail().getDomainUsername(), password);
 
         artist.albums = new ArrayList<>();
         artist.songs = new ArrayList<>();
@@ -76,16 +88,7 @@ public class Artist extends AbstractEntity<ArtistId> implements Serializable {
     }
 
     /**
-     * Method used for creation of a new album by an artist.
-     *
-     * @param album - the album to be created.
-     */
-    public void createAlbum(Album album) {
-        this.albums.add(album);
-    }
-
-    /**
-     * Method used for creation of a new song by an artist.
+     * Method used for adding a new song to an artist.
      *
      * @param song - the song to be created.
      */
@@ -94,7 +97,7 @@ public class Artist extends AbstractEntity<ArtistId> implements Serializable {
     }
 
     /**
-     * Method used for deletion of a song by an artist.
+     * Method used for deletion of an existing song made by an artist.
      *
      * @param song - the song to be deleted.
      */

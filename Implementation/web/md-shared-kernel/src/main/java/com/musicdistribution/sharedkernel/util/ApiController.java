@@ -1,6 +1,6 @@
 package com.musicdistribution.sharedkernel.util;
 
-import com.musicdistribution.sharedkernel.constants.EnvironmentConstants;
+import com.musicdistribution.sharedkernel.constant.EnvironmentConstants;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +20,11 @@ import java.lang.annotation.*;
         produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = EnvironmentConstants.CROSS_ORIGIN_DOMAIN,
         methods = {
-        RequestMethod.GET,
-        RequestMethod.POST,
-        RequestMethod.PUT,
-        RequestMethod.DELETE,
-        RequestMethod.OPTIONS
-})
+                RequestMethod.GET,
+                RequestMethod.POST,
+                RequestMethod.PUT,
+                RequestMethod.DELETE,
+                RequestMethod.OPTIONS
+        })
 public @interface ApiController {
 }

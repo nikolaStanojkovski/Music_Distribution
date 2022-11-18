@@ -8,7 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * An song object used to transfer data from the front-end user form to the backend.
+ * An extended song request wrapper object used to transfer form data
+ * data from the front-end to the backend.
  */
 @Data
 @NoArgsConstructor

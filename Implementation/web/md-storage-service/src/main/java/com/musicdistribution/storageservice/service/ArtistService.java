@@ -1,9 +1,9 @@
 package com.musicdistribution.storageservice.service;
 
-import com.musicdistribution.storageservice.domain.model.SearchResult;
 import com.musicdistribution.storageservice.domain.model.entity.Artist;
 import com.musicdistribution.storageservice.domain.model.entity.ArtistId;
 import com.musicdistribution.storageservice.domain.model.request.ArtistRequest;
+import com.musicdistribution.storageservice.domain.model.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,59 +12,57 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service for the implementation of the main specific business logic for the artists.
+ * A service that contains the specific business logic for artist entities.
  */
 public interface ArtistService {
 
     /**
-     * Method for getting all the artists from the database.
+     * Method used for fetching a page of artists from the database.
      *
-     * @param pageable - the wrapper for paging/sorting/filtering
-     * @return a list of the artists.
+     * @param pageable - the wrapper object containing pagination data.
+     * @return a page of the artists.
      */
     Page<Artist> findAll(Pageable pageable);
 
     /**
-     * Method for reading the total number of entities in the database.
+     * Method used for reading the total number of entities from the database.
      *
-     * @return the total number of artists in the database.
+     * @return the total number of artists from the database.
      */
     Long findTotalSize();
 
     /**
-     * Method for searching artists.
+     * Method used for searching artists.
      *
-     * @param searchParams - the object parameters by which a filtering will be done
-     * @param searchTerm   - the search term by which the filtering will be done
-     * @param pageable     - the wrapper for paging/sorting/filtering
-     * @return a search result of the filtered artists.
+     * @param searchParams - the object parameters by which the filtering is to be done.
+     * @param searchTerm   - the search term by which the filtering is to be done.
+     * @param pageable     - the wrapper object containing pagination data.
+     * @return a list of the filtered artists.
      */
-    SearchResult<Artist> search(List<String> searchParams, String searchTerm, Pageable pageable);
-
-
+    SearchResultResponse<Artist> search(List<String> searchParams, String searchTerm, Pageable pageable);
 
     /**
-     * Method for getting an artist from the database.
+     * Method used for fetching an artist with the specified ID.
      *
-     * @param id - artist's id.
+     * @param id - artist's ID.
      * @return an optional with the found artist.
      */
     Optional<Artist> findById(ArtistId id);
 
     /**
-     * Method for authenticating an existing artist from the database.
+     * Method used for authenticating an existing artist from the database.
      *
-     * @param artist - artist's login form object containing artist's information needed for authentication.
-     * @return the authenticated artist.
+     * @param artist - a wrapper object containing artist's information needed for authentication.
+     * @return an optional with the authenticated artist.
      */
     Optional<Artist> loginArtist(ArtistRequest artist);
 
     /**
-     * Method for registering a new artist in the database.
+     * Method used for registering a new artist in the database.
      *
-     * @param artist         - artist's login form object containing artist's information needed for authentication.
-     * @param profilePicture - the profile picture of the new artist to be registered.
-     * @return the new registered artist.
+     * @param profilePicture - the profile picture of the artist to be registered.
+     * @param artist         - a wrapper object containing artist's information needed for registration.
+     * @return an optional with the registered artist.
      */
     Optional<Artist> registerArtist(MultipartFile profilePicture, ArtistRequest artist);
 }

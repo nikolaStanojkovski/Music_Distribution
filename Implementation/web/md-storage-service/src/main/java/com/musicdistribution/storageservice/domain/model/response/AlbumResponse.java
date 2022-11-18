@@ -1,10 +1,10 @@
 package com.musicdistribution.storageservice.domain.model.response;
 
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.storageservice.domain.model.entity.Album;
 import com.musicdistribution.storageservice.domain.valueobject.AlbumInfo;
 import com.musicdistribution.storageservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.storageservice.domain.valueobject.SongLength;
-import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 /**
- * Data transfer object for an album.
+ * Object used for data transfer from the
+ * back-end to the front-end for an album.
  */
 @Data
 @NoArgsConstructor
@@ -28,6 +29,14 @@ public class AlbumResponse {
     private AlbumInfo albumInfo;
     private ArtistResponse creator;
 
+    /**
+     * Method used for building an album response object.
+     *
+     * @param album             - the album entity from which the properties are to be read from.
+     * @param encryptedId       - the encrypted ID of the album entity.
+     * @param encryptedArtistId - the encrypted ID of the artist entity.
+     * @return the created response object.
+     */
     public static AlbumResponse from(Album album, String encryptedId, String encryptedArtistId) {
         AlbumResponse albumResponse = new AlbumResponse();
         albumResponse.setId(encryptedId);

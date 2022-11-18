@@ -1,8 +1,10 @@
-package com.musicdistribution.storageservice.security;
+package com.musicdistribution.storageservice.config.security;
 
-import com.musicdistribution.storageservice.security.jwt.AuthEntryPointJwt;
-import com.musicdistribution.storageservice.security.jwt.AuthTokenFilter;
-import com.musicdistribution.storageservice.security.services.UserDetailsServiceImpl;
+import com.musicdistribution.storageservice.config.security.jwt.AuthEntryPointJwt;
+import com.musicdistribution.storageservice.config.security.jwt.AuthTokenFilter;
+import com.musicdistribution.storageservice.constant.AuthConstants;
+import com.musicdistribution.storageservice.constant.PathConstants;
+import com.musicdistribution.storageservice.service.implementation.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * The main configuration class for the web security mechanisms.
+ */
 @Configuration
 @AllArgsConstructor
 @EnableGlobalMethodSecurity(
@@ -27,11 +32,21 @@ public class WebSecurityConfig {
 
     private final AuthEntryPointJwt unauthorizedHandler;
 
+    /**
+     * Method used for assigning the appropriate filter class which handles the JWT authentication.
+     *
+     * @return the filter that handles the JWT authentication.
+     */
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
+    /**
+     * Method used for assigning the custom authentication provider.
+     *
+     * @return the custom configured DAO authentication provider.
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -41,32 +56,49 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
+    /**
+     * Method used for assigning the appropriate authentication manager.
+     *
+     * @param authConfig - the authentication configuration helper class.
+     * @return the configured authentication manager.
+     * @throws Exception if the authentication manager was not properly read from the authentication configuration.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
+    /**
+     * Method used for assigning the appropriate password encoder.
+     *
+     * @return the custom configured password encoder.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Method used for configuration of the entire filter security chain.
+     *
+     * @param http - a reference to the security wrapper object which provides configuration options.
+     * @return the custom configured security filter chain.
+     * @throws Exception if the filter chain was not properly configured.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/email-domains",
-                        "/api/resource/albums", "/api/resource/albums/search",
-                        "/api/resource/artists", "/api/resource/artists/search",
-                        "/api/resource/songs", "/api/resource/songs/search",
-                        "/api/resource/stream/**").permitAll()
+                .authorizeRequests().antMatchers(AuthConstants.AUTHENTICATION_ANT_MATCHER).permitAll()
+                .antMatchers(PathConstants.API_EMAIL_DOMAINS,
+                        PathConstants.API_ALBUMS, PathConstants.API_ALBUMS_SEARCH,
+                        PathConstants.API_ARTISTS, PathConstants.API_ARTISTS_SEARCH,
+                        PathConstants.API_SONGS, PathConstants.API_SONGS_SEARCH,
+                        AuthConstants.STREAM_ANT_MATCHER).permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic();
-
         http.authenticationProvider(authenticationProvider());
-
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -1,5 +1,6 @@
 package com.musicdistribution.sharedkernel.domain.valueobjects;
 
+import com.musicdistribution.sharedkernel.constant.ExceptionConstants;
 import com.musicdistribution.sharedkernel.domain.base.ValueObject;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Currency;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class Money implements ValueObject, Serializable {
     private final Double amount;
 
     /**
-     * Protected no-args constructor for the money object.
+     * Protected no-args constructor used for creating a money entity.
      */
     protected Money() {
         this.amount = 0.0;
@@ -33,26 +34,26 @@ public class Money implements ValueObject, Serializable {
     }
 
     /**
-     * Static method for creating a money object given the currency and amount.
+     * Static method used for the creation of a money object.
      *
      * @param currency - money's currency.
      * @param amount   - money's amount.
      * @return the created money object.
      */
-    public static Money valueOf(Currency currency, Double amount) {
+    public static Money from(Currency currency, Double amount) {
         return new Money(currency, amount);
     }
 
     /**
-     * Method used for the addition of two money objects.
+     * Method used for the addition of money into an existing object.
      *
-     * @param money - object's money which is to be added to this.
-     * @return the new money object with a made addition of the amounts of the two objects.
+     * @param money - the money that is to be added to {this}.
+     * @return the sum of the two objects.
      */
     public Money add(Money money) {
         if (money != null && currency != null) {
             if (!currency.equals(money.currency)) {
-                throw new IllegalArgumentException("Cannot add two Money objects with different currencies");
+                throw new IllegalArgumentException(ExceptionConstants.MONEY_ADDITION_FAILURE);
             }
             return new Money(currency, this.amount + money.amount);
         } else
@@ -60,15 +61,15 @@ public class Money implements ValueObject, Serializable {
     }
 
     /**
-     * Method used for the subtraction of two money objects.
+     * Method used for the subtraction of money from an existing object.
      *
-     * @param money - object's money which is to be subtracted to this.
-     * @return the new money object with a made subtraction of the amounts of the two objects.
+     * @param money - the money that is to be subtracted from {this}.
+     * @return the sum of the two objects.
      */
     public Money subtract(Money money) {
         if (money != null && currency != null) {
             if (!currency.equals(money.currency)) {
-                throw new IllegalArgumentException("Cannot add two Money objects with different currencies");
+                throw new IllegalArgumentException(ExceptionConstants.MONEY_SUBTRACTION_FAILURE);
             }
             return new Money(currency, amount - money.amount);
         } else
@@ -76,10 +77,10 @@ public class Money implements ValueObject, Serializable {
     }
 
     /**
-     * Method used for the multiplication of two money objects.
+     * Method used for the multiplication of the money amount from an existing object.
      *
-     * @param factor - the factor that the money's amount will be multiplied to.
-     * @return the new money object with a made multiplication of the amounts of the two objects.
+     * @param factor - the factor that needs to get multiplied to {this}.
+     * @return the multiplied money amount.
      */
     public Money multiply(int factor) {
         if (currency != null)
@@ -91,8 +92,8 @@ public class Money implements ValueObject, Serializable {
     /**
      * Method used for comparing two objects of type money.
      *
-     * @param o - the other object that is compared to this.
-     * @return a flag whether the two objects are equal or not.
+     * @param o - the other object that is compared to {this}.
+     * @return a flag representing whether the two objects are identical or not.
      */
     @Override
     public boolean equals(Object o) {
@@ -103,7 +104,7 @@ public class Money implements ValueObject, Serializable {
     }
 
     /**
-     * Method used for generating the hash code for an money object.
+     * Method used for generating a hash code for a money object.
      *
      * @return the integer value of the hash code.
      */

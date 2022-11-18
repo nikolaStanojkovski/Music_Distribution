@@ -5,7 +5,12 @@ package com.musicdistribution.storageservice.domain.exception;
  */
 public class FileStorageException extends RuntimeException {
 
-    public FileStorageException(String error) {
-        super(error);
+    /**
+     * Public constructor for the exception.
+     *
+     * @param message - the message of the error that occurred when storing a file.
+     */
+    public FileStorageException(String message) {
+        super(message);
     }
 }

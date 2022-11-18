@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * JPA Repository for a song.
+ * JPA Repository for a song entity.
  */
 @Repository
 public interface SongRepository extends JpaRepository<Song, SongId> {

@@ -1,9 +1,10 @@
 package com.musicdistribution.storageservice.xport.rest.core;
 
+import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.storageservice.constant.*;
 import com.musicdistribution.storageservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.storageservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.storageservice.domain.service.IFileSystemStorage;
-import com.musicdistribution.sharedkernel.util.ApiController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,68 +18,112 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 
 /**
- * Song Rest Controller.
+ * Stream Rest Controller.
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/resource/stream")
+@RequestMapping(PathConstants.API_STREAM)
 public class StreamResource {
 
     private final IFileSystemStorage fileSystemStorage;
     private final IEncryptionSystem encryptionSystem;
 
-    @GetMapping("/{id}.mp3")
-    public Mono<ResponseEntity<byte[]>> streamAudio(@RequestHeader(value = "Range", required = false) String httpRangeList,
-                                                    @PathVariable("id") String id) {
-        String fileName = String.format("%s.mp3", encryptionSystem.decrypt(id));
+    /**
+     * Method used to stream an audio file.
+     *
+     * @param httpRangeList - the range list of the audio to be fetched.
+     * @param id            - the ID of the audio to be fetched.
+     * @return a response entity with the requested bytes of the audio file.
+     */
+    @GetMapping(PathConstants.API_AUDIO_STREAM)
+    public Mono<ResponseEntity<byte[]>> streamAudio(@RequestHeader(value = ServletConstants.RANGE, required = false) String httpRangeList,
+                                                    @PathVariable(EntityConstants.ID) String id) {
+        String fileName = String.format("%s.%s", encryptionSystem.decrypt(id), FileConstants.MPEG_EXTENSION);
         return Mono.just(getAudioContent(fileName, httpRangeList));
     }
 
-    @GetMapping(value = "/songs/{id}.png", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getSongCover(@PathVariable("id") String id) {
-        String fileName = String.format("%s.png", encryptionSystem.decrypt(id));
+    /**
+     * Method used to fetch the cover picture of a song.
+     *
+     * @param id - the id of the song cover picture to be fetched.
+     * @return a response entity with the requested bytes of the picture.
+     */
+    @GetMapping(value = PathConstants.API_SONG_COVER,
+            produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getSongCover(@PathVariable(EntityConstants.ID) String id) {
+        String fileName = String.format("%s.%s", encryptionSystem.decrypt(id), FileConstants.PNG_EXTENSION);
         return getPictureContent(fileName, FileLocationType.SONG_COVERS);
     }
 
-    @GetMapping(value = "/albums/{id}.png", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getAlbumCover(@PathVariable("id") String id) {
-        String fileName = String.format("%s.png", encryptionSystem.decrypt(id));
+    /**
+     * Method used to fetch the cover picture of an album.
+     *
+     * @param id - the id of the album cover picture to be fetched.
+     * @return a response entity with the requested bytes of the picture.
+     */
+    @GetMapping(value = PathConstants.API_ALBUM_COVER,
+            produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getAlbumCover(@PathVariable(EntityConstants.ID) String id) {
+        String fileName = String.format("%s.%s", encryptionSystem.decrypt(id), FileConstants.PNG_EXTENSION);
         return getPictureContent(fileName, FileLocationType.ALBUM_COVERS);
     }
 
-    @GetMapping(value = "/artists/{id}.png", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getArtistPicture(@PathVariable("id") String id) {
-        String fileName = String.format("%s.png", encryptionSystem.decrypt(id));
+    /**
+     * Method used to fetch the cover picture of an artist.
+     *
+     * @param id - the id of the artist cover picture to be fetched.
+     * @return a response entity with the requested bytes of the picture.
+     */
+    @GetMapping(value = PathConstants.API_ARTIST_COVER,
+            produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getArtistPicture(@PathVariable(EntityConstants.ID) String id) {
+        String fileName = String.format("%s.%s", encryptionSystem.decrypt(id), FileConstants.PNG_EXTENSION);
         return getPictureContent(fileName, FileLocationType.ARTIST_PROFILE_PICTURE);
     }
 
+    /**
+     * Method used to fetch the adequate byte array from the audio file.
+     *
+     * @param fileName      - the name of the audio file to fetched.
+     * @param httpRangeList - the range list of the audio to be fetched.
+     * @return the requested byte array from the audio file.
+     */
     private ResponseEntity<byte[]> getAudioContent(String fileName, String httpRangeList) {
         Long fileSize = fileSystemStorage.loadFileSize(fileName, FileLocationType.SONGS);
 
         return Optional.ofNullable(httpRangeList).map(range -> {
-            String[] ranges = range.split("-");
+            String[] ranges = range.split(AlphabetConstants.SCORE);
             long rangeStart = Long.parseLong(ranges[0].substring(6));
             long rangeEnd = ((ranges.length > 1)) ? Long.parseLong(ranges[1]) : fileSize - 1;
             rangeEnd = ((fileSize < rangeEnd)) ? fileSize - 1 : rangeEnd;
             String contentLength = String.valueOf((rangeEnd - rangeStart) + 1);
 
             return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                    .header("Content-Type", "audio/mpeg")
-                    .header("Accept-Ranges", "bytes")
-                    .header("Content-Length", contentLength)
-                    .header("Content-Range", "bytes" + " " + rangeStart + "-" + rangeEnd + "/" + fileSize)
+                    .header(ServletConstants.CONTENT_TYPE, ServletConstants.AUDIO_CONTENT_TYPE)
+                    .header(ServletConstants.ACCEPT_RANGES, ServletConstants.BYTES)
+                    .header(ServletConstants.CONTENT_LENGTH, contentLength)
+                    .header(ServletConstants.CONTENT_RANGE, String.format("%s %s-%s/%s",
+                            ServletConstants.BYTES, rangeStart, rangeEnd, fileSize))
                     .body(fileSystemStorage.loadFileByteRange(fileName, rangeStart, rangeEnd, FileLocationType.SONGS));
         }).orElse(ResponseEntity.status(HttpStatus.OK)
-                .header("Content-Type", "audio/mpeg")
-                .header("Content-Length", String.valueOf(fileSize))
+                .header(ServletConstants.CONTENT_TYPE, ServletConstants.AUDIO_CONTENT_TYPE)
+                .header(ServletConstants.CONTENT_LENGTH, String.valueOf(fileSize))
                 .body(fileSystemStorage.loadFileByteRange(fileName, 0, fileSize - 1, FileLocationType.SONGS)));
     }
 
+    /**
+     * Method used to read the content of the requested picture file.
+     *
+     * @param fileName     - the name of the image file to fetched.
+     * @param locationType - the type of the image file to be loaded.
+     * @return the requested byte array from the image.
+     */
     private ResponseEntity<byte[]> getPictureContent(String fileName, FileLocationType locationType) {
         return Optional.ofNullable(fileSystemStorage.loadFileSize(fileName, locationType))
                 .filter(size -> size != 0).map(size -> ResponseEntity.status(HttpStatus.OK)
-                        .header("Content-Type", "image/png")
-                        .header("Content-Length", String.valueOf(size))
-                        .body(fileSystemStorage.loadFileByteRange(fileName, 0, size - 1, locationType))).orElse(ResponseEntity.badRequest().build());
+                        .header(ServletConstants.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
+                        .header(ServletConstants.CONTENT_LENGTH, String.valueOf(size))
+                        .body(fileSystemStorage.loadFileByteRange(fileName, 0, size - 1,
+                                locationType))).orElse(ResponseEntity.badRequest().build());
     }
 }

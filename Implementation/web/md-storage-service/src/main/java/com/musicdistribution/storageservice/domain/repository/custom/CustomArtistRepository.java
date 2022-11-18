@@ -1,9 +1,9 @@
 package com.musicdistribution.storageservice.domain.repository.custom;
 
-import com.musicdistribution.storageservice.domain.model.SearchResult;
 import com.musicdistribution.storageservice.domain.model.entity.Artist;
+import com.musicdistribution.storageservice.domain.model.response.SearchResultResponse;
 import com.musicdistribution.storageservice.domain.repository.SearchRepository;
-import com.musicdistribution.storageservice.domain.util.SearchUtil;
+import com.musicdistribution.storageservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
@@ -17,15 +17,27 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+/**
+ * Custom repository for artist database entities.
+ */
 @Repository
 @AllArgsConstructor
 public class CustomArtistRepository implements SearchRepository<Artist> {
 
     private final EntityManager entityManager;
+
     private final EntityManagerFactory entityManagerFactory;
 
+    /**
+     * Method used to filter artist entity objects.
+     *
+     * @param searchParameters - the parameters by which the filtering will be done.
+     * @param searchTerm       - the term which is being searched upon.
+     * @param pageable         - pagination data for the artist entity object.
+     * @return the results of the filtering for artists which meet the search criteria.
+     */
     @Override
-    public SearchResult<Artist> search(List<String> searchParameters, String searchTerm, Pageable pageable) {
+    public SearchResultResponse<Artist> search(List<String> searchParameters, String searchTerm, Pageable pageable) {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         List<String> formattedSearchParams = SearchUtil.buildSearchParams(searchParameters, Artist.class.getName(), sessionFactory);
 
@@ -40,6 +52,6 @@ public class CustomArtistRepository implements SearchRepository<Artist> {
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))
                 .getResultList();
         Integer resultListSize = entityManager.createQuery(cq).getResultList().size();
-        return new SearchResult<>(new PageImpl<>(resultList, pageable, resultList.size()), resultListSize);
+        return new SearchResultResponse<>(new PageImpl<>(resultList, pageable, resultList.size()), resultListSize);
     }
 }

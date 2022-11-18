@@ -1,17 +1,19 @@
 package com.musicdistribution.storageservice.domain.valueobject;
 
 import com.musicdistribution.sharedkernel.domain.base.ValueObject;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Embeddable;
 
 /**
- * Value object for an artist personal information that contains the first name, last name and art name of the artist.
+ * A value object that contains artist's personal information.
  */
 @Getter
 @Embeddable
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArtistPersonalInfo implements ValueObject {
 
     private final String firstName;
@@ -19,23 +21,23 @@ public class ArtistPersonalInfo implements ValueObject {
     private final String artName;
 
     /**
-     * Protected no-args constructor for ArtistPersonalInfo.
+     * Protected no-args constructor for the class.
      */
     protected ArtistPersonalInfo() {
-        this.firstName = "";
-        this.lastName = "";
-        this.artName = "";
+        this.firstName = StringUtils.EMPTY;
+        this.lastName = StringUtils.EMPTY;
+        this.artName = StringUtils.EMPTY;
     }
 
     /**
-     * Static method for creating a new artist personal information object.
+     * Method used for creating a new artist personal information object.
      *
      * @param firstName - artist's first name.
      * @param lastName  - artist's last name.
      * @param artName   - artist's art name.
      * @return the created artist personal information object.
      */
-    public static ArtistPersonalInfo build(String firstName, String lastName, String artName) {
+    public static ArtistPersonalInfo from(String firstName, String lastName, String artName) {
         return new ArtistPersonalInfo(firstName, lastName, artName);
     }
 

@@ -1,12 +1,13 @@
 package com.musicdistribution.storageservice.xport.rest.core;
 
+import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.storageservice.constant.PathConstants;
 import com.musicdistribution.storageservice.domain.model.request.ArtistRequest;
 import com.musicdistribution.storageservice.domain.model.response.ArtistJwtResponse;
 import com.musicdistribution.storageservice.domain.model.response.ArtistResponse;
 import com.musicdistribution.storageservice.domain.service.IEncryptionSystem;
-import com.musicdistribution.storageservice.security.jwt.JwtUtil;
 import com.musicdistribution.storageservice.service.ArtistService;
-import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.storageservice.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +27,7 @@ import javax.validation.Valid;
  */
 @ApiController
 @AllArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping(PathConstants.API_AUTH)
 public class AuthResource {
 
     private final ArtistService artistService;
@@ -36,12 +37,12 @@ public class AuthResource {
     private final IEncryptionSystem encryptionSystem;
 
     /**
-     * Method for authenticating an existing artist.
+     * Method used for authenticating an existing artist.
      *
-     * @param artistRequest - dto object containing the login information about an artist.
+     * @param artistRequest - an object wrapper containing the login information about an artist.
      * @return the authenticated artist.
      */
-    @PostMapping("/login")
+    @PostMapping(PathConstants.LOGIN)
     public ResponseEntity<ArtistJwtResponse> login(@RequestBody @Valid ArtistRequest artistRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(artistRequest.getUsername(), artistRequest.getPassword()));
@@ -56,12 +57,12 @@ public class AuthResource {
     }
 
     /**
-     * Method for registering an existing artist.
+     * Method used for registering a new artist.
      *
-     * @param artistRequest - dto object containing the login information about an artist.
+     * @param artistRequest - an object wrapper containing the registration information about the new artist.
      * @return the registered artist.
      */
-    @PostMapping("/register")
+    @PostMapping(PathConstants.REGISTER)
     public ResponseEntity<ArtistResponse> register(@RequestPart MultipartFile profilePicture,
                                                    @RequestPart @Valid ArtistRequest artistRequest) {
         return this.artistService.registerArtist(profilePicture, artistRequest)

@@ -1,10 +1,11 @@
 package com.musicdistribution.storageservice.domain.model.entity;
 
-import com.musicdistribution.storageservice.domain.valueobject.PaymentInfo;
-import com.musicdistribution.storageservice.domain.valueobject.SongLength;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
+import com.musicdistribution.storageservice.constant.EntityConstants;
+import com.musicdistribution.storageservice.domain.valueobject.PaymentInfo;
+import com.musicdistribution.storageservice.domain.valueobject.SongLength;
 import lombok.Getter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -17,7 +18,7 @@ import java.io.Serializable;
  */
 @Entity
 @Getter
-@Table(name = "Song")
+@Table(name = EntityConstants.SONG)
 public class Song extends AbstractEntity<SongId> implements Serializable {
 
     private String songName;
@@ -30,16 +31,22 @@ public class Song extends AbstractEntity<SongId> implements Serializable {
     private Genre songGenre;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "subscriptionFee.amount", column = @Column(name = "payment_subscription_fee_amount")),
-            @AttributeOverride(name = "subscriptionFee.currency", column = @Column(name = "payment_subscription_fee_amount_currency")),
-            @AttributeOverride(name = "transactionFee.amount", column = @Column(name = "payment_transaction_fee_amount")),
-            @AttributeOverride(name = "transactionFee.currency", column = @Column(name = "payment_transaction_fee_currency")),
-            @AttributeOverride(name = "tier", column = @Column(name = "payment_tier"))
+            @AttributeOverride(name = EntityConstants.SUBSCRIPTION_FEE_AMOUNT,
+                    column = @Column(name = EntityConstants.SONG_SUBSCRIPTION_FEE_AMOUNT)),
+            @AttributeOverride(name = EntityConstants.SUBSCRIPTION_FEE_CURRENCY,
+                    column = @Column(name = EntityConstants.SONG_SUBSCRIPTION_FEE_CURRENCY)),
+            @AttributeOverride(name = EntityConstants.TRANSACTION_FEE_AMOUNT,
+                    column = @Column(name = EntityConstants.SONG_TRANSACTION_FEE_AMOUNT)),
+            @AttributeOverride(name = EntityConstants.TRANSACTION_FEE_CURRENCY,
+                    column = @Column(name = EntityConstants.SONG_TRANSACTION_FEE_CURRENCY)),
+            @AttributeOverride(name = EntityConstants.TIER,
+                    column = @Column(name = EntityConstants.SONG_PAYMENT_TIER))
     })
     private PaymentInfo paymentInfo;
 
     @AttributeOverrides({
-            @AttributeOverride(name = "lengthInSeconds", column = @Column(name = "song_length"))
+            @AttributeOverride(name = EntityConstants.LENGTH_IN_SECONDS,
+                    column = @Column(name = EntityConstants.SONG_LENGTH_IN_SECONDS))
     })
     private SongLength songLength;
 
@@ -52,7 +59,7 @@ public class Song extends AbstractEntity<SongId> implements Serializable {
     private Album album;
 
     /**
-     * Protected no args constructor for the Song entity.
+     * Protected no args constructor for creating a new Song entity.
      */
     protected Song() {
         super(SongId.randomId(SongId.class));
@@ -98,7 +105,7 @@ public class Song extends AbstractEntity<SongId> implements Serializable {
     }
 
     /**
-     * Method for publishing a song as non-single single, part of an album.
+     * Method for publishing a non-single song, which is a part of an album.
      *
      * @param album - the album in which the song is put into.
      * @return the published song.
@@ -114,12 +121,15 @@ public class Song extends AbstractEntity<SongId> implements Serializable {
     /**
      * Method used for raising song's tier.
      *
-     * @param paymentInfo - the payment information for raising song's tier.
+     * @param paymentInfo - the information about the payment that was
+     *                    made in order for the song's tier to be raised.
+     * @return the song whose tier was raised.
      */
-    public void raiseTier(PaymentInfo paymentInfo) {
+    public Song raiseTier(PaymentInfo paymentInfo) {
         Money subscriptionFeeSum = this.paymentInfo.getSubscriptionFee().add(paymentInfo.getSubscriptionFee());
         Money transactionFeeSum = this.paymentInfo.getTransactionFee().add(paymentInfo.getTransactionFee());
 
-        this.paymentInfo = PaymentInfo.build(subscriptionFeeSum, transactionFeeSum, paymentInfo.getTier());
+        this.paymentInfo = PaymentInfo.from(subscriptionFeeSum, transactionFeeSum, paymentInfo.getTier());
+        return this;
     }
 }

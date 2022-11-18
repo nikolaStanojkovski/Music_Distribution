@@ -8,14 +8,25 @@
         <version>2.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.music-disstribution.storage-service</groupId>
     <artifactId>md-storage-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>md-storage-service</name>
     <description>The storage service from the music distribution system</description>
+
     <properties>
         <java.version>11</java.version>
+
+        <io.jsonwebtoken.jjwt.version>0.9.1</io.jsonwebtoken.jjwt.version>
+        <org.springframework.spring-webflux.version>5.3.23</org.springframework.spring-webflux.version>
+        <javax.validation.validation-api.version>2.0.1.Final</javax.validation.validation-api.version>
+        <org.apache.commons.commons-lang3.version>3.12.0</org.apache.commons.commons-lang3.version>
+
+        <com.music-disstribution.shared-kernel.md-shared-kernel.version>0.0.1-SNAPSHOT</com.music-disstribution.shared-kernel.md-shared-kernel.version>
+        <org.apache.maven.plugins.maven-surefire-plugin.version>2.19.1</org.apache.maven.plugins.maven-surefire-plugin.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -38,15 +49,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${io.jsonwebtoken.jjwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
-            <version>5.3.23</version>
+            <version>${org.springframework.spring-webflux.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -56,7 +68,12 @@
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
+            <version>${javax.validation.validation-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${org.apache.commons.commons-lang3.version}</version>
         </dependency>
 
         <dependency>
@@ -68,7 +85,7 @@
         <dependency>
             <groupId>com.music-disstribution.shared-kernel</groupId>
             <artifactId>md-shared-kernel</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${com.music-disstribution.shared-kernel.md-shared-kernel.version}</version>
         </dependency>
     </dependencies>
 
@@ -89,7 +106,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>${org.apache.maven.plugins.maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

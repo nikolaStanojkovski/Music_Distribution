@@ -1,23 +1,26 @@
 package com.musicdistribution.storageservice.config;
 
+import com.musicdistribution.storageservice.constant.PropertyConstants;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Configuration helper class used for storing static file properties.
+ */
 @Getter
 @Component
 public class FileProperties {
 
-    @Value("${file.songs.upload.location}")
+    @Value(PropertyConstants.MD_SONG_FILES_LOCATION)
     private String songsLocation;
 
-    @Value("${file.cover-songs.upload.location}")
+    @Value(PropertyConstants.MD_SONG_COVER_FILES_LOCATION)
     private String songCoversLocation;
 
-    @Value("${file.cover-albums.upload.location}")
+    @Value(PropertyConstants.MD_ALBUM_COVER_FILES_LOCATION)
     private String albumCoversLocation;
 
-    @Value("${file.profile-pictures.upload.location}")
+    @Value(PropertyConstants.MD_ARTIST_COVER_FILES_LOCATION)
     private String profilePicturesLocation;
-
 }

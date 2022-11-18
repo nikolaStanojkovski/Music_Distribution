@@ -1,34 +1,28 @@
 package com.musicdistribution.storageservice.domain.model.entity;
 
 import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
-import org.springframework.lang.NonNull;
+import lombok.NoArgsConstructor;
 
 /**
- * AlbumId value object used as the album identifier.
+ * AlbumId value object used as an album unique identifier.
  */
+@NoArgsConstructor
 public class AlbumId extends DomainObjectId {
 
     /**
-     * Protected no-args constructor for a album id.
-     */
-    protected AlbumId() {
-        super(AlbumId.randomId(AlbumId.class).getId());
-    }
-
-    /**
-     * Constructor for the album id.
+     * Public constructor used for creating a new album unique ID.
      *
-     * @param uuid - the id that is used for the creation of the album id.
+     * @param uuid - the value of the identifier to be created.
      */
-    public AlbumId(@NonNull String uuid) {
+    public AlbumId(String uuid) {
         super(uuid);
     }
 
     /**
-     * Static method for creating a album id.
+     * Static method for creating a new album ID.
      *
-     * @param uuid - the id that is used for the creation of the album id.
-     * @return the album id.
+     * @param uuid - the unique identifier for a album.
+     * @return the created album ID.
      */
     public static AlbumId of(String uuid) {
         return new AlbumId(uuid);

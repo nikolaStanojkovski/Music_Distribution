@@ -1,8 +1,8 @@
 package com.musicdistribution.sharedkernel.domain.base;
 
+import com.musicdistribution.sharedkernel.constant.ExceptionConstants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.util.ProxyUtils;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.EmbeddedId;
@@ -10,9 +10,9 @@ import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
 /**
- * Abstract class for ID entity object.
+ * Database entity identifier object.
  *
- * @param <ID> - the main identifier for the entity.
+ * @param <ID> - the type of the identifier.
  */
 @Getter
 @MappedSuperclass
@@ -23,35 +23,35 @@ public class AbstractEntity<ID extends DomainObjectId> {
     private ID id;
 
     /**
-     * Protected args constructors.
+     * Protected args constructor used for creating an abstract entity.
      *
-     * @param id - the entity's id from which the object is created.
+     * @param id - entity's ID from which the object is to be created.
      */
     protected AbstractEntity(@NonNull ID id) {
-        this.id = Objects.requireNonNull(id, "id must not be null");
+        this.id = Objects.requireNonNull(id, ExceptionConstants.ENTITY_CREATION_FAILURE);
     }
 
     /**
-     * Method used for checking whether two abstract entities are equal.
+     * Method used for checking whether two abstract entities are identical.
      *
-     * @param obj - the other object to be compared to this.
-     * @return a flag of whether this object is equal to the one passed as an argument.
+     * @param o - the other object to be compared to {this}.
+     * @return a flag determining whether the objects are identical or not.
      */
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
-        if (obj == null || !getClass().equals(ProxyUtils.getUserClass(obj))) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        var other = (AbstractEntity<?>) obj;
-        return id != null && id.equals(other.id);
+        var other = (AbstractEntity<?>) o;
+        return id != null && Objects.equals(id, other.id);
     }
 
     /**
-     * Method used for creation of the hash code for the abstract entity.
+     * Method used to create hash code for the abstract entity.
      *
      * @return the integer value of the hash code.
      */
@@ -61,7 +61,7 @@ public class AbstractEntity<ID extends DomainObjectId> {
     }
 
     /**
-     * The toString notation for the abstract entity.
+     * Method used to construct the string representation of the abstract entity.
      *
      * @return the string representation for the abstract entity.
      */

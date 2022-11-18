@@ -1,5 +1,6 @@
 package com.musicdistribution.storageservice.domain.exception;
 
+import com.musicdistribution.storageservice.constant.ExceptionConstants;
 import com.musicdistribution.storageservice.domain.model.entity.AlbumId;
 
 /**
@@ -7,7 +8,12 @@ import com.musicdistribution.storageservice.domain.model.entity.AlbumId;
  */
 public class AlbumNotFoundException extends RuntimeException {
 
+    /**
+     * Public constructor for the exception.
+     *
+     * @param id - the ID of the album which was not found.
+     */
     public AlbumNotFoundException(AlbumId id) {
-        super("Album with id " + id.getId() + " is not found.");
+        super(String.format(ExceptionConstants.ALBUM_NOT_FOUND, id.getId()));
     }
 }

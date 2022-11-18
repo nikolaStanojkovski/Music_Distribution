@@ -12,7 +12,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * An album object used to transfer transaction data from the front-end user form to the backend.
+ * An extended album request wrapper object used to transfer transaction
+ * data from the front-end to the backend.
  */
 @Data
 @NoArgsConstructor
