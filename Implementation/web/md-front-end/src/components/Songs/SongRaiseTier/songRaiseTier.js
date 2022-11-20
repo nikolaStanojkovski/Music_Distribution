@@ -40,9 +40,11 @@ const SongRaiseTier = (props) => {
         const songId = e.target.value;
         if (songId) {
             const filteredSongs = props.songs.content.filter(song => song.id === songId);
-            if (filteredSongs && filteredSongs.length > 0) {
-                updateSong(filteredSongs[0]);
-                handleSongTier(songTier);
+            if (filteredSongs) {
+                if(filteredSongs.length > 0) {
+                    updateSong(filteredSongs[0]);
+                    handleSongTier(songTier);
+                }
             }
         }
     }

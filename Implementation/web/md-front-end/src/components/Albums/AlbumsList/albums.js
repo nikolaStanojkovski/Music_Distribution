@@ -31,7 +31,7 @@ const Albums = (props) => {
     return (
         <div className={"container mm-4 my-5"}>
             <div className={"row mb-5"}>
-                <h1 className="display-5">Distribute your albums</h1>
+                <h1 className="display-5">The list of albums</h1>
                 <p className="text-muted">Make sure that others may access your albums using our platform.</p>
             </div>
             <hr/>
@@ -70,7 +70,7 @@ const Albums = (props) => {
                                     </td>
                                 </tr>
                             );
-                        }) : <tr/>}
+                        }) : null}
                         </tbody>
                     </table>
                 </div>

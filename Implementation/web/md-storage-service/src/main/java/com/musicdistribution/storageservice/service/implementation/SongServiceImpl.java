@@ -44,12 +44,15 @@ public class SongServiceImpl implements SongService {
     /**
      * Method used for fetching a page of songs from the database.
      *
-     * @param pageable - the wrapper object containing pagination data.
+     * @param pageable              - the wrapper object containing pagination data.
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
      * @return a page of the songs.
      */
     @Override
-    public Page<Song> findAll(Pageable pageable) {
-        return songRepository.findAll(pageable);
+    public Page<Song> findAll(Pageable pageable, Boolean shouldFilterPublished) {
+        return (shouldFilterPublished)
+                ? songRepository.findByIsPublished(true, pageable)
+                : songRepository.findAll(pageable);
     }
 
     /**
@@ -65,14 +68,16 @@ public class SongServiceImpl implements SongService {
     /**
      * Method used for searching songs.
      *
-     * @param searchParams - the object parameters by which the filtering is to be done.
-     * @param searchTerm   - the search term by which the filtering is to be done.
-     * @param pageable     - the wrapper object containing pagination data.
+     * @param searchParams          - the object parameters by which the filtering is to be done.
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param searchTerm            - the search term by which the filtering is to be done.
+     * @param pageable              - the wrapper object containing pagination data.
      * @return a list of the filtered songs.
      */
     @Override
-    public SearchResultResponse<Song> search(List<String> searchParams, String searchTerm, Pageable pageable) {
-        return searchRepository.search(searchParams, searchTerm, pageable);
+    public SearchResultResponse<Song> search(List<String> searchParams, Boolean shouldFilterPublished,
+                                             String searchTerm, Pageable pageable) {
+        return searchRepository.search(searchParams, shouldFilterPublished, searchTerm, pageable);
     }
 
     /**

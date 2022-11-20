@@ -40,9 +40,11 @@ const AlbumRaiseTier = (props) => {
         const albumId = e.target.value;
         if (albumId) {
             const filteredAlbums = props.albums.content.filter(album => album.id === albumId);
-            if (filteredAlbums && filteredAlbums.content.length > 0) {
-                updateAlbum(filteredAlbums[0]);
-                handleAlbumTier(albumTier);
+            if (filteredAlbums) {
+                if(filteredAlbums.content.length > 0) {
+                    updateAlbum(filteredAlbums[0]);
+                    handleAlbumTier(albumTier);
+                }
             }
         }
     }

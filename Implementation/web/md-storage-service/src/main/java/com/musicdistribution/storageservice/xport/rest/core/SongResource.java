@@ -50,8 +50,13 @@ public class SongResource {
      * @return the page with the found songs.
      */
     @GetMapping
-    public Page<SongResponse> findAll(Pageable pageable) {
-        List<SongResponse> songs = songService.findAll(pageable).stream()
+    public Page<SongResponse> findAll(@RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
+                                      Pageable pageable) {
+        boolean isTokenValid = jwtUtil.validateJwtToken(authToken
+                .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX),
+                        StringUtils.EMPTY));
+        List<SongResponse> songs = songService.findAll(pageable, !isTokenValid)
+                .stream()
                 .map(song -> SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
@@ -71,10 +76,15 @@ public class SongResource {
      * @return the page with the filtered songs.
      */
     @GetMapping(PathConstants.SEARCH)
-    public Page<SongResponse> search(@RequestParam String[] searchParams,
+    public Page<SongResponse> search(@RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
+                                     @RequestParam String[] searchParams,
                                      @RequestParam String searchTerm,
                                      Pageable pageable) {
+        boolean isTokenValid = jwtUtil.validateJwtToken(authToken
+                .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX),
+                        StringUtils.EMPTY));
         SearchResultResponse<Song> songSearchResultResponse = songService.search(List.of(searchParams),
+                !isTokenValid,
                 (List.of(searchParams).stream().filter(param ->
                         param.contains(EntityConstants.ID)).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable);

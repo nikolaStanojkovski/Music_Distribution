@@ -31,13 +31,15 @@ public class CustomArtistRepository implements SearchRepository<Artist> {
     /**
      * Method used to filter artist entity objects.
      *
-     * @param searchParameters - the parameters by which the filtering will be done.
-     * @param searchTerm       - the term which is being searched upon.
-     * @param pageable         - pagination data for the artist entity object.
+     * @param searchParameters      - the parameters by which the filtering will be done.
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param searchTerm            - the term which is being searched upon.
+     * @param pageable              - pagination data for the artist entity object.
      * @return the results of the filtering for artists which meet the search criteria.
      */
     @Override
-    public SearchResultResponse<Artist> search(List<String> searchParameters, String searchTerm, Pageable pageable) {
+    public SearchResultResponse<Artist> search(List<String> searchParameters, Boolean shouldFilterPublished,
+                                               String searchTerm, Pageable pageable) {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         List<String> formattedSearchParams = SearchUtil.buildSearchParams(searchParameters, Artist.class.getName(), sessionFactory);
 
@@ -45,7 +47,7 @@ public class CustomArtistRepository implements SearchRepository<Artist> {
         CriteriaQuery<Artist> cq = cb.createQuery(Artist.class);
 
         Root<Artist> artistRoot = cq.from(Artist.class);
-        cq.where(SearchUtil.convertToPredicates(formattedSearchParams, artistRoot, cb, searchTerm));
+        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, artistRoot, cb, searchTerm));
 
         List<Artist> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())

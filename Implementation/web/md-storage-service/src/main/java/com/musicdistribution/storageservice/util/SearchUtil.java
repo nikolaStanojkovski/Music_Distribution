@@ -45,22 +45,22 @@ public final class SearchUtil {
     }
 
     /**
-     * Method used to convert search parameters to predicates.
+     * Method used to convert search parameters to AND predicates.
      *
      * @param searchParams - the search parameters from which the predicates are to be generated.
      * @param entityRoot   - the entity root of the predicate expression.
      * @param cb           - the criteria builder on which the predicates are to be applied to.
      * @param searchTerm   - the term which will be used in the search predicates.
      * @param <T>          - the type of the entity.
-     * @return an array of the generated predicates.
+     * @return an array of the generated AND predicates.
      */
-    public static <T> Predicate[] convertToPredicates(List<String> searchParams,
+    public static <T> Predicate[] convertToAndPredicates(List<String> searchParams,
                                                       Root<T> entityRoot,
                                                       CriteriaBuilder cb,
                                                       String searchTerm) {
         return searchParams.stream()
-                .map(param -> cb.like(SearchUtil.convertToPredicateExpression(param, entityRoot),
-                        String.format("%%%s%%", searchTerm)))
+                .map(param -> cb.and(cb.like(SearchUtil.convertToPredicateExpression(param, entityRoot),
+                        String.format("%%%s%%", searchTerm))))
                 .toArray(Predicate[]::new);
     }
 

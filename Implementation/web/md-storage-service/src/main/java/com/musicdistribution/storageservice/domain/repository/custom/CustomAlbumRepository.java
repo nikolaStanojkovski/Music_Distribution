@@ -31,13 +31,15 @@ public class CustomAlbumRepository implements SearchRepository<Album> {
     /**
      * Method used to filter album entity objects.
      *
-     * @param searchParameters - the parameters by which the filtering will be done.
-     * @param searchTerm       - the term which is being searched upon.
-     * @param pageable         - pagination data for the album entity object.
+     * @param searchParameters      - the parameters by which the filtering will be done.
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param searchTerm            - the term which is being searched upon.
+     * @param pageable              - pagination data for the album entity object.
      * @return the results of the filtering for albums which meet the search criteria.
      */
     @Override
-    public SearchResultResponse<Album> search(List<String> searchParameters, String searchTerm, Pageable pageable) {
+    public SearchResultResponse<Album> search(List<String> searchParameters, Boolean shouldFilterPublished,
+                                              String searchTerm, Pageable pageable) {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         List<String> formattedSearchParams = SearchUtil.buildSearchParams(searchParameters, Album.class.getName(), sessionFactory);
 
@@ -45,7 +47,7 @@ public class CustomAlbumRepository implements SearchRepository<Album> {
         CriteriaQuery<Album> cq = cb.createQuery(Album.class);
 
         Root<Album> AlbumRoot = cq.from(Album.class);
-        cq.where(SearchUtil.convertToPredicates(formattedSearchParams, AlbumRoot, cb, searchTerm));
+        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, AlbumRoot, cb, searchTerm));
 
         List<Album> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())

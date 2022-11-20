@@ -62,7 +62,7 @@ public class AlbumServiceImpl implements AlbumService {
      */
     @Override
     public SearchResultResponse<Album> search(List<String> searchParams, String searchTerm, Pageable pageable) {
-        return searchRepository.search(searchParams, searchTerm, pageable);
+        return searchRepository.search(searchParams, false, searchTerm, pageable);
     }
 
     /**

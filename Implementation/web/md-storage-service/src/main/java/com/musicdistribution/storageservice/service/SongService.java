@@ -21,10 +21,11 @@ public interface SongService {
     /**
      * Method used for fetching a page of songs from the database.
      *
-     * @param pageable - the wrapper object containing pagination data.
+     * @param pageable              - the wrapper object containing pagination data.
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
      * @return a page of the songs.
      */
-    Page<Song> findAll(Pageable pageable);
+    Page<Song> findAll(Pageable pageable, Boolean shouldFilterPublished);
 
     /**
      * Method used for reading the total number of entities from the database.
@@ -36,12 +37,14 @@ public interface SongService {
     /**
      * Method used for searching songs.
      *
-     * @param searchParams - the object parameters by which the filtering is to be done.
-     * @param searchTerm   - the search term by which the filtering is to be done.
-     * @param pageable     - the wrapper object containing pagination data.
+     * @param searchParams          - the object parameters by which the filtering is to be done.
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param searchTerm            - the search term by which the filtering is to be done.
+     * @param pageable              - the wrapper object containing pagination data.
      * @return a list of the filtered songs.
      */
-    SearchResultResponse<Song> search(List<String> searchParams, String searchTerm, Pageable pageable);
+    SearchResultResponse<Song> search(List<String> searchParams, Boolean shouldFilterPublished,
+                                      String searchTerm, Pageable pageable);
 
     /**
      * Method used for fetching a song with the specified ID.

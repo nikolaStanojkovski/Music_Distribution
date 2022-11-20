@@ -4,6 +4,7 @@ import {API_BASE_URL, AUDIO_STREAM_URL, SONG_COVER_URL} from "../../../constants
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import Pagination from "../../Partial/Pagination/pagination";
 import SearchParamUtil from "../../../util/searchParamUtil";
+import AuthUtil from "../../../util/authUtil";
 
 const Songs = (props) => {
     const [filter, setFilter] = React.useState(false);
@@ -84,7 +85,7 @@ const Songs = (props) => {
     return (
         <div className={"container mm-4 my-5"}>
             <div className={"row mb-5"}>
-                <h1 className="display-5">Send out your songs</h1>
+                <h1 className="display-5">The list of songs</h1>
                 <p className="text-muted">Allow guests to hear the songs you've always wanted them to hear.</p>
             </div>
             <hr/>
@@ -96,7 +97,10 @@ const Songs = (props) => {
                             <th scope={"col"}>Name</th>
                             <th scope={"col"}>Genre</th>
                             <th scope={"col"}>Length</th>
-                            <th scope={"col"}>Is Published</th>
+                            {
+                                (AuthUtil.isAuthorized())
+                                    ? <th scope={"col"}>Is Published</th> : null
+                            }
                             <th scope={"col"}>Is Single</th>
                             <th scope={"col"}>Artist</th>
                             <th scope={"col"}>Album</th>
@@ -112,7 +116,10 @@ const Songs = (props) => {
                                     <td>{term.songName}</td>
                                     <td>{term.songGenre}</td>
                                     <td>{term['songLength']['formattedString']}</td>
-                                    <td>{(term['isPublished']) ? 'Yes' : 'No'}</td>
+                                    {
+                                        (AuthUtil.isAuthorized())
+                                            ? <td>{(term['isPublished']) ? 'Yes' : 'No'}</td> : null
+                                    }
                                     <td>{(term['isASingle']) ? 'Yes' : 'No'}</td>
                                     <td>{term['creator']['artistPersonalInfo'].fullName}</td>
                                     <td>{(term['album']) ? term['album'].albumName : ''}</td>
@@ -123,7 +130,7 @@ const Songs = (props) => {
                                     </td>
                                 </tr>
                             );
-                        }) : <tr/>}
+                        }) : null}
                         </tbody>
                     </table>
                 </div>

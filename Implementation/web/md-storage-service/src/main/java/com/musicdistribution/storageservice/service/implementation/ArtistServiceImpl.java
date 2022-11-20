@@ -70,7 +70,7 @@ public class ArtistServiceImpl implements ArtistService {
      */
     @Override
     public SearchResultResponse<Artist> search(List<String> searchParams, String searchTerm, Pageable pageable) {
-        return searchRepository.search(searchParams, searchTerm, pageable);
+        return searchRepository.search(searchParams, false, searchTerm, pageable);
     }
 
     /**

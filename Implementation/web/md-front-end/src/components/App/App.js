@@ -299,7 +299,8 @@ class App extends Component {
 
     logoutArtist = () => {
         AuthRepository.logoutArtist();
-        window.location.reload();
+        const baseUrl = window.location.origin;
+        window.location.replace(baseUrl);
     }
 
     getTransactionFee = () => {

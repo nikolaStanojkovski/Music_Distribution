@@ -1,6 +1,7 @@
 package com.musicdistribution.storageservice.util;
 
 import com.musicdistribution.storageservice.config.security.jwt.JwtProperties;
+import com.musicdistribution.storageservice.constant.AlphabetConstants;
 import com.musicdistribution.storageservice.service.implementation.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -53,6 +54,10 @@ public class JwtUtil {
      * @return a flag determining whether a JWT token is valid or not.
      */
     public boolean validateJwtToken(String authToken) {
+        if (authToken.isBlank() || authToken.equals(AlphabetConstants.NULL)) {
+            return false;
+        }
+
         try {
             Jwts.parser().setSigningKey(jwtProperties.getJwtSecret()).parseClaimsJws(authToken);
             return true;

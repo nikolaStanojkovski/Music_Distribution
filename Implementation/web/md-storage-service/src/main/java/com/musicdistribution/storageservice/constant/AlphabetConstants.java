@@ -5,6 +5,7 @@ package com.musicdistribution.storageservice.constant;
  */
 public final class AlphabetConstants {
 
+    public static final String NULL = "null";
     public static final String UNDERSCORE = "_";
     public static final String SCORE = "-";
     public static final String DOT = ".";
@@ -15,6 +16,8 @@ public final class AlphabetConstants {
     public static final char P_LOWERCASE = 'p';
     public static final char Q_LOWERCASE = 'q';
     public static final char Z_LOWERCASE = 'z';
+
+
 
     /**
      * Private constructor which throws an exception because the class should not be instantiated.

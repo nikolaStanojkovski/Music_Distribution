@@ -22,6 +22,7 @@ public final class EntityConstants {
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
     public static final String ART_NAME = "artName";
+    public static final String IS_PUBLISHED = "isPublished";
     public static final String LENGTH_IN_SECONDS = "lengthInSeconds";
 
     public static final String ALBUM = "album";
