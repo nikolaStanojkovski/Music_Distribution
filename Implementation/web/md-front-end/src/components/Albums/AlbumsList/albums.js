@@ -58,8 +58,8 @@ const Albums = (props) => {
                                     <td>{term.albumName}</td>
                                     <td>{term['totalLength']['formattedString']}</td>
                                     <td>{term['genre']}</td>
-                                    <td>{(term['creator'] && term['creator']['artistPersonalInfo'])
-                                        ? term['creator']['artistPersonalInfo'].fullName : ''}</td>
+                                    <td>{(term['creator'] && term['creator']['userPersonalInfo'])
+                                        ? term['creator']['userPersonalInfo'].fullName : ''}</td>
                                     <td>{(term['albumInfo']) ? term['albumInfo']['artistName'] : ''}</td>
                                     <td>{(term['albumInfo']) ? term['albumInfo']['producerName'] : ''}</td>
                                     <td>{(term['albumInfo']) ? term['albumInfo']['composerName'] : ''}</td>

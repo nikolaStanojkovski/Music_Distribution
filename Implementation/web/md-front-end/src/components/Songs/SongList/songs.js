@@ -121,7 +121,7 @@ const Songs = (props) => {
                                             ? <td>{(term['isPublished']) ? 'Yes' : 'No'}</td> : null
                                     }
                                     <td>{(term['isASingle']) ? 'Yes' : 'No'}</td>
-                                    <td>{term['creator']['artistPersonalInfo'].fullName}</td>
+                                    <td>{term['creator']['userPersonalInfo'].fullName}</td>
                                     <td>{(term['album']) ? term['album'].albumName : ''}</td>
                                     <td className={"table-cell-clickable"}>
                                         <button onClick={fetchSong}

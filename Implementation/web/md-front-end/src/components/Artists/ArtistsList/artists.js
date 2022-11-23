@@ -43,10 +43,10 @@ const Artists = (props) => {
                             return (
                                 <tr key={term.id} className={"table-row-clickable align-middle"}
                                     onClick={(e) => fetchArtistPicture(e, term.id)}>
-                                    <td>{term['artistContactInfo'].email['fullAddress']}</td>
-                                    <td>{term['artistContactInfo'].telephoneNumber}</td>
-                                    <td>{term['artistPersonalInfo'].fullName}</td>
-                                    <td>{term['artistPersonalInfo'].artName}</td>
+                                    <td>{term['userContactInfo'].email['fullAddress']}</td>
+                                    <td>{term['userContactInfo'].telephoneNumber}</td>
+                                    <td>{term['userPersonalInfo'].fullName}</td>
+                                    <td>{term['userPersonalInfo'].artName}</td>
                                     <td className={"table-cell-clickable"}>
                                         <Link to={"/albums?creator_id=" + term.id}
                                               className={`btn btn-outline-secondary btn-block bi bi-list`}>

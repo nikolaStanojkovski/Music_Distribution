@@ -1,7 +1,5 @@
 .idea
-md-storage-service/.mvn
 md-streaming-service/.mvn
 md-shared-kernel/.mvn
-md-storage-service/target
 md-streaming-service/target
 md-shared-kernel/target

@@ -24,14 +24,14 @@ import Unauthorized from "../Partial/Error/Unauthorized/unauthorized";
 import NotFound from "../Partial/Error/NotFound/notFound";
 import NonProtectedRoute from "../Partial/Route/NonProtected/nonProtectedRoute";
 import SongRaiseTier from "../Songs/SongRaiseTier/songRaiseTier";
-import AlbumRepository from "../../repository/storage-service/albumRepository";
-import EmailDomainRepository from "../../repository/storage-service/enum/emailDomainRepository";
-import GenreRepository from "../../repository/storage-service/enum/genreRepository";
-import TierRepository from "../../repository/storage-service/enum/tierRepository";
-import ArtistRepository from "../../repository/storage-service/artistRepository";
-import SongRepository from "../../repository/storage-service/songRepository";
-import PaymentRepository from "../../repository/storage-service/paymentRepository";
-import AuthRepository from "../../repository/storage-service/authRepository";
+import AlbumRepository from "../../repository/streaming-service/albumRepository";
+import EmailDomainRepository from "../../repository/streaming-service/enum/emailDomainRepository";
+import GenreRepository from "../../repository/streaming-service/enum/genreRepository";
+import TierRepository from "../../repository/streaming-service/enum/tierRepository";
+import ArtistRepository from "../../repository/streaming-service/artistRepository";
+import SongRepository from "../../repository/streaming-service/songRepository";
+import PaymentRepository from "../../repository/streaming-service/paymentRepository";
+import AuthRepository from "../../repository/streaming-service/authRepository";
 
 class App extends Component {
 

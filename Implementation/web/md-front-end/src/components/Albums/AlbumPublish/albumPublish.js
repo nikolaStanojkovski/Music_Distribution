@@ -158,7 +158,7 @@ const PublishAlbum = (props) => {
 
                         <div className="form-group">
                             <input name="artistName" disabled={true}
-                                   value={props.selectedArtist['artistPersonalInfo'].fullName}
+                                   value={props.selectedArtist['userPersonalInfo'].fullName}
                                    className="form-control disabled"/>
                         </div>
                         <br/>

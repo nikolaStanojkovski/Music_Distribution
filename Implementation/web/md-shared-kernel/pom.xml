@@ -13,7 +13,7 @@
     <artifactId>md-shared-kernel</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>md-shared-kernel</name>
-    <description>The shared kernel from the music distribution system</description>
+    <description>The shared kernel for the music distribution system</description>
 
     <properties>
         <java.version>11</java.version>
