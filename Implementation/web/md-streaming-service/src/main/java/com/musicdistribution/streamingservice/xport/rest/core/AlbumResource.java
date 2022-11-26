@@ -6,7 +6,7 @@ import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.constant.ServletConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.Album;
-import com.musicdistribution.streamingservice.domain.model.entity.AlbumId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.response.AlbumResponse;

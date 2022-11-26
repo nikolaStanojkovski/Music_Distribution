@@ -4,6 +4,7 @@ import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
+import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.valueobject.AlbumInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.SongLength;
@@ -61,7 +62,7 @@ public class Album extends AbstractEntity<AlbumId> implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private Artist creator;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Song> songs;
 

@@ -4,6 +4,7 @@ import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
+import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.SongLength;
 import lombok.Getter;

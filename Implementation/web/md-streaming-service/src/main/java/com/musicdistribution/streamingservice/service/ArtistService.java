@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.service;
 
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
-import com.musicdistribution.streamingservice.domain.model.entity.ArtistId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.model.request.ArtistRequest;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
 import org.springframework.data.domain.Page;

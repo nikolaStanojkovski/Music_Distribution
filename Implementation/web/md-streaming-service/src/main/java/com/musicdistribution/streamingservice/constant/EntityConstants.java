@@ -16,8 +16,10 @@ public final class EntityConstants {
     public static final String TIER = "tier";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
-    public static final String EMAIL_DOMAIN_USERNAME = "email.domainUsername";
-    public static final String EMAIL_DOMAIN_NAME = "email.domainName";
+    public static final String DOMAIN_USERNAME = "domainUsername";
+    public static final String DOMAIN_NAME = "domainName";
+    public static final String EMAIL_DOMAIN_USERNAME = "email." + DOMAIN_USERNAME;
+    public static final String EMAIL_DOMAIN_NAME = "email." + DOMAIN_NAME;
     public static final String TELEPHONE_NUMBER = "telephoneNumber";
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
@@ -44,6 +46,18 @@ public final class EntityConstants {
     public static final String ARTIST_FIRST_NAME = "artist_first_name";
     public static final String ARTIST_LAST_NAME = "artist_last_name";
     public static final String ARTIST_ART_NAME = "artist_art_name";
+
+    public static final String LISTENER = "listener";
+    public static final String LISTENER_USERNAME = "listener_username";
+    public static final String LISTENER_PASSWORD = "listener_password";
+    public static final String LISTENER_EMAIL_DOMAIN_USERNAME = "listener_email_domain_username";
+    public static final String LISTENER_EMAIL_DOMAIN_NAME = "listener_email_domain_name";
+
+    public static final String NOTIFICATION = "notification";
+    public static final String NOTIFICATION_UUID_1 = ID + ".uuid1";
+    public static final String NOTIFICATION_UUID_2 = ID + ".uuid2";
+    public static final String NOTIFICATION_RECEIVER_ID = "notification_receiver_id";
+    public static final String NOTIFICATION_PUBLISHING_ID = "notification_publishing_id";
 
     public static final String SONG = "song";
     public static final String SONG_SUBSCRIPTION_FEE_AMOUNT = "song_payment_subscription_fee_amount";

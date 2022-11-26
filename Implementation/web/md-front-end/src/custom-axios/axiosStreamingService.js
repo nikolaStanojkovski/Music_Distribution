@@ -13,7 +13,8 @@ const instance = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Access-Control-Allow-Origin': '*',
-        'Authorization': `Bearer ${(!isExpired(token)) ? token : ''}`
+        'Authorization': `Bearer ${(!isExpired(token)) ? token : ''}`,
+        'Auth-Role': `Artist`
     }
 })
 

@@ -4,7 +4,7 @@ import com.musicdistribution.sharedkernel.util.ApiController;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
-import com.musicdistribution.streamingservice.domain.model.entity.ArtistId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.model.response.ArtistResponse;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;

@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.service;
 
 import com.musicdistribution.streamingservice.domain.model.entity.Song;
-import com.musicdistribution.streamingservice.domain.model.entity.SongId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.request.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;

@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.domain.repository;
 
 import com.musicdistribution.streamingservice.domain.model.entity.Song;
-import com.musicdistribution.streamingservice.domain.model.entity.SongId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

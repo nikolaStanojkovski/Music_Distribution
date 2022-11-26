@@ -2,6 +2,8 @@ package com.musicdistribution.streamingservice.service.implementation;
 
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.*;
+import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;

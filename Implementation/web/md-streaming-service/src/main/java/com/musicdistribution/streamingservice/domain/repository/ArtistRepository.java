@@ -2,7 +2,7 @@ package com.musicdistribution.streamingservice.domain.repository;
 
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
-import com.musicdistribution.streamingservice.domain.model.entity.ArtistId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

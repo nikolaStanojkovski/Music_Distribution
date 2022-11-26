@@ -2,13 +2,16 @@ package com.musicdistribution.sharedkernel.domain.valueobjects;
 
 import com.musicdistribution.sharedkernel.domain.base.ValueObject;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -16,8 +19,8 @@ import java.util.Objects;
  */
 @Getter
 @Embeddable
-@AllArgsConstructor
-public class Email implements ValueObject {
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public class Email implements ValueObject, Serializable {
 
     private final String domainUsername;
 

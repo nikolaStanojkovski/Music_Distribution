@@ -4,7 +4,7 @@ import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.exception.FileStorageException;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
 import com.musicdistribution.streamingservice.domain.model.entity.Song;
-import com.musicdistribution.streamingservice.domain.model.entity.SongId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;

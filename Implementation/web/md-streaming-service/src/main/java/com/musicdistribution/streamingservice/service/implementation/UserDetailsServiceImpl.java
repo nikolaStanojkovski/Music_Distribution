@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * Implementation of the user details service.
  */
@@ -31,6 +33,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format(ExceptionConstants.ARTIST_USERNAME_NOT_FOUND, username)));
 
-        return UserDetailsImpl.build(artist);
+        return UserDetailsImpl.build(artist.getId().getId(), Optional.of(artist)
+                .map(Artist::getUserRegistrationInfo)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(String.format(ExceptionConstants
+                                .ARTIST_USER_INFO_NOT_FOUND, username))));
     }
 }

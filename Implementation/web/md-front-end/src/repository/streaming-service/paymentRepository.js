@@ -1,4 +1,4 @@
-import axios from "../../custom-axios/axiosStorageService";
+import axios from "../../custom-axios/axiosStreamingService";
 
 const PaymentRepository = {
     getTransactionFee: (locale) => {

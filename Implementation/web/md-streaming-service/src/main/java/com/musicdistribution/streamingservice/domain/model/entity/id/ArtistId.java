@@ -1,4 +1,4 @@
-package com.musicdistribution.streamingservice.domain.model.entity;
+package com.musicdistribution.streamingservice.domain.model.entity.id;
 
 import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
 import lombok.NoArgsConstructor;

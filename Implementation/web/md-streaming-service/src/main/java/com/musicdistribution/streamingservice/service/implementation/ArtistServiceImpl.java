@@ -3,7 +3,7 @@ package com.musicdistribution.streamingservice.service.implementation;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
-import com.musicdistribution.streamingservice.domain.model.entity.ArtistId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.ArtistRequest;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;

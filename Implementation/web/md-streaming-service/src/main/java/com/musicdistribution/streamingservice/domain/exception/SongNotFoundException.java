@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.domain.exception;
 
 import com.musicdistribution.streamingservice.constant.ExceptionConstants;
-import com.musicdistribution.streamingservice.domain.model.entity.SongId;
+import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 
 /**
  * Runtime exception that is thrown when a song is not found.

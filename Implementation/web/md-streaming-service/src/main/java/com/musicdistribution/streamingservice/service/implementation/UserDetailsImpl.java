@@ -3,6 +3,7 @@ package com.musicdistribution.streamingservice.service.implementation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.musicdistribution.streamingservice.constant.AuthConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
+import com.musicdistribution.streamingservice.domain.valueobject.UserRegistrationInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,16 +30,16 @@ public class UserDetailsImpl implements UserDetails {
     /**
      * Method used to create a new user details object.
      *
-     * @param artist - the artist from which the new object is to be created.
+     * @param user - the user from which the new object is to be created.
      * @return the created user details object.
      */
-    public static UserDetailsImpl build(Artist artist) {
+    public static UserDetailsImpl build(String id, UserRegistrationInfo user) {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(AuthConstants.ADMIN_AUTHORITY);
 
         return new UserDetailsImpl(
-                artist.getId().getId(),
-                artist.getUserRegistrationInfo().getUsername(),
-                artist.getUserRegistrationInfo().getPassword(),
+                id,
+                user.getUsername(),
+                user.getPassword(),
                 authorities);
     }
 

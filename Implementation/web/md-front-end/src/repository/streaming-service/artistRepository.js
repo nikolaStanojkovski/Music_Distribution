@@ -1,4 +1,4 @@
-import axios from "../../custom-axios/axiosStorageService";
+import axios from "../../custom-axios/axiosStreamingService";
 import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../constants/pagination";
 
 const ArtistRepository = {

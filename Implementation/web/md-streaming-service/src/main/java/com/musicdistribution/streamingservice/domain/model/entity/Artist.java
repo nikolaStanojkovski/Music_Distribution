@@ -2,6 +2,7 @@ package com.musicdistribution.streamingservice.domain.model.entity;
 
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
+import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.valueobject.UserContactInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.UserPersonalInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.UserRegistrationInfo;
@@ -50,12 +51,12 @@ public class Artist extends AbstractEntity<ArtistId> implements Serializable {
     })
     private UserPersonalInfo userPersonalInfo;
 
-    @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Album> albums;
 
-    @OneToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Song> songs;
 
     /**
@@ -70,7 +71,7 @@ public class Artist extends AbstractEntity<ArtistId> implements Serializable {
      *
      * @param userContactInfo  - artist's contact information.
      * @param userPersonalInfo - artist's personal information.
-     * @param password           - artist's password.
+     * @param password         - artist's password.
      * @return the created artist.
      */
     public static Artist build(UserContactInfo userContactInfo,
