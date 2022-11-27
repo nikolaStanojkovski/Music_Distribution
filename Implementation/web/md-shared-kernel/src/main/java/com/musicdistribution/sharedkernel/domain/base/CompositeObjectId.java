@@ -8,7 +8,6 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.Embeddable;
 import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -18,7 +17,7 @@ import java.util.Objects;
 @Embeddable
 @MappedSuperclass
 @NoArgsConstructor
-public class CompositeObjectId implements Serializable {
+public class CompositeObjectId implements DomainObjectId {
 
     private String uuid1;
     private String uuid2;

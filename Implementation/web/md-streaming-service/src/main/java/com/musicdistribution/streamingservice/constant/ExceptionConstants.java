@@ -10,7 +10,8 @@ public final class ExceptionConstants {
     public final static String ALBUM_NOT_FOUND = "Album with id %s was not found.";
     public final static String ARTIST_NOT_FOUND = "Artist with id %s was not found.";
     public final static String ARTIST_USERNAME_NOT_FOUND = "Artist with username %s was not found.";
-    public final static String ARTIST_USER_INFO_NOT_FOUND = "Artist registration info with username %s was not found.";
+    public final static String LISTENER_USERNAME_NOT_FOUND = "Listener with username %s was not found.";
+    public final static String USER_NOT_FOUND = "User with username %s was not found.";
     public final static String SONG_NOT_FOUND = "Song with id %s was not found.";
 
     public final static String STRING_ENCRYPTION_FAILURE = "Encryption of the string %s has failed.";

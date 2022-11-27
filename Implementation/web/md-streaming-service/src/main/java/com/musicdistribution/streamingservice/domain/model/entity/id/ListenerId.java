@@ -1,13 +1,13 @@
 package com.musicdistribution.streamingservice.domain.model.entity.id;
 
-import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
+import com.musicdistribution.sharedkernel.domain.base.SingularObjectId;
 import lombok.NoArgsConstructor;
 
 /**
  * ListenerId value object used as the listener identifier.
  */
 @NoArgsConstructor
-public class ListenerId extends DomainObjectId {
+public class ListenerId extends SingularObjectId {
 
     /**
      * Public constructor used for creating a new listener unique ID.

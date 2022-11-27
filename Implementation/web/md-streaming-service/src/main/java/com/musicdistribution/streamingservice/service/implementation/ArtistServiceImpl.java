@@ -1,11 +1,13 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.ArtistRequest;
+import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.repository.ArtistRepository;
 import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
@@ -87,12 +89,12 @@ public class ArtistServiceImpl implements ArtistService {
     /**
      * Method used for authenticating an existing artist from the database.
      *
-     * @param artistRequest - a wrapper object containing artist's information needed for authentication.
+     * @param authRequest - a wrapper object containing artist's information needed for authentication.
      * @return an optional with the authenticated artist.
      */
     @Override
-    public Optional<Artist> loginArtist(ArtistRequest artistRequest) {
-        return findByEmail(artistRequest);
+    public Optional<Artist> loginArtist(AuthRequest authRequest) {
+        return findByEmail(authRequest.getUsername(), authRequest.getEmailDomain());
     }
 
     /**
@@ -104,7 +106,7 @@ public class ArtistServiceImpl implements ArtistService {
      */
     @Override
     public Optional<Artist> registerArtist(MultipartFile profilePicture, ArtistRequest artistRequest) {
-        if (findByEmail(artistRequest).isPresent() ||
+        if (findByEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()).isPresent() ||
                 findByUsername(artistRequest.getUsername()).isPresent())
             return Optional.empty();
 
@@ -132,12 +134,12 @@ public class ArtistServiceImpl implements ArtistService {
     /**
      * Method used for filtering an artist by the specified email.
      *
-     * @param artistRequest - the wrapper object containing artist's email by which the filtering is to be done.
+     * @param username    - the username by which the filtering is to be done.
+     * @param emailDomain - the email domain by which the filtering is to be done.
      * @return an optional with the found artist.
      */
-    private Optional<Artist> findByEmail(ArtistRequest artistRequest) {
+    private Optional<Artist> findByEmail(String username, EmailDomain emailDomain) {
         return artistRepository.findByUserContactInfo_Email(
-                Email.from(artistRequest.getUsername(),
-                        artistRequest.getEmailDomain()));
+                Email.from(username, emailDomain));
     }
 }

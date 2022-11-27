@@ -17,7 +17,7 @@ public interface ArtistRepository extends JpaRepository<Artist, ArtistId> {
     /**
      * Method used for fetching a user by his username.
      *
-     * @param username - the username used for filtering
+     * @param username - the username used for filtering.
      * @return an optional with an artist.
      */
     Optional<Artist> findByUserRegistrationInfo_Username(String username);

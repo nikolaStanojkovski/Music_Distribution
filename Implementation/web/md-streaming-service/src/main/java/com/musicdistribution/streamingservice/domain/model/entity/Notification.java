@@ -1,5 +1,6 @@
 package com.musicdistribution.streamingservice.domain.model.entity;
 
+import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.id.NotificationId;
 import com.musicdistribution.streamingservice.domain.model.enums.NotificationType;
@@ -20,10 +21,7 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = EntityConstants.NOTIFICATION)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Notification implements Serializable {
-
-    @EmbeddedId
-    private NotificationId id;
+public class Notification extends AbstractEntity<NotificationId> implements Serializable {
 
     private Boolean isReceived;
 
@@ -42,7 +40,7 @@ public class Notification implements Serializable {
      * Protected no args constructor used for creating a new notification entity.
      */
     protected Notification(String receiverId, String publishingId) {
-        this.id = NotificationId.of(receiverId, publishingId);
+        super(NotificationId.of(receiverId, publishingId));
     }
 
     /**

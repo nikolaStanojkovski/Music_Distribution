@@ -16,7 +16,7 @@ public interface ListenerRepository extends JpaRepository<Listener, ListenerId> 
     /**
      * Method used for fetching a listener by his username.
      *
-     * @param username - the username used for filtering
+     * @param username - the username used for filtering.
      * @return an optional with a listener.
      */
     Optional<Listener> findByUserRegistrationInfo_Username(String username);

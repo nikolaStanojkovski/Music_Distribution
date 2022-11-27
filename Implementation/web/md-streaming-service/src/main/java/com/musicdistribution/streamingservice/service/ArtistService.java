@@ -3,6 +3,7 @@ package com.musicdistribution.streamingservice.service;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.model.request.ArtistRequest;
+import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,7 @@ public interface ArtistService {
      * @param artist - a wrapper object containing artist's information needed for authentication.
      * @return an optional with the authenticated artist.
      */
-    Optional<Artist> loginArtist(ArtistRequest artist);
+    Optional<Artist> loginArtist(AuthRequest artist);
 
     /**
      * Method used for registering a new artist in the database.

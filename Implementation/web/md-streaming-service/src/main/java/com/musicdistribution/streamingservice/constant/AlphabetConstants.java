@@ -9,6 +9,7 @@ public final class AlphabetConstants {
     public static final String UNDERSCORE = "_";
     public static final String SCORE = "-";
     public static final String DOT = ".";
+    public static final String COLON = ":";
 
     public static final char A_LOWERCASE = 'a';
     public static final char H_LOWERCASE = 'h';

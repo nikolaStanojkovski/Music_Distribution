@@ -2,8 +2,8 @@ package com.musicdistribution.streamingservice.config.security.jwt;
 
 import com.musicdistribution.streamingservice.constant.AuthConstants;
 import com.musicdistribution.streamingservice.constant.ServletConstants;
-import com.musicdistribution.streamingservice.domain.model.enums.AuthRole;
 import com.musicdistribution.streamingservice.service.implementation.UserDetailsServiceImpl;
+import com.musicdistribution.streamingservice.util.AuthUtil;
 import com.musicdistribution.streamingservice.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * An authentication filter which checks the validity of a user request.
@@ -53,10 +52,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
                 String username = jwtUtil.getUserNameFromJwtToken(jwt);
 
-                AuthRole authRole = Optional.ofNullable(request.getHeader(AuthConstants.AUTH_ROLE))
-                        .map(AuthRole::valueOf)
-                        .orElse(AuthRole.None);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(
+                        AuthUtil.formatUsernamePrincipal(username,
+                                request.getHeader(AuthConstants.AUTH_ROLE)));
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null,
                                 userDetails.getAuthorities());

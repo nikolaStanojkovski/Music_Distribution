@@ -10,6 +10,7 @@ public final class AuthConstants {
 
     public static final String UNAUTHORIZED_MESSAGE = "Unauthorized";
     public static final String AUTH_ROLE = "Auth-Role";
+    public static final String USERNAME_AUTH_ROLE_DELIMITER = AlphabetConstants.COLON;
     public static final String ADMIN_AUTHORITY = "ADMIN";
 
     public static final String JWT_TOKEN_PREFIX = "Bearer";

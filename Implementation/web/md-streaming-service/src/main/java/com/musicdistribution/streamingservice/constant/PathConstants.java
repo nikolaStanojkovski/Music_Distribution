@@ -14,7 +14,7 @@ public final class PathConstants {
     public static final String PUBLISH = "/publish";
     public static final String RAISE_TIER = "/raise-tier";
     public static final String LOGIN = "/login";
-    public static final String REGISTER = "/register";
+    public static final String REGISTER_ARTIST = "/register/artist";
     public static final String CREATE = "/create";
 
     public static final String SONGS = "/songs";

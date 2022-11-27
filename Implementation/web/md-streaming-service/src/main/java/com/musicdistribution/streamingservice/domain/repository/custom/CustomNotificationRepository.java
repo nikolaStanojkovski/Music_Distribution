@@ -1,6 +1,6 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
-import com.musicdistribution.streamingservice.domain.model.entity.Album;
+import com.musicdistribution.streamingservice.domain.model.entity.Notification;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
 import com.musicdistribution.streamingservice.util.SearchUtil;
@@ -18,38 +18,38 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
- * Custom repository for album database entities.
+ * Custom repository for notification database entities.
  */
 @Repository
 @AllArgsConstructor
-public class CustomAlbumRepository implements SearchRepository<Album> {
+public class CustomNotificationRepository implements SearchRepository<Notification> {
 
     private final EntityManager entityManager;
 
     private final EntityManagerFactory entityManagerFactory;
 
     /**
-     * Method used to filter album entity objects.
+     * Method used to filter notification entity objects.
      *
      * @param searchParameters      - the parameters by which the filtering will be done.
      * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
      * @param searchTerm            - the term which is being searched upon.
-     * @param pageable              - pagination data for the album entity object.
-     * @return the results of the filtering for albums which meet the search criteria.
+     * @param pageable              - pagination data for the notification entity object.
+     * @return the results of the filtering for notifications which meet the search criteria.
      */
     @Override
-    public SearchResultResponse<Album> search(List<String> searchParameters, Boolean shouldFilterPublished,
+    public SearchResultResponse<Notification> search(List<String> searchParameters, Boolean shouldFilterPublished,
                                               String searchTerm, Pageable pageable) {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-        List<String> formattedSearchParams = SearchUtil.buildSearchParams(searchParameters, Album.class.getName(), sessionFactory);
+        List<String> formattedSearchParams = SearchUtil.buildSearchParams(searchParameters, Notification.class.getName(), sessionFactory);
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Album> cq = cb.createQuery(Album.class);
+        CriteriaQuery<Notification> cq = cb.createQuery(Notification.class);
 
-        Root<Album> albumRoot = cq.from(Album.class);
-        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, albumRoot, cb, searchTerm));
+        Root<Notification> notificationRoot = cq.from(Notification.class);
+        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, notificationRoot, cb, searchTerm));
 
-        List<Album> resultList = entityManager.createQuery(cq)
+        List<Notification> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))
                 .getResultList();

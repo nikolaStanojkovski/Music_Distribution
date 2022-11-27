@@ -22,7 +22,7 @@ const AuthRepository = {
         })], {
             type: "application/json"
         }));
-        return axios.post("/auth/register", formData);
+        return axios.post("/auth/register/artist", formData);
     },
     logoutArtist: () => {
         if (localStorage.getItem('accessToken')) {
