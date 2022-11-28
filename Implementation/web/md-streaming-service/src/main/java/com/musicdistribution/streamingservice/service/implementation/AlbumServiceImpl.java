@@ -1,17 +1,18 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
 import com.musicdistribution.streamingservice.constant.FileConstants;
-import com.musicdistribution.streamingservice.domain.model.entity.*;
+import com.musicdistribution.streamingservice.domain.model.entity.Album;
+import com.musicdistribution.streamingservice.domain.model.entity.Artist;
+import com.musicdistribution.streamingservice.domain.model.entity.Notification;
+import com.musicdistribution.streamingservice.domain.model.entity.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
+import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.AlbumRepository;
-import com.musicdistribution.streamingservice.domain.repository.ArtistRepository;
-import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
-import com.musicdistribution.streamingservice.domain.repository.SongRepository;
+import com.musicdistribution.streamingservice.domain.repository.*;
 import com.musicdistribution.streamingservice.domain.service.IFileSystemStorage;
 import com.musicdistribution.streamingservice.domain.valueobject.AlbumInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
@@ -39,6 +40,8 @@ public class AlbumServiceImpl implements AlbumService {
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final SongRepository songRepository;
+    private final ListenerRepository listenerRepository;
+    private final NotificationRepository notificationRepository;
     private final SearchRepository<Album> searchRepository;
 
     private final IFileSystemStorage fileSystemStorage;
@@ -115,9 +118,23 @@ public class AlbumServiceImpl implements AlbumService {
                             albumTransactionRequest.getAlbumTier()),
                     songs);
 
+            createNotifications(album, artist.get());
             return this.save(album, cover);
         }
         return Optional.empty();
+    }
+
+    /**
+     * Method used to create notifications for the fans of the artist who is publishing.
+     *
+     * @param album  - the album which is being published.
+     * @param artist - the artist who is publishing the album.
+     */
+    private void createNotifications(Album album, Artist artist) {
+        listenerRepository.findAllByFavouriteArtists_Id(artist.getId())
+                .forEach(listener -> notificationRepository.save(
+                        Notification.build(album.getId().getId(), listener, EntityType.ALBUMS)
+                ));
     }
 
     /**

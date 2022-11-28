@@ -56,7 +56,7 @@ public interface ArtistService {
      * @param artist - a wrapper object containing artist's information needed for authentication.
      * @return an optional with the authenticated artist.
      */
-    Optional<Artist> loginArtist(AuthRequest artist);
+    Optional<Artist> login(AuthRequest artist);
 
     /**
      * Method used for registering a new artist in the database.
@@ -65,5 +65,5 @@ public interface ArtistService {
      * @param artist         - a wrapper object containing artist's information needed for registration.
      * @return an optional with the registered artist.
      */
-    Optional<Artist> registerArtist(MultipartFile profilePicture, ArtistRequest artist);
+    Optional<Artist> register(MultipartFile profilePicture, ArtistRequest artist);
 }

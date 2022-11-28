@@ -6,6 +6,7 @@ import com.musicdistribution.streamingservice.domain.model.enums.AuthRole;
 import com.musicdistribution.streamingservice.domain.repository.ArtistRepository;
 import com.musicdistribution.streamingservice.domain.repository.ListenerRepository;
 import com.musicdistribution.streamingservice.domain.valueobject.UserRegistrationInfo;
+import com.musicdistribution.streamingservice.util.AuthUtil;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,12 +54,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private Map.Entry<String, UserRegistrationInfo> getUserDetails(String usernameAndUserRole) {
         String username = getUsername(usernameAndUserRole);
         switch (getUserAuthRole(usernameAndUserRole)) {
-            case Artist:
+            case ARTIST:
                 return artistRepository.findByUserRegistrationInfo_Username(username)
                         .map(a -> new AbstractMap.SimpleEntry<>(a.getId().getId(), a.getUserRegistrationInfo()))
                         .orElseThrow(() -> new UsernameNotFoundException(
                                 String.format(ExceptionConstants.ARTIST_USERNAME_NOT_FOUND, username)));
-            case Listener:
+            case LISTENER:
                 return listenerRepository.findByUserRegistrationInfo_Username(username)
                         .map(l -> new AbstractMap.SimpleEntry<>(l.getId().getId(), l.getUserRegistrationInfo()))
                         .orElseThrow(() -> new UsernameNotFoundException(
@@ -90,7 +91,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private AuthRole getUserAuthRole(String usernameAndUserRole) {
         return Optional.ofNullable(usernameAndUserRole)
                 .map(uur -> uur.substring(uur.lastIndexOf(AuthConstants.USERNAME_AUTH_ROLE_DELIMITER) + 1))
-                .map(AuthRole::valueOf)
-                .orElse(AuthRole.None);
+                .map(AuthUtil::parseAuthRole)
+                .orElse(AuthRole.NONE);
     }
 }

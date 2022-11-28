@@ -3,7 +3,7 @@ package com.musicdistribution.streamingservice.domain.model.entity;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.id.NotificationId;
-import com.musicdistribution.streamingservice.domain.model.enums.NotificationType;
+import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ public class Notification extends AbstractEntity<NotificationId> implements Seri
     private LocalDateTime receivedTime;
 
     @Enumerated(value = EnumType.STRING)
-    private NotificationType type;
+    private EntityType type;
 
     @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -51,7 +51,7 @@ public class Notification extends AbstractEntity<NotificationId> implements Seri
      * @param type         - the type of the notification which is being made.
      * @return the created notification object.
      */
-    public static Notification build(String publishingId, Listener receiver, NotificationType type) {
+    public static Notification build(String publishingId, Listener receiver, EntityType type) {
         Notification notification = new Notification(receiver.getId().getId(), publishingId);
         notification.isReceived = false;
         notification.publishedTime = LocalDateTime.now();
@@ -60,5 +60,13 @@ public class Notification extends AbstractEntity<NotificationId> implements Seri
         notification.type = type;
 
         return notification;
+    }
+
+    /**
+     * Method used for triggering an already created notification.
+     */
+    public void trigger() {
+        this.isReceived = true;
+        this.receivedTime = LocalDateTime.now();
     }
 }

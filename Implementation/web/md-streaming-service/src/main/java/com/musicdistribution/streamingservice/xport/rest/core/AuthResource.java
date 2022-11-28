@@ -54,7 +54,7 @@ public class AuthResource {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtil.generateJwtToken(authentication);
 
-        return this.artistService.loginArtist(authRequest)
+        return this.artistService.login(authRequest)
                 .map(artist -> ResponseEntity.ok().body(ArtistJwtResponse.from(artist, jwt,
                         encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
@@ -69,7 +69,7 @@ public class AuthResource {
     @PostMapping(PathConstants.REGISTER_ARTIST)
     public ResponseEntity<ArtistResponse> registerArtist(@RequestPart MultipartFile profilePicture,
                                                          @RequestPart @Valid ArtistRequest artistRequest) {
-        return this.artistService.registerArtist(profilePicture, artistRequest)
+        return this.artistService.register(profilePicture, artistRequest)
                 .map(artist -> ResponseEntity.ok().body(ArtistResponse.from(artist,
                         encryptionSystem.encrypt(artist.getId().getId()))))
                 .orElseGet(() -> ResponseEntity.badRequest().build());

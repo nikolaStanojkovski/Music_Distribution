@@ -3,16 +3,16 @@ package com.musicdistribution.streamingservice.service.implementation;
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.exception.FileStorageException;
 import com.musicdistribution.streamingservice.domain.model.entity.Artist;
+import com.musicdistribution.streamingservice.domain.model.entity.Notification;
 import com.musicdistribution.streamingservice.domain.model.entity.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
+import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.ArtistRepository;
-import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
-import com.musicdistribution.streamingservice.domain.repository.SongRepository;
+import com.musicdistribution.streamingservice.domain.repository.*;
 import com.musicdistribution.streamingservice.domain.service.IFileSystemStorage;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.SongLength;
@@ -37,6 +37,8 @@ public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
     private final ArtistRepository artistRepository;
+    private final NotificationRepository notificationRepository;
+    private final ListenerRepository listenerRepository;
     private final SearchRepository<Song> searchRepository;
 
     private final IFileSystemStorage fileSystemStorage;
@@ -158,12 +160,26 @@ public class SongServiceImpl implements SongService {
                     fileSystemStorage.saveFile(cover, fileName, FileLocationType.SONG_COVERS);
                 }
 
+                createNotifications(s, artist.get());
                 return s.publishAsSingle(PaymentInfo.from(songTransactionRequest.getSubscriptionFee(),
                         songTransactionRequest.getTransactionFee(),
                         songTransactionRequest.getSongTier()));
             });
         }
         return song;
+    }
+
+    /**
+     * Method used to create notifications for the fans of the artist who is publishing.
+     *
+     * @param song   - the song which is being published.
+     * @param artist - the artist who is publishing the song.
+     */
+    private void createNotifications(Song song, Artist artist) {
+        listenerRepository.findAllByFavouriteArtists_Id(artist.getId())
+                .forEach(listener -> notificationRepository.save(
+                        Notification.build(song.getId().getId(), listener, EntityType.SONGS)
+                ));
     }
 
     /**

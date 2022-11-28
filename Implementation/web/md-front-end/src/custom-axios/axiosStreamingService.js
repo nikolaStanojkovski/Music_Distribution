@@ -14,7 +14,7 @@ const instance = axios.create({
     headers: {
         'Access-Control-Allow-Origin': '*',
         'Authorization': `Bearer ${(!isExpired(token)) ? token : ''}`,
-        'Auth-Role': `Artist`
+        'Auth-Role': `ARTIST`
     }
 })
 

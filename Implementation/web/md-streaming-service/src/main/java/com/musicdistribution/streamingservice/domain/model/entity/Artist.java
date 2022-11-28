@@ -69,18 +69,18 @@ public class Artist extends AbstractEntity<ArtistId> implements Serializable {
     /**
      * Static method for creating a new artist.
      *
-     * @param userContactInfo  - artist's contact information.
-     * @param userPersonalInfo - artist's personal information.
-     * @param password         - artist's password.
+     * @param userContactInfo      - artist's contact information.
+     * @param userPersonalInfo     - artist's personal information.
+     * @param userRegistrationInfo - artist's registration information.
      * @return the created artist.
      */
     public static Artist build(UserContactInfo userContactInfo,
                                UserPersonalInfo userPersonalInfo,
-                               String password) {
+                               UserRegistrationInfo userRegistrationInfo) {
         Artist artist = new Artist();
         artist.userContactInfo = userContactInfo;
         artist.userPersonalInfo = userPersonalInfo;
-        artist.userRegistrationInfo = UserRegistrationInfo.from(userContactInfo.getEmail().getDomainUsername(), password);
+        artist.userRegistrationInfo = userRegistrationInfo;
 
         artist.albums = new ArrayList<>();
         artist.songs = new ArrayList<>();

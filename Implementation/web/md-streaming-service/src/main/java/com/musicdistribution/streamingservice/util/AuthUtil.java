@@ -38,6 +38,6 @@ public final class AuthUtil {
      */
     public static AuthRole parseAuthRole(String authRole) {
         return Optional.ofNullable(authRole)
-                .map(AuthRole::valueOf).orElse(AuthRole.None);
+                .map(AuthRole::valueOf).orElse(AuthRole.NONE);
     }
 }

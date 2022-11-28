@@ -14,6 +14,7 @@ import com.musicdistribution.streamingservice.domain.repository.SearchRepository
 import com.musicdistribution.streamingservice.domain.service.IFileSystemStorage;
 import com.musicdistribution.streamingservice.domain.valueobject.UserContactInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.UserPersonalInfo;
+import com.musicdistribution.streamingservice.domain.valueobject.UserRegistrationInfo;
 import com.musicdistribution.streamingservice.service.ArtistService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -93,7 +94,7 @@ public class ArtistServiceImpl implements ArtistService {
      * @return an optional with the authenticated artist.
      */
     @Override
-    public Optional<Artist> loginArtist(AuthRequest authRequest) {
+    public Optional<Artist> login(AuthRequest authRequest) {
         return findByEmail(authRequest.getUsername(), authRequest.getEmailDomain());
     }
 
@@ -105,13 +106,14 @@ public class ArtistServiceImpl implements ArtistService {
      * @return an optional with the registered artist.
      */
     @Override
-    public Optional<Artist> registerArtist(MultipartFile profilePicture, ArtistRequest artistRequest) {
+    public Optional<Artist> register(MultipartFile profilePicture, ArtistRequest artistRequest) {
         if (findByEmail(artistRequest.getUsername(), artistRequest.getEmailDomain()).isPresent() ||
                 findByUsername(artistRequest.getUsername()).isPresent())
             return Optional.empty();
 
         Artist artist = artistRepository.save(Artist.build(UserContactInfo.from(artistRequest.getTelephoneNumber(), artistRequest.getUsername(), artistRequest.getEmailDomain()),
-                UserPersonalInfo.from(artistRequest.getFirstName(), artistRequest.getLastName(), artistRequest.getArtName()), passwordEncoder.encode(artistRequest.getPassword())));
+                UserPersonalInfo.from(artistRequest.getFirstName(), artistRequest.getLastName(), artistRequest.getArtName()),
+                UserRegistrationInfo.from(artistRequest.getUsername(), passwordEncoder.encode(artistRequest.getPassword()))));
 
         if (Objects.nonNull(profilePicture) && !profilePicture.isEmpty()) {
             String fileName = String.format("%s.%s", artist.getId().getId(), FileConstants.PNG_EXTENSION);

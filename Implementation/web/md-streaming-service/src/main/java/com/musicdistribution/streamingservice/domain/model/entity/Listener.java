@@ -80,4 +80,31 @@ public class Listener extends AbstractEntity<ListenerId> implements Serializable
 
         return listener;
     }
+
+    /**
+     * Method used for adding an artist to the favourites list.
+     *
+     * @param artist - the artist to be created.
+     */
+    public void addFavouriteArtist(Artist artist) {
+        this.favouriteArtists.add(artist);
+    }
+
+    /**
+     * Method used for adding an album to the favourites list.
+     *
+     * @param album - the album to be created.
+     */
+    public void addFavouriteAlbum(Album album) {
+        this.favouriteAlbums.add(album);
+    }
+
+    /**
+     * Method used for adding an song to the favourites list.
+     *
+     * @param song - the song to be created.
+     */
+    public void addFavouriteSong(Song song) {
+        this.favouriteSongs.add(song);
+    }
 }
