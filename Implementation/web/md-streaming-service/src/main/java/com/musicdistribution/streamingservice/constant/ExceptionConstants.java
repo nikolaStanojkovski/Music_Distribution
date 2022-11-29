@@ -7,12 +7,9 @@ public final class ExceptionConstants {
 
     public final static String UNSUPPORTED_CLASS_INSTANTIATION = "The class is not meant to be instantiated.";
 
-    public final static String ALBUM_NOT_FOUND = "Album with id %s was not found.";
-    public final static String ARTIST_NOT_FOUND = "Artist with id %s was not found.";
     public final static String ARTIST_USERNAME_NOT_FOUND = "Artist with username %s was not found.";
     public final static String LISTENER_USERNAME_NOT_FOUND = "Listener with username %s was not found.";
     public final static String USER_NOT_FOUND = "User with username %s was not found.";
-    public final static String SONG_NOT_FOUND = "Song with id %s was not found.";
 
     public final static String STRING_ENCRYPTION_FAILURE = "Encryption of the string %s has failed.";
     public final static String STRING_DECRYPTION_FAILURE = "Decryption of the string %s has failed.";
@@ -23,6 +20,7 @@ public final class ExceptionConstants {
     public final static String MULTIPART_FILE_FAILURE = "Could not save a new multipart file.";
     public final static String FILE_BYTES_LOADING_FAILURE = "The bytes from the file %s with start index %s and end index %s failed to be loaded.";
     public final static String FILES_FOLDER_FAILURE = "Could not create the files folder.";
+    public final static String SONG_NOT_SAVED = "Could not save the song with id %s.";
 
     /**
      * Private constructor which throws an exception because the class should not be instantiated.

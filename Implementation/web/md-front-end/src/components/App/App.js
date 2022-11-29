@@ -3,8 +3,8 @@ import React, {Component} from "react";
 import {BrowserRouter, Switch} from 'react-router-dom'
 import Home from '../Home/home';
 
-import Artists from '../Artists/ArtistsList/artists';
-import Albums from '../Albums/AlbumsList/albums';
+import Artists from '../Artists/ArtistList/artists';
+import Albums from '../Albums/AlbumList/albums';
 
 import AlbumPublish from '../Albums/AlbumPublish/albumPublish';
 import AlbumRaiseTier from '../Albums/AlbumRaiseTier/albumRaiseTier';

@@ -18,8 +18,8 @@ public final class EntityConstants {
     public static final String PASSWORD = "password";
     public static final String DOMAIN_USERNAME = "domainUsername";
     public static final String DOMAIN_NAME = "domainName";
-    public static final String EMAIL_DOMAIN_USERNAME = "email." + DOMAIN_USERNAME;
-    public static final String EMAIL_DOMAIN_NAME = "email." + DOMAIN_NAME;
+    public static final String EMAIL_DOMAIN_USERNAME = "email.domainUsername";
+    public static final String EMAIL_DOMAIN_NAME = "email.domainName";
     public static final String TELEPHONE_NUMBER = "telephoneNumber";
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
@@ -54,10 +54,6 @@ public final class EntityConstants {
     public static final String LISTENER_EMAIL_DOMAIN_NAME = "listener_email_domain_name";
 
     public static final String NOTIFICATION = "notification";
-    public static final String NOTIFICATION_UUID_1 = ID + ".uuid1";
-    public static final String NOTIFICATION_UUID_2 = ID + ".uuid2";
-    public static final String NOTIFICATION_RECEIVER_ID = "notification_receiver_id";
-    public static final String NOTIFICATION_PUBLISHING_ID = "notification_publishing_id";
 
     public static final String SONG = "song";
     public static final String SONG_SUBSCRIPTION_FEE_AMOUNT = "song_payment_subscription_fee_amount";

@@ -1,9 +1,9 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
 import com.musicdistribution.streamingservice.constant.EntityConstants;
-import com.musicdistribution.streamingservice.domain.model.entity.Song;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,7 +35,7 @@ public class CustomSongRepository implements SearchRepository<Song> {
      * Method used to filter song entity objects.
      *
      * @param searchParameters      - the parameters by which the filtering will be done.
-     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param shouldFilterPublished - a flag determining whether the filtering should be done by publishing status.
      * @param searchTerm            - the term which is being searched upon.
      * @param pageable              - pagination data for the song entity object.
      * @return the results of the filtering for songs which meet the search criteria.
@@ -52,10 +52,9 @@ public class CustomSongRepository implements SearchRepository<Song> {
         Root<Song> songRoot = cq.from(Song.class);
         Predicate[] predicates = SearchUtil.convertToAndPredicates(formattedSearchParams, songRoot, cb, searchTerm);
         if (shouldFilterPublished) {
-            Predicate isPublishedPredicate = cb.and(cb.equal(SearchUtil
+            predicates = ArrayUtils.add(predicates, cb.and(cb.equal(SearchUtil
                     .convertToPredicateExpression(EntityConstants.IS_PUBLISHED,
-                            songRoot), Boolean.TRUE));
-            predicates = ArrayUtils.add(predicates, isPublishedPredicate);
+                            songRoot), Boolean.TRUE)));
         }
 
         cq.where(predicates);

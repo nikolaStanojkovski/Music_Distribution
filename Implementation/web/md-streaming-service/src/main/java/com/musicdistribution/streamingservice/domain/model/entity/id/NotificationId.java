@@ -20,7 +20,7 @@ public class NotificationId extends CompositeObjectId {
     }
 
     /**
-     * Static method for creating a new notification ID.
+     * Static method used for creating a new notification ID.
      *
      * @param receiverUuid   - the value of the receiver identifier to be created.
      * @param publishingUuid - the value of the publishing (song or album) identifier to be created.

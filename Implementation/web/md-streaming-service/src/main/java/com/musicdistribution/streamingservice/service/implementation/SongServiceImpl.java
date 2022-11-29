@@ -1,21 +1,26 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.streamingservice.constant.ExceptionConstants;
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.exception.FileStorageException;
-import com.musicdistribution.streamingservice.domain.model.entity.Artist;
-import com.musicdistribution.streamingservice.domain.model.entity.Notification;
-import com.musicdistribution.streamingservice.domain.model.entity.Song;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Artist;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
-import com.musicdistribution.streamingservice.domain.model.request.SongRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.*;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.repository.core.ArtistRepository;
+import com.musicdistribution.streamingservice.domain.repository.core.ListenerRepository;
+import com.musicdistribution.streamingservice.domain.repository.core.NotificationRepository;
+import com.musicdistribution.streamingservice.domain.repository.core.SongRepository;
 import com.musicdistribution.streamingservice.domain.service.IFileSystemStorage;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
-import com.musicdistribution.streamingservice.domain.valueobject.SongLength;
+import com.musicdistribution.streamingservice.domain.valueobject.core.SongLength;
 import com.musicdistribution.streamingservice.service.SongService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -114,7 +119,7 @@ public class SongServiceImpl implements SongService {
             this.save(song.get(), file);
 
             song.ifPresent(s -> {
-                artist.get().addSongToArtist(s);
+                artist.get().addSong(s);
                 artistRepository.save(artist.get());
             });
         }
@@ -136,7 +141,7 @@ public class SongServiceImpl implements SongService {
                 fileSystemStorage.saveFile(file, fileName, FileLocationType.SONGS);
             }
         } catch (Exception exception) {
-            throw new FileStorageException("Could not save the compressed version of the song with id " + songId);
+            throw new FileStorageException(String.format(ExceptionConstants.SONG_NOT_SAVED, songId));
         }
     }
 

@@ -52,7 +52,7 @@ public final class SearchUtil {
      * @param cb           - the criteria builder on which the predicates are to be applied to.
      * @param searchTerm   - the term which will be used in the search predicates.
      * @param <T>          - the type of the entity.
-     * @return an array of the generated AND predicates.
+     * @return an array of the generated 'AND' predicates.
      */
     public static <T> Predicate[] convertToAndPredicates(List<String> searchParams,
                                                       Root<T> entityRoot,

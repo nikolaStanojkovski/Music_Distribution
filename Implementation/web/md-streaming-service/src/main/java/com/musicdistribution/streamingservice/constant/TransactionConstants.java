@@ -1,9 +1,14 @@
 package com.musicdistribution.streamingservice.constant;
 
+import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Currency;
+
 /**
  * Helper class used for storing constants related to user transactions.
  */
 public final class TransactionConstants {
+
+    public static final Money NO_FEE = Money.from(Currency.EUR, 0.00);
 
     public final static Double LEVEL_1_TRANSACTION_FEE = 3.00;
     public final static Double LEVEL_2_TRANSACTION_FEE = 5.00;

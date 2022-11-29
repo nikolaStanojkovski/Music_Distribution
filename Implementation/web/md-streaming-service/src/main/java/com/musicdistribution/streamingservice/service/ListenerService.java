@@ -1,11 +1,10 @@
 package com.musicdistribution.streamingservice.service;
 
-import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
-import com.musicdistribution.streamingservice.domain.model.entity.Listener;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -70,9 +69,9 @@ public interface ListenerService {
      * Method used for adding an object to the list of favourites.
      *
      * @param listenerId - a wrapper object containing listener's identifier.
-     * @param objectId   - a wrapper object containing object's identifier.
+     * @param objectId   - a string object containing object's identifier.
      * @param type       - a wrapper object containing entity's type.
      * @return a flag determining whether the object was added to the favourites list.
      */
-    boolean addToFavourite(ListenerId listenerId, DomainObjectId objectId, EntityType type);
+    Optional<Boolean> addToFavourite(ListenerId listenerId, String objectId, EntityType type);
 }

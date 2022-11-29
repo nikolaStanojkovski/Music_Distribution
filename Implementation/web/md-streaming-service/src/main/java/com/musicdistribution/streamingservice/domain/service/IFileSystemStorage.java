@@ -27,7 +27,7 @@ public interface IFileSystemStorage {
     Long loadFileSize(String fileName, FileLocationType fileLocationType);
 
     /**
-     * Method used to fetch the bytes from the file in the specified range.
+     * Method used to fetch the bytes from the file in the specified byte range.
      *
      * @param filename         - the name of the file whose bytes are to be read from.
      * @param start            - the starting index of the range of the required bytes.

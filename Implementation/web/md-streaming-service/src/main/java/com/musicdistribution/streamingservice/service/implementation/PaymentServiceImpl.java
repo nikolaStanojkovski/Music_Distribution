@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-    public static final Money NO_FEE = Money.from(Currency.EUR, 0.00);
-
     /**
      * Method used for calculating the transaction fee based on the user locale.
      *
@@ -29,7 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Money getTransactionFee(String locale) {
         if (locale.isEmpty())
-            return NO_FEE;
+            return TransactionConstants.NO_FEE;
 
         char leading = Character.toLowerCase(locale.charAt(0));
         if (leading >= AlphabetConstants.A_LOWERCASE && leading
@@ -42,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
                 && leading <= AlphabetConstants.Z_LOWERCASE)
             return Money.from(Currency.EUR, TransactionConstants.LEVEL_3_TRANSACTION_FEE);
         else
-            return NO_FEE;
+            return TransactionConstants.NO_FEE;
     }
 
     /**
@@ -65,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
             case Diamond:
                 return Money.from(Currency.EUR, TransactionConstants.DIAMOND_SUBSCRIPTION_FEE);
             default:
-                return NO_FEE;
+                return TransactionConstants.NO_FEE;
         }
     }
 }

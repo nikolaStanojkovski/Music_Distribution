@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * An extended song request wrapper object used to transfer
- * transaction data from the front-end to the backend.
+ * song transaction data from the front-end to the back-end.
  */
 @Data
 @NoArgsConstructor

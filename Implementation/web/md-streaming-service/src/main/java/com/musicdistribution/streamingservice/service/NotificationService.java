@@ -1,10 +1,9 @@
 package com.musicdistribution.streamingservice.service;
 
-import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
-import com.musicdistribution.streamingservice.domain.model.entity.Notification;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.NotificationId;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -50,11 +49,11 @@ public interface NotificationService {
     Optional<Notification> findById(NotificationId id);
 
     /**
-     * Method used for sending a notification to the appropriate listener.
+     * Method used for sending a notification to the appropriate user.
      *
      * @param listenerId - the ID of the listener to whom the notification is being sent to.
      * @param objectId   - the ID of the object for which the notification is being triggered.
-     * @return an optional with sent notification.
+     * @return an optional with the sent notification.
      */
-    Optional<Notification> send(ListenerId listenerId, DomainObjectId objectId);
+    Optional<Notification> send(ListenerId listenerId, String objectId);
 }

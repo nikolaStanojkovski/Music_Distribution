@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A component which is used as a handler for unauthorized user requests.
+ * An interceptor which is used as a handler for unauthorized user requests.
  */
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {

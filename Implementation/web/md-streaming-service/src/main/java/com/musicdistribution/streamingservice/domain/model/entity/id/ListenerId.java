@@ -19,7 +19,7 @@ public class ListenerId extends SingularObjectId {
     }
 
     /**
-     * Static method for creating a new listener ID.
+     * Static method used for creating a new listener ID.
      *
      * @param uuid - the unique identifier for a listener.
      * @return the created listener ID.

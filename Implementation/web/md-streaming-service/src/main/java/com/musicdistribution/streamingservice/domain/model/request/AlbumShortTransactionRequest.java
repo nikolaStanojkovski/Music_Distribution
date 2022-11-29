@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 /**
- * An album request wrapper object used to transfer
- * transaction data from the front-end to the backend.
+ * An album request wrapper object used to transfer short
+ * album transaction data from the front-end to the back-end.
  */
 @Data
 @NoArgsConstructor

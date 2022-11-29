@@ -1,8 +1,8 @@
 package com.musicdistribution.streamingservice.domain.model.enums;
 
 /**
- * Enumeration used for determining the type
- * of the notification which is being sent or received.
+ * Enumeration used for determining
+ * the type of the database entity.
  */
 public enum EntityType {
     SONGS, ALBUMS, ARTISTS

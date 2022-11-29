@@ -1,10 +1,10 @@
 package com.musicdistribution.streamingservice.service;
 
-import com.musicdistribution.streamingservice.domain.model.entity.Artist;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Artist;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
-import com.musicdistribution.streamingservice.domain.model.request.ArtistRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.ArtistRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

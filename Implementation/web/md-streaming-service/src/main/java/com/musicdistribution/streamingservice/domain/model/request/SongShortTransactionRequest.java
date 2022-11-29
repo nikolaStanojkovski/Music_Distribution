@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 
 /**
- * A song request wrapper object used to transfer
- * transaction data from the front-end to the backend.
+ * A song request wrapper object used to transfer short
+ * song transaction data from the front-end to the back-end.
  */
 @Data
 @NoArgsConstructor

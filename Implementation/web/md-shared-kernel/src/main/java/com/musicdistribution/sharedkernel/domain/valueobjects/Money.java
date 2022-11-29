@@ -61,35 +61,6 @@ public class Money implements ValueObject, Serializable {
     }
 
     /**
-     * Method used for the subtraction of money from an existing object.
-     *
-     * @param money - the money that is to be subtracted from {this}.
-     * @return the sum of the two objects.
-     */
-    public Money subtract(Money money) {
-        if (money != null && currency != null) {
-            if (!currency.equals(money.currency)) {
-                throw new IllegalArgumentException(ExceptionConstants.MONEY_SUBTRACTION_FAILURE);
-            }
-            return new Money(currency, amount - money.amount);
-        } else
-            return null;
-    }
-
-    /**
-     * Method used for the multiplication of the money amount from an existing object.
-     *
-     * @param factor - the factor that needs to get multiplied to {this}.
-     * @return the multiplied money amount.
-     */
-    public Money multiply(int factor) {
-        if (currency != null)
-            return new Money(currency, amount * factor);
-
-        return null;
-    }
-
-    /**
      * Method used for comparing two objects of type money.
      *
      * @param o - the other object that is compared to {this}.

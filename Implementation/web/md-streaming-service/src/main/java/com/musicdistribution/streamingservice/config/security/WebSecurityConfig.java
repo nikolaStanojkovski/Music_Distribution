@@ -20,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * The main configuration class for the web security mechanisms.
+ * The main configuration for the web security mechanisms.
  */
 @Configuration
 @AllArgsConstructor
@@ -95,6 +95,8 @@ public class WebSecurityConfig {
                         PathConstants.API_ALBUMS, PathConstants.API_ALBUMS_SEARCH,
                         PathConstants.API_ARTISTS, PathConstants.API_ARTISTS_SEARCH,
                         PathConstants.API_SONGS, PathConstants.API_SONGS_SEARCH,
+                        PathConstants.API_LISTENERS, PathConstants.API_LISTENERS_SEARCH,
+                        PathConstants.API_NOTIFICATIONS, PathConstants.API_NOTIFICATIONS_SEARCH,
                         AuthConstants.STREAM_ANT_MATCHER).permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic();

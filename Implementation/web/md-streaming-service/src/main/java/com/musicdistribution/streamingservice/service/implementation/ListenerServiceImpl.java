@@ -1,18 +1,21 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
-import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
-import com.musicdistribution.streamingservice.domain.model.entity.Listener;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
 import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.*;
-import com.musicdistribution.streamingservice.domain.valueobject.UserRegistrationInfo;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.repository.core.AlbumRepository;
+import com.musicdistribution.streamingservice.domain.repository.core.ArtistRepository;
+import com.musicdistribution.streamingservice.domain.repository.core.ListenerRepository;
+import com.musicdistribution.streamingservice.domain.repository.core.SongRepository;
+import com.musicdistribution.streamingservice.domain.valueobject.core.UserRegistrationInfo;
 import com.musicdistribution.streamingservice.service.ListenerService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -145,12 +148,12 @@ public class ListenerServiceImpl implements ListenerService {
      * @return a flag determining whether the object was added to the favourites list.
      */
     @Override
-    public boolean addToFavourite(ListenerId listenerId, DomainObjectId objectId, EntityType type) {
+    public Optional<Boolean> addToFavourite(ListenerId listenerId, String objectId, EntityType type) {
         return findById(listenerId)
                 .map(listener -> {
                     switch (type) {
                         case SONGS:
-                            return songRepository.findById(SongId.of(objectId.toString()))
+                            return songRepository.findById(SongId.of(objectId))
                                     .map(song -> {
                                         listener.addFavouriteSong(song);
                                         listenerRepository.save(listener);
@@ -158,7 +161,7 @@ public class ListenerServiceImpl implements ListenerService {
                                         return true;
                                     }).orElse(false);
                         case ALBUMS:
-                            return albumRepository.findById(AlbumId.of(objectId.toString()))
+                            return albumRepository.findById(AlbumId.of(objectId))
                                     .map(album -> {
                                         listener.addFavouriteAlbum(album);
                                         listenerRepository.save(listener);
@@ -166,7 +169,7 @@ public class ListenerServiceImpl implements ListenerService {
                                         return true;
                                     }).orElse(false);
                         case ARTISTS:
-                            return artistRepository.findById(ArtistId.of(objectId.toString()))
+                            return artistRepository.findById(ArtistId.of(objectId))
                                     .map(artist -> {
                                         listener.addFavouriteArtist(artist);
                                         listenerRepository.save(listener);
@@ -176,6 +179,6 @@ public class ListenerServiceImpl implements ListenerService {
                         default:
                             return false;
                     }
-                }).orElse(false);
+                });
     }
 }

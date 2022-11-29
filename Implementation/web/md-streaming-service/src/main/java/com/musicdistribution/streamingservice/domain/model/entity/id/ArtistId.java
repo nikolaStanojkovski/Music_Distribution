@@ -19,7 +19,7 @@ public class ArtistId extends SingularObjectId {
     }
 
     /**
-     * Static method for creating a new artist ID.
+     * Static method used for creating a new artist ID.
      *
      * @param uuid - the unique identifier for a artist.
      * @return the created artist ID.

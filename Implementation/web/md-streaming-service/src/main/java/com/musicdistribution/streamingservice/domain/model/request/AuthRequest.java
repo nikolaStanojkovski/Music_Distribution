@@ -9,8 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * A user request wrapper object used to transfer authentication form
- * data from the front-end to the backend.
+ * A user request wrapper object used to transfer authentication
+ * form data from the front-end to the back-end.
  */
 @Data
 @NoArgsConstructor

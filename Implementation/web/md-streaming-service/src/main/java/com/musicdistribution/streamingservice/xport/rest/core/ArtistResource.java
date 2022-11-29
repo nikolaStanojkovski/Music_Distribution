@@ -1,12 +1,12 @@
 package com.musicdistribution.streamingservice.xport.rest.core;
 
-import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.sharedkernel.config.ApiController;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
-import com.musicdistribution.streamingservice.domain.model.entity.Artist;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Artist;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
-import com.musicdistribution.streamingservice.domain.model.response.ArtistResponse;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.model.response.core.ArtistResponse;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.streamingservice.service.ArtistService;
 import lombok.AllArgsConstructor;

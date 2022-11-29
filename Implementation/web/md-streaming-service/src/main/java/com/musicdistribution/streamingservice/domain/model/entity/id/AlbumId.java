@@ -19,7 +19,7 @@ public class AlbumId extends SingularObjectId {
     }
 
     /**
-     * Static method for creating a new album ID.
+     * Static method used for creating a new album ID.
      *
      * @param uuid - the unique identifier for a album.
      * @return the created album ID.

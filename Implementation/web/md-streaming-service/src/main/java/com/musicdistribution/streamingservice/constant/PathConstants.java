@@ -13,13 +13,20 @@ public final class PathConstants {
     public static final String SEARCH = "/search";
     public static final String PUBLISH = "/publish";
     public static final String RAISE_TIER = "/raise-tier";
-    public static final String LOGIN = "/login";
-    public static final String REGISTER_ARTIST = "/register/artist";
     public static final String CREATE = "/create";
+    public static final String ID = "/id";
+    public static final String SEND = "/send";
+
+    public static final String LOGIN = "/login";
+    public static final String REGISTER = "/register";
+    public static final String REGISTER_ARTIST = REGISTER + "/artist";
+    public static final String REGISTER_LISTENER = REGISTER + "/listener";
 
     public static final String SONGS = "/songs";
     public static final String ALBUMS = "/albums";
     public static final String ARTISTS = "/artists";
+    public static final String LISTENERS = "/listeners";
+    public static final String NOTIFICATIONS = "/notifications";
 
     public static final String FORMATTED_ID = "/{id}";
 
@@ -36,6 +43,11 @@ public final class PathConstants {
     public static final String API_ALBUMS_SEARCH = API_ALBUMS + SEARCH;
     public static final String API_ARTISTS = API + RESOURCE + ARTISTS;
     public static final String API_ARTISTS_SEARCH = API_ARTISTS + SEARCH;
+    public static final String API_LISTENERS = API + RESOURCE + LISTENERS;
+    public static final String API_LISTENERS_SEARCH = API_LISTENERS + SEARCH;
+    public static final String API_FAVOURITE = API_LISTENERS + FORMATTED_ID + "/favourite";
+    public static final String API_NOTIFICATIONS = API + RESOURCE + NOTIFICATIONS;
+    public static final String API_NOTIFICATIONS_SEARCH = NOTIFICATIONS + SEARCH;
 
     public static final String API_AUDIO_STREAM = FORMATTED_ID + AlphabetConstants.DOT + FileConstants.MPEG_EXTENSION;
     public static final String API_SONG_COVER = SONGS + FORMATTED_ID

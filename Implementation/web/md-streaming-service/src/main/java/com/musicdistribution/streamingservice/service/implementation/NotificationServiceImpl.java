@@ -1,12 +1,11 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
-import com.musicdistribution.sharedkernel.domain.base.DomainObjectId;
-import com.musicdistribution.streamingservice.domain.model.entity.Notification;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.NotificationId;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.NotificationRepository;
-import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.repository.core.NotificationRepository;
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
 import com.musicdistribution.streamingservice.service.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -73,9 +72,16 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.findById(id);
     }
 
+    /**
+     * Method used for sending a notification to the appropriate user.
+     *
+     * @param listenerId - the ID of the listener to whom the notification is being sent to.
+     * @param objectId   - the ID of the object for which the notification is being triggered.
+     * @return an optional with the sent notification.
+     */
     @Override
-    public Optional<Notification> send(ListenerId listenerId, DomainObjectId objectId) {
-        return findById(NotificationId.of(listenerId.getId(), objectId.toString()))
+    public Optional<Notification> send(ListenerId listenerId, String objectId) {
+        return findById(NotificationId.of(listenerId.getId(), objectId))
                 .map(notification -> {
                     notification.trigger();
                     notificationRepository.save(notification);

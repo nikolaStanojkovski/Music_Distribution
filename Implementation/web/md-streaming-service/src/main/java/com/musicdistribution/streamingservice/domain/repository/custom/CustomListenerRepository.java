@@ -1,8 +1,8 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
-import com.musicdistribution.streamingservice.domain.model.entity.Listener;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
@@ -32,7 +32,7 @@ public class CustomListenerRepository implements SearchRepository<Listener> {
      * Method used to filter listener entity objects.
      *
      * @param searchParameters      - the parameters by which the filtering will be done.
-     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param shouldFilterPublished - a flag determining whether the filtering should be done by publishing status.
      * @param searchTerm            - the term which is being searched upon.
      * @param pageable              - pagination data for the notification entity object.
      * @return the results of the filtering for listeners which meet the search criteria.

@@ -1,16 +1,16 @@
 package com.musicdistribution.streamingservice.xport.rest.core;
 
-import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.sharedkernel.config.ApiController;
 import com.musicdistribution.streamingservice.constant.AuthConstants;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.constant.ServletConstants;
-import com.musicdistribution.streamingservice.domain.model.entity.Album;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Album;
 import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;
-import com.musicdistribution.streamingservice.domain.model.response.AlbumResponse;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.model.response.core.AlbumResponse;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.streamingservice.service.AlbumService;
 import com.musicdistribution.streamingservice.util.JwtUtil;

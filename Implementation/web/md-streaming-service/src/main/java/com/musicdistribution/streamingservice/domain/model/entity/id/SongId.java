@@ -19,7 +19,7 @@ public class SongId extends SingularObjectId {
     }
 
     /**
-     * Static method for creating a new song ID.
+     * Static method used for creating a new song ID.
      *
      * @param uuid - the unique identifier for a song.
      * @return the created song ID.

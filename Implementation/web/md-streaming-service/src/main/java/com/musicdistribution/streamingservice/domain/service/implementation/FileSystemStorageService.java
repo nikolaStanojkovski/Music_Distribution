@@ -72,7 +72,7 @@ public class FileSystemStorageService implements IFileSystemStorage {
     }
 
     /**
-     * Method used to fetch the bytes from the file in the specified range.
+     * Method used to fetch the bytes from the file in the specified byte range.
      *
      * @param filename     - the name of the file whose bytes are to be read from.
      * @param start        - the starting index of the range of the required bytes.
@@ -101,6 +101,13 @@ public class FileSystemStorageService implements IFileSystemStorage {
         }
     }
 
+    /**
+     * Method used to load a file path given its name and location type.
+     *
+     * @param fileName     - the name of the file.
+     * @param locationType - the type of the location where the file is stored.
+     * @return the path of the located file.
+     */
     private Path loadFilePath(String fileName, FileLocationType locationType) {
         try {
             Path location = resolveLocation(locationType);
@@ -116,6 +123,12 @@ public class FileSystemStorageService implements IFileSystemStorage {
         }
     }
 
+    /**
+     * Method used to resolve the location path of a file.
+     *
+     * @param locationType - the type of the location where the file is stored.
+     * @return the resolved location of the specified file.
+     */
     private Path resolveLocation(FileLocationType locationType) {
         return Optional.ofNullable(getLocation(locationType)).map(location -> {
             try {
@@ -131,6 +144,12 @@ public class FileSystemStorageService implements IFileSystemStorage {
         }).orElse(null);
     }
 
+    /**
+     * Method used to read the location of the file type.
+     *
+     * @param locationType - the type of the location where the file is stored.
+     * @return the location of the file with the specified type.
+     */
     private String getLocation(FileLocationType locationType) {
         switch (locationType) {
             case SONGS:

@@ -1,8 +1,8 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
-import com.musicdistribution.streamingservice.domain.model.entity.Notification;
-import com.musicdistribution.streamingservice.domain.model.response.SearchResultResponse;
-import com.musicdistribution.streamingservice.domain.repository.SearchRepository;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
@@ -32,14 +32,14 @@ public class CustomNotificationRepository implements SearchRepository<Notificati
      * Method used to filter notification entity objects.
      *
      * @param searchParameters      - the parameters by which the filtering will be done.
-     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param shouldFilterPublished - a flag determining whether the filtering should be done by publishing status.
      * @param searchTerm            - the term which is being searched upon.
      * @param pageable              - pagination data for the notification entity object.
      * @return the results of the filtering for notifications which meet the search criteria.
      */
     @Override
     public SearchResultResponse<Notification> search(List<String> searchParameters, Boolean shouldFilterPublished,
-                                              String searchTerm, Pageable pageable) {
+                                                     String searchTerm, Pageable pageable) {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         List<String> formattedSearchParams = SearchUtil.buildSearchParams(searchParameters, Notification.class.getName(), sessionFactory);
 

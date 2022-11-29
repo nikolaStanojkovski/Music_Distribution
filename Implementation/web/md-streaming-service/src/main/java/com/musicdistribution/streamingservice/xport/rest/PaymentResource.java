@@ -2,7 +2,7 @@ package com.musicdistribution.streamingservice.xport.rest;
 
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
-import com.musicdistribution.sharedkernel.util.ApiController;
+import com.musicdistribution.sharedkernel.config.ApiController;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.service.PaymentService;
 import lombok.AllArgsConstructor;

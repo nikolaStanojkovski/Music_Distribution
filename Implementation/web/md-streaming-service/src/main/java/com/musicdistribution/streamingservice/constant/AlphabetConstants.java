@@ -18,8 +18,6 @@ public final class AlphabetConstants {
     public static final char Q_LOWERCASE = 'q';
     public static final char Z_LOWERCASE = 'z';
 
-
-
     /**
      * Private constructor which throws an exception because the class should not be instantiated.
      */

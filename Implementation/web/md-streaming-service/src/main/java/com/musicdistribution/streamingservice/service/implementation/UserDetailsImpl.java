@@ -2,8 +2,7 @@ package com.musicdistribution.streamingservice.service.implementation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.musicdistribution.streamingservice.constant.AuthConstants;
-import com.musicdistribution.streamingservice.domain.model.entity.Artist;
-import com.musicdistribution.streamingservice.domain.valueobject.UserRegistrationInfo;
+import com.musicdistribution.streamingservice.domain.valueobject.core.UserRegistrationInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

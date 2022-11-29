@@ -5,7 +5,6 @@ import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDom
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Embeddable;
