@@ -1,49 +1,16 @@
 import React from 'react';
-import {Link, useHistory} from 'react-router-dom';
-import ScreenElementsUtil from "../../../util/screenElementsUtil";
+import {Link} from 'react-router-dom';
+import useRegister from "./useRegister";
+import viewRegister from "./viewRegister";
 
 const Register = (props) => {
 
-    const History = useHistory();
-    const [profilePicture, updateProfilePicture] = React.useState(null);
-    const [formData, updateFormData] = React.useState({
-        username: "",
-        emailDomain: 0,
-        telephoneNumber: "",
-        firstName: "",
-        lastName: "",
-        artName: "",
-        password: "",
-        repeatPassword: ""
-    });
-
-    const handleChange = (e) => {
-        updateFormData({
-            ...formData,
-            [e.target.name]: e.target.value.trim()
-        })
-    }
-
-    const onFormSubmit = (e) => {
-        e.preventDefault();
-        const username = formData.username;
-        const emailDomain = formData.emailDomain;
-        const telephoneNumber = formData.telephoneNumber;
-        const firstName = formData.firstName;
-        const lastName = formData.lastName;
-        const artName = formData.artName;
-        const password = formData.password;
-        const repeatPassword = formData.repeatPassword;
-
-        if (password && repeatPassword && password !== repeatPassword) {
-            alert('The passwords do not match');
-            return;
-        }
-
-        props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
-            firstName, lastName, artName, password, repeatPassword);
-        History.push("/");
-    }
+    const {
+        emailDomains,
+        updateProfilePicture,
+        handleChange,
+        onFormSubmit
+    } = useRegister(props);
 
     return (
         <div className="container mm-4 my-5">
@@ -57,139 +24,16 @@ const Register = (props) => {
                     <br/>
                     <br/>
 
-                    <form onSubmit={onFormSubmit}>
-                        <div className={"form-group"}>
-                            <label className="upload-drop-container">
-                                <span className="upload-drop-title">Profile picture</span>
-                                <input type="file" id="songUpload" accept="image/png, image/jpeg" required={true}
-                                       onChange={(e) => updateProfilePicture(e.target.files[0])}/>
-                                <span
-                                    className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
-                            </label>
-                            <br />
-                        </div>
-
-                        <div className="form-group">
-                            <div className={"row"}>
-                                <div className="col-12 form-inline">
-                                    <div className="input-group">
-                                        <input type="text"
-                                               className="form-control"
-                                               id="username"
-                                               name="username"
-                                               required
-                                               placeholder="Username"
-                                               onChange={handleChange}/>
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text">@</span>
-                                        </div>
-                                        <select onChange={handleChange} name="emailDomain" className="form-control">
-                                            {(props.emailDomains) ? props.emailDomains.map((term) =>
-                                                <option key={term} value={term}>{term}</option>
-                                            ) : undefined}
-                                        </select>
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text">.com</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br/>
-
-                        <div className="form-group">
-                            <div className={"row"}>
-                                <div className={"col-12"}>
-                                    <input type="password"
-                                           className="form-control"
-                                           id="password"
-                                           name="password"
-                                           required
-                                           placeholder="Enter the password"
-                                           onChange={handleChange}/>
-                                </div>
-                            </div>
-                        </div>
-                        <br/>
-
-                        <div className="form-group">
-                            <div className={"row"}>
-                                <div className={"col-12"}>
-                                    <input type="password"
-                                           className="form-control"
-                                           id="repeatPassword"
-                                           name="repeatPassword"
-                                           required
-                                           placeholder="Repeat the password"
-                                           onChange={handleChange}/>
-                                </div>
-                            </div>
-                        </div>
-                        <br/>
-
-                        <div className="accordion">
-                            <div className="accordion-item">
-                                <h2 className="accordion-header">
-                                    <button className="accordion-button collapsed" type="button"
-                                            onClick={e => ScreenElementsUtil.toggleAccordionItems(e)}>
-                                        Additional information
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" className="accordion-collapse collapse">
-                                    <div className={"row"}>
-                                        <div className="form-group form-group-inner mt-4">
-                                            <input type="tel"
-                                                   className="form-control"
-                                                   id="telephoneNumber"
-                                                   name="telephoneNumber"
-                                                   placeholder="Enter your telephone number"
-                                                   onChange={handleChange}/>
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <div className={"row"}>
-                                        <div className="form-group form-group-inner">
-                                            <input type="text"
-                                                   className="form-control"
-                                                   id="firstName"
-                                                   name="firstName"
-                                                   placeholder="Enter your first name"
-                                                   onChange={handleChange}/>
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <div className={"row"}>
-                                        <div className="form-group form-group-inner">
-                                            <input type="text"
-                                                   className="form-control"
-                                                   id="lastName"
-                                                   name="lastName"
-                                                   placeholder="Enter your last name"
-                                                   onChange={handleChange}/>
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <div className={"row"}>
-                                        <div className="form-group form-group-inner">
-                                            <input type="text"
-                                                   className="form-control"
-                                                   id="artName"
-                                                   name="artName"
-                                                   placeholder="Enter your art name"
-                                                   onChange={handleChange}/>
-                                        </div>
-                                    </div>
-                                    <br/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br/>
-
-                        <button id="submit" type="submit" className="btn btn-dark w-100 mt-3">Sign Up</button>
-
-                        <br/>
-                    </form>
+                    {
+                        viewRegister(
+                            {
+                                emailDomains,
+                                updateProfilePicture,
+                                handleChange,
+                                onFormSubmit
+                            }
+                        )
+                    }
 
                     <Link to={"/login"} className="btn btn-outline-dark w-100 mt-3">Sign In</Link>
 

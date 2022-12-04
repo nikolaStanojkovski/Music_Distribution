@@ -1,6 +1,6 @@
 import React from 'react';
-import AuthHeader from "./authHeader";
-import NonAuthHeader from "./nonAuthHeader";
+import AuthHeader from "./AuthHeader/authHeader";
+import NonAuthHeader from "./NonAuthHeader/nonAuthHeader";
 
 const Header = (props) => {
     const accessToken = localStorage.getItem('accessToken');
