@@ -21,6 +21,7 @@ const useLogin  = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+
         const username = formData.username;
         const emailDomain = formData.emailDomain;
         const password = formData.password;

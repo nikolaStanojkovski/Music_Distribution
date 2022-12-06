@@ -25,8 +25,9 @@ const viewSongCreate = (props) => {
             <br/>
 
             <div className="form-group">
-                <select onChange={props.handleChange} name="songGenre" className="form-control">
-                    <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                <select onChange={props.handleChange} defaultValue={"-- Choose song genre --"}
+                        name="songGenre" className="form-control">
+                    <option className={"text-muted"} value={"-- Choose song genre --"} disabled={true}>
                         -- Choose song genre --
                     </option>
                     {(props.genres) ? props.genres.map((term) => {

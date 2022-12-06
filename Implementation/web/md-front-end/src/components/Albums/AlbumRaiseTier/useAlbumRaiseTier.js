@@ -5,7 +5,7 @@ const useAlbumRaiseTier = (props) => {
 
     const History = useHistory();
 
-    const transactionFee = props.transactionFee;
+    const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const albums = props.albums;
     const tiers = props.tiers;
     const [album, updateAlbum] = React.useState({});
@@ -41,13 +41,11 @@ const useAlbumRaiseTier = (props) => {
 
     const handleAlbumChange = (e) => {
         const albumId = e.target.value;
-        if (albumId) {
+        if (albumId && props.albums && props.albums.content) {
             const filteredAlbums = props.albums.content.filter(album => album.id === albumId);
-            if (filteredAlbums) {
-                if (filteredAlbums.content.length > 0) {
-                    updateAlbum(filteredAlbums[0]);
-                    handleAlbumTier(albumTier);
-                }
+            if (filteredAlbums && filteredAlbums.length > 0) {
+                updateAlbum(filteredAlbums[0]);
+                handleAlbumTier(albumTier);
             }
         }
     }

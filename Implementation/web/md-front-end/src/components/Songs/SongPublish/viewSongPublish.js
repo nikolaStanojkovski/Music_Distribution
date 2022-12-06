@@ -16,8 +16,10 @@ const viewSongPublish = (props) => {
             <br/>
 
             <div className={"form-group"}>
-                <select onChange={props.handleChange} name="songId" className="form-control" required={true}>
-                    <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                <select onChange={props.handleChange} name="songId"
+                        defaultValue={"-- Choose song --"}
+                        className="form-control" required={true}>
+                    <option className={"text-muted"} value={"-- Choose song --"} disabled={true}>
                         -- Choose song --
                     </option>
                     {(props.songs && props.songs.content) ? props.songs.content.map((term) => {
@@ -32,8 +34,10 @@ const viewSongPublish = (props) => {
             <br/>
 
             <div className="form-group">
-                <select onChange={props.handleChange} name="songTier" className="form-control" required={true}>
-                    <option className={"text-muted"} value={null} disabled={true} selected={true}>
+                <select onChange={props.handleChange} name="songTier"
+                        defaultValue={"-- Choose tier --"}
+                        className="form-control" required={true}>
+                    <option className={"text-muted"} value={"-- Choose tier --"} disabled={true}>
                         -- Choose tier --
                     </option>
                     {(props.tiers) ? props.tiers.map((term) => {
@@ -48,7 +52,7 @@ const viewSongPublish = (props) => {
                             <span>
                                 <input name="subscriptionFee" disabled={true}
                                        id="subscriptionFee"
-                                       value={StringUtil.formatCurrency(props.subscriptionFee.amount, props.subscriptionFee.currency)}
+                                       value={StringUtil.formatCurrency(props.subscriptionFee)}
                                        className="form-control disabled"/>&nbsp;
                             </span>
                 <span className={"text-muted"}>Subscription fee is based on the tier our platform offers for distribution</span>
@@ -58,8 +62,7 @@ const viewSongPublish = (props) => {
             <div className="form-group">
                 <input name="transactionFee" disabled={true}
                        id={"transactionFee"}
-                       value={StringUtil.formatCurrency(props.transactionFee.amount,
-                           props.transactionFee.currency)}
+                       value={StringUtil.formatCurrency(props.transactionFee)}
                        className="form-control disabled"/>
                 <span className={"text-muted"}>Transaction fee is fixed and based on your location and country</span>
             </div>

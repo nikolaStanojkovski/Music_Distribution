@@ -1,16 +1,16 @@
 package com.musicdistribution.streamingservice.xport.rest.core;
 
 import com.musicdistribution.sharedkernel.config.ApiController;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.constant.AuthConstants;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.constant.ServletConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
-import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.response.core.SongResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.streamingservice.service.SongService;
@@ -64,7 +64,7 @@ public class SongResource {
                                 song.getAlbum()).map(album -> album.getId().getId())
                                 .orElse(StringUtils.EMPTY))))
                 .collect(Collectors.toList());
-        return new PageImpl<>(songs, pageable, songService.findTotalSize());
+        return new PageImpl<>(songs, pageable, songService.findSize(!isTokenValid));
     }
 
     /**
@@ -83,7 +83,8 @@ public class SongResource {
         boolean isTokenValid = jwtUtil.validateJwtToken(authToken
                 .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX),
                         StringUtils.EMPTY));
-        SearchResultResponse<Song> songSearchResultResponse = songService.search(List.of(searchParams),
+        SearchResultResponse<Song> songSearchResultResponse = songService.search(
+                List.of(searchParams),
                 !isTokenValid,
                 (List.of(searchParams).stream().filter(param ->
                         param.contains(EntityConstants.ID)).count() == searchParams.length)

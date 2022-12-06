@@ -30,9 +30,10 @@ public interface SongService {
     /**
      * Method used for reading the total number of entities from the database.
      *
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
      * @return the total number of songs from the database.
      */
-    Long findTotalSize();
+    Long findSize(Boolean shouldFilterPublished);
 
     /**
      * Method used for searching songs.

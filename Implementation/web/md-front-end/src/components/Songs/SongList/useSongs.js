@@ -71,7 +71,6 @@ const useSongs = (props) => {
                 }
             }
 
-
             togglePlayButton(button);
         }
     }

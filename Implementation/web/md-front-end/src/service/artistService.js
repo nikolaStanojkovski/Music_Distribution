@@ -1,6 +1,7 @@
 import React from "react";
 import ArtistRepository from "../repository/streaming-service/artistRepository";
 import AuthRepository from "../repository/streaming-service/authRepository";
+import ScreenElementsUtil from "../util/screenElementsUtil";
 
 const useArtistService = () => {
 
@@ -35,8 +36,7 @@ const useArtistService = () => {
 
     const logoutArtist = () => {
         AuthRepository.logoutArtist();
-        const baseUrl = window.location.origin;
-        window.location.replace(baseUrl);
+        ScreenElementsUtil.reloadDomain();
     }
 
     return {

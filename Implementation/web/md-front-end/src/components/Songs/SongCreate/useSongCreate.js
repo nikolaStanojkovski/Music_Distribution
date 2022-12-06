@@ -49,6 +49,7 @@ const useSongCreate = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+
         const songName = formData.songName;
         const songGenre = formData.songGenre;
 

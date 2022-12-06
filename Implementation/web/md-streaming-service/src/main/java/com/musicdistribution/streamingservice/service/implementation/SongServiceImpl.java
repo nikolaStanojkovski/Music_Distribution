@@ -1,6 +1,7 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
 import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.constant.ExceptionConstants;
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.exception.FileStorageException;
@@ -10,10 +11,9 @@ import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
-import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.repository.core.ArtistRepository;
 import com.musicdistribution.streamingservice.domain.repository.core.ListenerRepository;
 import com.musicdistribution.streamingservice.domain.repository.core.NotificationRepository;
@@ -65,11 +65,14 @@ public class SongServiceImpl implements SongService {
     /**
      * Method used for reading the total number of entities from the database.
      *
+     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
      * @return the total number of songs from the database.
      */
     @Override
-    public Long findTotalSize() {
-        return songRepository.count();
+    public Long findSize(Boolean shouldFilterPublished) {
+        return (shouldFilterPublished)
+                ? songRepository.countByIsPublished(true)
+                : songRepository.count();
     }
 
     /**

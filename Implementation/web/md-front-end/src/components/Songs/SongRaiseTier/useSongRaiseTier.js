@@ -7,7 +7,7 @@ const useSongRaiseTier = (props) => {
 
     const songs = props.songs;
     const tiers = props.tiers;
-    const transactionFee = props.transactionFee;
+    const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const [song, updateSong] = React.useState({});
     const [songTier, updateSongTier] = React.useState("");
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});

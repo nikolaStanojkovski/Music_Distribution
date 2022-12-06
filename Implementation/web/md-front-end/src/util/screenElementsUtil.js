@@ -88,6 +88,10 @@ const ScreenElementsUtil = {
             }
         }
         return false;
+    },
+    reloadDomain() {
+        const baseUrl = window.location.origin;
+        window.location.replace(baseUrl);
     }
 }
 

@@ -7,7 +7,7 @@ const useSongPublish = (props) => {
 
     const songs = props.songs;
     const tiers = props.tiers;
-    const transactionFee = props.transactionFee;
+    const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const selectedArtist = props.selectedArtist;
     const [cover, updateCover] = React.useState(null);
     const [subscriptionFee, updateSubscriptionFee] = React.useState("");
@@ -37,6 +37,7 @@ const useSongPublish = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+
         const songId = formData.songId;
         const songTier = formData.songTier;
 

@@ -27,6 +27,7 @@ const useRegister = (props) => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+
         const username = formData.username;
         const emailDomain = formData.emailDomain;
         const telephoneNumber = formData.telephoneNumber;

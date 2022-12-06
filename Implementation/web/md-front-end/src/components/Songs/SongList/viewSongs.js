@@ -39,7 +39,7 @@ const viewSongs = (props) => {
                             <td>{(term['album']) ? term['album'].albumName : ''}</td>
                             <td className={"table-cell-clickable"}>
                                 <button onClick={props.fetchSong}
-                                        className={`btn btn-outline-secondary btn-block bi bi-play`}>
+                                        className={`btn btn-outline-secondary btn-block bi bi-play play-pause-button`}>
                                 </button>
                             </td>
                         </tr>

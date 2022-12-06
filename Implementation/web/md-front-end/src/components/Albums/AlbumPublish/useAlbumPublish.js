@@ -4,7 +4,7 @@ import React from "react";
 const useAlbumPublish = (props) => {
     const History = useHistory();
 
-    const transactionFee = props.transactionFee;
+    const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const genres = props.genres;
     const songs = props.songs;
     const tiers = props.tiers;
