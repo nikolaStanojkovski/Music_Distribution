@@ -1,5 +1,5 @@
-import ArtistRepository from "../../repository/streaming-service/artistRepository";
-import TierRepository from "../../repository/streaming-service/enum/tierRepository";
+import ArtistRepository from "../../../repository/streaming-service/artistRepository";
+import TierRepository from "../../../repository/streaming-service/enum/tierRepository";
 import React from "react";
 
 const useTierService = () => {

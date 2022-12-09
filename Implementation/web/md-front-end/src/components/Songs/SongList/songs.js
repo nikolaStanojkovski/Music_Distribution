@@ -1,9 +1,9 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Pagination from "../../Partial/Pagination/pagination";
-import SearchParamUtil from "../../../util/searchParamUtil";
 import useSongs from "./useSongs";
 import viewSongs from "./viewSongs";
+import {KEY, PAGEABLE, TOTAL_PAGES, VALUE} from "../../../constants/model";
 
 const Songs = (props) => {
 
@@ -12,6 +12,7 @@ const Songs = (props) => {
         imageSource,
         showModal,
         filter,
+        searchParams,
         setShowModal,
         fetchSongCover,
         fetchSong,
@@ -31,14 +32,15 @@ const Songs = (props) => {
                     viewSongs({songs, fetchSongCover, fetchSong})
                 }
             </div>
-            {(songs && songs['pageable'] && songs['totalPages'])
-                ? <Pagination changePage={(pageNumber) => (filter)
-                    ? filterSongs(pageNumber,
-                        SearchParamUtil.getSearchParams()['key'],
-                        SearchParamUtil.getSearchParams()['value'])
-                    : loadSongs(pageNumber)}
-                              totalPages={(songs['totalPages']) ? songs['totalPages'] : 0}
-                              pageNumber={(songs['pageable']) ? songs['pageable'].pageNumber : 0}/>
+            {(songs && songs[PAGEABLE] && songs[TOTAL_PAGES])
+                ? <Pagination changePage={(pageNumber) =>
+                    (filter && searchParams && searchParams[KEY] && searchParams[VALUE])
+                        ? filterSongs(pageNumber,
+                        searchParams[KEY],
+                        searchParams[VALUE])
+                        : loadSongs(pageNumber)}
+                              totalPages={(songs[TOTAL_PAGES]) ? songs[TOTAL_PAGES] : 0}
+                              pageNumber={(songs[PAGEABLE]) ? songs[PAGEABLE].pageNumber : 0}/>
                 : undefined}
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"

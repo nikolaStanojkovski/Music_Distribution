@@ -1,6 +1,6 @@
 import React from "react";
-import ArtistRepository from "../repository/streaming-service/artistRepository";
-import PaymentRepository from "../repository/streaming-service/paymentRepository";
+import ArtistRepository from "../../repository/streaming-service/artistRepository";
+import PaymentRepository from "../../repository/streaming-service/paymentRepository";
 
 const usePaymentService = () => {
 

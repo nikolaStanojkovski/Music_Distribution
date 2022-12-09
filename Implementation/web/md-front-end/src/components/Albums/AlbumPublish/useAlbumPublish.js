@@ -1,5 +1,8 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {ALBUM_TIER} from "../../../constants/model";
+import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
 
 const useAlbumPublish = (props) => {
     const History = useHistory();
@@ -13,12 +16,12 @@ const useAlbumPublish = (props) => {
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});
     const [songIdList, updateSongIdList] = React.useState([]);
     const [formData, updateFormData] = React.useState({
-        albumName: "",
-        albumGenre: "",
-        albumTier: "",
-        artistName: "",
-        producerName: "",
-        composerName: ""
+        albumName: EMPTY_STRING,
+        albumGenre: EMPTY_STRING,
+        albumTier: EMPTY_STRING,
+        artistName: EMPTY_STRING,
+        producerName: EMPTY_STRING,
+        composerName: EMPTY_STRING
     });
 
     const handleSubscriptionFee = (tier) => {
@@ -33,7 +36,7 @@ const useAlbumPublish = (props) => {
             [e.target.name]: e.target.value.trim()
         });
 
-        if (e.target.name === "albumTier") {
+        if (e.target.name === ALBUM_TIER) {
             handleSubscriptionFee(e.target.value);
         }
     }
@@ -54,7 +57,7 @@ const useAlbumPublish = (props) => {
                 subscriptionFee, props.transactionFee,
                 formData.artistName, formData.producerName, formData.composerName);
 
-            History.push("/checkout/success");
+            History.push(CHECKOUT_SUCCESS);
         }
     }
 

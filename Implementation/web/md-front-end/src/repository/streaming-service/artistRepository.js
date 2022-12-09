@@ -1,12 +1,15 @@
 import axios from "../../custom-axios/axiosStreamingService";
 import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../constants/pagination";
+import {ARTISTS, RESOURCE} from "../../constants/endpoint";
+import {LOGGED_ARTIST} from "../../constants/auth";
+import {PAGE, SIZE} from "../../constants/model";
 
 const ArtistRepository = {
     fetchArtists: (pageNumber) => {
-        return axios.get(`/resource/artists?page=${pageNumber || DEFAULT_PAGE_NUMBER}&size=${DEFAULT_PAGE_SIZE}`);
+        return axios.get(`${RESOURCE}${ARTISTS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
     },
     fetchArtistLocal: () => {
-        return JSON.parse(localStorage.getItem('loggedArtist'));
+        return JSON.parse(localStorage.getItem(LOGGED_ARTIST));
     }
 }
 

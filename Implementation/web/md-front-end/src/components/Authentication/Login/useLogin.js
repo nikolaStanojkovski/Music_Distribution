@@ -1,15 +1,17 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {DEFAULT} from "../../../constants/endpoint";
 
-const useLogin  = (props) => {
+const useLogin = (props) => {
 
     const History = useHistory();
 
     const emailDomains = props.emailDomains;
     const [formData, updateFormData] = React.useState({
-        username: "",
+        username: EMPTY_STRING,
         emailDomain: 0,
-        password: "",
+        password: EMPTY_STRING,
     });
 
     const handleChange = (e) => {
@@ -26,8 +28,10 @@ const useLogin  = (props) => {
         const emailDomain = formData.emailDomain;
         const password = formData.password;
 
-        props.loginArtist(username, emailDomain, password);
-        History.push("/");
+        if(username && password) {
+            props.loginArtist(username, emailDomain, password);
+            History.push(DEFAULT);
+        }
     }
     return {emailDomains, handleChange, onFormSubmit};
 }

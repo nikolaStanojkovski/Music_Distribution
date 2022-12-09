@@ -1,9 +1,9 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Pagination from "../../Partial/Pagination/pagination";
-import SearchParamUtil from "../../../util/searchParamUtil";
 import useAlbums from "./useAlbums";
 import viewAlbums from "./viewAlbums";
+import {KEY, PAGEABLE, TOTAL_PAGES, VALUE} from "../../../constants/model";
 
 const Albums = (props) => {
 
@@ -12,6 +12,7 @@ const Albums = (props) => {
         filter,
         imageSource,
         showModal,
+        searchParams,
         setShowModal,
         fetchAlbums,
         fetchAlbumCover,
@@ -33,14 +34,17 @@ const Albums = (props) => {
             <div className={"row my-4"}>
                 {viewAlbums({albums, fetchAlbumCover})}
             </div>
-            {(albums && albums['pageable'] && albums['totalPages'])
-                ? <Pagination changePage={(pageNumber) => (filter)
-                    ? filterAlbums(pageNumber,
-                        SearchParamUtil.getSearchParams()['key'],
-                        SearchParamUtil.getSearchParams()['value'])
-                    : loadAlbums(pageNumber)}
-                              totalPages={(albums['totalPages']) ? albums['totalPages'] : 0}
-                              pageNumber={(albums['pageable']) ? albums['pageable'].pageNumber : 0}/>
+            {(albums && albums[PAGEABLE] && albums[TOTAL_PAGES])
+                ? <Pagination changePage={(pageNumber) =>
+                    (filter && searchParams && searchParams[KEY] && searchParams[VALUE])
+                        ? filterAlbums(pageNumber,
+                        searchParams[KEY],
+                        searchParams[VALUE])
+                        : loadAlbums(pageNumber)}
+                              totalPages={(albums[TOTAL_PAGES]) ? albums[TOTAL_PAGES] : 0}
+                              pageNumber={(albums[PAGEABLE] && albums[PAGEABLE].pageNumber)
+                                  ? albums[PAGEABLE].pageNumber
+                                  : 0 }/>
                 : undefined}
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"

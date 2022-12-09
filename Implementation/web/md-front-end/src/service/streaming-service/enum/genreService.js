@@ -1,6 +1,6 @@
 import React from "react";
-import ArtistRepository from "../../repository/streaming-service/artistRepository";
-import GenreRepository from "../../repository/streaming-service/enum/genreRepository";
+import ArtistRepository from "../../../repository/streaming-service/artistRepository";
+import GenreRepository from "../../../repository/streaming-service/enum/genreRepository";
 
 const useGenreService = () => {
 

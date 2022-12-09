@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Pagination from "../../Partial/Pagination/pagination";
 import useArtists from "./useArtists";
 import viewArtists from "./viewArtists";
+import {PAGEABLE, TOTAL_PAGES} from "../../../constants/model";
 
 const Artists = (props) => {
 
@@ -28,10 +29,12 @@ const Artists = (props) => {
                     viewArtists({artists, fetchArtistPicture})
                 }
             </div>
-            {(props.artists && props.artists['pageable'] && props.artists['totalPages'])
+            {(props.artists && props.artists[PAGEABLE]
+                && props.artists[PAGEABLE].pageNumber
+                && props.artists[TOTAL_PAGES])
                 ? <Pagination changePage={(pageNumber) => props.loadArtists(pageNumber)}
-                              totalPages={props.artists['totalPages']}
-                              pageNumber={props.artists['pageable'].pageNumber}/>
+                              totalPages={props.artists[TOTAL_PAGES]}
+                              pageNumber={props.artists[PAGEABLE].pageNumber}/>
                 : undefined}
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"

@@ -2,6 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import useLogin from "./useLogin";
 import viewLogin from "./viewLogin";
+import {REGISTER} from "../../../constants/endpoint";
 
 const Login = (props) => {
 
@@ -20,7 +21,7 @@ const Login = (props) => {
 
                     {viewLogin({emailDomains, handleChange, onFormSubmit})}
 
-                    <Link to={"/register"} className="btn btn-outline-dark w-100 mt-3">Sign Up</Link>
+                    <Link to={REGISTER} className="btn btn-outline-dark w-100 mt-3">Sign Up</Link>
                 </div>
                 <div className={"col-md-2"}/>
             </div>

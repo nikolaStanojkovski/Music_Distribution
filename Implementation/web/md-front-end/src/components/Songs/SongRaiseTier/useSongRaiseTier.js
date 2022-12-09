@@ -1,5 +1,8 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {PAYMENT_INFO, TIER} from "../../../constants/model";
+import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
 
 const useSongRaiseTier = (props) => {
 
@@ -9,7 +12,7 @@ const useSongRaiseTier = (props) => {
     const tiers = props.tiers;
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const [song, updateSong] = React.useState({});
-    const [songTier, updateSongTier] = React.useState("");
+    const [songTier, updateSongTier] = React.useState(EMPTY_STRING);
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});
 
     const handleCalculatedFee = (existingSubscriptionFee, currentSubscriptionFee,
@@ -53,9 +56,9 @@ const useSongRaiseTier = (props) => {
     }
 
     const handleSongTier = (tier) => {
-        const paymentInfo = song['paymentInfo'];
-        if (paymentInfo) {
-            const songTier = paymentInfo['tier'];
+        const paymentInfo = song[PAYMENT_INFO];
+        if (song && paymentInfo) {
+            const songTier = paymentInfo[TIER];
             if (tier && paymentInfo) {
                 handleSubscriptionFee(tier, songTier);
             }
@@ -69,7 +72,7 @@ const useSongRaiseTier = (props) => {
         if (songId && songTier && subscriptionFee &&
             subscriptionFee.amount > 0 && props.transactionFee) {
             props.raiseTierSong(songId, songTier, subscriptionFee, props.transactionFee);
-            History.push("/checkout/success");
+            History.push(CHECKOUT_SUCCESS);
         }
     }
 

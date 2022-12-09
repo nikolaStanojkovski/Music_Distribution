@@ -5,6 +5,7 @@ import albumsWallpaper from "../../../assets/img/albums-wallpaper.jpg";
 import songsWallpaper from "../../../assets/img/songs-wallpaper.jpg";
 import artistsWallpaper from "../../../assets/img/artists-wallpaper.jpg";
 import {Link} from "react-router-dom";
+import {ALBUMS, ARTISTS, SONGS} from "../../../constants/endpoint";
 
 const Home = () => {
     return (
@@ -14,7 +15,7 @@ const Home = () => {
                     <img className={"carousel-image d-block w-100"} src={logo} alt={"Website Logo"}/>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <Link to={"/albums"}>
+                    <Link to={ALBUMS}>
                         <img className={"carousel-image d-block w-100"} src={albumsWallpaper} alt={"Albums Wallpaper"}/>
                         <Carousel.Caption>
                             <h3>Albums</h3>
@@ -23,7 +24,7 @@ const Home = () => {
                     </Link>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <Link to={"/songs"}>
+                    <Link to={SONGS}>
                         <img className={"carousel-image d-block w-100"} src={songsWallpaper} alt={"Songs Wallpaper"}/>
                         <Carousel.Caption>
                             <h3>Songs</h3>
@@ -32,7 +33,7 @@ const Home = () => {
                     </Link>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <Link to={"/artists"}>
+                    <Link to={ARTISTS}>
                         <img className={"carousel-image d-block w-100"} src={artistsWallpaper}
                              alt={"Artists Wallpaper"}/>
                         <Carousel.Caption>

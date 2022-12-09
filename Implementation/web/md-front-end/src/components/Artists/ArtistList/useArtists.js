@@ -1,6 +1,7 @@
 import React from "react";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import {API_BASE_URL, ARTIST_PICTURE_URL} from "../../../constants/endpoint";
+import {PNG} from "../../../constants/extension";
 
 const useArtists = (props) => {
     const artists = props.artists;
@@ -9,7 +10,7 @@ const useArtists = (props) => {
 
     const fetchArtistPicture = (e, id) => {
         if (ScreenElementsUtil.isClickableTableRow(e, id)) {
-            updateProfilePictureSource(`${API_BASE_URL}${ARTIST_PICTURE_URL}/${id}.png`);
+            updateProfilePictureSource(`${API_BASE_URL}${ARTIST_PICTURE_URL}/${id}.${PNG}`);
             setShowModal(true);
         }
     }

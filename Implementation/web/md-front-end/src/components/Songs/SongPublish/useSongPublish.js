@@ -1,5 +1,8 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {SONG_TIER} from "../../../constants/model";
+import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
 
 const useSongPublish = (props) => {
 
@@ -10,14 +13,14 @@ const useSongPublish = (props) => {
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const selectedArtist = props.selectedArtist;
     const [cover, updateCover] = React.useState(null);
-    const [subscriptionFee, updateSubscriptionFee] = React.useState("");
+    const [subscriptionFee, updateSubscriptionFee] = React.useState(EMPTY_STRING);
     const [formData, updateFormData] = React.useState({
-        songId: "",
-        songTier: "",
+        songId: EMPTY_STRING,
+        songTier: EMPTY_STRING,
     });
 
     const handleSubscriptionFee = (tier) => {
-        if (tier && tier !== "") {
+        if (tier && tier !== EMPTY_STRING) {
             props.subscriptionFee(tier).then((data) => {
                 updateSubscriptionFee(data.data);
             })
@@ -30,7 +33,7 @@ const useSongPublish = (props) => {
             [e.target.name]: e.target.value.trim()
         });
 
-        if (e.target.name === "songTier") {
+        if (e.target.name === SONG_TIER) {
             handleSubscriptionFee(e.target.value);
         }
     }
@@ -44,7 +47,7 @@ const useSongPublish = (props) => {
         if (songId && songTier && subscriptionFee && props.transactionFee) {
             props.publishSong(cover, songId, songTier, subscriptionFee, props.transactionFee);
 
-            History.push("/checkout/success");
+            History.push(CHECKOUT_SUCCESS);
         }
     }
 

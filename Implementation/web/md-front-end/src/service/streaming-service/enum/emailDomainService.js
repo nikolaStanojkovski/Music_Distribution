@@ -1,4 +1,4 @@
-import EmailDomainRepository from "../../repository/streaming-service/enum/emailDomainRepository";
+import EmailDomainRepository from "../../../repository/streaming-service/enum/emailDomainRepository";
 import React from "react";
 
 const useEmailDomainService = () => {

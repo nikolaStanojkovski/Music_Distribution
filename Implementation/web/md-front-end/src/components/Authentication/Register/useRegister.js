@@ -1,5 +1,8 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {DEFAULT} from "../../../constants/endpoint";
+import {PASSWORDS_DONT_MATCH} from "../../../constants/exception";
 
 const useRegister = (props) => {
 
@@ -8,14 +11,14 @@ const useRegister = (props) => {
     const emailDomains = props.emailDomains;
     const [profilePicture, updateProfilePicture] = React.useState(null);
     const [formData, updateFormData] = React.useState({
-        username: "",
+        username: EMPTY_STRING,
         emailDomain: 0,
-        telephoneNumber: "",
-        firstName: "",
-        lastName: "",
-        artName: "",
-        password: "",
-        repeatPassword: ""
+        telephoneNumber: EMPTY_STRING,
+        firstName: EMPTY_STRING,
+        lastName: EMPTY_STRING,
+        artName: EMPTY_STRING,
+        password: EMPTY_STRING,
+        repeatPassword: EMPTY_STRING
     });
 
     const handleChange = (e) => {
@@ -38,13 +41,15 @@ const useRegister = (props) => {
         const repeatPassword = formData.repeatPassword;
 
         if (password && repeatPassword && password !== repeatPassword) {
-            alert('The passwords do not match');
+            alert(PASSWORDS_DONT_MATCH);
             return;
         }
 
-        props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
-            firstName, lastName, artName, password, repeatPassword);
-        History.push("/");
+        if(username && firstName && lastName && artName && password && repeatPassword) {
+            props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
+                firstName, lastName, artName, password, repeatPassword);
+            History.push(DEFAULT);
+        }
     }
 
     return {emailDomains, updateProfilePicture, handleChange, onFormSubmit};

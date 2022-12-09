@@ -1,5 +1,8 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import StringUtil from "../../../util/stringUtil";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {DEFAULT} from "../../../constants/endpoint";
 
 const useSongCreate = (props) => {
 
@@ -10,14 +13,14 @@ const useSongCreate = (props) => {
     const [song, updateSong] = React.useState(null);
     const [lengthInSeconds, updateLengthInSeconds] = React.useState(0);
     const [formData, updateFormData] = React.useState({
-        songName: "",
-        songGenre: ""
+        songName: EMPTY_STRING,
+        songGenre: EMPTY_STRING
     });
 
     const getFormattedSongLength = (lengthInSeconds) => {
-        const minutes = parseInt((lengthInSeconds / 60).toString());
-        const seconds = parseInt((lengthInSeconds % 60).toString());
-        return `${(minutes > 10) ? minutes : '0' + minutes}:${(seconds > 10) ? seconds : '0' + seconds}`;
+        const minutes = StringUtil.formatMinutes(lengthInSeconds);
+        const seconds = StringUtil.formatSeconds(lengthInSeconds);
+        return `${minutes}:${seconds}`;
     }
 
     const handleChange = (e) => {
@@ -55,7 +58,7 @@ const useSongCreate = (props) => {
 
         if(songName && songGenre && lengthInSeconds && songGenre) {
             props.createSong(song, songName, lengthInSeconds, songGenre);
-            History.push("/");
+            History.push(DEFAULT);
         }
     }
 

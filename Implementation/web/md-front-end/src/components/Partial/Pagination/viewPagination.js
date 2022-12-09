@@ -1,4 +1,5 @@
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
 
 const viewPagination = (props) => {
     return (
@@ -7,7 +8,7 @@ const viewPagination = (props) => {
                 <li className="page-item">
                     <button className="page-link"
                             onClick={() => ((props.activePage - 1) >= 0)
-                                ? props.changePage(props.activePage - 1) : ''}>
+                                ? props.changePage(props.activePage - 1) : EMPTY_STRING}>
                         Previous
                     </button>
                 </li>
@@ -15,7 +16,7 @@ const viewPagination = (props) => {
                 <li className="page-item">
                     <button className="page-link"
                             onClick={() => ((props.activePage + 1) < (props.totalPages))
-                                ? props.changePage(props.activePage + 1) : ''}>
+                                ? props.changePage(props.activePage + 1) : EMPTY_STRING}>
                         Next
                     </button>
                 </li>

@@ -1,5 +1,7 @@
 import AuthUtil from "../../../util/authUtil";
 import React from "react";
+import {ALBUM, CREATOR, FORMATTED_STRING, IS_A_SINGLE, IS_PUBLISHED, SONG_LENGTH} from "../../../constants/model";
+import {EMPTY_STRING} from "../../../constants/alphabet";
 
 const viewSongs = (props) => {
 
@@ -25,18 +27,18 @@ const viewSongs = (props) => {
                 {(props.songs && props.songs.content) ? props.songs.content.map((term) => {
                     return (
                         <tr key={term.id} data-id={term.id}
-                            className={`${(term['isASingle']) ? 'table-row-clickable' : ''} align-middle`}
-                            onClick={(e) => props.fetchSongCover(e, term.id, term['isASingle'])}>
+                            className={`${(term[IS_A_SINGLE]) ? 'table-row-clickable' : EMPTY_STRING} align-middle`}
+                            onClick={(e) => props.fetchSongCover(e, term.id, term[IS_A_SINGLE])}>
                             <td>{term.songName}</td>
                             <td>{term.songGenre}</td>
-                            <td>{term['songLength']['formattedString']}</td>
+                            <td>{term[SONG_LENGTH][FORMATTED_STRING]}</td>
                             {
                                 (AuthUtil.isAuthorized())
-                                    ? <td>{(term['isPublished']) ? 'Yes' : 'No'}</td> : null
+                                    ? <td>{(term[IS_PUBLISHED]) ? 'Yes' : 'No'}</td> : null
                             }
-                            <td>{(term['isASingle']) ? 'Yes' : 'No'}</td>
-                            <td>{term['creator']['userPersonalInfo'].fullName}</td>
-                            <td>{(term['album']) ? term['album'].albumName : ''}</td>
+                            <td>{(term[IS_A_SINGLE]) ? 'Yes' : 'No'}</td>
+                            <td>{term[CREATOR]['userPersonalInfo'].fullName}</td>
+                            <td>{(term[ALBUM]) ? term[ALBUM].albumName : EMPTY_STRING}</td>
                             <td className={"table-cell-clickable"}>
                                 <button onClick={props.fetchSong}
                                         className={`btn btn-outline-secondary btn-block bi bi-play play-pause-button`}>

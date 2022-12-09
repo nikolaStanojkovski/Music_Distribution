@@ -1,4 +1,5 @@
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
 
 const usePagination = (props) => {
 
@@ -18,9 +19,9 @@ const usePagination = (props) => {
         }
 
         return (
-            <li key={index} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
+            <li key={index} className={`page-item ${isCurrentPage ? 'active' : EMPTY_STRING}`}>
                 <button className="page-link" onClick={() => (!isCurrentPage)
-                    ? props.changePage(index - 1) : ''}>{index}</button>
+                    ? props.changePage(index - 1) : EMPTY_STRING}>{index}</button>
             </li>
         );
     }

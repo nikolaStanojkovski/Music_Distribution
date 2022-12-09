@@ -1,5 +1,8 @@
 import {useHistory} from "react-router-dom";
 import React from "react";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {PAYMENT_INFO, TIER} from "../../../constants/model";
+import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
 
 const useAlbumRaiseTier = (props) => {
 
@@ -9,7 +12,7 @@ const useAlbumRaiseTier = (props) => {
     const albums = props.albums;
     const tiers = props.tiers;
     const [album, updateAlbum] = React.useState({});
-    const [albumTier, updateAlbumTier] = React.useState("");
+    const [albumTier, updateAlbumTier] = React.useState(EMPTY_STRING);
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});
 
     const handleCalculatedFee = (existingSubscriptionFee, currentSubscriptionFee,
@@ -51,9 +54,9 @@ const useAlbumRaiseTier = (props) => {
     }
 
     const handleAlbumTier = (tier) => {
-        const paymentInfo = album['paymentInfo'];
+        const paymentInfo = album[PAYMENT_INFO];
         if (paymentInfo) {
-            const albumTier = paymentInfo['tier'];
+            const albumTier = paymentInfo[TIER];
             if (tier && paymentInfo) {
                 handleSubscriptionFee(tier, albumTier);
             }
@@ -67,7 +70,7 @@ const useAlbumRaiseTier = (props) => {
         if (albumId && albumTier && subscriptionFee &&
             subscriptionFee.amount > 0 && props.transactionFee) {
             props.raiseTierAlbum(albumId, albumTier, subscriptionFee, props.transactionFee);
-            History.push("/checkout/success");
+            History.push(CHECKOUT_SUCCESS);
         }
     }
 

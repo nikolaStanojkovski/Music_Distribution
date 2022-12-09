@@ -3,6 +3,7 @@ import makeAnimated from "react-select/animated";
 import StringUtil from "../../../util/stringUtil";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import React from "react";
+import {ALBUM, CREATOR, FULL_NAME, IS_PUBLISHED, USER_PERSONAL_INFO} from "../../../constants/model";
 
 const viewAlbumPublish = (props) => {
     return (
@@ -10,7 +11,7 @@ const viewAlbumPublish = (props) => {
             <div className="form-group">
                 <label className="upload-drop-container">
                     <span className="upload-drop-title">Album cover picture</span>
-                    <input type="file" id="albumUpload" accept="image/png, image/jpeg" required
+                    <input type="file" id="albumUpload" accept="image/png, image/jpeg" required={true}
                            onChange={(e) => props.updateCover(e.target.files[0])}/>
                     <span
                         className={"text-muted"}><b>png</b> and <b>jpeg</b> file formats accepted</span>
@@ -23,7 +24,7 @@ const viewAlbumPublish = (props) => {
                        className="form-control"
                        id="albumName"
                        name="albumName"
-                       required
+                       required={true}
                        placeholder="Enter the album name"
                        onChange={props.handleChange}/>
             </div>
@@ -53,8 +54,8 @@ const viewAlbumPublish = (props) => {
                     defaultValue={"-- Select songs --"}
                     onChange={(choice) => props.updateSongIdList(choice)}
                     options={(props.songs && props.songs.content) ? props.songs.content.map((term) => {
-                        return (term && term['creator'].id === props.selectedArtist.id
-                            && !term['album'] && !term['isPublished'])
+                        return (term && term[CREATOR].id === props.selectedArtist.id
+                            && !term[ALBUM] && !term[IS_PUBLISHED])
                             ? {value: term.id, label: term.songName} : undefined;
                     }).filter(term => term !== undefined) : undefined}/>
             </div>
@@ -98,7 +99,7 @@ const viewAlbumPublish = (props) => {
 
             <div className="form-group">
                 <input name="artistName" disabled={true}
-                       value={props.selectedArtist['userPersonalInfo'].fullName}
+                       value={props.selectedArtist[USER_PERSONAL_INFO][FULL_NAME]}
                        className="form-control disabled"/>
             </div>
             <br/>

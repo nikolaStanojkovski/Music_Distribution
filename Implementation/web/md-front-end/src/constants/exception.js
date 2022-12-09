@@ -1,0 +1,1 @@
+export const PASSWORDS_DONT_MATCH = 'The passwords do not match';

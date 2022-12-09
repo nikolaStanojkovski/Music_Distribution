@@ -1,5 +1,16 @@
 import {Link} from "react-router-dom";
 import React from "react";
+import {
+    ALBUM_INFO, ARTIST_NAME, COMPOSER_NAME,
+    CREATOR,
+    FORMATTED_STRING,
+    FULL_NAME,
+    GENRE, PRODUCER_NAME,
+    TOTAL_LENGTH,
+    USER_PERSONAL_INFO
+} from "../../../constants/model";
+import {EMPTY_STRING} from "../../../constants/alphabet";
+import {ALBUM_ID, SONGS} from "../../../constants/endpoint";
 
 const viewAlbums = (props) => {
     return (
@@ -23,21 +34,25 @@ const viewAlbums = (props) => {
                         <tr key={term.id} className={'table-row-clickable align-middle'}
                             onClick={(e) => props.fetchAlbumCover(e, term.id)}>
                             <td>{term.albumName}</td>
-                            <td>{term['totalLength']['formattedString']}</td>
-                            <td>{term['genre']}</td>
-                            <td>{(term['creator'] && term['creator']['userPersonalInfo'])
-                                ? term['creator']['userPersonalInfo'].fullName : ''}</td>
-                            <td>{(term['albumInfo']) ? term['albumInfo']['artistName'] : ''}</td>
-                            <td>{(term['albumInfo']) ? term['albumInfo']['producerName'] : ''}</td>
-                            <td>{(term['albumInfo']) ? term['albumInfo']['composerName'] : ''}</td>
+                            <td>{term[TOTAL_LENGTH][FORMATTED_STRING]}</td>
+                            <td>{term[GENRE]}</td>
+                            <td>{(term[CREATOR]
+                                    && term[CREATOR][USER_PERSONAL_INFO]
+                                    && term[CREATOR][USER_PERSONAL_INFO]
+                                    && term[CREATOR][USER_PERSONAL_INFO][FULL_NAME])
+                                ? term[CREATOR][USER_PERSONAL_INFO][FULL_NAME] : EMPTY_STRING}</td>
+                            <td>{(term[ALBUM_INFO]) ? term[ALBUM_INFO][ARTIST_NAME] : EMPTY_STRING}</td>
+                            <td>{(term[ALBUM_INFO]) ? term[ALBUM_INFO][PRODUCER_NAME] : EMPTY_STRING}</td>
+                            <td>{(term[ALBUM_INFO]) ? term[ALBUM_INFO][COMPOSER_NAME] : EMPTY_STRING}</td>
                             <td className={"table-cell-clickable"}>
-                                <Link to={"/songs?album_id=" + term.id}
+
+                                <Link to={`${SONGS}?${ALBUM_ID}=${term.id}`}
                                       className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                 </Link>
                             </td>
                         </tr>
                     );
-                }) : null}
+                }) : undefined}
                 </tbody>
             </table>
         </div>

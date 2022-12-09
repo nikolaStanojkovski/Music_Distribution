@@ -1,8 +1,9 @@
 import axios from "../../../custom-axios/axiosStreamingService";
+import {GENRES} from "../../../constants/endpoint";
 
 const GenreRepository = {
     fetchGenres: () => {
-        return axios.get("/genres");
+        return axios.get(GENRES);
     },
 }
 

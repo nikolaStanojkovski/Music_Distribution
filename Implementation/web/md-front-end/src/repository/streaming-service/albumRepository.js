@@ -1,12 +1,31 @@
 import axios from "../../custom-axios/axiosStreamingService";
 import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../constants/pagination";
+import {ALBUM_ID, ALBUMS, ALBUMS_PUBLISH, ALBUMS_RAISE_TIER, RESOURCE, SEARCH} from "../../constants/endpoint";
+import {
+    ALBUM_GENRE,
+    ALBUM_NAME,
+    ALBUM_TIER,
+    ALBUM_TRANSACTION_REQUEST,
+    ARTIST_NAME,
+    COMPOSER_NAME,
+    COVER,
+    PAGE,
+    PRODUCER_NAME,
+    SEARCH_PARAMS,
+    SEARCH_TERM,
+    SIZE,
+    SONG_ID_LIST,
+    SUBSCRIPTION_FEE,
+    TRANSACTION_FEE
+} from "../../constants/model";
+import {APPLICATION_JSON} from "../../constants/extension";
 
 const AlbumRepository = {
     fetchAlbums: (pageNumber) => {
-        return axios.get(`/resource/albums?page=${pageNumber || DEFAULT_PAGE_NUMBER}&size=${DEFAULT_PAGE_SIZE}`);
+        return axios.get(`${RESOURCE}${ALBUMS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
     },
     filterAlbums: (pageNumber, key, value) => {
-        return axios.get(`/resource/albums/search?searchParams=${key}&searchTerm=${value}&page=${pageNumber || DEFAULT_PAGE_NUMBER}&size=${DEFAULT_PAGE_SIZE}`);
+        return axios.get(`${RESOURCE}${ALBUMS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
     },
 
     publishAlbum: (cover, songIdList,
@@ -14,29 +33,29 @@ const AlbumRepository = {
                    subscriptionFee, transactionFee,
                    artistName, producerName, composerName) => {
         const formData = new FormData();
-        formData.append('cover', cover);
-        formData.append('albumTransactionRequest', new Blob([JSON.stringify({
-            "songIdList": songIdList,
-            "albumName": albumName,
-            "albumGenre": albumGenre,
-            "albumTier": albumTier,
-            "subscriptionFee": subscriptionFee,
-            "transactionFee": transactionFee,
-            "artistName": artistName,
-            "producerName": producerName,
-            "composerName": composerName,
-        })], {
-            type: "application/json"
+        formData.append(COVER, cover);
+        const albumTransactionRequest = {};
+        albumTransactionRequest[`${SONG_ID_LIST}`] = songIdList;
+        albumTransactionRequest[`${ALBUM_NAME}`] = albumName;
+        albumTransactionRequest[`${ALBUM_GENRE}`] = albumGenre;
+        albumTransactionRequest[`${ALBUM_TIER}`] = albumTier;
+        albumTransactionRequest[`${SUBSCRIPTION_FEE}`] = subscriptionFee;
+        albumTransactionRequest[`${TRANSACTION_FEE}`] = transactionFee;
+        albumTransactionRequest[`${ARTIST_NAME}`] = artistName;
+        albumTransactionRequest[`${PRODUCER_NAME}`] = producerName;
+        albumTransactionRequest[`${COMPOSER_NAME}`] = composerName;
+        formData.append(ALBUM_TRANSACTION_REQUEST, new Blob([JSON.stringify(albumTransactionRequest)], {
+            type: APPLICATION_JSON
         }));
-        return axios.post("/resource/albums/publish", formData);
+        return axios.post(ALBUMS_PUBLISH, formData);
     },
     raiseTierAlbum: (albumId, albumTier, subscriptionFee, transactionFee) => {
-        return axios.post("/resource/albums/raise-tier", {
-            "albumId": albumId,
-            "albumTier": albumTier,
-            "subscriptionFee": subscriptionFee,
-            "transactionFee": transactionFee,
-        });
+        const raiseAlbumTierRequest = {};
+        raiseAlbumTierRequest[`${ALBUM_ID}`] = albumId;
+        raiseAlbumTierRequest[`${ALBUM_TIER}`] = albumTier;
+        raiseAlbumTierRequest[`${SUBSCRIPTION_FEE}`] = subscriptionFee;
+        raiseAlbumTierRequest[`${TRANSACTION_FEE}`] = transactionFee;
+        return axios.post(`${RESOURCE}${ALBUMS_RAISE_TIER}`, raiseAlbumTierRequest);
     },
 }
 

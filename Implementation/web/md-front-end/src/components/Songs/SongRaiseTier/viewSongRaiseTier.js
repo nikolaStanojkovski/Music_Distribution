@@ -1,5 +1,6 @@
 import StringUtil from "../../../util/stringUtil";
 import React from "react";
+import {DIAMOND, IS_A_SINGLE, IS_PUBLISHED, PAYMENT_INFO, TIER} from "../../../constants/model";
 
 const viewSongRaiseTier = (props) => {
     return (
@@ -11,14 +12,14 @@ const viewSongRaiseTier = (props) => {
                         -- Choose song --
                     </option>
                     {(props.songs && props.songs.content) ? props.songs.content
-                        .filter((term) => (term && term['paymentInfo'] && term['paymentInfo']['tier'])
-                            ? term['paymentInfo']['tier'] !== 'Diamond' : true)
+                        .filter((term) => (term && term[PAYMENT_INFO] && term[PAYMENT_INFO][TIER])
+                            ? term[PAYMENT_INFO][TIER] !== DIAMOND : true)
                         .map((term) => {
-                            return (term['isPublished'] && term['isASingle'])
-                                ? <option key={term.id} value={term.id}>{term.songName}</option>
-                                : undefined;
-                        }
-                    ) : undefined}
+                                return (term[IS_PUBLISHED] && term[IS_A_SINGLE])
+                                    ? <option key={term.id} value={term.id}>{term.songName}</option>
+                                    : undefined;
+                            }
+                        ) : undefined}
                 </select>
             </div>
             <br/>

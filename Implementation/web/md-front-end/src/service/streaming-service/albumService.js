@@ -1,5 +1,6 @@
 import React from "react";
-import AlbumRepository from "../repository/streaming-service/albumRepository";
+import AlbumRepository from "../../repository/streaming-service/albumRepository";
+import {PAGEABLE} from "../../constants/model";
 
 const useAlbumService = () => {
 
@@ -31,14 +32,14 @@ const useAlbumService = () => {
             subscriptionFee, transactionFee,
             artistName, producerName, composerName)
             .then(() => {
-                loadAlbums(albums['pageable'].pageNumber);
+                loadAlbums(albums[PAGEABLE].pageNumber);
             });
     }
 
     const raiseTierAlbum = (albumId, albumTier, subscriptionFee, transactionFee) => {
         AlbumRepository.raiseTierAlbum(albumId, albumTier, subscriptionFee, transactionFee)
             .then(() => {
-                loadAlbums(albums['pageable'].pageNumber);
+                loadAlbums(albums[PAGEABLE].pageNumber);
             });
     }
 

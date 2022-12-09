@@ -1,6 +1,8 @@
+import {EMPTY_STRING} from "../constants/alphabet";
+
 const SearchParamUtil = {
     getSearchParams() {
-        const searchParams = {key: "", value: ""};
+        const searchParams = {key: EMPTY_STRING, value: EMPTY_STRING};
         new URLSearchParams(window.location.search)
             .forEach((value, key) => {
                 searchParams.key += `,${key}`;

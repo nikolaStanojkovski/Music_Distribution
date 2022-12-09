@@ -1,5 +1,6 @@
-import StringUtil from "../../../util/stringUtil";
 import React from "react";
+import {ALBUM, CREATOR, IS_PUBLISHED} from "../../../constants/model";
+import StringUtil from "../../../util/stringUtil";
 
 const viewSongPublish = (props) => {
     return (
@@ -23,9 +24,9 @@ const viewSongPublish = (props) => {
                         -- Choose song --
                     </option>
                     {(props.songs && props.songs.content) ? props.songs.content.map((term) => {
-                            return (term && term['creator']
-                                && term['creator'].id === props.selectedArtist.id
-                                && !term['album'] && !term['isPublished']) ?
+                            return (term && term[CREATOR]
+                                && term[CREATOR].id === props.selectedArtist.id
+                                && !term[ALBUM] && !term[IS_PUBLISHED]) ?
                                 <option key={term.id} value={term.id}>{term.songName}</option> : undefined;
                         }
                     ) : undefined}
@@ -49,12 +50,12 @@ const viewSongPublish = (props) => {
             <br/>
 
             <div className="form-group">
-                            <span>
-                                <input name="subscriptionFee" disabled={true}
-                                       id="subscriptionFee"
-                                       value={StringUtil.formatCurrency(props.subscriptionFee)}
-                                       className="form-control disabled"/>&nbsp;
-                            </span>
+                        <span>
+                        <input name="subscriptionFee" disabled={true}
+                               id="subscriptionFee"
+                               value={StringUtil.formatCurrency(props.subscriptionFee)}
+                               className="form-control disabled"/>&nbsp;
+                        </span>
                 <span className={"text-muted"}>Subscription fee is based on the tier our platform offers for distribution</span>
             </div>
             <br/>

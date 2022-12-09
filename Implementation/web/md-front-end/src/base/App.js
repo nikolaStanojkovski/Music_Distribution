@@ -25,13 +25,13 @@ import NotFound from "../components/Partial/Error/NotFound/notFound";
 import NonProtectedRoute from "../components/Partial/Route/NonProtected/nonProtectedRoute";
 import SongRaiseTier from "../components/Songs/SongRaiseTier/songRaiseTier";
 import ArtistRepository from "../repository/streaming-service/artistRepository";
-import useAlbumService from "../service/albumService";
-import useArtistService from "../service/artistService";
-import useSongService from "../service/songService";
-import usePaymentService from "../service/paymentService";
-import useEmailDomainService from "../service/enum/emailDomainService";
-import useTierService from "../service/enum/tierService";
-import useGenreService from "../service/enum/genreService";
+import useAlbumService from "../service/streaming-service/albumService";
+import useArtistService from "../service/streaming-service/artistService";
+import useSongService from "../service/streaming-service/songService";
+import usePaymentService from "../service/streaming-service/paymentService";
+import useEmailDomainService from "../service/streaming-service/enum/emailDomainService";
+import useTierService from "../service/streaming-service/enum/tierService";
+import useGenreService from "../service/streaming-service/enum/genreService";
 
 const App = () => {
 

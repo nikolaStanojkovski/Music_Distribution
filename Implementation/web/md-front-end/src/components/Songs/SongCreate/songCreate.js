@@ -4,7 +4,15 @@ import viewSongCreate from "./viewSongCreate";
 
 const CreateSong = (props) => {
 
-    const {genres, selectedArtist, lengthInSeconds, getFormattedSongLength, handleChange, handleUpload, onFormSubmit} = useSongCreate(props);
+    const {
+        genres,
+        selectedArtist,
+        lengthInSeconds,
+        getFormattedSongLength,
+        handleChange,
+        handleUpload,
+        onFormSubmit
+    } = useSongCreate(props);
 
     return (
         <div className="container mm-4 my-5">
@@ -17,16 +25,18 @@ const CreateSong = (props) => {
 
             <div className={"row"}>
                 <div className="col-md">
-                    {viewSongCreate(
-                        {
-                            genres,
-                            selectedArtist,
-                            lengthInSeconds,
-                            getFormattedSongLength,
-                            handleChange,
-                            handleUpload,
-                            onFormSubmit
-                        })
+                    {
+                        viewSongCreate(
+                            {
+                                genres,
+                                selectedArtist,
+                                lengthInSeconds,
+                                getFormattedSongLength,
+                                handleChange,
+                                handleUpload,
+                                onFormSubmit
+                            }
+                        )
                     }
                 </div>
             </div>

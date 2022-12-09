@@ -1,8 +1,9 @@
 import axios from "../../../custom-axios/axiosStreamingService";
+import {TIERS} from "../../../constants/endpoint";
 
 const TierRepository = {
     fetchTiers: () => {
-        return axios.get("/tiers");
+        return axios.get(TIERS);
     },
 }
 

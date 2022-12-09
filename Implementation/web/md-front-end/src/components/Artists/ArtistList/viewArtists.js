@@ -1,5 +1,7 @@
 import {Link} from "react-router-dom";
 import React from "react";
+import {FULL_ADDRESS, USER_CONTACT_INFO, USER_PERSONAL_INFO} from "../../../constants/model";
+import {ALBUMS, CREATOR_ID, SONGS} from "../../../constants/endpoint";
 
 const viewArtists = (props) => {
     return (
@@ -20,17 +22,17 @@ const viewArtists = (props) => {
                     return (
                         <tr key={term.id} className={"table-row-clickable align-middle"}
                             onClick={(e) => props.fetchArtistPicture(e, term.id)}>
-                            <td>{term['userContactInfo'].email['fullAddress']}</td>
-                            <td>{term['userContactInfo'].telephoneNumber}</td>
-                            <td>{term['userPersonalInfo'].fullName}</td>
-                            <td>{term['userPersonalInfo'].artName}</td>
+                            <td>{term[USER_CONTACT_INFO].email[FULL_ADDRESS]}</td>
+                            <td>{term[USER_CONTACT_INFO].telephoneNumber}</td>
+                            <td>{term[USER_PERSONAL_INFO].fullName}</td>
+                            <td>{term[USER_PERSONAL_INFO].artName}</td>
                             <td className={"table-cell-clickable"}>
-                                <Link to={"/albums?creator_id=" + term.id}
+                                <Link to={`${ALBUMS}?${CREATOR_ID}=${term.id}`}
                                       className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                 </Link>
                             </td>
                             <td className={"table-cell-clickable"}>
-                                <Link to={"/songs?creator_id=" + term.id}
+                                <Link to={`${SONGS}?${CREATOR_ID}=${term.id}`}
                                       className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                 </Link>
                             </td>

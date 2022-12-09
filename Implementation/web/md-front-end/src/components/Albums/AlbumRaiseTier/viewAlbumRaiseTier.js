@@ -1,5 +1,6 @@
 import StringUtil from "../../../util/stringUtil";
 import React from "react";
+import {DIAMOND, PAYMENT_INFO, TIER} from "../../../constants/model";
 
 const viewAlbumRaiseTier = (props) => {
     return (
@@ -11,8 +12,8 @@ const viewAlbumRaiseTier = (props) => {
                         -- Choose album --
                     </option>
                     {(props.albums && props.albums.content) ? props.albums.content
-                        .filter((term) => (term && term['paymentInfo'] && term['paymentInfo']['tier'])
-                            ? term['paymentInfo']['tier'] !== 'Diamond' : true)
+                        .filter((term) => (term && term[PAYMENT_INFO] && term[PAYMENT_INFO][TIER])
+                            ? term[PAYMENT_INFO][TIER] !== DIAMOND : true)
                         .map((term) => {
                                 return <option key={term.id} value={term.id}>{term.albumName}</option>;
                             }
