@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.data.firebase.auth
+package com.musicdistribution.streamingservice.data.firebase.auth
 
 import com.google.firebase.auth.FirebaseAuth
 

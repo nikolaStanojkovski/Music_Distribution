@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Album Distribution</string>
+    <string name="app_name">Music Distribution</string>
 
     <!-- Strings related to authentication -->
     <string name="title_activity_auth">AuthActivity</string>

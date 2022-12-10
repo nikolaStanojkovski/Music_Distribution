@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.data.firebase.realtime
+package com.musicdistribution.streamingservice.data.firebase.realtime
 
 class FirebaseRealtimeDB {
 }

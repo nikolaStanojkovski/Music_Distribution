@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.domain
+package com.musicdistribution.streamingservice.domain
 
 data class User(
     val id: String,

@@ -1,8 +1,8 @@
-package com.musicdistribution.albumdistribution.data
+package com.musicdistribution.streamingservice.data
 
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.domain.Genre
-import com.musicdistribution.albumdistribution.model.GenreItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.domain.Genre
+import com.musicdistribution.streamingservice.model.GenreItem
 
 class GenreData {
     companion object {

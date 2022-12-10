@@ -1,11 +1,11 @@
-package com.musicdistribution.albumdistribution.ui.home.item
+package com.musicdistribution.streamingservice.ui.home.item
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.streamingservice.R
 
 class AlbumFragment : Fragment() {
 

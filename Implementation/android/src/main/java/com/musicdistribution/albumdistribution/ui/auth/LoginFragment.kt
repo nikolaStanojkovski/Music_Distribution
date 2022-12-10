@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.auth
+package com.musicdistribution.streamingservice.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,11 +9,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
-import com.musicdistribution.albumdistribution.databinding.FragmentLoginBinding
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
-import com.musicdistribution.albumdistribution.util.ValidationUtils
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.data.firebase.auth.FirebaseAuthDB
+import com.musicdistribution.streamingservice.databinding.FragmentLoginBinding
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
+import com.musicdistribution.streamingservice.util.ValidationUtils
 
 class LoginFragment : Fragment() {
 

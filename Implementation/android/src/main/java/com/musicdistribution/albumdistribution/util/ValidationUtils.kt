@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.util
+package com.musicdistribution.streamingservice.util
 
 import android.content.Context
 import android.util.Patterns

@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.data
+package com.musicdistribution.streamingservice.data
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -1,11 +1,11 @@
-package com.musicdistribution.albumdistribution.ui.home
+package com.musicdistribution.streamingservice.ui.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.musicdistribution.albumdistribution.R
+import com.musicdistribution.streamingservice.R
 
 class HomeActivity : AppCompatActivity() {
 

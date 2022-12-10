@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.musicdistribution.albumdistribution">
+    package="streamingservice">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,18 +20,18 @@
         android:theme="@style/Theme.AlbumDistribution">
 
         <activity
-            android:name=".ui.HomeActivity"
+            android:name="com.musicdistribution.streamingservice.ui.HomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.AlbumDistribution.NoActionBar" />
         <activity
-            android:name=".ui.auth.AuthActivity"
+            android:name="com.musicdistribution.streamingservice.ui.auth.AuthActivity"
             android:exported="false"
             android:label="@string/title_activity_auth"
             android:theme="@style/Theme.AlbumDistribution.NoActionBar" />
         <activity
-            android:name=".ui.SplashScreenActivity"
+            android:name="com.musicdistribution.streamingservice.ui.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

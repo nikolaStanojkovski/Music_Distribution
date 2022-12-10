@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.home
+package com.musicdistribution.streamingservice.ui.home
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.CategoryData
-import com.musicdistribution.albumdistribution.model.Category
-import com.musicdistribution.albumdistribution.model.CategoryItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.data.CategoryData
+import com.musicdistribution.streamingservice.model.Category
+import com.musicdistribution.streamingservice.model.CategoryItem
 
 class HomeVerticalAdapter(categoryList: MutableList<Category>) :
     RecyclerView.Adapter<HomeVerticalAdapter.ViewHolder>() {

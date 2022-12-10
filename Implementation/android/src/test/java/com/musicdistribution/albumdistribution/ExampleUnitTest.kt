@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution
+package com.musicdistribution.streamingservice
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.search
+package com.musicdistribution.streamingservice.ui.search
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.model.SearchItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.model.SearchItem
 
 class SearchItemAdapter(searchItemsList: MutableList<SearchItem>) :
     RecyclerView.Adapter<SearchItemAdapter.ViewHolder>() {

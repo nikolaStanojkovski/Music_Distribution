@@ -13,21 +13,27 @@ const useSongs = (props) => {
     const filterSongs = props.filterSongs;
     const loadSongs = props.loadSongs;
     const searchParams = SearchParamUtil.getSearchParams();
+    const [fetch, setFetch] = React.useState(false);
     const [filter, setFilter] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const [imageSource, updateImageSource] = React.useState(undefined);
     const [audioPlayer, updateAudioPlayer] = React.useState(undefined);
 
     React.useEffect(() => {
-        if (searchParams && searchParams.key && searchParams.value) {
-            filterSongs(0, searchParams.key, searchParams.value);
-            setFilter(true);
-        } else {
-            loadSongs(0);
-        }
+        const fetchSongs = () => {
+            if (searchParams && searchParams.key && searchParams.value) {
+                filterSongs(0, searchParams.key, searchParams.value);
+                setFilter(true);
+            } else {
+                loadSongs(0);
+            }
+        };
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (!fetch) {
+            fetchSongs();
+            setFetch(true);
+        }
+    }, [searchParams, filterSongs, loadSongs, fetch]);
 
     const playAudio = (songId, button) => {
         if (button.classList.contains(STOP_BUTTON)) {

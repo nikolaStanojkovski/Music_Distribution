@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.home
+package com.musicdistribution.streamingservice.ui.home
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -15,10 +15,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.CategoryData
-import com.musicdistribution.albumdistribution.data.SessionService
-import com.musicdistribution.albumdistribution.util.LocalizationUtils
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.data.CategoryData
+import com.musicdistribution.streamingservice.data.SessionService
+import com.musicdistribution.streamingservice.util.LocalizationUtils
 import java.util.*
 
 class HomeFragment : Fragment() {

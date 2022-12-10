@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.home
+package com.musicdistribution.streamingservice.ui.home
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.model.CategoryItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.model.CategoryItem
 
 class HomeHorizontalAdapter(categoryItemList: MutableList<CategoryItem>) :
     RecyclerView.Adapter<HomeHorizontalAdapter.ViewHolder>() {

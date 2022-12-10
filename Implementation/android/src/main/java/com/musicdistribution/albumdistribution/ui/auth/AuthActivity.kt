@@ -1,13 +1,13 @@
-package com.musicdistribution.albumdistribution.ui.auth
+package com.musicdistribution.streamingservice.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
-import com.musicdistribution.albumdistribution.databinding.ActivityAuthBinding
-import com.musicdistribution.albumdistribution.ui.home.HomeActivity
-import com.musicdistribution.albumdistribution.util.InternetUtils
+import com.musicdistribution.streamingservice.data.firebase.auth.FirebaseAuthDB
+import com.musicdistribution.streamingservice.databinding.ActivityAuthBinding
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
+import com.musicdistribution.streamingservice.util.InternetUtils
 
 class AuthActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.auth
+package com.musicdistribution.streamingservice.ui.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.firebase.auth.FirebaseAuthDB
-import com.musicdistribution.albumdistribution.databinding.FragmentRegistrationBinding
-import com.musicdistribution.albumdistribution.util.ValidationUtils
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.data.firebase.auth.FirebaseAuthDB
+import com.musicdistribution.streamingservice.databinding.FragmentRegistrationBinding
+import com.musicdistribution.streamingservice.util.ValidationUtils
 
 
 class RegistrationFragment : Fragment() {

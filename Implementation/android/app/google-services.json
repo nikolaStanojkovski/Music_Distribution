@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:972854535578:android:5cc4089ce3ec60d788c623",
         "android_client_info": {
-          "package_name": "com.musicdistribution.albumdistribution"
+          "package_name": "com.musicdistribution.streamingservice"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "972854535578-tngks7vkaj5a9hgs4te67ec0dceq0qrn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.musicdistribution.albumdistribution",
+            "package_name": "com.musicdistribution.streamingservice",
             "certificate_hash": "c22fc1c5b06e6ad4e2609386232ab57a484b7264"
           }
         },

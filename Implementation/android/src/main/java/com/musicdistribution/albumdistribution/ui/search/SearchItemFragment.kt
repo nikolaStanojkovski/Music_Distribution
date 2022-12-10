@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.search
+package com.musicdistribution.streamingservice.ui.search
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,9 +10,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.data.GenreData
-import com.musicdistribution.albumdistribution.model.SearchItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.data.GenreData
+import com.musicdistribution.streamingservice.model.SearchItem
 
 class SearchItemFragment : Fragment() {
 

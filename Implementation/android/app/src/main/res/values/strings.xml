@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Album Distribution</string>
+    <string name="app_name">Music Distribution</string>
 
     <!-- Strings related to authentication -->
     <string name="title_activity_auth">AuthActivity</string>
     <string name="registration_fragment_label">Create account</string>
-    <string name="button_sign_up">Sign up free</string>
+    <string name="button_sign_up">Sign Up</string>
     <string name="button_logout">Sign Out</string>
-    <string name="button_log_in">Log In</string>
+    <string name="button_log_in">Sign In</string>
     <string name="registration_title">Create Account</string>
     <string name="login_title">Sign into your account</string>
     <string name="login_email">Enter your username</string>
@@ -14,8 +14,11 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="user_creator">Creator</string>
     <string name="user_listener">Listener</string>
-    <string name="hint_text_username">Use your first and last name comma separated as a username.</string>
+    <string name="hint_text_username">Please enter one of the supported e-mail domains</string>
     <string name="note_oauth_login">Available only for listeners</string>
+    <string name="logo_description">The logo image for the application</string>
+    <string name="password_hint">Enter at least 6 characters</string>
+    <string name="username_hint">eg. `test.example@yahoo.com`</string>
 
     <!-- Strings related to home -->
     <string name="button_follow">Follow</string>
@@ -25,6 +28,7 @@
     <string name="artist_default_info">Has 0 followers</string>
     <string name="exit_dialog">Exit</string>
     <string name="dot_text">⚫</string>
+    <string name="floating_button_description">Button used to display an e-mail action</string>
 
     <!-- Strings related to publish/create -->
     <string name="song_create_title">Publish a Song</string>

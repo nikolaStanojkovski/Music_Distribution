@@ -1,8 +1,8 @@
-package com.musicdistribution.albumdistribution.data
+package com.musicdistribution.streamingservice.data
 
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.model.Category
-import com.musicdistribution.albumdistribution.model.CategoryItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.model.Category
+import com.musicdistribution.streamingservice.model.CategoryItem
 
 class CategoryData {
     companion object {

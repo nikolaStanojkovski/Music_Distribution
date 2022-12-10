@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.HomeFragment"
+        android:name="streamingservice.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.search.SearchFragment"
+        android:name="streamingservice.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListenerFragment"
+        android:name="streamingservice.ui.profile.ProfileListenerFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile_listener" >
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragmentArtist"
-        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileArtistFragment"
+        android:name="streamingservice.ui.profile.ProfileArtistFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile_artist" >
         <action
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchItemFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.search.SearchItemFragment"
+        android:name="streamingservice.ui.search.SearchItemFragment"
         android:label="fragment_search_item"
         tools:layout="@layout/fragment_search_item" >
         <action
@@ -76,7 +76,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.item.AlbumFragment"
+        android:name="streamingservice.ui.home.item.AlbumFragment"
         android:label="fragment_album"
         tools:layout="@layout/fragment_album" >
         <action
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/artistFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.item.ArtistFragment"
+        android:name="streamingservice.ui.home.item.ArtistFragment"
         android:label="fragment_artist"
         tools:layout="@layout/fragment_artist" >
         <action
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/songFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.item.SongFragment"
+        android:name="streamingservice.ui.home.item.SongFragment"
         android:label="fragment_song"
         tools:layout="@layout/fragment_song" >
         <action
@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/publishSongFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.publish.PublishSongFragment"
+        android:name="streamingservice.ui.home.publish.PublishSongFragment"
         android:label="fragment_create"
         tools:layout="@layout/fragment_publish_song" >
         <action
@@ -121,7 +121,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileListFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.profile.ProfileListFragment"
+        android:name="streamingservice.ui.profile.ProfileListFragment"
         android:label="fragment_profile_list"
         tools:layout="@layout/fragment_profile_list" >
         <action
@@ -139,12 +139,12 @@
     </fragment>
     <fragment
         android:id="@+id/publishAlbumFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.publish.PublishAlbumFragment"
+        android:name="streamingservice.ui.home.publish.PublishAlbumFragment"
         android:label="fragment_publish_album"
         tools:layout="@layout/fragment_publish_album" />
     <fragment
         android:id="@+id/raiseTierFragment"
-        android:name="com.musicdistribution.albumdistribution.ui.home.publish.RaiseTierFragment"
+        android:name="streamingservice.ui.home.publish.RaiseTierFragment"
         android:label="fragment_raise_tier"
         tools:layout="@layout/fragment_raise_tier" />
 </navigation>

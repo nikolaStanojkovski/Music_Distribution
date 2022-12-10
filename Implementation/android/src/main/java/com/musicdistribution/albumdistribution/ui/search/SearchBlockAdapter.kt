@@ -1,4 +1,4 @@
-package com.musicdistribution.albumdistribution.ui.search
+package com.musicdistribution.streamingservice.ui.search
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.albumdistribution.R
-import com.musicdistribution.albumdistribution.model.GenreItem
+import com.musicdistribution.streamingservice.R
+import com.musicdistribution.streamingservice.model.GenreItem
 
 class SearchBlockAdapter(genreItemsList: MutableList<GenreItem>) :
     RecyclerView.Adapter<SearchBlockAdapter.ViewHolder>() {
