@@ -1,8 +1,9 @@
 export const API_BASE_URL = 'http://localhost:8082/api';
 
-export const CHECKOUT_SUCCESS = '/checkout/success';
+export const CHECKOUT = '/checkout';
 
 export const DEFAULT = '/';
+export const HOME = '/home';
 export const RESOURCE = '/resource';
 export const STREAM = '/stream';
 export const RESOURCE_STREAM =`${RESOURCE}${STREAM}`;

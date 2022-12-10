@@ -3,6 +3,9 @@ import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import React from "react";
 import SearchParamUtil from "../../../util/searchParamUtil";
 import {MP3, PNG} from "../../../constants/extension";
+import {toast} from "react-toastify";
+import {SONG_AUDIO_PLAY_FAILED} from "../../../constants/exception";
+import {STOP_BUTTON} from "../../../constants/screen";
 
 const useSongs = (props) => {
 
@@ -17,26 +20,28 @@ const useSongs = (props) => {
 
     React.useEffect(() => {
         if (searchParams && searchParams.key && searchParams.value) {
-            props.filterSongs(0, searchParams.key, searchParams.value);
+            filterSongs(0, searchParams.key, searchParams.value);
             setFilter(true);
         } else {
-            props.loadSongs(0);
+            loadSongs(0);
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const playAudio = (songId, button) => {
-        if (button.classList.contains('bi-play')) {
+        if (button.classList.contains(STOP_BUTTON)) {
             if (audioPlayer) {
                 audioPlayer.pause();
             }
             const audio = new Audio(`${API_BASE_URL}${RESOURCE_STREAM}/${songId}.${MP3}`);
-            if(audio) {
-                audio.play().catch((error) => console.error(error));
-                updateAudioPlayer(audio);
-            }
+            audio.play().catch(() => toast.error(SONG_AUDIO_PLAY_FAILED));
+            updateAudioPlayer(audio);
         } else {
             if (audioPlayer) {
                 audioPlayer.pause();
+            } else {
+                toast.error(SONG_AUDIO_PLAY_FAILED);
             }
         }
     }
@@ -48,6 +53,8 @@ const useSongs = (props) => {
         const songId = ScreenElementsUtil.getTableRowId(button);
         if (songId) {
             playAudio(songId, button);
+        } else {
+            toast.error(SONG_AUDIO_PLAY_FAILED);
         }
     }
 

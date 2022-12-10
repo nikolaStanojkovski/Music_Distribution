@@ -46,7 +46,7 @@ const Songs = (props) => {
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
-                <img src={imageSource} alt={"Song cover image"}/>
+                <img src={imageSource} alt={"Song cover"}/>
             </Modal>
         </div>
     )

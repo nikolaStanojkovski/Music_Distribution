@@ -42,7 +42,9 @@ const AuthRepository = {
         if (localStorage.getItem(ACCESS_TOKEN)) {
             localStorage.removeItem(ACCESS_TOKEN);
             localStorage.removeItem(LOGGED_ARTIST);
+            return true;
         }
+        return false;
     },
 }
 

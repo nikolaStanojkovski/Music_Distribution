@@ -1,12 +1,10 @@
-import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
-import {DEFAULT} from "../../../constants/endpoint";
-import {PASSWORDS_DONT_MATCH} from "../../../constants/exception";
+import {ARTIST_REGISTER_FAILED, PASSWORDS_DONT_MATCH} from "../../../constants/exception";
+import ScreenElementsUtil from "../../../util/screenElementsUtil";
+import {toast} from "react-toastify";
 
 const useRegister = (props) => {
-
-    const History = useHistory();
 
     const emailDomains = props.emailDomains;
     const [profilePicture, updateProfilePicture] = React.useState(null);
@@ -28,7 +26,7 @@ const useRegister = (props) => {
         })
     }
 
-    const onFormSubmit = (e) => {
+    const onFormSubmit = async (e) => {
         e.preventDefault();
 
         const username = formData.username;
@@ -41,14 +39,19 @@ const useRegister = (props) => {
         const repeatPassword = formData.repeatPassword;
 
         if (password && repeatPassword && password !== repeatPassword) {
-            alert(PASSWORDS_DONT_MATCH);
+            toast.error(PASSWORDS_DONT_MATCH);
             return;
         }
 
-        if(username && firstName && lastName && artName && password && repeatPassword) {
-            props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
-                firstName, lastName, artName, password, repeatPassword);
-            History.push(DEFAULT);
+        if (username && firstName && lastName && artName && password && repeatPassword) {
+            if (await props.registerArtist(profilePicture, username, emailDomain, telephoneNumber,
+                firstName, lastName, artName, password, repeatPassword)) {
+                ScreenElementsUtil.reloadDomain();
+            } else {
+                toast.error(ARTIST_REGISTER_FAILED);
+            }
+        } else {
+            toast.error(ARTIST_REGISTER_FAILED);
         }
     }
 

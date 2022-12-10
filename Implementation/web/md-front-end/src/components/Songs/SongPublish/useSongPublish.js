@@ -2,11 +2,14 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {SONG_TIER} from "../../../constants/model";
-import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
+import {CHECKOUT} from "../../../constants/endpoint";
+import {toast} from "react-toastify";
+import {SONG_PUBLISHING_FAILED} from "../../../constants/exception";
+import PaymentUtil from "../../../util/paymentUtil";
 
 const useSongPublish = (props) => {
 
-    const History = useHistory();
+    const history = useHistory();
 
     const songs = props.songs;
     const tiers = props.tiers;
@@ -19,35 +22,40 @@ const useSongPublish = (props) => {
         songTier: EMPTY_STRING,
     });
 
-    const handleSubscriptionFee = (tier) => {
+    const handleSubscriptionFee = async (tier) => {
         if (tier && tier !== EMPTY_STRING) {
-            props.subscriptionFee(tier).then((data) => {
-                updateSubscriptionFee(data.data);
-            })
+            const calculatedFee = await PaymentUtil.getSubscriptionFeeWithoutCalculation(props, tier);
+            updateSubscriptionFee(calculatedFee);
         }
     }
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         updateFormData({
             ...formData,
             [e.target.name]: e.target.value.trim()
         });
 
         if (e.target.name === SONG_TIER) {
-            handleSubscriptionFee(e.target.value);
+            await handleSubscriptionFee(e.target.value);
         }
     }
 
-    const onFormSubmit = (e) => {
+    const onFormSubmit = async (e) => {
         e.preventDefault();
 
         const songId = formData.songId;
         const songTier = formData.songTier;
 
         if (songId && songTier && subscriptionFee && props.transactionFee) {
-            props.publishSong(cover, songId, songTier, subscriptionFee, props.transactionFee);
-
-            History.push(CHECKOUT_SUCCESS);
+            const result = await props.publishSong(cover, songId,
+                songTier, subscriptionFee,
+                props.transactionFee);
+            history.push({
+                pathname: CHECKOUT,
+                state: {result: result}
+            });
+        } else {
+            toast.error(SONG_PUBLISHING_FAILED);
         }
     }
 

@@ -14,14 +14,15 @@ const useAlbums = (props) => {
     const [showModal, setShowModal] = React.useState(false);
     const [imageSource, updateImageSource] = React.useState(undefined);
 
-    const fetchAlbums = () => {
+    React.useEffect(() => {
         if (searchParams && searchParams.key && searchParams.value) {
-            props.filterAlbums(0, searchParams.key, searchParams.value);
+            filterAlbums(0, searchParams.key, searchParams.value);
             setFilter(true);
         } else {
-            props.loadAlbums(0);
+            loadAlbums(0);
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const fetchAlbumCover = (e, id) => {
         if (ScreenElementsUtil.isClickableTableRow(e, id)) {
@@ -37,7 +38,6 @@ const useAlbums = (props) => {
         showModal,
         searchParams,
         setShowModal,
-        fetchAlbums,
         fetchAlbumCover,
         filterAlbums,
         loadAlbums

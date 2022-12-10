@@ -15,7 +15,6 @@ const Artists = (props) => {
         fetchArtistPicture,
     } = useArtists(props);
 
-
     return (
         <div className={"container mm-4 my-5"}>
             <div className={"row mb-5"}>
@@ -40,7 +39,7 @@ const Artists = (props) => {
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
-                <img src={profilePictureSource} alt={"Artist profile image"}/>
+                <img src={profilePictureSource} alt={"Artist profile"}/>
             </Modal>
         </div>
     )

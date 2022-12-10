@@ -45,7 +45,6 @@ const viewAlbums = (props) => {
                             <td>{(term[ALBUM_INFO]) ? term[ALBUM_INFO][PRODUCER_NAME] : EMPTY_STRING}</td>
                             <td>{(term[ALBUM_INFO]) ? term[ALBUM_INFO][COMPOSER_NAME] : EMPTY_STRING}</td>
                             <td className={"table-cell-clickable"}>
-
                                 <Link to={`${SONGS}?${ALBUM_ID}=${term.id}`}
                                       className={`btn btn-outline-secondary btn-block bi bi-list`}>
                                 </Link>

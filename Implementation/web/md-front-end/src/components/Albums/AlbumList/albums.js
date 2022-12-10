@@ -14,15 +14,10 @@ const Albums = (props) => {
         showModal,
         searchParams,
         setShowModal,
-        fetchAlbums,
         fetchAlbumCover,
         filterAlbums,
         loadAlbums
     } = useAlbums(props);
-
-    React.useEffect(() => {
-        fetchAlbums();
-    }, []);
 
     return (
         <div className={"container mm-4 my-5"}>
@@ -50,7 +45,7 @@ const Albums = (props) => {
                    size="lg"
                    aria-labelledby="contained-modal-title-vcenter"
                    centered>
-                <img src={imageSource} alt={"Album cover image"}/>
+                <img src={imageSource} alt={"Album cover"}/>
             </Modal>
         </div>
     )

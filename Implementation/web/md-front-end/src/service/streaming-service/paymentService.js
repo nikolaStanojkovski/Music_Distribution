@@ -1,6 +1,8 @@
 import React from "react";
 import ArtistRepository from "../../repository/streaming-service/artistRepository";
 import PaymentRepository from "../../repository/streaming-service/paymentRepository";
+import {toast} from "react-toastify";
+import {TRANSACTION_FEE_FETCH_FAILED} from "../../constants/exception";
 
 const usePaymentService = () => {
 
@@ -12,8 +14,11 @@ const usePaymentService = () => {
     const getTransactionFee = () => {
         if (ArtistRepository.fetchArtistLocal()) {
             const locale = navigator.language;
-            PaymentRepository.getTransactionFee(locale).then((data) => {
-                setTransactionFee(data.data);
+            PaymentRepository.getTransactionFee(locale)
+                .then((data) => {
+                    setTransactionFee(data.data);
+                }).catch(() => {
+                toast.error(TRANSACTION_FEE_FETCH_FAILED);
             });
         }
     }

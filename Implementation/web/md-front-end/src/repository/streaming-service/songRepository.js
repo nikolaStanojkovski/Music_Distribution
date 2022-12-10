@@ -24,7 +24,7 @@ const SongRepository = {
         return axios.get(`${RESOURCE}${SONGS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
     },
     filterSongs: (pageNumber, key, value) => {
-        return axios.get(`${RESOURCE}${SONGS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}}`)
+        return axios.get(`${RESOURCE}${SONGS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`)
     },
 
     fetchSong: (id) => {

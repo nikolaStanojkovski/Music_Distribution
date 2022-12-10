@@ -1,12 +1,12 @@
-import {useHistory} from "react-router-dom";
 import React from "react";
 import StringUtil from "../../../util/stringUtil";
 import {EMPTY_STRING} from "../../../constants/alphabet";
-import {DEFAULT} from "../../../constants/endpoint";
+import {toast} from "react-toastify";
+import {SONG_AUDIO_READ_FAILED, SONG_CREATION_FAILED} from "../../../constants/exception";
+import {AUDIO_ELEMENT, DURATION_CHANGE_EVENT} from "../../../constants/screen";
+import ScreenElementsUtil from "../../../util/screenElementsUtil";
 
 const useSongCreate = (props) => {
-
-    const History = useHistory();
 
     const genres = props.genres;
     const selectedArtist = props.selectedArtist;
@@ -32,12 +32,12 @@ const useSongCreate = (props) => {
 
     const handleUpload = (file) => {
         const reader = new FileReader();
-        const audio = document.createElement('audio');
+        const audio = document.createElement(AUDIO_ELEMENT);
         reader.onload = function (e) {
             const result = e.target.result;
             if (result) {
                 audio.src = result.toString();
-                audio.addEventListener('durationchange', function () {
+                audio.addEventListener(DURATION_CHANGE_EVENT, function () {
                     const duration = audio.duration;
                     if (duration) {
                         const lengthInSeconds = parseInt(audio.duration.toString());
@@ -45,20 +45,27 @@ const useSongCreate = (props) => {
                         updateLengthInSeconds(lengthInSeconds);
                     }
                 }, false);
+            } else {
+                toast.error(SONG_AUDIO_READ_FAILED);
             }
         };
         reader.readAsDataURL(file);
     }
 
-    const onFormSubmit = (e) => {
+    const onFormSubmit = async (e) => {
         e.preventDefault();
 
         const songName = formData.songName;
         const songGenre = formData.songGenre;
 
-        if(songName && songGenre && lengthInSeconds && songGenre) {
-            props.createSong(song, songName, lengthInSeconds, songGenre);
-            History.push(DEFAULT);
+        if (songName && songGenre && lengthInSeconds && songGenre) {
+            if (await props.createSong(song, songName, lengthInSeconds, songGenre)) {
+                ScreenElementsUtil.reloadDomain();
+            } else {
+                toast.error(SONG_CREATION_FAILED);
+            }
+        } else {
+            toast.error(SONG_CREATION_FAILED);
         }
     }
 

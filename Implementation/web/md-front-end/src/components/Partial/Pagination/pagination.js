@@ -1,4 +1,3 @@
-import React from 'react';
 import usePagination from "./usePagination";
 import viewPagination from "./viewPagination";
 

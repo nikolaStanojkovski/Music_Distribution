@@ -59,3 +59,30 @@
     color: white !important;
     background-color: #161c2d !important;
 }
+
+.table-item-button {
+    border-radius: 50%;
+    border-width: thin;
+    transition: all 0.2s ease;
+}
+
+.table-item-button:hover {
+    background-color: black;
+    border-color: white;
+    color: white;
+}
+
+.auth-form {
+    background-color: #dedede;
+}
+
+.clickable {
+    cursor: pointer;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.clickable:hover {
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}

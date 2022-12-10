@@ -2,10 +2,13 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {ALBUM_TIER} from "../../../constants/model";
-import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
+import {CHECKOUT} from "../../../constants/endpoint";
+import {toast} from "react-toastify";
+import {ALBUM_PUBLISHING_FAILED} from "../../../constants/exception";
+import PaymentUtil from "../../../util/paymentUtil";
 
 const useAlbumPublish = (props) => {
-    const History = useHistory();
+    const history = useHistory();
 
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const genres = props.genres;
@@ -24,24 +27,23 @@ const useAlbumPublish = (props) => {
         composerName: EMPTY_STRING
     });
 
-    const handleSubscriptionFee = (tier) => {
-        props.subscriptionFee(tier).then((data) => {
-            updateSubscriptionFee(data.data);
-        });
+    const handleSubscriptionFee = async (tier) => {
+        const subscriptionFee = await PaymentUtil.getSubscriptionFeeWithoutCalculation(props, tier);
+        updateSubscriptionFee(subscriptionFee);
     }
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         updateFormData({
             ...formData,
             [e.target.name]: e.target.value.trim()
         });
 
         if (e.target.name === ALBUM_TIER) {
-            handleSubscriptionFee(e.target.value);
+            await handleSubscriptionFee(e.target.value);
         }
     }
 
-    const onFormSubmit = (e) => {
+    const onFormSubmit = async (e) => {
         e.preventDefault();
 
         const albumName = formData.albumName;
@@ -51,13 +53,17 @@ const useAlbumPublish = (props) => {
         if (songIdList && songIdList.length > 0
             && albumName && albumGenre && albumTier
             && subscriptionFee && props.transactionFee) {
-            props.publishAlbum(cover, songIdList.map(song => song.value)
+            const result = await props.publishAlbum(cover, songIdList.map(song => song.value)
                     .filter(term => term !== undefined),
                 albumName, albumGenre, albumTier,
                 subscriptionFee, props.transactionFee,
                 formData.artistName, formData.producerName, formData.composerName);
-
-            History.push(CHECKOUT_SUCCESS);
+            history.push({
+                pathname: CHECKOUT,
+                state: {result: result}
+            });
+        } else {
+            toast.error(ALBUM_PUBLISHING_FAILED);
         }
     }
 

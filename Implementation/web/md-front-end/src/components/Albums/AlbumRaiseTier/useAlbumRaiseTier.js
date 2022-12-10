@@ -2,11 +2,18 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {PAYMENT_INFO, TIER} from "../../../constants/model";
-import {CHECKOUT_SUCCESS} from "../../../constants/endpoint";
+import {CHECKOUT} from "../../../constants/endpoint";
+import {toast} from "react-toastify";
+import {
+    ALBUM_HIGHER_TIER_WARNING,
+    ALBUM_RAISE_TIER_FAILED,
+    SUBSCRIPTION_FEE_FETCH_FAILED
+} from "../../../constants/exception";
+import PaymentUtil from "../../../util/paymentUtil";
 
 const useAlbumRaiseTier = (props) => {
 
-    const History = useHistory();
+    const history = useHistory();
 
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const albums = props.albums;
@@ -15,62 +22,53 @@ const useAlbumRaiseTier = (props) => {
     const [albumTier, updateAlbumTier] = React.useState(EMPTY_STRING);
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});
 
-    const handleCalculatedFee = (existingSubscriptionFee, currentSubscriptionFee,
-                                 tier, albumTier) => {
-        if (existingSubscriptionFee.amount > currentSubscriptionFee.amount) {
-            updateAlbumTier(albumTier);
-            return {amount: 0.0, currency: existingSubscriptionFee.currency};
-        } else {
-            updateAlbumTier(tier);
-            return {
-                amount: currentSubscriptionFee.amount - existingSubscriptionFee.amount,
-                currency: existingSubscriptionFee.currency
-            };
-        }
-    }
-
-    const handleSubscriptionFee = (tier, albumTier) => {
-        props.subscriptionFee(tier).then((data) => {
-            const currentSubscriptionFee = data.data;
-            props.subscriptionFee(albumTier).then((data) => {
-                const existingSubscriptionFee = data.data;
-
-                const calculatedFee = handleCalculatedFee(existingSubscriptionFee,
-                    currentSubscriptionFee, tier, albumTier);
-                updateSubscriptionFee(calculatedFee);
-            });
-        });
-    }
-
-    const handleAlbumChange = (e) => {
+    const handleAlbumChange = async (e) => {
         const albumId = e.target.value;
         if (albumId && props.albums && props.albums.content) {
             const filteredAlbums = props.albums.content.filter(album => album.id === albumId);
             if (filteredAlbums && filteredAlbums.length > 0) {
                 updateAlbum(filteredAlbums[0]);
-                handleAlbumTier(albumTier);
+                await handleAlbumTier(albumTier);
             }
         }
     }
 
-    const handleAlbumTier = (tier) => {
+    const handleAlbumTier = async (tier) => {
         const paymentInfo = album[PAYMENT_INFO];
         if (paymentInfo) {
             const albumTier = paymentInfo[TIER];
             if (tier && paymentInfo) {
-                handleSubscriptionFee(tier, albumTier);
+                const subscriptionFee = await PaymentUtil
+                    .getSubscriptionFeeWithCalculation(props,
+                        tier, albumTier,
+                        updateAlbumTier,
+                        ALBUM_HIGHER_TIER_WARNING);
+                updateSubscriptionFee(subscriptionFee);
             }
         }
     }
 
-    const onFormSubmit = (e) => {
+    const onFormSubmit = async (e) => {
         e.preventDefault();
+
+        if (subscriptionFee.amount === 0) {
+            toast.error(SUBSCRIPTION_FEE_FETCH_FAILED);
+            return;
+        }
 
         const albumId = album.id;
         if (albumId && albumTier && subscriptionFee &&
             subscriptionFee.amount > 0 && props.transactionFee) {
-            props.raiseTierAlbum(albumId, albumTier, subscriptionFee, props.transactionFee);
-            History.push(CHECKOUT_SUCCESS);
+            const result = await props.raiseTierAlbum(albumId,
+                albumTier,
+                subscriptionFee,
+                props.transactionFee);
+            history.push({
+                pathname: CHECKOUT,
+                state: {result: result}
+            });
+        } else {
+            toast.error(ALBUM_RAISE_TIER_FAILED);
         }
     }
 

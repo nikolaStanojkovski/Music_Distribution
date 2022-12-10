@@ -1,6 +1,8 @@
 import ArtistRepository from "../../../repository/streaming-service/artistRepository";
 import TierRepository from "../../../repository/streaming-service/enum/tierRepository";
 import React from "react";
+import {toast} from "react-toastify";
+import {TIER_FETCH_FAILED} from "../../../constants/exception";
 
 const useTierService = () => {
 
@@ -14,7 +16,9 @@ const useTierService = () => {
             TierRepository.fetchTiers()
                 .then((data) => {
                     setTiers(data.data);
-                });
+                }).catch(() => {
+                toast.error(TIER_FETCH_FAILED);
+            });
         }
     }
 

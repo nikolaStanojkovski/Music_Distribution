@@ -27,7 +27,7 @@ const AuthHeader = (props) => {
                     <div className="collapse navbar-collapse" id={"navbarSupportedContent"}>
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item dropdown active">
-                                <a className="nav-link dropdown-toggle" href={"#"}
+                                <a className="nav-link dropdown-toggle" href={"#navigation"}
                                    id={"albumsToggleDropdown"}>Albums</a>
                                 <div className="dropdown-menu" aria-labelledby="albumsToggleDropdown">
                                     <Link to={ALBUMS} className="dropdown-item">View</Link>
@@ -38,7 +38,8 @@ const AuthHeader = (props) => {
                                 </div>
                             </li>
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href={"#"} id={"songsToggleDropdown"}>Songs</a>
+                                <a className="nav-link dropdown-toggle" href={"#navigation"}
+                                   id={"songsToggleDropdown"}>Songs</a>
                                 <div className="dropdown-menu" aria-labelledby="songsToggleDropdown">
                                     <Link to={SONGS} className="dropdown-item">View</Link>
                                     <div className="dropdown-divider"/>
