@@ -3,9 +3,6 @@ package com.musicdistribution.streamingservice.ui.profile
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.model.retrofit.AlbumRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.ArtistRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.SongRetrofit
 
 class ProfileFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -13,12 +10,12 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
 
 //    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
 
-    private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
-    private var artistsLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
-    private var publishedSongsLiveData: MutableLiveData<MutableList<SongRetrofit?>> =
-        MutableLiveData()
-    private var publishedAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit?>> =
-        MutableLiveData()
+//    private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
+//    private var artistsLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
+//    private var publishedSongsLiveData: MutableLiveData<MutableList<SongRetrofit?>> =
+//        MutableLiveData()
+//    private var publishedAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit?>> =
+//        MutableLiveData()
 
     fun updateUserInfo(firstName: String, lastName: String) {
 //        updateFirebaseDb(firstName, lastName)
@@ -133,19 +130,19 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
 //    }
 
 
-    fun getSongsLiveData(): MutableLiveData<SongRetrofit?> {
-        return songsLiveData
-    }
-
-    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit?> {
-        return artistsLiveData
-    }
-
-    fun getPublishedSongsLiveData(): MutableLiveData<MutableList<SongRetrofit?>> {
-        return publishedSongsLiveData
-    }
-
-    fun getPublishedAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit?>> {
-        return publishedAlbumsLiveData
-    }
+//    fun getSongsLiveData(): MutableLiveData<SongRetrofit?> {
+//        return songsLiveData
+//    }
+//
+//    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit?> {
+//        return artistsLiveData
+//    }
+//
+//    fun getPublishedSongsLiveData(): MutableLiveData<MutableList<SongRetrofit?>> {
+//        return publishedSongsLiveData
+//    }
+//
+//    fun getPublishedAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit?>> {
+//        return publishedAlbumsLiveData
+//    }
 }

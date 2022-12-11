@@ -1,6 +1,7 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
 import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.constant.FileConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Album;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Artist;
@@ -12,11 +13,10 @@ import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.repository.core.*;
 import com.musicdistribution.streamingservice.domain.service.IFileSystemStorage;
-import com.musicdistribution.streamingservice.domain.valueobject.core.AlbumInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
+import com.musicdistribution.streamingservice.domain.valueobject.core.AlbumInfo;
 import com.musicdistribution.streamingservice.service.AlbumService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,7 +51,7 @@ public class AlbumServiceImpl implements AlbumService {
      * Method used for fetching a page of albums from the database.
      *
      * @param pageable - the wrapper object containing pagination data.
-     * @return a page of the albums.
+     * @return a page of the albums, sorted by their tier.
      */
     @Override
     public Page<Album> findAll(Pageable pageable) {

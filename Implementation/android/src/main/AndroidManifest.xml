@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AlbumDistribution">
+        android:theme="@style/Theme.MusicDistribution">
 
 
         <activity
@@ -24,12 +24,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.AlbumDistribution.NoActionBar" />
+            android:theme="@style/Theme.MusicDistribution.NoActionBar" />
         <activity
             android:name=".ui.auth.AuthActivity"
             android:exported="false"
             android:label="@string/title_activity_auth"
-            android:theme="@style/Theme.AlbumDistribution.NoActionBar" />
+            android:theme="@style/Theme.MusicDistribution.NoActionBar" />
         <activity
             android:name=".ui.SplashScreenActivity"
             android:exported="true">

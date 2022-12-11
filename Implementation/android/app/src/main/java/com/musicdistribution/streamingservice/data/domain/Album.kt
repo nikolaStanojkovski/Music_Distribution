@@ -2,6 +2,7 @@ package com.musicdistribution.streamingservice.data.domain
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.musicdistribution.streamingservice.model.enums.Genre
 
 @Entity
 data class Album(

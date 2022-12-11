@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.musicdistribution.streamingservice.constants.ApiConstants
 import com.musicdistribution.streamingservice.constants.EntityConstants
 import com.musicdistribution.streamingservice.data.SessionService
-import com.musicdistribution.streamingservice.model.retrofit.ListenerJwt
+import com.musicdistribution.streamingservice.model.retrofit.response.ListenerJwt
 import com.musicdistribution.streamingservice.ui.HomeActivity
 import streamingservice.R
 import streamingservice.databinding.FragmentLoginBinding

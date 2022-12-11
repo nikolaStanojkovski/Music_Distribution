@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.data
 
-import com.musicdistribution.streamingservice.model.Genre
-import com.musicdistribution.streamingservice.model.GenreItem
+import com.musicdistribution.streamingservice.model.enums.Genre
+import com.musicdistribution.streamingservice.model.search.GenreItem
 import streamingservice.R
 
 object GenreData {

@@ -3,39 +3,34 @@ package com.musicdistribution.streamingservice.util
 import android.app.Activity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.musicdistribution.streamingservice.constants.MessageConstants
 import java.util.*
 
-class LocalizationUtils {
-    companion object {
-        fun getStringForGreeting(): String {
-            val time = Calendar.getInstance().time
+@Suppress(MessageConstants.DEPRECATION)
+object LocalizationUtils {
 
-            when (time.hours) {
-                in 0..5 -> {
-                    return "Good night"
-                }
-                in 6..11 -> {
-                    return "Good morning"
-                }
-                in 12..17 -> {
-                    return "Good afternoon"
-                }
-                in 18..24 -> {
-                    return "Good evening"
-                }
+    fun getStringForGreeting(): String {
+        val time = Calendar.getInstance().time
+
+        when (time.hours) {
+            in 0..5 -> {
+                return MessageConstants.GOOD_NIGHT
             }
-
-            return "Hello there"
+            in 6..11 -> {
+                return MessageConstants.GOOD_MORNING
+            }
+            in 12..17 -> {
+                return MessageConstants.GOOD_AFTERNOON
+            }
+            in 18..24 -> {
+                return MessageConstants.GOOD_EVENING
+            }
         }
 
-        fun getStringForTime(): String {
-            val time = Calendar.getInstance().time
+        return MessageConstants.HELLO_THERE
+    }
 
-            return "${if (time.hours >= 10) time.hours else "0" + time.hours}:${if (time.minutes >= 10) time.minutes else "0" + time.minutes}"
-        }
-
-        fun getLocationProvider(context: Activity): FusedLocationProviderClient {
-            return LocationServices.getFusedLocationProviderClient(context)
-        }
+    fun getLocationProvider(context: Activity): FusedLocationProviderClient {
+        return LocationServices.getFusedLocationProviderClient(context)
     }
 }

@@ -17,19 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.AlbumDistribution">
+        android:theme="@style/Theme.MusicDistribution">
 
         <activity
             android:name="com.musicdistribution.streamingservice.ui.HomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.AlbumDistribution.NoActionBar" />
+            android:theme="@style/Theme.MusicDistribution.NoActionBar" />
         <activity
             android:name="com.musicdistribution.streamingservice.ui.auth.AuthActivity"
             android:exported="false"
             android:label="@string/title_activity_auth"
-            android:theme="@style/Theme.AlbumDistribution.NoActionBar" />
+            android:theme="@style/Theme.MusicDistribution.NoActionBar" />
         <activity
             android:name="com.musicdistribution.streamingservice.ui.SplashScreenActivity"
             android:exported="true">

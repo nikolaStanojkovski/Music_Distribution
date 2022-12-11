@@ -1,6 +1,6 @@
 import StringUtil from "../../../util/stringUtil";
 import React from "react";
-import {DIAMOND, PAYMENT_INFO, TIER} from "../../../constants/model";
+import {DIAMOND, NONE, PAYMENT_INFO, TIER} from "../../../constants/model";
 
 const viewAlbumRaiseTier = (props) => {
     return (
@@ -28,7 +28,9 @@ const viewAlbumRaiseTier = (props) => {
                     <option className={"text-muted"} value={"-- Choose tier --"} disabled={true}>
                         -- Choose tier --
                     </option>
-                    {(props.tiers) ? props.tiers.map((term) => {
+                    {(props.tiers) ? props.tiers
+                        .filter(term => term !== NONE)
+                        .map((term) => {
                             return <option key={term} value={term}>{term}</option>;
                         }
                     ) : undefined}

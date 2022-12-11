@@ -3,10 +3,7 @@ package com.musicdistribution.streamingservice.ui.search
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.model.Genre
-import com.musicdistribution.streamingservice.model.retrofit.AlbumRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.ArtistRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.SongRetrofit
+import com.musicdistribution.streamingservice.model.enums.Genre
 
 class SearchFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -14,16 +11,16 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
 
 //    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
 
-    private var albumsGenreLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> =
-        MutableLiveData()
-    private var songsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
-    private var albumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> = MutableLiveData()
-    private var artistsLiveData: MutableLiveData<MutableList<ArtistRetrofit>?> = MutableLiveData()
+//    private var albumsGenreLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> =
+//        MutableLiveData()
+//    private var songsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
+//    private var albumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> = MutableLiveData()
+//    private var artistsLiveData: MutableLiveData<MutableList<ArtistRetrofit>?> = MutableLiveData()
 
     fun fetchSearchData(searchTerm: String) {
-        artistsLiveData = MutableLiveData()
-        albumsLiveData = MutableLiveData()
-        artistsLiveData = MutableLiveData()
+//        artistsLiveData = MutableLiveData()
+//        albumsLiveData = MutableLiveData()
+//        artistsLiveData = MutableLiveData()
 //        streamingServiceApi.searchArtists(searchTerm).enqueue(object :
 //            Callback<ArrayList<ArtistRetrofit>> {
 //            override fun onResponse(
@@ -87,7 +84,7 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun fetchGenreData(genre: Genre) {
-        albumsGenreLiveData = MutableLiveData()
+//        albumsGenreLiveData = MutableLiveData()
 //        streamingServiceApi.getAlbumsGenre(genre.toString()).enqueue(object :
 //            Callback<ArrayList<AlbumRetrofit>> {
 //            override fun onResponse(
@@ -111,19 +108,19 @@ class SearchFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
 
-    fun getAlbumsGenreLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
-        return albumsGenreLiveData
-    }
-
-    fun getArtistsLiveData(): MutableLiveData<MutableList<ArtistRetrofit>?> {
-        return artistsLiveData
-    }
-
-    fun getAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
-        return albumsLiveData
-    }
-
-    fun getSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
-        return songsLiveData
-    }
+//    fun getAlbumsGenreLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
+//        return albumsGenreLiveData
+//    }
+//
+//    fun getArtistsLiveData(): MutableLiveData<MutableList<ArtistRetrofit>?> {
+//        return artistsLiveData
+//    }
+//
+//    fun getAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
+//        return albumsLiveData
+//    }
+//
+//    fun getSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
+//        return songsLiveData
+//    }
 }

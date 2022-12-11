@@ -26,7 +26,7 @@ const viewCheckout = (props) => {
                                  hidden={!props.resultWatermark}>
                                 <div className="o-circle__sign"/>
                             </div>
-                            <div className="o-circle c-container__circle o-circle__sign--failure"
+                            <div className="o-circle c-container__circle o-circle__sign--failure clickable"
                                  hidden={props.resultWatermark}>
                                 <div className="o-circle__sign"/>
                             </div>

@@ -51,7 +51,6 @@ const usePagination = (props) => {
     }, [pageNumber, totalPages, changePage]);
 
 
-
     return {activePage, items, totalPages, changePage};
 }
 

@@ -12,7 +12,8 @@ const Artists = (props) => {
         showModal,
         profilePictureSource,
         setShowModal,
-        fetchArtistPicture,
+        loadArtists,
+        fetchArtistPicture
     } = useArtists(props);
 
     return (
@@ -28,12 +29,10 @@ const Artists = (props) => {
                     viewArtists({artists, fetchArtistPicture})
                 }
             </div>
-            {(props.artists && props.artists[PAGEABLE]
-                && props.artists[PAGEABLE].pageNumber
-                && props.artists[TOTAL_PAGES])
-                ? <Pagination changePage={(pageNumber) => props.loadArtists(pageNumber)}
-                              totalPages={props.artists[TOTAL_PAGES]}
-                              pageNumber={props.artists[PAGEABLE].pageNumber}/>
+            {(artists && artists[PAGEABLE] && artists[TOTAL_PAGES])
+                ? <Pagination changePage={(pageNumber) => loadArtists(pageNumber)}
+                              totalPages={artists[TOTAL_PAGES]}
+                              pageNumber={artists[PAGEABLE].pageNumber}/>
                 : undefined}
             <Modal show={showModal} onHide={() => setShowModal(false)}
                    size="lg"

@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.streamingservice.model.CategoryItemType
+import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.ui.HomeActivity
 import com.musicdistribution.streamingservice.util.ValidationUtils
 import streamingservice.R
@@ -46,44 +46,42 @@ class SongFragment : Fragment() {
         fillData(selectedSongId!!, categoryItemType)
         fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
             findNavController().navigate(R.id.action_songFragment_to_homeFragment)
-            homeItemFragmentViewModel.clear()
+//            homeItemFragmentViewModel.clear()
         }
     }
 
     private fun fillData(selectedSongId: String, categoryItemType: CategoryItemType?) {
-        if (categoryItemType != null && categoryItemType == CategoryItemType.PUBLISHED_SONG) {
-            fragmentView.findViewById<ImageView>(R.id.btnLikeSong).visibility = View.GONE
-            val unpublishButton = fragmentView.findViewById<Button>(R.id.btnUnPublishSong)
-            unpublishButton.visibility = View.VISIBLE
-            unpublishButton.setOnClickListener {
-                fillConfirmDialog(selectedSongId)
-            }
-        } else {
-            fragmentView.findViewById<Button>(R.id.btnUnPublishSong).visibility = View.GONE
-            fragmentView.findViewById<ImageView>(R.id.btnLikeSong).visibility = View.VISIBLE
+//        if (categoryItemType != null && categoryItemType == CategoryItemType.PUBLISHED_SONG) {
+//            fragmentView.findViewById<ImageView>(R.id.btnLikeSong).visibility = View.GONE
+//            val unpublishButton = fragmentView.findViewById<Button>(R.id.btnUnPublishSong)
+//            unpublishButton.visibility = View.VISIBLE
+//            unpublishButton.setOnClickListener {
+//                fillConfirmDialog(selectedSongId)
+//            }
+//        } else {
 //            fillLikeButton(fragmentView.findViewById(R.id.btnLikeSong), selectedSongId)
-        }
+//        }
 
-        homeItemFragmentViewModel.clear()
-        homeItemFragmentViewModel.fetchSongApi(selectedSongId)
-        homeItemFragmentViewModel.getSongsLiveData()
-            .observe(viewLifecycleOwner,
-                { song ->
-                    if (song != null) {
-                        fragmentView.findViewById<TextView>(R.id.txtSongHeading).text =
-                            if (song.isASingle) "Taken from" else "Taken from album"
-                        fragmentView.findViewById<TextView>(R.id.txtSongProperty).text =
-                            if (!song.isASingle) song.album!!.albumName else song.songName
-                        fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
-                            song.songName
-                        fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
-                            song.creator!!.artistPersonalInfo.fullName
-
-                        fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
-                            "Length: ${ValidationUtils.generateTimeString(song.songLength!!.lengthInSeconds)}"
-
-                        val imageControl =
-                            fragmentView.findViewById<ImageView>(R.id.imageSong)
+//        homeItemFragmentViewModel.clear()
+//        homeItemFragmentViewModel.fetchSongApi(selectedSongId)
+//        homeItemFragmentViewModel.getSongsLiveData()
+//            .observe(viewLifecycleOwner,
+//                { song ->
+//                    if (song != null) {
+//                        fragmentView.findViewById<TextView>(R.id.txtSongHeading).text =
+//                            if (song.isASingle) "Taken from" else "Taken from album"
+//                        fragmentView.findViewById<TextView>(R.id.txtSongProperty).text =
+//                            if (!song.isASingle) song.album!!.albumName else song.songName
+//                        fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
+//                            song.songName
+//                        fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
+//                            song.creator!!.artistPersonalInfo.fullName
+//
+//                        fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
+//                            "Length: ${ValidationUtils.generateTimeString(song.songLength!!.lengthInSeconds)}"
+//
+//                        val imageControl =
+//                            fragmentView.findViewById<ImageView>(R.id.imageSong)
 //                        val gsReference =
 //                            if (song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
 //                            else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
@@ -97,23 +95,8 @@ class SongFragment : Fragment() {
 //                                .placeholder(R.drawable.default_picture)
 //                                .into(imageControl!!)
 //                        }
-                    }
-                })
-    }
-
-    private fun fillConfirmDialog(selectedSongId: String) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Confirm Unpublish Song")
-        builder.setMessage("Are you sure you want to unpublish this song?")
-        builder.setPositiveButton("Confirm") { dialog, _ ->
-            dialog.dismiss()
-            homeItemFragmentViewModel.unPublishSong(selectedSongId)
-            navigateOut()
-        }
-        builder.setNegativeButton(
-            "Cancel"
-        ) { dialog, _ -> dialog.dismiss() }
-        builder.show()
+//                    }
+//                })
     }
 
 //    private fun fillLikeButton(btnLikeSong: ImageView?, selectedSongId: String) {

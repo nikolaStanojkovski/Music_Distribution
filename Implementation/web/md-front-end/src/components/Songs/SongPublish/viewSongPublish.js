@@ -1,5 +1,5 @@
 import React from "react";
-import {ALBUM, CREATOR, IS_PUBLISHED} from "../../../constants/model";
+import {ALBUM, CREATOR, IS_PUBLISHED, NONE} from "../../../constants/model";
 import StringUtil from "../../../util/stringUtil";
 
 const viewSongPublish = (props) => {
@@ -41,7 +41,9 @@ const viewSongPublish = (props) => {
                     <option className={"text-muted"} value={"-- Choose tier --"} disabled={true}>
                         -- Choose tier --
                     </option>
-                    {(props.tiers) ? props.tiers.map((term) => {
+                    {(props.tiers) ? props.tiers
+                        .filter(term => term !== NONE)
+                        .map((term) => {
                             return <option key={term} value={term}>{term}</option>;
                         }
                     ) : undefined}

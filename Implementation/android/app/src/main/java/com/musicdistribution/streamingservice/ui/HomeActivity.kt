@@ -12,16 +12,16 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.musicdistribution.streamingservice.constants.MessageConstants
 import com.musicdistribution.streamingservice.constants.NotificationConstants
+import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.ui.home.HomeFragmentViewModel
 import streamingservice.R
 
-@Suppress("deprecation")
+@Suppress(MessageConstants.DEPRECATION)
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var notificationManager: NotificationManager
@@ -35,7 +35,8 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navigationHostFragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navigationHostFragment) as NavHostFragment
         val navController = navHostFragment.navController
         bottomNavigationView.setupWithNavController(navController)
 

@@ -1,5 +1,5 @@
 import axios from "../../custom-axios/axiosStreamingService";
-import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../constants/pagination";
+import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DEFAULT_SORT_ORDER} from "../../constants/pagination";
 import {FILE, RESOURCE, SEARCH, SONGS, SONGS_CREATE, SONGS_PUBLISH, SONGS_RAISE_TIER} from "../../constants/endpoint";
 import {
     COVER,
@@ -13,7 +13,7 @@ import {
     SONG_NAME,
     SONG_REQUEST,
     SONG_TIER,
-    SONG_TRANSACTION_REQUEST,
+    SONG_TRANSACTION_REQUEST, SORT,
     SUBSCRIPTION_FEE,
     TRANSACTION_FEE
 } from "../../constants/model";
@@ -21,10 +21,10 @@ import {APPLICATION_JSON} from "../../constants/extension";
 
 const SongRepository = {
     fetchSongs: (pageNumber) => {
-        return axios.get(`${RESOURCE}${SONGS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
+        return axios.get(`${RESOURCE}${SONGS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
     },
     filterSongs: (pageNumber, key, value) => {
-        return axios.get(`${RESOURCE}${SONGS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`)
+        return axios.get(`${RESOURCE}${SONGS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`)
     },
 
     fetchSong: (id) => {

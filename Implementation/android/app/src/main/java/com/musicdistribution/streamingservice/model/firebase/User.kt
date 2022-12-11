@@ -1,6 +1,6 @@
 package com.musicdistribution.streamingservice.model.firebase
 
-import com.musicdistribution.streamingservice.model.Role
+import com.musicdistribution.streamingservice.model.enums.Role
 
 data class User(
     var name: String,

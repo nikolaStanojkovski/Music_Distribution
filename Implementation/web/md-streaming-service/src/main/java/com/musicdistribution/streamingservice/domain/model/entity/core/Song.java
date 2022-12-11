@@ -3,7 +3,9 @@ package com.musicdistribution.streamingservice.domain.model.entity.core;
 import com.musicdistribution.sharedkernel.domain.base.AbstractEntity;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Genre;
+import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
+import com.musicdistribution.streamingservice.constant.TransactionConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.core.SongLength;
@@ -87,6 +89,9 @@ public class Song extends AbstractEntity<SongId> implements Serializable {
 
         song.creator = artist;
         song.songLength = songLength;
+        song.paymentInfo = PaymentInfo.from(TransactionConstants.NO_FEE,
+                TransactionConstants.NO_FEE,
+                Tier.None);
 
         return song;
     }

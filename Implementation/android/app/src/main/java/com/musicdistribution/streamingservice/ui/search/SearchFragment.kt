@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.streamingservice.data.GenreData
-import com.musicdistribution.streamingservice.model.Genre
-import com.musicdistribution.streamingservice.util.listeners.GenreItemClickListener
+import com.musicdistribution.streamingservice.model.enums.Genre
+import com.musicdistribution.streamingservice.listeners.GenreItemClickListener
 import streamingservice.R
 
 class SearchFragment : Fragment(), GenreItemClickListener {

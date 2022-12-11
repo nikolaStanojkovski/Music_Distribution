@@ -1,5 +1,5 @@
 package com.musicdistribution.streamingservice.constants
 
 object EmailConstants {
-    const val COM = ".com"
+    const val COM = "${AlphabetConstants.DOT}com"
 }

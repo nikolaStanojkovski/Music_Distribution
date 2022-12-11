@@ -6,4 +6,5 @@ object AlphabetConstants {
     const val AT_SIGN = "@"
     const val ZERO = "0"
     const val COLON = ":"
+    const val COMMA = ","
 }

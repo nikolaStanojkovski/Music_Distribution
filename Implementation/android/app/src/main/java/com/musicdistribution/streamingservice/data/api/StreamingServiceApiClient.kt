@@ -1,12 +1,7 @@
 package com.musicdistribution.streamingservice.data.api
 
 import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.data.api.core.AuthServiceApi
-import com.musicdistribution.streamingservice.data.api.core.ListenerServiceApi
-import com.musicdistribution.streamingservice.data.api.core.NotificationServiceApi
-import com.musicdistribution.streamingservice.data.api.enums.EmailDomainServiceApi
-import com.musicdistribution.streamingservice.data.api.enums.GenreServiceApi
-import com.musicdistribution.streamingservice.data.api.enums.TierServiceApi
+import com.musicdistribution.streamingservice.data.api.core.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
@@ -17,34 +12,13 @@ class StreamingServiceApiClient {
 
     companion object {
 
-        private var emailDomainServiceApi: EmailDomainServiceApi? = null
-        private var genreServiceApi: GenreServiceApi? = null
-        private var tierServiceApi: TierServiceApi? = null
-
         private var authServiceApi: AuthServiceApi? = null
         private var listenerServiceApi: ListenerServiceApi? = null
         private var notificationServiceApi: NotificationServiceApi? = null
 
-        fun getEmailDomainService(): EmailDomainServiceApi {
-            if (emailDomainServiceApi == null) {
-                emailDomainServiceApi = buildServiceApi(EmailDomainServiceApi::class.java)
-            }
-            return emailDomainServiceApi!!
-        }
-
-        fun getGenreServiceApi(): GenreServiceApi {
-            if (genreServiceApi == null) {
-                genreServiceApi = buildServiceApi(GenreServiceApi::class.java)
-            }
-            return genreServiceApi!!
-        }
-
-        fun getTierServiceApi(): TierServiceApi {
-            if (tierServiceApi == null) {
-                tierServiceApi = buildServiceApi(TierServiceApi::class.java)
-            }
-            return tierServiceApi!!
-        }
+        private var artistServiceApi: ArtistServiceApi? = null
+        private var albumServiceApi: AlbumServiceApi? = null
+        private var songServiceApi: SongServiceApi? = null
 
         fun getAuthServiceApi(): AuthServiceApi {
             if (authServiceApi == null) {
@@ -65,6 +39,27 @@ class StreamingServiceApiClient {
                 notificationServiceApi = buildServiceApi(NotificationServiceApi::class.java)
             }
             return notificationServiceApi!!
+        }
+
+        fun getAlbumServiceApi(): AlbumServiceApi {
+            if (albumServiceApi == null) {
+                albumServiceApi = buildServiceApi(AlbumServiceApi::class.java)
+            }
+            return albumServiceApi!!
+        }
+
+        fun getArtistServiceApi(): ArtistServiceApi {
+            if (artistServiceApi == null) {
+                artistServiceApi = buildServiceApi(ArtistServiceApi::class.java)
+            }
+            return artistServiceApi!!
+        }
+
+        fun getSongServiceApi(): SongServiceApi {
+            if (songServiceApi == null) {
+                songServiceApi = buildServiceApi(SongServiceApi::class.java)
+            }
+            return songServiceApi!!
         }
 
         private fun <T> buildServiceApi(streamingServiceClass: Class<T>): T {

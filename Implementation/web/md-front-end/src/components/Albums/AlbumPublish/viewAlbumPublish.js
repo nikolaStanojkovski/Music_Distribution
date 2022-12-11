@@ -3,7 +3,7 @@ import makeAnimated from "react-select/animated";
 import StringUtil from "../../../util/stringUtil";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import React from "react";
-import {ALBUM, CREATOR, FULL_NAME, IS_PUBLISHED, USER_PERSONAL_INFO} from "../../../constants/model";
+import {ALBUM, CREATOR, FULL_NAME, IS_PUBLISHED, NONE, USER_PERSONAL_INFO} from "../../../constants/model";
 
 const viewAlbumPublish = (props) => {
     return (
@@ -69,7 +69,9 @@ const viewAlbumPublish = (props) => {
                     <option className={"text-muted"} value={"-- Choose tier --"} disabled={true}>
                         -- Choose tier --
                     </option>
-                    {(props.tiers) ? props.tiers.map((term) => {
+                    {(props.tiers) ? props.tiers
+                        .filter(term => term !== NONE)
+                        .map((term) => {
                             return <option key={term} value={term}>{term}</option>;
                         }
                     ) : undefined}

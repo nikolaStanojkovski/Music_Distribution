@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -48,6 +49,9 @@ public class CustomArtistRepository implements SearchRepository<Artist> {
 
         Root<Artist> artistRoot = cq.from(Artist.class);
         cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, artistRoot, cb, searchTerm));
+        if (pageable.getSort().isSorted()) {
+            cq.orderBy(QueryUtils.toOrders(pageable.getSort(), artistRoot, cb));
+        }
 
         List<Artist> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())

@@ -33,7 +33,6 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        SessionService.setSessionService(requireContext().applicationContext)
         authActivityViewModel =
             ViewModelProvider(this)[AuthActivityViewModel::class.java]
 

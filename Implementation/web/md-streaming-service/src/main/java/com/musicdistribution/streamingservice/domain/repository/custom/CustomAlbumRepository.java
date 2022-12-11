@@ -1,13 +1,14 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
-import com.musicdistribution.streamingservice.domain.model.entity.core.Album;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Album;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -48,6 +49,9 @@ public class CustomAlbumRepository implements SearchRepository<Album> {
 
         Root<Album> albumRoot = cq.from(Album.class);
         cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, albumRoot, cb, searchTerm));
+        if (pageable.getSort().isSorted()) {
+            cq.orderBy(QueryUtils.toOrders(pageable.getSort(), albumRoot, cb));
+        }
 
         List<Album> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())

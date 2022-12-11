@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -48,6 +49,9 @@ public class CustomNotificationRepository implements SearchRepository<Notificati
 
         Root<Notification> notificationRoot = cq.from(Notification.class);
         cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, notificationRoot, cb, searchTerm));
+        if (pageable.getSort().isSorted()) {
+            cq.orderBy(QueryUtils.toOrders(pageable.getSort(), notificationRoot, cb));
+        }
 
         List<Notification> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())

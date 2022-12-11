@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.musicdistribution.streamingservice.constants.AlphabetConstants
+import com.musicdistribution.streamingservice.model.enums.EmailDomain
 import streamingservice.R
 import streamingservice.databinding.FragmentRegistrationBinding
 
@@ -37,6 +40,11 @@ class RegistrationFragment : Fragment() {
             findNavController().navigate(R.id.action_RegisterFragment_to_WelcomeFragment)
         }
 
+        view.findViewById<TextView>(R.id.txtHintUsername).text =
+            getString(
+                R.string.hint_text_username,
+                EmailDomain.values().joinToString { i -> i.toString() })
+
         binding.btnRegister.setOnClickListener {
             registerUser(view)
         }
@@ -45,6 +53,9 @@ class RegistrationFragment : Fragment() {
     private fun registerUser(view: View) {
         val email = view.findViewById<EditText>(R.id.inputRegisterEmail).text.toString()
         val password = view.findViewById<EditText>(R.id.inputRegisterPassword).text.toString()
+
+
+        EmailDomain.values().map { i -> i.toString() }.joinToString { AlphabetConstants.COMMA }
 
         authActivityViewModel.registerApi(email, password)
     }

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -48,6 +49,9 @@ public class CustomListenerRepository implements SearchRepository<Listener> {
 
         Root<Listener> listenerRoot = cq.from(Listener.class);
         cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, listenerRoot, cb, searchTerm));
+        if (pageable.getSort().isSorted()) {
+            cq.orderBy(QueryUtils.toOrders(pageable.getSort(), listenerRoot, cb));
+        }
 
         List<Listener> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())

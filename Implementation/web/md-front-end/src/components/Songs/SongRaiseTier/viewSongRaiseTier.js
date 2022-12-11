@@ -1,6 +1,6 @@
 import StringUtil from "../../../util/stringUtil";
 import React from "react";
-import {DIAMOND, IS_A_SINGLE, IS_PUBLISHED, PAYMENT_INFO, TIER} from "../../../constants/model";
+import {DIAMOND, IS_A_SINGLE, IS_PUBLISHED, NONE, PAYMENT_INFO, TIER} from "../../../constants/model";
 
 const viewSongRaiseTier = (props) => {
     return (
@@ -30,7 +30,9 @@ const viewSongRaiseTier = (props) => {
                     <option className={"text-muted"} value={"-- Choose tier --"} disabled={true}>
                         -- Choose tier --
                     </option>
-                    {(props.tiers) ? props.tiers.map((term) => {
+                    {(props.tiers) ? props.tiers
+                        .filter(term => term !== NONE)
+                        .map((term) => {
                             return <option key={term} value={term}>{term}</option>;
                         }
                     ) : undefined}

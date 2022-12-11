@@ -1,6 +1,6 @@
 package com.musicdistribution.streamingservice.data
 
-import com.musicdistribution.streamingservice.model.Category
+import com.musicdistribution.streamingservice.model.search.Category
 
 object CategoryData {
     fun clearData() {

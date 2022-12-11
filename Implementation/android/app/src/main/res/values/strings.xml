@@ -13,7 +13,7 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="user_creator">Creator</string>
     <string name="user_listener">Listener</string>
-    <string name="hint_text_username">Please enter one of the supported e-mail domains</string>
+    <string name="hint_text_username">Domains: %1$s</string>
     <string name="note_oauth_login">Available only for listeners</string>
     <string name="logo_description">The logo image for the application</string>
     <string name="password_hint">Enter at least 6 characters</string>
@@ -45,7 +45,7 @@
 
     <!-- Strings related to search -->
     <string name="search_title">Search</string>
-    <string name="search_placeholder">Artists, Songs or Albums</string>
+    <string name="search_placeholder">Artists, Songs or Albums …</string>
     <string name="search_favourite_genre_title">Genres of music we offer</string>
 
     <!-- Strings related to profile -->

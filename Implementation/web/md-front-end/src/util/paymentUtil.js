@@ -12,9 +12,9 @@ const PaymentUtil = {
         });
     },
     async getSubscriptionFeeWithCalculation(props, tier, newTier, updateTierFn, exceptionMessage) {
-        return await props.subscriptionFee(tier).then((data) => {
+        return await props.subscriptionFee(tier).then(async (data) => {
             const currentSubscriptionFee = data.data;
-            props.subscriptionFee(newTier).then((data) => {
+            return await props.subscriptionFee(newTier).then((data) => {
                 const existingSubscriptionFee = data.data;
                 return this.getCalculatedSubscriptionFee(existingSubscriptionFee,
                     currentSubscriptionFee, tier, newTier, updateTierFn, exceptionMessage);

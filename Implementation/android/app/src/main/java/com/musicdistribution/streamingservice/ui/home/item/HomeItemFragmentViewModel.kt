@@ -5,9 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.musicdistribution.streamingservice.model.firebase.FavouriteSong
 import com.musicdistribution.streamingservice.model.firebase.User
-import com.musicdistribution.streamingservice.model.retrofit.AlbumRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.ArtistRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.SongRetrofit
 
 class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -15,24 +12,24 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 
 //    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
 
-    private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
-    private var usersLiveData: MutableLiveData<User?> = MutableLiveData()
-    private var artistAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> =
-        MutableLiveData()
-    private var artistSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
-    private var albumsLiveData: MutableLiveData<AlbumRetrofit?> = MutableLiveData()
-    private var albumSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
-    private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
+//    private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
+//    private var usersLiveData: MutableLiveData<User?> = MutableLiveData()
+//    private var artistAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> =
+//        MutableLiveData()
+//    private var artistSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
+//    private var albumsLiveData: MutableLiveData<AlbumRetrofit?> = MutableLiveData()
+//    private var albumSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
+//    private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
 
-    init {
-        artistsLiveData = MutableLiveData()
-        usersLiveData = MutableLiveData()
-        artistAlbumsLiveData = MutableLiveData()
-        artistSongsLiveData = MutableLiveData()
-        albumsLiveData = MutableLiveData()
-        albumSongsLiveData = MutableLiveData()
-        songsLiveData = MutableLiveData()
-    }
+//    init {
+//        artistsLiveData = MutableLiveData()
+//        usersLiveData = MutableLiveData()
+//        artistAlbumsLiveData = MutableLiveData()
+//        artistSongsLiveData = MutableLiveData()
+//        albumsLiveData = MutableLiveData()
+//        albumSongsLiveData = MutableLiveData()
+//        songsLiveData = MutableLiveData()
+//    }
 
     fun fetchArtistApi(id: String) {
 //        streamingServiceApi.getArtistById(id).enqueue(object : Callback<ArtistRetrofit?> {
@@ -318,41 +315,41 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 //    }
 
 
-    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit> {
-        return artistsLiveData
-    }
-
-    fun getArtistAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
-        return artistAlbumsLiveData
-    }
-
-    fun getArtistSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
-        return artistSongsLiveData
-    }
-
-    fun getUsersLiveData(): MutableLiveData<User?> {
-        return usersLiveData
-    }
-
-    fun getAlbumsLiveData(): MutableLiveData<AlbumRetrofit?> {
-        return albumsLiveData
-    }
-
-    fun getAlbumSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
-        return albumSongsLiveData
-    }
-
-    fun getSongsLiveData(): MutableLiveData<SongRetrofit?> {
-        return songsLiveData
-    }
-
-    fun clear() {
-        this.artistsLiveData = MutableLiveData()
-        this.artistAlbumsLiveData = MutableLiveData()
-        this.artistSongsLiveData = MutableLiveData()
-        this.usersLiveData = MutableLiveData()
-        this.albumsLiveData = MutableLiveData()
-        this.albumSongsLiveData = MutableLiveData()
-        this.songsLiveData = MutableLiveData()
-    }
+//    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit> {
+//        return artistsLiveData
+//    }
+//
+//    fun getArtistAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
+//        return artistAlbumsLiveData
+//    }
+//
+//    fun getArtistSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
+//        return artistSongsLiveData
+//    }
+//
+//    fun getUsersLiveData(): MutableLiveData<User?> {
+//        return usersLiveData
+//    }
+//
+//    fun getAlbumsLiveData(): MutableLiveData<AlbumRetrofit?> {
+//        return albumsLiveData
+//    }
+//
+//    fun getAlbumSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
+//        return albumSongsLiveData
+//    }
+//
+//    fun getSongsLiveData(): MutableLiveData<SongRetrofit?> {
+//        return songsLiveData
+//    }
+//
+//    fun clear() {
+//        this.artistsLiveData = MutableLiveData()
+//        this.artistAlbumsLiveData = MutableLiveData()
+//        this.artistSongsLiveData = MutableLiveData()
+//        this.usersLiveData = MutableLiveData()
+//        this.albumsLiveData = MutableLiveData()
+//        this.albumSongsLiveData = MutableLiveData()
+//        this.songsLiveData = MutableLiveData()
+//    }
 }

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.streamingservice.model.GenreItem
-import com.musicdistribution.streamingservice.util.listeners.GenreItemClickListener
+import com.musicdistribution.streamingservice.model.search.GenreItem
+import com.musicdistribution.streamingservice.listeners.GenreItemClickListener
 import streamingservice.R
 
 class SearchBlockAdapter(

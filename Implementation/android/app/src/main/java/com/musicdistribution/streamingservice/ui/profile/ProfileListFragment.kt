@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.streamingservice.model.CategoryItemType
-import com.musicdistribution.streamingservice.model.SearchItem
+import com.musicdistribution.streamingservice.model.search.CategoryItemType
+import com.musicdistribution.streamingservice.model.search.SearchItem
 import com.musicdistribution.streamingservice.ui.HomeActivity
 import com.musicdistribution.streamingservice.ui.search.SearchItemAdapter
-import com.musicdistribution.streamingservice.util.listeners.SearchItemClickListener
+import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
 import streamingservice.R
 
 class ProfileListFragment : Fragment(), SearchItemClickListener {
@@ -202,24 +201,6 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
                 val bundle = bundleOf("selected_song_id" to searchItem.searchItemId)
                 findNavController()
                     .navigate(R.id.action_profileListFragment_to_songFragment, bundle)
-            }
-            CategoryItemType.PUBLISHED_SONG -> {
-                val bundle =
-                    bundleOf(
-                        "selected_song_id" to searchItem.searchItemId,
-                        "item_type" to searchItem.searchItemType
-                    )
-                findNavController()
-                    .navigate(R.id.action_profileListFragment_to_songFragment, bundle)
-            }
-            CategoryItemType.PUBLISHED_ALBUM -> {
-                val bundle =
-                    bundleOf(
-                        "selected_album_id" to searchItem.searchItemId,
-                        "item_type" to searchItem.searchItemType
-                    )
-                findNavController()
-                    .navigate(R.id.action_profileListFragment_to_albumFragment, bundle)
             }
         }
     }

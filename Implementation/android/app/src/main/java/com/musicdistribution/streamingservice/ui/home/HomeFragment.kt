@@ -1,4 +1,3 @@
-
 package com.musicdistribution.streamingservice.ui.home
 
 import android.Manifest
@@ -22,11 +21,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.musicdistribution.streamingservice.data.CategoryData
 import com.musicdistribution.streamingservice.data.SessionService
-import com.musicdistribution.streamingservice.model.CategoryItem
-import com.musicdistribution.streamingservice.model.CategoryItemType
+import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
+import com.musicdistribution.streamingservice.model.search.CategoryItem
+import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.util.LocalizationUtils
-import com.musicdistribution.streamingservice.util.ValidationUtils
-import com.musicdistribution.streamingservice.util.listeners.CategoryItemClickListener
+import com.musicdistribution.streamingservice.util.StringUtils
 import streamingservice.R
 import java.util.*
 
@@ -58,7 +57,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     }
 
     private fun fetchData() {
-        homeFragmentViewModel.emptyData()
+//        homeFragmentViewModel.emptyData()
 
         homeFragmentViewModel.fetchSongs()
         homeFragmentViewModel.fetchAlbums()
@@ -260,9 +259,9 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                     SessionService.save("location_latitude", location.latitude.toString())
                     SessionService.save("location_longitude", location.longitude.toString())
                 }
-                if (ValidationUtils.isDouble(
+                if (StringUtils.isDouble(
                         SessionService.read("location_longitude").toString()
-                    ) && ValidationUtils.isDouble(
+                    ) && StringUtils.isDouble(
                         SessionService.read("location_latitude").toString()
                     )
                 ) {
@@ -291,18 +290,6 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 val bundle = bundleOf("selected_song_id" to item.itemId)
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_songFragment, bundle)
-            }
-            CategoryItemType.PUBLISHED_SONG -> {
-                val bundle =
-                    bundleOf("selected_song_id" to item.itemId, "item_type" to item.itemType)
-                findNavController()
-                    .navigate(R.id.action_homeFragment_to_songFragment, bundle)
-            }
-            CategoryItemType.PUBLISHED_ALBUM -> {
-                val bundle =
-                    bundleOf("selected_album_id" to item.itemId, "item_type" to item.itemType)
-                findNavController()
-                    .navigate(R.id.action_homeFragment_to_albumFragment, bundle)
             }
         }
     }

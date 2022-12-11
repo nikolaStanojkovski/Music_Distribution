@@ -10,6 +10,7 @@ import java.lang.Double.parseDouble
 import java.lang.Integer.parseInt
 
 object ValidationUtils {
+
     fun validateEmail(
         email: String,
         emailDomains: MutableList<String>,
@@ -66,35 +67,5 @@ object ValidationUtils {
                 AlphabetConstants.EMPTY_STRING
             )
         else AlphabetConstants.EMPTY_STRING
-    }
-
-    fun generateTimeString(timeInSeconds: Int): String {
-        val minutes = timeInSeconds / 60
-        val seconds = timeInSeconds % 60
-        val minutesString =
-            if (minutes < 10) "${AlphabetConstants.ZERO}$minutes" else minutes.toString()
-        val secondsString =
-            if (seconds < 10) "${AlphabetConstants.ZERO}$seconds" else seconds.toString()
-        return "$minutesString${AlphabetConstants.COLON}$secondsString"
-    }
-
-    fun isNumeric(string: String): Boolean {
-        try {
-            parseInt(string)
-        } catch (e: NumberFormatException) {
-            return false
-        }
-
-        return true
-    }
-
-    fun isDouble(string: String): Boolean {
-        try {
-            parseDouble(string)
-        } catch (e: NumberFormatException) {
-            return false
-        }
-
-        return true
     }
 }

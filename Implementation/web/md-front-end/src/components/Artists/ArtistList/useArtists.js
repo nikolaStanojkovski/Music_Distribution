@@ -25,7 +25,7 @@ const useArtists = (props) => {
         }
     }
 
-    return {artists, showModal, profilePictureSource, setShowModal, fetchArtistPicture};
+    return {artists, showModal, profilePictureSource, setShowModal, loadArtists, fetchArtistPicture};
 }
 
 export default useArtists;

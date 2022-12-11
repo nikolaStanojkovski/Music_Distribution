@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.musicdistribution.streamingservice.model.CategoryItem
-import com.musicdistribution.streamingservice.util.listeners.CategoryItemClickListener
+import com.musicdistribution.streamingservice.model.search.CategoryItem
+import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
 import streamingservice.R
 
 class HomeHorizontalAdapter(

@@ -14,7 +14,7 @@ class SessionService(var context: Context) {
     }
 
     companion object {
-        private val PREF_NAME = "AlbumDistribution"
+        private val PREF_NAME = "MusicDistribution"
         private var sessionService: SessionService? = null
 
         fun setSessionService(context: Context) {

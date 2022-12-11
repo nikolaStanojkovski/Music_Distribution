@@ -12,7 +12,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.streamingservice.model.CategoryItemType
+import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.constants.EntityConstants
+import com.musicdistribution.streamingservice.data.SessionService
+import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.ui.HomeActivity
 import com.musicdistribution.streamingservice.ui.auth.AuthActivity
 import streamingservice.R
@@ -66,11 +69,7 @@ class ProfileListenerFragment : Fragment() {
             }
         }
         fragmentView!!.findViewById<Button>(R.id.btnLogoutListener).setOnClickListener {
-//            FirebaseAuthUser.user = null
-//            FirebaseAuthDB.firebaseAuth.signOut()
-            val intent = Intent(requireActivity(), AuthActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            logout()
         }
 
         fragmentView!!.findViewById<Button>(R.id.btnFavouriteArtistsListener).setOnClickListener {
@@ -128,6 +127,16 @@ class ProfileListenerFragment : Fragment() {
 
     private fun refresh() {
         val intent = Intent(requireActivity(), HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    private fun logout() {
+        SessionService.remove(ApiConstants.ACCESS_TOKEN)
+        SessionService.remove(EntityConstants.USER_ID)
+        SessionService.remove(EntityConstants.USER_EMAIL)
+
+        val intent = Intent(requireActivity(), AuthActivity::class.java)
         startActivity(intent)
         requireActivity().finish()
     }

@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import com.musicdistribution.streamingservice.constants.MessageConstants
 import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
 import com.musicdistribution.streamingservice.data.api.core.AuthServiceApi
-import com.musicdistribution.streamingservice.data.api.enums.EmailDomainServiceApi
-import com.musicdistribution.streamingservice.model.retrofit.Listener
-import com.musicdistribution.streamingservice.model.retrofit.ListenerJwt
+import com.musicdistribution.streamingservice.model.enums.EmailDomain
+import com.musicdistribution.streamingservice.model.retrofit.core.Listener
+import com.musicdistribution.streamingservice.model.retrofit.response.ListenerJwt
 import com.musicdistribution.streamingservice.model.retrofit.UserAuth
 import com.musicdistribution.streamingservice.util.ValidationUtils
 import retrofit2.Call
@@ -21,8 +21,6 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
     private val app: Application = application
 
     private val authService: AuthServiceApi = StreamingServiceApiClient.getAuthServiceApi()
-    private val emailDomainService: EmailDomainServiceApi =
-        StreamingServiceApiClient.getEmailDomainService()
 
     private val loginLiveData: MutableLiveData<ListenerJwt?> = MutableLiveData()
 
@@ -46,29 +44,8 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
             password = password
         )
 
-        emailDomainService.getEmailDomains()
-            .enqueue(object : Callback<ArrayList<String>?> {
-                override fun onResponse(
-                    call: Call<ArrayList<String>?>?,
-                    response: Response<ArrayList<String>?>?
-                ) {
-                    val emailDomains = response?.body()
-                    if (emailDomains != null) {
-                        registerUser(email, userAuth, emailDomains)
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<ArrayList<String>?>?,
-                    t: Throwable?
-                ) {
-                    Toast.makeText(
-                        app,
-                        MessageConstants.EMAIL_DOMAIN_FETCH_ERROR,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
+        registerUser(email, userAuth,
+            EmailDomain.values().map { i -> i.toString() } as ArrayList<String>)
     }
 
     private fun registerUser(email: String, userAuth: UserAuth, emailDomains: ArrayList<String>) {

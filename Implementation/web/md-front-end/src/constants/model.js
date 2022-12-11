@@ -7,11 +7,13 @@ export const VALUE = 'value';
 export const EMAIL = 'email';
 export const PAGE = 'page';
 export const SIZE = 'size';
+export const SORT = 'sort';
 export const SEARCH_PARAMS = 'searchParams';
 export const SEARCH_TERM = 'searchTerm';
 export const LOCALE = 'locale';
 export const AMOUNT = 'amount';
 export const CURRENCY = 'currency';
+export const NONE = 'None';
 
 // Album
 export const ALBUM = 'album';
@@ -21,6 +23,7 @@ export const ALBUM_INFO = 'albumInfo';
 export const COVER = 'cover';
 export const ALBUM_TRANSACTION_REQUEST = 'albumTransactionRequest';
 export const SONG_ID_LIST = "songIdList";
+export const ALBUM_ID = "albumId";
 export const ALBUM_NAME = "albumName";
 export const ALBUM_GENRE = "albumGenre";
 export const ALBUM_TIER = "albumTier";

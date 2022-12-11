@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -55,6 +56,9 @@ public class CustomSongRepository implements SearchRepository<Song> {
             predicates = ArrayUtils.add(predicates, cb.and(cb.equal(SearchUtil
                     .convertToPredicateExpression(EntityConstants.IS_PUBLISHED,
                             songRoot), Boolean.TRUE)));
+        }
+        if (pageable.getSort().isSorted()) {
+            cq.orderBy(QueryUtils.toOrders(pageable.getSort(), songRoot, cb));
         }
 
         cq.where(predicates);

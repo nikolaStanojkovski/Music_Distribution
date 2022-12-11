@@ -1,7 +1,8 @@
 import axios from "../../custom-axios/axiosStreamingService";
-import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE} from "../../constants/pagination";
-import {ALBUM_ID, ALBUMS, ALBUMS_PUBLISH, ALBUMS_RAISE_TIER, RESOURCE, SEARCH} from "../../constants/endpoint";
+import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DEFAULT_SORT_ORDER} from "../../constants/pagination";
+import {ALBUMS, ALBUMS_PUBLISH, ALBUMS_RAISE_TIER, RESOURCE, SEARCH} from "../../constants/endpoint";
 import {
+    ALBUM_ID,
     ALBUM_GENRE,
     ALBUM_NAME,
     ALBUM_TIER,
@@ -14,7 +15,7 @@ import {
     SEARCH_PARAMS,
     SEARCH_TERM,
     SIZE,
-    SONG_ID_LIST,
+    SONG_ID_LIST, SORT,
     SUBSCRIPTION_FEE,
     TRANSACTION_FEE
 } from "../../constants/model";
@@ -22,10 +23,10 @@ import {APPLICATION_JSON} from "../../constants/extension";
 
 const AlbumRepository = {
     fetchAlbums: (pageNumber) => {
-        return axios.get(`${RESOURCE}${ALBUMS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
+        return axios.get(`${RESOURCE}${ALBUMS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
     },
     filterAlbums: (pageNumber, key, value) => {
-        return axios.get(`${RESOURCE}${ALBUMS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}`);
+        return axios.get(`${RESOURCE}${ALBUMS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
     },
 
     publishAlbum: (cover, songIdList,
