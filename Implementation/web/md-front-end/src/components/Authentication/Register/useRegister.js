@@ -1,6 +1,6 @@
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
-import {ARTIST_REGISTER_FAILED, PASSWORDS_DONT_MATCH} from "../../../constants/exception";
+import {ARTIST_REGISTER_FAILED, PASSWORD_TOO_SHORT, PASSWORDS_DONT_MATCH} from "../../../constants/exception";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import {toast} from "react-toastify";
 
@@ -40,6 +40,11 @@ const useRegister = (props) => {
 
         if (password && repeatPassword && password !== repeatPassword) {
             toast.error(PASSWORDS_DONT_MATCH);
+            return;
+        }
+
+        if(password.length < 6 || repeatPassword.length < 6) {
+            toast.error(PASSWORD_TOO_SHORT);
             return;
         }
 

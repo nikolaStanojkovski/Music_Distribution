@@ -1,6 +1,3 @@
-export const PASSWORDS_DONT_MATCH = 'The passwords do not match';
-export const CHECKOUT_ERROR = 'There was a problem when processing the checkout';
-
 // Enums
 export const EMAIL_DOMAIN_FETCH_FAILED = 'There was a problem when fetching the email domains';
 export const GENRE_FETCH_FAILED = 'There was a problem when fetching the genres';
@@ -18,6 +15,8 @@ export const ARTIST_FETCH_FAILED = 'There was a problem when fetching the artist
 export const ARTIST_LOGIN_FAILED = 'Incorrect credentials were entered. Try again';
 export const ARTIST_LOGOUT_FAILED = 'There was a problem when logging out';
 export const ARTIST_REGISTER_FAILED = 'There was a problem when registering an artist. Try again';
+export const PASSWORDS_DONT_MATCH = 'The passwords do not match';
+export const PASSWORD_TOO_SHORT = 'The passwords must be at least 6 characters long';
 
 // Song
 export const SONG_FETCH_FAILED = 'There was a problem when fetching the songs';

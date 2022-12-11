@@ -4,12 +4,13 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.data.api.AlbumCatalogApi
-import com.musicdistribution.streamingservice.data.api.AlbumCatalogApiClient
-import com.musicdistribution.streamingservice.model.Role
-import com.musicdistribution.streamingservice.model.retrofit.ArtistRetrofit
-import com.musicdistribution.streamingservice.model.retrofit.ArtistRetrofitAuth
-import com.musicdistribution.streamingservice.model.retrofit.EmailDomain
+import com.musicdistribution.streamingservice.constants.MessageConstants
+import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
+import com.musicdistribution.streamingservice.data.api.core.AuthServiceApi
+import com.musicdistribution.streamingservice.data.api.enums.EmailDomainServiceApi
+import com.musicdistribution.streamingservice.model.retrofit.Listener
+import com.musicdistribution.streamingservice.model.retrofit.ListenerJwt
+import com.musicdistribution.streamingservice.model.retrofit.UserAuth
 import com.musicdistribution.streamingservice.util.ValidationUtils
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,72 +20,128 @@ class AuthActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val app: Application = application
 
-    private val albumCatalogApi: AlbumCatalogApi = AlbumCatalogApiClient.getAlbumCatalogApi()!!
-    private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
+    private val authService: AuthServiceApi = StreamingServiceApiClient.getAuthServiceApi()
+    private val emailDomainService: EmailDomainServiceApi =
+        StreamingServiceApiClient.getEmailDomainService()
 
-    fun registerApi(email: String, password: String, role: Role) {
-        if (role == Role.CREATOR) {
-            val nameSurname = ValidationUtils.generateFirstLastName(email)
-            val artistRetrofit = ArtistRetrofitAuth(
-                username = email.split("@")[0],
-                emailDomain = EmailDomain.valueOf(email.split("@")[1].split(".")[0]),
-                telephoneNumber = "[not-defined]",
-                firstName = nameSurname[0],
-                lastName = nameSurname[1],
-                artName = "[not-defined]",
-                password = password
-            )
-            albumCatalogApi.loginArtist(artistRetrofit).enqueue(object : Callback<ArtistRetrofit?> {
+    private val loginLiveData: MutableLiveData<ListenerJwt?> = MutableLiveData()
+
+    fun loginApi(email: String, password: String) {
+        val username = ValidationUtils.getUsername(email)
+        val emailDomain = ValidationUtils.getEmailDomain(email)
+        val userAuth = UserAuth(
+            username = username,
+            emailDomain = emailDomain,
+            password = password
+        )
+        loginUser(userAuth)
+    }
+
+    fun registerApi(email: String, password: String) {
+        val username = ValidationUtils.getUsername(email)
+        val emailDomain = ValidationUtils.getEmailDomain(email)
+        val userAuth = UserAuth(
+            username = username,
+            emailDomain = emailDomain,
+            password = password
+        )
+
+        emailDomainService.getEmailDomains()
+            .enqueue(object : Callback<ArrayList<String>?> {
                 override fun onResponse(
-                    call: Call<ArtistRetrofit?>?,
-                    response: Response<ArtistRetrofit?>
+                    call: Call<ArrayList<String>?>?,
+                    response: Response<ArrayList<String>?>?
                 ) {
-                    val artistLogin = response.body()
-                    if (artistLogin == null) {
-                        albumCatalogApi.registerArtist(artistRetrofit)
-                            .enqueue(object : Callback<ArtistRetrofit?> {
-                                override fun onResponse(
-                                    call: Call<ArtistRetrofit?>?,
-                                    response: Response<ArtistRetrofit?>?
-                                ) {
-                                    val artist = response!!.body()
-                                    if (artist != null) {
-                                        artistsLiveData.value = artist!!
-                                    }
-                                }
+                    val emailDomains = response?.body()
+                    if (emailDomains != null) {
+                        registerUser(email, userAuth, emailDomains)
+                    }
+                }
 
-                                override fun onFailure(
-                                    call: Call<ArtistRetrofit?>?,
-                                    t: Throwable?
-                                ) {
-                                    Toast.makeText(
-                                        app,
-                                        "There was a problem when trying to register the artist to the server 'Album Catalog'!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            })
+                override fun onFailure(
+                    call: Call<ArrayList<String>?>?,
+                    t: Throwable?
+                ) {
+                    Toast.makeText(
+                        app,
+                        MessageConstants.EMAIL_DOMAIN_FETCH_ERROR,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+    }
+
+    private fun registerUser(email: String, userAuth: UserAuth, emailDomains: ArrayList<String>) {
+        if (ValidationUtils.validateEmail(email, emailDomains, app)
+            && ValidationUtils.validatePassword(userAuth.password, app)
+        ) {
+            authService.register(userAuth)
+                .enqueue(object : Callback<Listener?> {
+                    override fun onResponse(
+                        call: Call<Listener?>?,
+                        response: Response<Listener?>?
+                    ) {
+                        Toast.makeText(
+                            app,
+                            if (response?.body() != null)
+                                MessageConstants.SUCCESSFUL_REGISTRATION
+                            else MessageConstants.FAILED_REGISTRATION,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    override fun onFailure(
+                        call: Call<Listener?>?,
+                        t: Throwable?
+                    ) {
+                        Toast.makeText(
+                            app,
+                            MessageConstants.FAILED_REGISTRATION,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+        }
+    }
+
+    private fun loginUser(userAuth: UserAuth) {
+        authService.login(userAuth)
+            .enqueue(object : Callback<ListenerJwt?> {
+                override fun onResponse(
+                    call: Call<ListenerJwt?>?,
+                    response: Response<ListenerJwt?>?
+                ) {
+                    val user = response?.body()
+                    if (user != null) {
+                        Toast.makeText(
+                            app,
+                            MessageConstants.SUCCESSFUL_LOGIN,
+                            Toast.LENGTH_LONG
+                        ).show()
+                        loginLiveData.value = user
                     } else {
                         Toast.makeText(
                             app,
-                            "There is already an artist with that username and password!",
+                            MessageConstants.FAILED_LOGIN,
                             Toast.LENGTH_LONG
                         ).show()
                     }
                 }
 
-                override fun onFailure(call: Call<ArtistRetrofit?>?, throwable: Throwable) {
+                override fun onFailure(
+                    call: Call<ListenerJwt?>?,
+                    t: Throwable?
+                ) {
                     Toast.makeText(
                         app,
-                        "There is already an artist with that username and password!",
+                        MessageConstants.FAILED_LOGIN,
                         Toast.LENGTH_LONG
                     ).show()
                 }
             })
-        }
     }
 
-    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit> {
-        return artistsLiveData
+    fun getLoginLiveData(): MutableLiveData<ListenerJwt?> {
+        return loginLiveData
     }
 }

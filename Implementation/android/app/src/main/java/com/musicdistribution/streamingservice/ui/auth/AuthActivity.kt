@@ -15,8 +15,11 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (InternetUtils.isOffline(this)) {
-            Toast.makeText(this, ExceptionConstants.NO_INTERNET_CONNECTION, Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(
+                this,
+                ExceptionConstants.NO_INTERNET_CONNECTION,
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         binding = ActivityAuthBinding.inflate(layoutInflater)

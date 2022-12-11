@@ -57,14 +57,23 @@
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/drawable/ic_home.xml" value="0.17135416666666667" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/drawable/ic_logout.xml" value="0.17135416666666667" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/drawable/ic_settings.xml" value="0.17135416666666667" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout-v28/activity_home.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/activity_auth.xml" value="0.1" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/activity_home.xml" value="0.18" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/activity_splash_screen.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/artist_item_adapter.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/category_adapter.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/category_item_adapter.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/content_auth.xml" value="0.11367753623188406" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/content_home.xml" value="0.15104166666666666" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/content_main.xml" value="0.15104166666666666" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_album.xml" value="0.14479166666666668" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_artist.xml" value="0.15104166666666666" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_first.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_login.xml" value="0.33" />
-        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_registration.xml" value="0.22" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_profile_list.xml" value="0.25" />
+        <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_registration.xml" value="0.33" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/layout/fragment_welcome.xml" value="0.5" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/menu/bottom_menu.xml" value="0.15104166666666666" />
         <entry key="..\:/Users/Nick/Documents/GitHub/Music_Distribution/Implementation/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.234375" />

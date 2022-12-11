@@ -3,8 +3,6 @@ package com.musicdistribution.streamingservice.ui.profile
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.data.api.AlbumCatalogApi
-import com.musicdistribution.streamingservice.data.api.AlbumCatalogApiClient
 import com.musicdistribution.streamingservice.model.retrofit.AlbumRetrofit
 import com.musicdistribution.streamingservice.model.retrofit.ArtistRetrofit
 import com.musicdistribution.streamingservice.model.retrofit.SongRetrofit
@@ -13,7 +11,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
 
     private val app: Application = application
 
-    private val albumCatalogApi: AlbumCatalogApi = AlbumCatalogApiClient.getAlbumCatalogApi()!!
+//    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
 
     private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
     private var artistsLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
@@ -50,7 +48,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
 //                        for (favSong in values.entries) {
 //                            val favouriteSong = favSong.value as HashMap<String, Any>
 //                            val songId = favouriteSong["songId"].toString()
-//                            albumCatalogApi.getSong(songId)
+//                            streamingServiceApi.getSong(songId)
 //                                .enqueue(object : Callback<SongRetrofit?> {
 //                                    override fun onResponse(
 //                                        call: Call<SongRetrofit?>?,
@@ -97,7 +95,7 @@ class ProfileFragmentViewModel(application: Application) : AndroidViewModel(appl
 //                        for (favArtist in values.entries) {
 //                            val favouriteArtist = favArtist.value as HashMap<String, Any>
 //                            val artistId = favouriteArtist["followingId"].toString()
-//                            albumCatalogApi.getArtistById(artistId)
+//                            streamingServiceApi.getArtistById(artistId)
 //                                .enqueue(object : Callback<ArtistRetrofit?> {
 //                                    override fun onResponse(
 //                                        call: Call<ArtistRetrofit?>?,

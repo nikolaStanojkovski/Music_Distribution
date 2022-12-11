@@ -1,19 +1,20 @@
 package com.musicdistribution.streamingservice.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.musicdistribution.streamingservice.constants.TimeConstants
 import com.musicdistribution.streamingservice.ui.auth.AuthActivity
 import streamingservice.R
 
+@SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
 
-    private var SPLASH_SCREEN_TIME: Long = 2000
-
-    @SuppressWarnings("deprecation")
+    @Suppress("deprecation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(
@@ -26,6 +27,6 @@ class SplashScreenActivity : AppCompatActivity() {
         Handler(Looper.myLooper()!!).postDelayed({
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
-        }, SPLASH_SCREEN_TIME)
+        }, TimeConstants.SPLASH_SCREEN_TIME)
     }
 }

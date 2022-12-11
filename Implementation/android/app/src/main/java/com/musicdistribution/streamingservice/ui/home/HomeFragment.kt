@@ -1,3 +1,4 @@
+
 package com.musicdistribution.streamingservice.ui.home
 
 import android.Manifest
@@ -50,7 +51,6 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         fetchData()
 
         CategoryData.clearData()
-        SessionService.setSessionService(requireActivity().applicationContext)
         getLocation(LocalizationUtils.getLocationProvider(requireActivity()))
         fillAddButton()
         fillDateAndTime()

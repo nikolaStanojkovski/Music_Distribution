@@ -119,7 +119,7 @@ public class AuthResource {
      * @return the registered listener.
      */
     @PostMapping(PathConstants.REGISTER_LISTENER)
-    public ResponseEntity<ListenerResponse> registerListener(@RequestPart @Valid AuthRequest listenerRequest) {
+    public ResponseEntity<ListenerResponse> registerListener(@RequestBody @Valid AuthRequest listenerRequest) {
         return this.listenerService.register(listenerRequest)
                 .map(listener -> ResponseEntity.ok().body(ListenerResponse.from(listener,
                         encryptionSystem.encrypt(listener.getId().getId()))))

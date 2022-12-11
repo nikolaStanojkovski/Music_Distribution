@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="streamingservice.ui.home.HomeFragment"
+        android:name="com.musicdistribution.streamingservice.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="streamingservice.ui.search.SearchFragment"
+        android:name="com.musicdistribution.streamingservice.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="streamingservice.ui.profile.ProfileFragment"
+        android:name="com.musicdistribution.streamingservice.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

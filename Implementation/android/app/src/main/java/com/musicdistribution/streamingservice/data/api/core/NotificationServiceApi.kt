@@ -1,0 +1,3 @@
+package com.musicdistribution.streamingservice.data.api.core
+
+interface NotificationServiceApi

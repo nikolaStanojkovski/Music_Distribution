@@ -14,11 +14,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.musicdistribution.streamingservice.constants.NotificationConstants
 import com.musicdistribution.streamingservice.ui.home.HomeFragmentViewModel
 import streamingservice.R
 
+@Suppress("deprecation")
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var notificationManager: NotificationManager
@@ -32,18 +35,17 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val navController = findNavController(R.id.navigationHostFragment)
-
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navigationHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
         bottomNavigationView.setupWithNavController(navController)
 
-        homeFragmentViewModel =
-            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
-        checkNotifications()
+//        homeFragmentViewModel =
+//            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
+//        checkNotifications()
     }
 
     private fun checkNotifications() {
         homeFragmentViewModel.checkNotifications()
-
         homeFragmentViewModel.getNotificationsLivedata()
             .observe(this,
                 { message ->
@@ -54,7 +56,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showNotification(message: String) {
-        val channelId = "com.musicdistribution.streamingservice"
         notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -64,20 +65,24 @@ class HomeActivity : AppCompatActivity() {
                 this,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
             notificationChannel =
-                NotificationChannel(channelId, message, NotificationManager.IMPORTANCE_HIGH)
+                NotificationChannel(
+                    NotificationConstants.CHANNEL_ID,
+                    message,
+                    NotificationManager.IMPORTANCE_HIGH
+                )
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.BLACK
             notificationChannel.enableVibration(true)
             notificationManager.createNotificationChannel(notificationChannel)
 
-            builder = NotificationCompat.Builder(this, channelId)
+            builder = NotificationCompat.Builder(this, NotificationConstants.CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("Album Publishing")
-                .setContentText("New Album/Song by favourite artist")
+                .setContentTitle(NotificationConstants.CONTENT_TITLE)
+                .setContentText(NotificationConstants.CONTENT_TEXT)
                 .setLargeIcon(
                     BitmapFactory.decodeResource(
                         this.resources,
@@ -89,7 +94,7 @@ class HomeActivity : AppCompatActivity() {
                 )
                 .setContentIntent(pendingIntent)
 
-            notificationManager.notify(1234, builder.build())
+            notificationManager.notify(NotificationConstants.ID, builder.build())
         }
     }
 }

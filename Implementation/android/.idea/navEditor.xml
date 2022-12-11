@@ -249,34 +249,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="createFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-494" />
-                            <option name="y" value="-819" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_createFragment_to_homeFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="homeFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-535" />
-                            <option name="y" value="-120" />
+                            <option name="x" value="-467" />
+                            <option name="y" value="-292" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -291,7 +270,17 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_homeFragment_to_createFragment">
+                            <entry key="action_homeFragment_to_publishAlbumFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_homeFragment_to_publishSongFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_homeFragment_to_raiseTierFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -401,6 +390,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="publishSongFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="204" />
+                            <option name="y" value="-144" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_publishSongFragment_to_homeFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="raiseTierFragment">
                     <value>
                       <LayoutPositions>
@@ -470,8 +480,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-82" />
-                            <option name="y" value="237" />
+                            <option name="x" value="-203" />
+                            <option name="y" value="413" />
                           </Point>
                         </option>
                         <option name="myPositions">

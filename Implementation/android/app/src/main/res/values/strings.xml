@@ -8,7 +8,6 @@
     <string name="button_logout">Sign Out</string>
     <string name="button_log_in">Sign In</string>
     <string name="registration_title">Create Account</string>
-    <string name="login_title">Sign into your account</string>
     <string name="login_email">Enter your username</string>
     <string name="login_password">Enter your password</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -52,7 +51,7 @@
     <!-- Strings related to profile -->
     <string name="profile_name">Your name</string>
     <string name="profile_surname">Your surname</string>
-    <string name="profile_favourite_artist">Your favourite artist</string>
+    <string name="profile_favourite_artist">Your favourite user</string>
     <string name="profile_name_placeholder">Enter your name</string>
     <string name="profile_surname_placeholder">Enter your surname</string>
     <string name="text_followers">Followers</string>

@@ -13,14 +13,13 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="15dp"
-        android:outlineSpotShadowColor="@color/black"
         app:itemRippleColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_menu"/>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navigationHostFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="409dp"

@@ -3,67 +3,98 @@ package com.musicdistribution.streamingservice.util
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
+import com.musicdistribution.streamingservice.constants.AlphabetConstants
+import com.musicdistribution.streamingservice.constants.EmailConstants
+import com.musicdistribution.streamingservice.constants.ExceptionConstants
 import java.lang.Double.parseDouble
 import java.lang.Integer.parseInt
 
-class ValidationUtils {
-    companion object {
-        fun validateUsername(email: String, context: Context): Boolean {
-            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                val firstLastName = generateFirstLastName(email)
-                if (firstLastName.size == 2 && firstLastName[0].isNotBlank() && firstLastName[1].isNotBlank()) {
-                    Toast.makeText(context, "Invalid e-mail address", Toast.LENGTH_SHORT).show()
-                    return false
-                }
-            }
-
-            return true
+object ValidationUtils {
+    fun validateEmail(
+        email: String,
+        emailDomains: MutableList<String>,
+        context: Context
+    ): Boolean {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(
+                context,
+                ExceptionConstants.INVALID_EMAIL_ADDRESS,
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+        val emailDomain = getEmailDomain(email)
+        if (emailDomain.isEmpty() || !emailDomains.contains(emailDomain)) {
+            Toast.makeText(
+                context,
+                ExceptionConstants.UNSUPPORTED_EMAIL_DOMAIN,
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
         }
 
-        fun validatePassword(password: String, context: Context): Boolean {
-            if (password.isEmpty() && password.length < 6) {
-                Toast.makeText(context, "Invalid password", Toast.LENGTH_SHORT).show()
-                return false
-            }
+        return true
+    }
 
-            return true
+    fun validatePassword(password: String, context: Context): Boolean {
+        if (password.isEmpty() || password.length < 6) {
+            Toast.makeText(context, ExceptionConstants.INVALID_PASSWORD, Toast.LENGTH_SHORT)
+                .show()
+            return false
         }
 
-        fun generateFirstLastName(email: String): MutableList<String> {
-            val usernameValidation = email.split("@")
-            val firstLastName = usernameValidation[0].split(".")
-            return if (firstLastName.isNullOrEmpty() || firstLastName.size < 2) mutableListOf(usernameValidation[0], "") else mutableListOf(
-                firstLastName[0][0].uppercaseChar() + firstLastName[0].substring(1),
-                firstLastName[1][0].uppercaseChar() + firstLastName[1].substring(1)
+        return true
+    }
+
+    fun getUsername(email: String): String {
+        val parts = email.split(AlphabetConstants.AT_SIGN)
+        return if (parts.isNotEmpty() && parts.size == 2
+            && parts[0].isNotEmpty() && parts[1].isNotEmpty()
+        )
+            parts[0]
+        else AlphabetConstants.EMPTY_STRING
+    }
+
+    fun getEmailDomain(email: String): String {
+        val parts = email.split(AlphabetConstants.AT_SIGN)
+        return if (parts.isNotEmpty() && parts.size == 2
+            && parts[0].isNotEmpty() && parts[1].isNotEmpty()
+            && parts[1].contains(EmailConstants.COM)
+        )
+            parts[1].replace(
+                EmailConstants.COM,
+                AlphabetConstants.EMPTY_STRING
             )
+        else AlphabetConstants.EMPTY_STRING
+    }
+
+    fun generateTimeString(timeInSeconds: Int): String {
+        val minutes = timeInSeconds / 60
+        val seconds = timeInSeconds % 60
+        val minutesString =
+            if (minutes < 10) "${AlphabetConstants.ZERO}$minutes" else minutes.toString()
+        val secondsString =
+            if (seconds < 10) "${AlphabetConstants.ZERO}$seconds" else seconds.toString()
+        return "$minutesString${AlphabetConstants.COLON}$secondsString"
+    }
+
+    fun isNumeric(string: String): Boolean {
+        try {
+            parseInt(string)
+        } catch (e: NumberFormatException) {
+            return false
         }
 
-        fun generateTimeString(timeInSeconds: Int): String {
-            val minutes = timeInSeconds / 60
-            val seconds = timeInSeconds % 60
-            val minutesString = if (minutes < 10) "0$minutes" else minutes.toString()
-            val secondsString = if (seconds < 10) "0$seconds" else seconds.toString()
-            return "$minutesString:$secondsString"
+        return true
+    }
+
+    fun isDouble(string: String): Boolean {
+        try {
+            parseDouble(string)
+        } catch (e: NumberFormatException) {
+            return false
         }
 
-        fun isNumeric(string: String): Boolean {
-            try {
-                parseInt(string)
-            } catch (e: NumberFormatException) {
-                return false
-            }
-
-            return true
-        }
-
-        fun isDouble(string: String): Boolean {
-            try {
-                parseDouble(string)
-            } catch (e: NumberFormatException) {
-                return false
-            }
-
-            return true
-        }
+        return true
     }
 }

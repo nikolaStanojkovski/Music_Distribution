@@ -28,7 +28,7 @@
     <!-- Strings related to profile -->
     <string name="profile_name">Your name</string>
     <string name="profile_surname">Your surname</string>
-    <string name="profile_favourite_artist">Your favourite artist</string>
+    <string name="profile_favourite_artist">Your favourite user</string>
     <string name="profile_name_placeholder">Enter your name</string>
     <string name="profile_surname_placeholder">Enter your surname</string>
     <string name="text_followers">Followers</string>

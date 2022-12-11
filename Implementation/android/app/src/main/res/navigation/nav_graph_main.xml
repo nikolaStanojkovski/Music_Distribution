@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="streamingservice.ui.home.HomeFragment"
+        android:name="com.musicdistribution.streamingservice.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -19,19 +19,10 @@
         <action
             android:id="@+id/action_homeFragment_to_songFragment"
             app:destination="@id/songFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_publishSongFragment"
-            app:destination="@id/publishSongFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_publishAlbumFragment"
-            app:destination="@id/publishAlbumFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_raiseTierFragment"
-            app:destination="@id/raiseTierFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="streamingservice.ui.search.SearchFragment"
+        android:name="com.musicdistribution.streamingservice.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -40,88 +31,16 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="streamingservice.ui.profile.ProfileListenerFragment"
+        android:name="com.musicdistribution.streamingservice.ui.profile.ProfileListenerFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile_listener" >
         <action
             android:id="@+id/action_profileFragmentListener_to_profileListFragment"
             app:destination="@id/profileListFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_profileFragmentArtist"
-            app:destination="@id/profileFragmentArtist" />
-    </fragment>
-    <fragment
-        android:id="@+id/profileFragmentArtist"
-        android:name="streamingservice.ui.profile.ProfileArtistFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile_artist" >
-        <action
-            android:id="@+id/action_profileFragmentArtist_to_profileListFragment"
-            app:destination="@id/profileListFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchItemFragment"
-        android:name="streamingservice.ui.search.SearchItemFragment"
-        android:label="fragment_search_item"
-        tools:layout="@layout/fragment_search_item" >
-        <action
-            android:id="@+id/action_searchItemFragment_to_songFragment"
-            app:destination="@id/songFragment" />
-        <action
-            android:id="@+id/action_searchItemFragment_to_albumFragment"
-            app:destination="@id/albumFragment" />
-        <action
-            android:id="@+id/action_searchItemFragment_to_artistFragment"
-            app:destination="@id/artistFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/albumFragment"
-        android:name="streamingservice.ui.home.item.AlbumFragment"
-        android:label="fragment_album"
-        tools:layout="@layout/fragment_album" >
-        <action
-            android:id="@+id/action_albumFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_albumFragment_to_songFragment"
-            app:destination="@id/songFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/artistFragment"
-        android:name="streamingservice.ui.home.item.ArtistFragment"
-        android:label="fragment_artist"
-        tools:layout="@layout/fragment_artist" >
-        <action
-            android:id="@+id/action_artistFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_artistFragment_to_albumFragment"
-            app:destination="@id/albumFragment" />
-        <action
-            android:id="@+id/action_artistFragment_to_songFragment"
-            app:destination="@id/songFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/songFragment"
-        android:name="streamingservice.ui.home.item.SongFragment"
-        android:label="fragment_song"
-        tools:layout="@layout/fragment_song" >
-        <action
-            android:id="@+id/action_songFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/publishSongFragment"
-        android:name="streamingservice.ui.home.publish.PublishSongFragment"
-        android:label="fragment_create"
-        tools:layout="@layout/fragment_publish_song" >
-        <action
-            android:id="@+id/action_publishSongFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileListFragment"
-        android:name="streamingservice.ui.profile.ProfileListFragment"
+        android:name="com.musicdistribution.streamingservice.ui.profile.ProfileListFragment"
         android:label="fragment_profile_list"
         tools:layout="@layout/fragment_profile_list" >
         <action
@@ -138,13 +57,54 @@
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/publishAlbumFragment"
-        android:name="streamingservice.ui.home.publish.PublishAlbumFragment"
-        android:label="fragment_publish_album"
-        tools:layout="@layout/fragment_publish_album" />
+        android:id="@+id/searchItemFragment"
+        android:name="com.musicdistribution.streamingservice.ui.search.SearchItemFragment"
+        android:label="fragment_search_item"
+        tools:layout="@layout/fragment_search_item" >
+        <action
+            android:id="@+id/action_searchItemFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+        <action
+            android:id="@+id/action_searchItemFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_searchItemFragment_to_artistFragment"
+            app:destination="@id/artistFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/raiseTierFragment"
-        android:name="streamingservice.ui.home.publish.RaiseTierFragment"
-        android:label="fragment_raise_tier"
-        tools:layout="@layout/fragment_raise_tier" />
+        android:id="@+id/albumFragment"
+        android:name="com.musicdistribution.streamingservice.ui.home.item.AlbumFragment"
+        android:label="fragment_album"
+        tools:layout="@layout/fragment_album" >
+        <action
+            android:id="@+id/action_albumFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_albumFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.musicdistribution.streamingservice.ui.home.item.ArtistFragment"
+        android:label="fragment_artist"
+        tools:layout="@layout/fragment_artist" >
+        <action
+            android:id="@+id/action_artistFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_artistFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_artistFragment_to_songFragment"
+            app:destination="@id/songFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/songFragment"
+        android:name="com.musicdistribution.streamingservice.ui.home.item.SongFragment"
+        android:label="fragment_song"
+        tools:layout="@layout/fragment_song" >
+        <action
+            android:id="@+id/action_songFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

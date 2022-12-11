@@ -10,7 +10,7 @@
         android:id="@+id/txtLoginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_title"
+        android:text="@string/button_log_in"
         android:textColor="@color/black"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
