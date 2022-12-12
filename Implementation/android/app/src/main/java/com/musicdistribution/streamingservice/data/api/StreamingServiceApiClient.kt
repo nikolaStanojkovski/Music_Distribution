@@ -1,6 +1,8 @@
 package com.musicdistribution.streamingservice.data.api
 
+import com.musicdistribution.streamingservice.constants.AlphabetConstants
 import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.data.api.core.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -68,6 +70,7 @@ class StreamingServiceApiClient {
                 val request: Request =
                     chain.request().newBuilder()
                         .addHeader(ApiConstants.AUTH_ROLE, ApiConstants.LISTENER_ROLE)
+                        .addHeader(ApiConstants.AUTHORIZATION, "Bearer ${getAccessToken()}")
                         .build()
                 chain.proceed(request)
             }
@@ -78,6 +81,12 @@ class StreamingServiceApiClient {
                 .client(httpClient.build())
                 .build()
                 .create(streamingServiceClass)
+        }
+
+        private fun getAccessToken(): String {
+            val accessToken = SessionService.read(ApiConstants.ACCESS_TOKEN)
+            return if (accessToken != null && accessToken.isNotBlank())
+                accessToken else AlphabetConstants.EMPTY_STRING
         }
     }
 }

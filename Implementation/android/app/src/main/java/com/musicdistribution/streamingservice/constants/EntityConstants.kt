@@ -12,4 +12,5 @@ object EntityConstants {
     const val ENTITY_TYPE = "entityType"
     const val PUBLISHING_ID = "publishingId"
     const val LISTENER_ID = "listenerId"
+    const val IS_A_SINGLE = "isASingle"
 }

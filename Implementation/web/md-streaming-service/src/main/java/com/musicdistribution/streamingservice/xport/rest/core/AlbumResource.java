@@ -1,6 +1,7 @@
 package com.musicdistribution.streamingservice.xport.rest.core;
 
 import com.musicdistribution.sharedkernel.config.ApiController;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.constant.AuthConstants;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
@@ -10,7 +11,6 @@ import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.response.core.AlbumResponse;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.streamingservice.service.AlbumService;
 import com.musicdistribution.streamingservice.util.JwtUtil;
@@ -97,6 +97,8 @@ public class AlbumResource {
     /**
      * Method used for publishing an album.
      *
+     * @param authToken               - the access token of the user which is being authenticated.
+     * @param cover                   - the cover picture of the album that is to be published.
      * @param albumTransactionRequest - an object wrapper containing information for the album to be published.
      * @return the published album.
      */

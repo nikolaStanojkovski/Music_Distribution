@@ -5,5 +5,5 @@ import com.musicdistribution.streamingservice.model.retrofit.core.Artist
 data class ArtistResponse(
     val totalPages: Int,
     val totalElements: Long,
-    val data: List<Artist>
+    val content: ArrayList<Artist>
 )

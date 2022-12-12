@@ -1,9 +1,9 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
+import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
-import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
@@ -53,9 +53,7 @@ public class CustomSongRepository implements SearchRepository<Song> {
         Root<Song> songRoot = cq.from(Song.class);
         Predicate[] predicates = SearchUtil.convertToAndPredicates(formattedSearchParams, songRoot, cb, searchTerm);
         if (shouldFilterPublished) {
-            predicates = ArrayUtils.add(predicates, cb.and(cb.equal(SearchUtil
-                    .convertToPredicateExpression(EntityConstants.IS_PUBLISHED,
-                            songRoot), Boolean.TRUE)));
+            predicates = filterSingleSongs(predicates, cb, songRoot);
         }
         if (pageable.getSort().isSorted()) {
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), songRoot, cb));
@@ -68,5 +66,21 @@ public class CustomSongRepository implements SearchRepository<Song> {
                 .getResultList();
         Integer resultListSize = entityManager.createQuery(cq).getResultList().size();
         return new SearchResultResponse<>(new PageImpl<>(resultList, pageable, resultList.size()), resultListSize);
+    }
+
+    /**
+     * Method used to filter published songs which are singles.
+     *
+     * @param predicates - the existing predicates to the builder.
+     * @param cb         - the criteria builder wrapper object.
+     * @param root       - the class root wrapper object.
+     * @return the predicates array containing the single songs filtering.
+     */
+    private Predicate[] filterSingleSongs(Predicate[] predicates,
+                                             CriteriaBuilder cb,
+                                             Root<Song> root) {
+        return ArrayUtils.add(predicates, cb.and(cb.equal(SearchUtil
+                .convertToPredicateExpression(EntityConstants.IS_A_SINGLE,
+                        root), Boolean.TRUE)));
     }
 }

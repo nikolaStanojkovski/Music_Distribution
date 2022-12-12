@@ -19,7 +19,7 @@ export const ALBUMS_RAISE_TIER = `${ALBUMS}/raise-tier`;
 
 export const AUTH = '/auth';
 export const SEARCH = '/search';
-export const ARTIST = '/artists';
+export const ARTIST = '/artist';
 export const ARTISTS = '/artists';
 export const LOGIN = '/login';
 export const REGISTER = '/register';

@@ -17,7 +17,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.musicdistribution.streamingservice.constants.MessageConstants
 import com.musicdistribution.streamingservice.constants.NotificationConstants
-import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.ui.home.HomeFragmentViewModel
 import streamingservice.R
 
@@ -45,16 +44,16 @@ class HomeActivity : AppCompatActivity() {
 //        checkNotifications()
     }
 
-    private fun checkNotifications() {
-        homeFragmentViewModel.checkNotifications()
-        homeFragmentViewModel.getNotificationsLivedata()
-            .observe(this,
-                { message ->
-                    if (!message.isNullOrBlank()) {
-                        showNotification(message)
-                    }
-                })
-    }
+//    private fun checkNotifications() {
+//        homeFragmentViewModel.checkNotifications()
+//        homeFragmentViewModel.getNotificationsLivedata()
+//            .observe(this,
+//                { message ->
+//                    if (!message.isNullOrBlank()) {
+//                        showNotification(message)
+//                    }
+//                })
+//    }
 
     private fun showNotification(message: String) {
         notificationManager =

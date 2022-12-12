@@ -14,8 +14,8 @@ interface NotificationServiceApi {
     fun search(
         @Query(EntityConstants.SEARCH_PARAMS) searchParams: String,
         @Query(EntityConstants.SEARCH_TERM) searchTerm: String,
-        @Query(EntityConstants.PAGE) page: String,
-        @Query(EntityConstants.SIZE) size: String
+        @Query(EntityConstants.PAGE) page: Int,
+        @Query(EntityConstants.SIZE) size: Int
     ): Call<NotificationResponse?>
 
     @GET(ApiConstants.API_NOTIFICATIONS_RECEIVE)

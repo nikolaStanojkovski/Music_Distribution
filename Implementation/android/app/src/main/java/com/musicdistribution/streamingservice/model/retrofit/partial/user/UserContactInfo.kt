@@ -1,8 +1,8 @@
 package com.musicdistribution.streamingservice.model.retrofit.partial.user
 
-import com.musicdistribution.streamingservice.model.enums.EmailDomain
+import com.musicdistribution.streamingservice.model.retrofit.partial.Email
 
 data class UserContactInfo(
-    val email: EmailDomain,
+    val email: Email,
     val telephoneNumber: String
 )

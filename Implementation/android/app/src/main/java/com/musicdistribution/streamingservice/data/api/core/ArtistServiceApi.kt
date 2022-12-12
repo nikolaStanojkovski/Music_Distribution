@@ -13,12 +13,15 @@ import retrofit2.http.Query
 
 interface ArtistServiceApi {
 
+    @GET(ApiConstants.API_ARTISTS)
+    fun findAll(): Call<ArtistResponse?>
+
     @GET(ApiConstants.API_ARTISTS_SEARCH)
     fun search(
         @Query(EntityConstants.SEARCH_PARAMS) searchParams: String,
         @Query(EntityConstants.SEARCH_TERM) searchTerm: String,
-        @Query(EntityConstants.PAGE) page: String,
-        @Query(EntityConstants.SIZE) size: String
+        @Query(EntityConstants.PAGE) page: Int,
+        @Query(EntityConstants.SIZE) size: Int
     ): Call<ArtistResponse?>
 
     @GET(ApiConstants.API_ARTISTS_ID)

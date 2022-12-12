@@ -1,116 +1,112 @@
 package com.musicdistribution.streamingservice.ui.home
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.data.room.AppDatabase
-import com.musicdistribution.streamingservice.model.retrofit.UserAuth
+import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
+import com.musicdistribution.streamingservice.data.api.core.AlbumServiceApi
+import com.musicdistribution.streamingservice.data.api.core.ArtistServiceApi
+import com.musicdistribution.streamingservice.data.api.core.SongServiceApi
+import com.musicdistribution.streamingservice.model.retrofit.core.Album
+import com.musicdistribution.streamingservice.model.retrofit.core.Artist
+import com.musicdistribution.streamingservice.model.retrofit.core.Song
+import com.musicdistribution.streamingservice.model.retrofit.response.AlbumResponse
+import com.musicdistribution.streamingservice.model.retrofit.response.ArtistResponse
+import com.musicdistribution.streamingservice.model.retrofit.response.SongResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app: Application = application
-    private val database = AppDatabase.getInstance(app)
+//    private val database = AppDatabase.getInstance(app)
 
 //    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
-    private var notificationsLiveData: MutableLiveData<String> = MutableLiveData()
 
-//    private var artistsLiveData: MutableLiveData<MutableList<ArtistRetrofit>> = MutableLiveData()
-//    private var artistLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
-//    private var albumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>> = MutableLiveData()
-//    private var songsLiveData: MutableLiveData<MutableList<SongRetrofit>> = MutableLiveData()
-//
-//    private var publishedAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>> =
-//        MutableLiveData()
-//    private var publishedSongsLiveData: MutableLiveData<MutableList<SongRetrofit>> =
-//        MutableLiveData()
+    //    private var notificationsLiveData: MutableLiveData<String> = MutableLiveData()
+    //    private var artistLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
 
-    fun fetchArtists() {
-//        streamingServiceApi.getArtistsPage().enqueue(object : Callback<ArrayList<ArtistRetrofit>> {
-//            override fun onResponse(
-//                call: Call<ArrayList<ArtistRetrofit>>?,
-//                response: Response<ArrayList<ArtistRetrofit>>
-//            ) {
-//                val artists = response.body()
-//                if (!artists.isNullOrEmpty()) {
-//                    artistsLiveData.value = artists.toMutableList()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ArrayList<ArtistRetrofit>>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch artists",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
-    }
+    private val songServiceApi: SongServiceApi = StreamingServiceApiClient.getSongServiceApi()
+    private val albumServiceApi: AlbumServiceApi = StreamingServiceApiClient.getAlbumServiceApi()
+    private val artistServiceApi: ArtistServiceApi = StreamingServiceApiClient.getArtistServiceApi()
 
-    fun fetchArtist(userAuth: UserAuth) {
-//        streamingServiceApi.getArtistByEmail(userAuth)
-//            .enqueue(object : Callback<ArtistRetrofit?> {
-//                override fun onResponse(
-//                    call: Call<ArtistRetrofit?>?,
-//                    response: Response<ArtistRetrofit?>
-//                ) {
-//                    val artist = response.body()
-//                    if (artist != null) {
-//                        artistLiveData.value = artist
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ArtistRetrofit?>?, throwable: Throwable) {
-//                    Toast.makeText(
-//                        app,
-//                        "There was a problem when trying to fetch the artist with mail ${userAuth.username + "@" + userAuth.emailDomain.toString() + ".com"}",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            })
-    }
+    private var artistsLiveData: MutableLiveData<MutableList<Artist>> = MutableLiveData()
+    private var albumsLiveData: MutableLiveData<MutableList<Album>> = MutableLiveData()
+    private var songsLiveData: MutableLiveData<MutableList<Song>> = MutableLiveData()
 
     fun fetchAlbums() {
-//        streamingServiceApi.getAlbumsPage().enqueue(object : Callback<ArrayList<AlbumRetrofit>> {
-//            override fun onResponse(
-//                call: Call<ArrayList<AlbumRetrofit>>?,
-//                response: Response<ArrayList<AlbumRetrofit>>
-//            ) {
-//                val albums = response.body()
-//                if (!albums.isNullOrEmpty()) {
-//                    albumsLiveData.value = albums.toMutableList()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ArrayList<AlbumRetrofit>>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch albums",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
+        albumServiceApi.findAll().enqueue(object : Callback<AlbumResponse?> {
+            override fun onResponse(
+                call: Call<AlbumResponse?>?,
+                response: Response<AlbumResponse?>
+            ) {
+                val albums = response.body()
+                if (albums?.content != null
+                    && albums.content.isNotEmpty()
+                ) {
+                    albumsLiveData.value = albums.content.toMutableList()
+                }
+            }
+
+            override fun onFailure(call: Call<AlbumResponse?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    ExceptionConstants.ALBUMS_FETCH_FAILED,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    fun fetchArtists() {
+        artistServiceApi.findAll().enqueue(object : Callback<ArtistResponse?> {
+            override fun onResponse(
+                call: Call<ArtistResponse?>?,
+                response: Response<ArtistResponse?>
+            ) {
+                val artists = response.body()
+                if (artists?.content != null
+                    && artists.content.isNotEmpty()
+                ) {
+                    artistsLiveData.value = artists.content.toMutableList()
+                }
+            }
+
+            override fun onFailure(call: Call<ArtistResponse?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    ExceptionConstants.ARTISTS_FETCH_FAILED,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     fun fetchSongs() {
-//        streamingServiceApi.getSongsPage().enqueue(object : Callback<ArrayList<SongRetrofit>> {
-//            override fun onResponse(
-//                call: Call<ArrayList<SongRetrofit>>?,
-//                response: Response<ArrayList<SongRetrofit>>
-//            ) {
-//                val songs = response.body()
-//                if (!songs.isNullOrEmpty()) {
-//                    songsLiveData.value = songs.toMutableList()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ArrayList<SongRetrofit>>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch songs",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
+        songServiceApi.findAll().enqueue(object : Callback<SongResponse?> {
+            override fun onResponse(
+                call: Call<SongResponse?>?,
+                response: Response<SongResponse?>
+            ) {
+                val songs = response.body()
+                if (songs?.content != null
+                    && songs.content.isNotEmpty()
+                ) {
+                    songsLiveData.value = songs.content.toMutableList()
+                }
+            }
+
+            override fun onFailure(call: Call<SongResponse?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    ExceptionConstants.SONGS_FETCH_FAILED,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     fun checkNotifications() {
@@ -235,32 +231,21 @@ class HomeFragmentViewModel(application: Application) : AndroidViewModel(applica
 //        }
 //    }
 
-    fun getNotificationsLivedata(): MutableLiveData<String> {
-        return notificationsLiveData
+    fun getAlbumsLiveData(): MutableLiveData<MutableList<Album>> {
+        return albumsLiveData
     }
 
-//    fun getArtistsLiveData(): MutableLiveData<MutableList<ArtistRetrofit>> {
-//        return artistsLiveData
-//    }
-//
-//    fun getArtistLiveData(): MutableLiveData<ArtistRetrofit?> {
-//        return artistLiveData
-//    }
-//
-//    fun getAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit>> {
-//        return albumsLiveData
-//    }
-//
-//    fun getSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>> {
-//        return songsLiveData
-//    }
-//
-//    fun emptyData() {
-//        this.artistsLiveData = MutableLiveData()
-//        this.artistLiveData = MutableLiveData()
-//        this.albumsLiveData = MutableLiveData()
-//        this.songsLiveData = MutableLiveData()
-//        this.publishedAlbumsLiveData = MutableLiveData()
-//        this.publishedSongsLiveData = MutableLiveData()
-//    }
+    fun getArtistsLiveData(): MutableLiveData<MutableList<Artist>> {
+        return artistsLiveData
+    }
+
+    fun getSongsLiveData(): MutableLiveData<MutableList<Song>> {
+        return songsLiveData
+    }
+
+    fun emptyData() {
+        this.artistsLiveData = MutableLiveData()
+        this.albumsLiveData = MutableLiveData()
+        this.songsLiveData = MutableLiveData()
+    }
 }

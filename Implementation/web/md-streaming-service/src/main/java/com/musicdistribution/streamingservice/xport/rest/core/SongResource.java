@@ -8,6 +8,7 @@ import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.constant.ServletConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
+import com.musicdistribution.streamingservice.domain.model.enums.AuthRole;
 import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
@@ -46,16 +47,21 @@ public class SongResource {
     /**
      * Method used for fetching a page with songs.
      *
-     * @param pageable - the wrapper object containing pagination data.
+     * @param authRole  - the role of the user which is being authenticated.
+     * @param authToken - the access token of the user which is being authenticated.
+     * @param pageable  - the wrapper object containing pagination data.
      * @return the page with the found songs.
      */
     @GetMapping
-    public Page<SongResponse> findAll(@RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
-                                      Pageable pageable) {
+    public Page<SongResponse> findAll(
+            @RequestHeader(value = AuthConstants.AUTH_ROLE) AuthRole authRole,
+            @RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
+            Pageable pageable) {
         boolean isTokenValid = jwtUtil.validateJwtToken(authToken
                 .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX),
                         StringUtils.EMPTY));
-        List<SongResponse> songs = songService.findAll(pageable, !isTokenValid)
+        List<SongResponse> songs = songService.findAll(pageable,
+                !isTokenValid || authRole.equals(AuthRole.LISTENER))
                 .stream()
                 .map(song -> SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
@@ -70,22 +76,26 @@ public class SongResource {
     /**
      * Method used for searching songs.
      *
+     * @param authRole     - the role of the user which is being authenticated.
+     * @param authToken    - the access token of the user which is being authenticated.
      * @param searchParams - the object parameters by which a filtering is to be done.
      * @param searchTerm   - the search term by which the filtering is to be done.
      * @param pageable     - the wrapper object containing pagination data.
      * @return the page with the filtered songs.
      */
     @GetMapping(PathConstants.SEARCH)
-    public Page<SongResponse> search(@RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
-                                     @RequestParam String[] searchParams,
-                                     @RequestParam String searchTerm,
-                                     Pageable pageable) {
+    public Page<SongResponse> search(
+            @RequestHeader(value = AuthConstants.AUTH_ROLE) AuthRole authRole,
+            @RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
+            @RequestParam String[] searchParams,
+            @RequestParam String searchTerm,
+            Pageable pageable) {
         boolean isTokenValid = jwtUtil.validateJwtToken(authToken
                 .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX),
                         StringUtils.EMPTY));
         SearchResultResponse<Song> songSearchResultResponse = songService.search(
                 List.of(searchParams),
-                !isTokenValid,
+                !isTokenValid || authRole.equals(AuthRole.LISTENER),
                 (List.of(searchParams).stream().filter(param ->
                         param.contains(EntityConstants.ID)).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable);
@@ -121,6 +131,8 @@ public class SongResource {
     /**
      * Method USED for creating a new song.
      *
+     * @param authToken               - the access token of the user which is being authenticated.
+     * @param file                   - the audio file of the song that is to be created.
      * @param songRequest - an object wrapper containing information for the song to be created.
      * @return the created song.
      */
@@ -140,6 +152,8 @@ public class SongResource {
     /**
      * Method used for publishing a new song.
      *
+     * @param authToken               - the access token of the user which is being authenticated.
+     * @param cover                   - the cover picture of the song that is to be published.
      * @param songTransactionRequest - an object wrapper containing information for the song to be published.
      * @return the published song.
      */

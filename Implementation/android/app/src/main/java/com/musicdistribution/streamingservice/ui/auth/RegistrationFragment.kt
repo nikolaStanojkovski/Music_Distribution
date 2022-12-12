@@ -54,9 +54,6 @@ class RegistrationFragment : Fragment() {
         val email = view.findViewById<EditText>(R.id.inputRegisterEmail).text.toString()
         val password = view.findViewById<EditText>(R.id.inputRegisterPassword).text.toString()
 
-
-        EmailDomain.values().map { i -> i.toString() }.joinToString { AlphabetConstants.COMMA }
-
         authActivityViewModel.registerApi(email, password)
     }
 

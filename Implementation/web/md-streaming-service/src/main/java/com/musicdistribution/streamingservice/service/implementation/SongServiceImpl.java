@@ -58,7 +58,7 @@ public class SongServiceImpl implements SongService {
     @Override
     public Page<Song> findAll(Pageable pageable, Boolean shouldFilterPublished) {
         return (shouldFilterPublished)
-                ? songRepository.findByIsPublished(true, pageable)
+                ? songRepository.findByIsASingle(true, pageable)
                 : songRepository.findAll(pageable);
     }
 
@@ -71,7 +71,7 @@ public class SongServiceImpl implements SongService {
     @Override
     public Long findSize(Boolean shouldFilterPublished) {
         return (shouldFilterPublished)
-                ? songRepository.countByIsPublished(true)
+                ? songRepository.countByIsASingle(true)
                 : songRepository.count();
     }
 
