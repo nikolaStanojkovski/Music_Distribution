@@ -1,3 +1,4 @@
+
 package com.musicdistribution.streamingservice.domain.valueobject.core;
 
 import com.musicdistribution.sharedkernel.domain.base.ValueObject;

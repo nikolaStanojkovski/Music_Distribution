@@ -19,12 +19,22 @@
     <string name="password_hint">Enter at least 6 characters</string>
     <string name="username_hint">eg. `test.example@yahoo.com`</string>
 
-    <!-- Strings related to home -->
+    <!-- Strings related to songs -->
+    <string name="song_genre_placeholder">[song_genre]</string>
+    <string name="song_title_placeholder">[song_title]</string>
+    <string name="artist_name_placeholder">[artist_name]</string>
+    <string name="artist_personal_info">[personal_info]</string>
+    <string name="album_name_placeholder">[album_name]</string>
+    <string name="image_placeholder">Home fragment item image</string>
+    <string name="length_placeholder">[length]</string>
+    <string name="length_parameter_placeholder">Length: %1$s</string>
+    <string name="location_placeholder">[location]</string>
+    <string name="date_time_placeholder">[date_time]</string>
+
     <string name="button_follow">Follow</string>
     <string name="create_dialog_title">What is the action you want to take?</string>
     <string name="publish_album_title">Publish an Album</string>
     <string name="publish_song_title">Publish a Song</string>
-    <string name="artist_default_info">Has 0 followers</string>
     <string name="exit_dialog">Exit</string>
     <string name="dot_text">⚫</string>
     <string name="floating_button_description">Button used to display an e-mail action</string>
@@ -32,13 +42,12 @@
     <!-- Strings related to publish/create -->
     <string name="song_create_title">Publish a Song</string>
     <string name="song_name_placeholder">Enter the song name</string>
-    <string name="song_length_placeholder">Enter the song length (seconds)</string>
+    <string name="song_length_placeholder_ya">Enter the song length (seconds)</string>
     <string name="song_create_button">Publish</string>
     <string name="cancel_button">Cancel</string>
     <string name="song_create_note_1">** If you do not choose an album to publish the song to, the one will be a single</string>
     <string name="song_create_add_picture">Change</string>
     <string name="album_create_title">Publish an Album</string>
-    <string name="album_name_placeholder">Enter the album name</string>
     <string name="total_album_cost">Total album cost:</string>
     <string name="raise_tier_title">Raise Album TIer</string>
     <string name="album_raise_note_1">** You will not be able to reduce the album tier; you will either have to raise it or leave it at its current level</string>

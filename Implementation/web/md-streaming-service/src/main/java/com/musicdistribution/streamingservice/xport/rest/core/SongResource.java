@@ -95,7 +95,7 @@ public class SongResource {
                         StringUtils.EMPTY));
         SearchResultResponse<Song> songSearchResultResponse = songService.search(
                 List.of(searchParams),
-                !isTokenValid || authRole.equals(AuthRole.LISTENER),
+                shouldFilterPublished(isTokenValid, authRole, searchParams),
                 (List.of(searchParams).stream().filter(param ->
                         param.contains(EntityConstants.ID)).count() == searchParams.length)
                         ? encryptionSystem.decrypt(searchTerm) : searchTerm, pageable);
@@ -111,7 +111,24 @@ public class SongResource {
     }
 
     /**
-     * Method for getting information about a specific song.
+     * Method used to check whether song filtering by the publishing status should be done or not.
+     *
+     * @param isTokenValid - flag determining whether the user authentication token is valid or not.
+     * @param authRole     - the role of the user that is being authenticated.
+     * @param searchParams - the search parameters by which the filtering is done.
+     * @return a flag determining whether the songs are to be filtered by the publishing status.
+     */
+    private Boolean shouldFilterPublished(Boolean isTokenValid,
+                                          AuthRole authRole,
+                                          String[] searchParams) {
+        return (!isTokenValid || authRole.equals(AuthRole.LISTENER))
+                && List.of(searchParams)
+                .stream()
+                .noneMatch(param -> param.startsWith(EntityConstants.ALBUM));
+    }
+
+    /**
+     * Method used for getting information about a specific song.
      *
      * @param id - song's id.
      * @return the found song.
@@ -129,10 +146,10 @@ public class SongResource {
     }
 
     /**
-     * Method USED for creating a new song.
+     * Method used for creating a new song.
      *
-     * @param authToken               - the access token of the user which is being authenticated.
-     * @param file                   - the audio file of the song that is to be created.
+     * @param authToken   - the access token of the user which is being authenticated.
+     * @param file        - the audio file of the song that is to be created.
      * @param songRequest - an object wrapper containing information for the song to be created.
      * @return the created song.
      */
@@ -152,8 +169,8 @@ public class SongResource {
     /**
      * Method used for publishing a new song.
      *
-     * @param authToken               - the access token of the user which is being authenticated.
-     * @param cover                   - the cover picture of the song that is to be published.
+     * @param authToken              - the access token of the user which is being authenticated.
+     * @param cover                  - the cover picture of the song that is to be published.
      * @param songTransactionRequest - an object wrapper containing information for the song to be published.
      * @return the published song.
      */

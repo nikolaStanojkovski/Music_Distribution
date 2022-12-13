@@ -1,7 +1,5 @@
 package com.musicdistribution.streamingservice.constants
 
-import com.musicdistribution.streamingservice.model.enums.EmailDomain
-
 object MessageConstants {
 
     const val SUCCESSFUL_REGISTRATION = "The user registration was successful"
@@ -14,6 +12,12 @@ object MessageConstants {
     const val GOOD_AFTERNOON = "Good afternoon"
     const val GOOD_EVENING = "Good evening"
     const val HELLO_THERE = "Hello there"
+
+    const val EXPLORE_SONGS = "Explore Songs"
+    const val EXPLORE_ALBUMS = "Explore Albums"
+    const val EXPLORE_ARTISTS = "Explore Artists"
+    const val PUBLISHED_SONGS = "Published Songs"
+    const val PUBLISHED_ALBUMS = "Published Albums"
 
     const val APPLICATION_ID = "MusicDistribution"
     const val DEPRECATION = "deprecation"

@@ -1,6 +1,5 @@
 package com.musicdistribution.streamingservice.ui.home.item
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +8,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.constants.ComponentConstants
+import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.constants.FileConstants
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.ui.HomeActivity
-import com.musicdistribution.streamingservice.util.ValidationUtils
 import streamingservice.R
 
 class SongFragment : Fragment() {
@@ -33,83 +37,68 @@ class SongFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        val selectedSongId = arguments?.get("selected_song_id") as String?
-        val categoryItemType = arguments?.get("item_type") as CategoryItemType?
-        if (selectedSongId == null) {
+        val selectedSongId = arguments?.get(ComponentConstants.SELECTED_SONG_ID) as String?
+        val categoryItemType = arguments?.get(ComponentConstants.ITEM_TYPE) as CategoryItemType?
+
+        if (selectedSongId == null || categoryItemType == null || categoryItemType != CategoryItemType.SONG) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))
             requireActivity().finish()
-        }
+        } else {
+            homeItemFragmentViewModel =
+                ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
 
-        homeItemFragmentViewModel =
-            ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
-
-        fillData(selectedSongId!!, categoryItemType)
-        fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
-            findNavController().navigate(R.id.action_songFragment_to_homeFragment)
-//            homeItemFragmentViewModel.clear()
+            fillData(selectedSongId)
+            fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
+                findNavController().navigate(R.id.action_songFragment_to_homeFragment)
+                homeItemFragmentViewModel.clear()
+            }
         }
     }
 
-    private fun fillData(selectedSongId: String, categoryItemType: CategoryItemType?) {
-//        if (categoryItemType != null && categoryItemType == CategoryItemType.PUBLISHED_SONG) {
-//            fragmentView.findViewById<ImageView>(R.id.btnLikeSong).visibility = View.GONE
-//            val unpublishButton = fragmentView.findViewById<Button>(R.id.btnUnPublishSong)
-//            unpublishButton.visibility = View.VISIBLE
-//            unpublishButton.setOnClickListener {
-//                fillConfirmDialog(selectedSongId)
-//            }
-//        } else {
-//            fillLikeButton(fragmentView.findViewById(R.id.btnLikeSong), selectedSongId)
-//        }
+    private fun fillData(selectedSongId: String) {
+        homeItemFragmentViewModel.clear()
+        homeItemFragmentViewModel.fetchSong(selectedSongId)
+        homeItemFragmentViewModel.getSongLiveData()
+            .observe(viewLifecycleOwner,
+                { item ->
+                    if (item != null) {
+                        fragmentView.findViewById<TextView>(R.id.txtSongGenre).text =
+                            item.songGenre.toString()
+                        fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
+                            item.songName
+                        fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
+                            if (item.creator.userPersonalInfo.artName.isNotBlank())
+                                item.creator.userPersonalInfo.artName else item.creator.email
 
-//        homeItemFragmentViewModel.clear()
-//        homeItemFragmentViewModel.fetchSongApi(selectedSongId)
-//        homeItemFragmentViewModel.getSongsLiveData()
-//            .observe(viewLifecycleOwner,
-//                { song ->
-//                    if (song != null) {
-//                        fragmentView.findViewById<TextView>(R.id.txtSongHeading).text =
-//                            if (song.isASingle) "Taken from" else "Taken from album"
-//                        fragmentView.findViewById<TextView>(R.id.txtSongProperty).text =
-//                            if (!song.isASingle) song.album!!.albumName else song.songName
-//                        fragmentView.findViewById<TextView>(R.id.txtSongTitle).text =
-//                            song.songName
-//                        fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
-//                            song.creator!!.artistPersonalInfo.fullName
-//
-//                        fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
-//                            "Length: ${ValidationUtils.generateTimeString(song.songLength!!.lengthInSeconds)}"
-//
-//                        val imageControl =
-//                            fragmentView.findViewById<ImageView>(R.id.imageSong)
-//                        val gsReference =
-//                            if (song.isASingle) FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
-//                            else FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${song.album!!.id}.jpg")
-//                        gsReference.downloadUrl.addOnCompleteListener { uri ->
-//                            var link = ""
-//                            if (uri.isSuccessful) {
-//                                link = uri.result.toString()
-//                            }
-//                            Glide.with(this)
-//                                .load(link)
-//                                .placeholder(R.drawable.default_picture)
-//                                .into(imageControl!!)
-//                        }
-//                    }
-//                })
+                        fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
+                            item.songLength.formattedString
+
+                        val imageControl =
+                            fragmentView.findViewById<ImageView>(R.id.imageSong)
+                        val songCoverReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${item.id}${FileConstants.PNG_EXTENSION}"
+
+                       if(imageControl != null) {
+                           fillImage(songCoverReference, imageControl)
+                       }
+                    }
+                })
     }
 
-//    private fun fillLikeButton(btnLikeSong: ImageView?, selectedSongId: String) {
-//        FirebaseRealtimeDB.favouriteSongsReference.child("/like-${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}-${selectedSongId}")
-//            .get()
-//            .addOnSuccessListener { entry ->
-//                if (entry.exists()) {
-//                    buttonUnlike(btnLikeSong!!, selectedSongId)
-//                } else {
-//                    buttonLike(btnLikeSong!!, selectedSongId)
-//                }
-//            }
-//    }
+    private fun fillImage(songCoverReference: String, imageControl: ImageView) {
+        try {
+            Glide.with(this)
+                .load(songCoverReference)
+                .placeholder(R.drawable.default_picture)
+                .into(imageControl)
+        } catch (exception: Exception) {
+            Toast.makeText(
+                context,
+                ExceptionConstants.SONG_PICTURE_FETCH_FAILED,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 //
 //    private fun buttonLike(likeButton: ImageView, selectedSongId: String) {
 //        likeButton.setImageResource(R.drawable.ic_favourite_unfilled)
@@ -134,10 +123,4 @@ class SongFragment : Fragment() {
 //            buttonLike(likeButton, selectedSongId)
 //        }
 //    }
-
-    private fun navigateOut() {
-        val intent = Intent(requireActivity(), HomeActivity::class.java)
-        startActivity(intent)
-        requireActivity().finish()
-    }
 }

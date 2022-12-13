@@ -128,13 +128,13 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 { songs ->
                     if (songs != null) {
                         for (item in songs) {
-                            val profilePictureReference =
+                            val songCoverReference =
                                 "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${item.id}${FileConstants.PNG_EXTENSION}"
                             verticalAdapter.updateData(
                                 CategoryData.mainData[0],
                                 CategoryItem(
                                     item.id,
-                                    profilePictureReference,
+                                    songCoverReference,
                                     CategoryItemType.SONG
                                 )
                             )
@@ -157,13 +157,13 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 { albums ->
                     if (albums != null) {
                         for (item in albums) {
-                            val profilePictureReference =
+                            val albumCoverReference =
                                 "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
                             verticalAdapter.updateData(
                                 CategoryData.mainData[1],
                                 CategoryItem(
                                     item.id,
-                                    profilePictureReference,
+                                    albumCoverReference,
                                     CategoryItemType.ALBUM
                                 )
                             )
@@ -276,17 +276,26 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     override fun onClick(item: CategoryItem) {
         when (item.itemType) {
             CategoryItemType.ARTIST -> {
-                val bundle = bundleOf(ComponentConstants.SELECTED_ARTIST_ID to item.itemId)
+                val bundle = bundleOf(
+                    ComponentConstants.SELECTED_ARTIST_ID to item.itemId,
+                    ComponentConstants.ITEM_TYPE to CategoryItemType.ARTIST
+                )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_artistFragment, bundle)
             }
             CategoryItemType.ALBUM -> {
-                val bundle = bundleOf(ComponentConstants.SELECTED_ALBUM_ID to item.itemId)
+                val bundle = bundleOf(
+                    ComponentConstants.SELECTED_ALBUM_ID to item.itemId,
+                    ComponentConstants.ITEM_TYPE to CategoryItemType.ALBUM
+                )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_albumFragment, bundle)
             }
             CategoryItemType.SONG -> {
-                val bundle = bundleOf(ComponentConstants.SELECTED_SONG_ID to item.itemId)
+                val bundle = bundleOf(
+                    ComponentConstants.SELECTED_SONG_ID to item.itemId,
+                    ComponentConstants.ITEM_TYPE to CategoryItemType.SONG
+                )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_songFragment, bundle)
             }

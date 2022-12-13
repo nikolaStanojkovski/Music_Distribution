@@ -1,68 +1,240 @@
 package com.musicdistribution.streamingservice.ui.home.item
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.model.firebase.FavouriteSong
-import com.musicdistribution.streamingservice.model.firebase.User
+import com.musicdistribution.streamingservice.constants.EntityConstants
+import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.constants.PaginationConstants
+import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
+import com.musicdistribution.streamingservice.data.api.core.AlbumServiceApi
+import com.musicdistribution.streamingservice.data.api.core.ArtistServiceApi
+import com.musicdistribution.streamingservice.data.api.core.SongServiceApi
+import com.musicdistribution.streamingservice.model.retrofit.core.Album
+import com.musicdistribution.streamingservice.model.retrofit.core.Artist
+import com.musicdistribution.streamingservice.model.retrofit.core.Song
+import com.musicdistribution.streamingservice.model.retrofit.response.AlbumResponse
+import com.musicdistribution.streamingservice.model.retrofit.response.SongResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app: Application = application
 
-//    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
+    private val songServiceApi: SongServiceApi = StreamingServiceApiClient.getSongServiceApi()
+    private val albumServiceApi: AlbumServiceApi = StreamingServiceApiClient.getAlbumServiceApi()
+    private val artistServiceApi: ArtistServiceApi = StreamingServiceApiClient.getArtistServiceApi()
 
-//    private var artistsLiveData: MutableLiveData<ArtistRetrofit> = MutableLiveData()
-//    private var usersLiveData: MutableLiveData<User?> = MutableLiveData()
-//    private var artistAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit>?> =
-//        MutableLiveData()
-//    private var artistSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
-//    private var albumsLiveData: MutableLiveData<AlbumRetrofit?> = MutableLiveData()
-//    private var albumSongsLiveData: MutableLiveData<MutableList<SongRetrofit>?> = MutableLiveData()
-//    private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
+    private var songLiveData: MutableLiveData<Song?> = MutableLiveData()
+    private var albumLiveData: MutableLiveData<Album?> = MutableLiveData()
+    private var artistLiveData: MutableLiveData<Artist?> = MutableLiveData()
 
-//    init {
-//        artistsLiveData = MutableLiveData()
-//        usersLiveData = MutableLiveData()
-//        artistAlbumsLiveData = MutableLiveData()
-//        artistSongsLiveData = MutableLiveData()
-//        albumsLiveData = MutableLiveData()
-//        albumSongsLiveData = MutableLiveData()
-//        songsLiveData = MutableLiveData()
-//    }
+    private var artistAlbumsLiveData: MutableLiveData<MutableList<Album>> = MutableLiveData()
+    private var artistSongsLiveData: MutableLiveData<MutableList<Song>> = MutableLiveData()
+    private var albumSongsLiveData: MutableLiveData<MutableList<Song>> = MutableLiveData()
 
-    fun fetchArtistApi(id: String) {
-//        streamingServiceApi.getArtistById(id).enqueue(object : Callback<ArtistRetrofit?> {
-//            override fun onResponse(
-//                call: Call<ArtistRetrofit?>?,
-//                response: Response<ArtistRetrofit?>
-//            ) {
-//                val artist = response.body()
-//                if (artist != null) {
-//                    artistsLiveData.value = artist!!
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ArtistRetrofit?>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch the artist with id: $id",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
+    fun fetchSong(id: String) {
+        songServiceApi.findById(id).enqueue(object : Callback<Song?> {
+            override fun onResponse(
+                call: Call<Song?>?,
+                response: Response<Song?>?
+            ) {
+                if (response?.body() == null) {
+                    Toast.makeText(
+                        app,
+                        "${ExceptionConstants.SONG_FETCH_FAILED} $id",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    songLiveData.value = response.body()
+                }
+            }
+
+            override fun onFailure(call: Call<Song?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    "${ExceptionConstants.SONG_FETCH_FAILED} $id",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
-    fun favouriteSong(fanId: String, selectedSongId: String, like: Boolean) {
-        if (like) {
-            val favouriteSongMap = FavouriteSong(fanId, selectedSongId)
+    fun fetchAlbum(id: String) {
+        albumServiceApi.findById(id).enqueue(object : Callback<Album?> {
+            override fun onResponse(
+                call: Call<Album?>?,
+                response: Response<Album?>?
+            ) {
+                if (response?.body() == null) {
+                    Toast.makeText(
+                        app,
+                        "${ExceptionConstants.ALBUM_FETCH_FAILED} $id",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    albumLiveData.value = response.body()
+                }
+            }
+
+            override fun onFailure(call: Call<Album?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    "${ExceptionConstants.ALBUM_FETCH_FAILED} $id",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    fun fetchArtist(id: String) {
+        artistServiceApi.findById(id).enqueue(object : Callback<Artist?> {
+            override fun onResponse(
+                call: Call<Artist?>?,
+                response: Response<Artist?>?
+            ) {
+                if (response?.body() == null) {
+                    Toast.makeText(
+                        app,
+                        "${ExceptionConstants.ARTIST_FETCH_FAILED} $id",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    artistLiveData.value = response.body()
+                }
+            }
+
+            override fun onFailure(call: Call<Artist?>?, throwable: Throwable) {
+                Toast.makeText(
+                    app,
+                    "${ExceptionConstants.ARTIST_FETCH_FAILED} $id",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    fun fetchArtistAlbums(artistId: String) {
+        albumServiceApi.search(
+            EntityConstants.CREATOR_ID,
+            artistId,
+            PaginationConstants.DEFAULT_PAGE_NUMBER,
+            PaginationConstants.DEFAULT_PAGE_SIZE
+        ).enqueue(object : Callback<AlbumResponse?> {
+            override fun onResponse(
+                call: Call<AlbumResponse?>?,
+                response: Response<AlbumResponse?>?
+            ) {
+                if (response?.body() == null || response.body()?.content == null) {
+                    Toast.makeText(
+                        app,
+                        "${ExceptionConstants.ALBUMS_FETCH_FAILED} for the artist $artistId",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    val albumResponse = response.body()
+                    artistAlbumsLiveData.value = albumResponse!!.content.toMutableList()
+                }
+            }
+
+            override fun onFailure(
+                call: Call<AlbumResponse?>?,
+                throwable: Throwable
+            ) {
+                Toast.makeText(
+                    app,
+                    "${ExceptionConstants.ALBUMS_FETCH_FAILED} for the artist $artistId",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    fun fetchArtistSongs(artistId: String) {
+        songServiceApi.search(
+            EntityConstants.CREATOR_ID,
+            artistId,
+            PaginationConstants.DEFAULT_PAGE_NUMBER,
+            PaginationConstants.DEFAULT_PAGE_SIZE
+        ).enqueue(object : Callback<SongResponse?> {
+            override fun onResponse(
+                call: Call<SongResponse?>?,
+                response: Response<SongResponse?>?
+            ) {
+                if (response?.body() == null || response.body()?.content == null) {
+                    Toast.makeText(
+                        app,
+                        "${ExceptionConstants.SONGS_FETCH_FAILED} for the artist $artistId",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    val albumResponse = response.body()
+                    artistSongsLiveData.value = albumResponse!!.content.toMutableList()
+                }
+            }
+
+            override fun onFailure(
+                call: Call<SongResponse?>?,
+                throwable: Throwable
+            ) {
+                Toast.makeText(
+                    app,
+                    "${ExceptionConstants.SONGS_FETCH_FAILED} for the artist $artistId",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+    fun fetchAlbumSongs(albumId: String) {
+        songServiceApi.search(
+            EntityConstants.ALBUM_ID,
+            albumId,
+            PaginationConstants.DEFAULT_PAGE_NUMBER,
+            PaginationConstants.DEFAULT_PAGE_SIZE
+        ).enqueue(object : Callback<SongResponse?> {
+            override fun onResponse(
+                call: Call<SongResponse?>?,
+                response: Response<SongResponse?>?
+            ) {
+                if (response?.body() == null || response.body()?.content == null) {
+                    Toast.makeText(
+                        app,
+                        "${ExceptionConstants.SONGS_FETCH_FAILED} for the album $albumId",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    val albumResponse = response.body()
+                    albumSongsLiveData.value = albumResponse!!.content.toMutableList()
+                }
+            }
+
+            override fun onFailure(
+                call: Call<SongResponse?>?,
+                throwable: Throwable
+            ) {
+                Toast.makeText(
+                    app,
+                    "${ExceptionConstants.SONGS_FETCH_FAILED} for the album $albumId",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
+//    fun favouriteSong(fanId: String, selectedSongId: String, like: Boolean) {
+//        if (like) {
+//            val favouriteSongMap = FavouriteSong(fanId, selectedSongId)
 //            FirebaseRealtimeDB.favouriteSongsReference.child("/like-${fanId}-${selectedSongId}")
 //                .setValue(favouriteSongMap)
-        } else {
+//        } else {
 //            FirebaseRealtimeDB.favouriteSongsReference.child("/like-${fanId}-${selectedSongId}")
 //                .removeValue()
-        }
-    }
+//        }
+//    }
 
 //    fun updateFollowers(
 //        followerId: String,
@@ -154,152 +326,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 //
 //    }
 
-    fun fetchArtistAlbumsApi(artistId: String) {
-//        streamingServiceApi.getArtistAlbums(artistId)
-//            .enqueue(object : Callback<ArrayList<AlbumRetrofit>> {
-//                override fun onResponse(
-//                    call: Call<ArrayList<AlbumRetrofit>>?,
-//                    response: Response<ArrayList<AlbumRetrofit>>
-//                ) {
-//                    val albums = response.body()
-//                    if (albums != null) {
-//                        artistAlbumsLiveData.value = albums
-//                    }
-//                }
-//
-//                override fun onFailure(
-//                    call: Call<ArrayList<AlbumRetrofit>>?,
-//                    throwable: Throwable
-//                ) {
-//                    Toast.makeText(
-//                        app,
-//                        "There was a problem when trying to fetch the artist albums with id: $artistId",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            })
-    }
-
-    fun fetchArtistSongsApi(artistId: String) {
-//        streamingServiceApi.getArtistSongs(artistId)
-//            .enqueue(object : Callback<ArrayList<SongRetrofit>> {
-//                override fun onResponse(
-//                    call: Call<ArrayList<SongRetrofit>>?,
-//                    response: Response<ArrayList<SongRetrofit>>
-//                ) {
-//                    val songs = response.body()
-//                    if (songs != null && songs.isNotEmpty()) {
-//                        artistSongsLiveData.value = songs
-//                    }
-//                }
-//
-//                override fun onFailure(
-//                    call: Call<ArrayList<SongRetrofit>>?,
-//                    throwable: Throwable
-//                ) {
-//                    Toast.makeText(
-//                        app,
-//                        "There was a problem when trying to fetch the artist songs with id: $artistId",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            })
-    }
-
-    fun fetchAlbumApi(id: String) {
-//        streamingServiceApi.getAlbum(id).enqueue(object : Callback<AlbumRetrofit?> {
-//            override fun onResponse(
-//                call: Call<AlbumRetrofit?>?,
-//                response: Response<AlbumRetrofit?>?
-//            ) {
-//                val album = response!!.body()
-//                if (album != null) {
-//                    albumsLiveData.value = album
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<AlbumRetrofit?>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch the album with id: $id",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
-    }
-
-    fun fetchAlbumSongsApi(id: String) {
-//        streamingServiceApi.getAlbumSongs(id).enqueue(object : Callback<ArrayList<SongRetrofit>> {
-//            override fun onResponse(
-//                call: Call<ArrayList<SongRetrofit>>?,
-//                response: Response<ArrayList<SongRetrofit>>?
-//            ) {
-//                val songs = response!!.body()
-//                if (songs != null && songs.isNotEmpty()) {
-//                    albumSongsLiveData.value = songs
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ArrayList<SongRetrofit>>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch the songs from album with id: $id",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
-    }
-
-    fun fetchSongApi(id: String) {
-//        streamingServiceApi.getSong(id).enqueue(object : Callback<SongRetrofit?> {
-//            override fun onResponse(
-//                call: Call<SongRetrofit?>?,
-//                response: Response<SongRetrofit?>?
-//            ) {
-//                val song = response!!.body()
-//                if (song != null) {
-//                    songsLiveData.value = null
-//                    songsLiveData.value = song
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<SongRetrofit?>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to fetch the song with id: $id",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
-    }
-
-    fun unPublishSong(selectedSongId: String) {
-//        streamingServiceApi.unPublishSong(selectedSongId).enqueue(object : Callback<SongRetrofit?> {
-//            override fun onResponse(
-//                call: Call<SongRetrofit?>?,
-//                response: Response<SongRetrofit?>
-//            ) {
-//                val song = response.body()
-//                if (song != null) {
-//                    clearFavouriteSOng(selectedSongId)
-//                    Toast.makeText(
-//                        app,
-//                        "The song with id $selectedSongId is successfully unpublished",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<SongRetrofit?>?, throwable: Throwable) {
-//                Toast.makeText(
-//                    app,
-//                    "There was a problem when trying to unpublish the song with id: $selectedSongId",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
-    }
-
 //    fun clearFavouriteSOng(selectedSongId: String) {
 //        FirebaseRealtimeDB.favouriteSongsReference.orderByChild("songId").equalTo(selectedSongId)
 //            .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -314,10 +340,6 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 //            })
 //    }
 
-
-//    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit> {
-//        return artistsLiveData
-//    }
 //
 //    fun getArtistAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit>?> {
 //        return artistAlbumsLiveData
@@ -327,29 +349,43 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 //        return artistSongsLiveData
 //    }
 //
-//    fun getUsersLiveData(): MutableLiveData<User?> {
-//        return usersLiveData
-//    }
-//
-//    fun getAlbumsLiveData(): MutableLiveData<AlbumRetrofit?> {
-//        return albumsLiveData
-//    }
-//
 //    fun getAlbumSongsLiveData(): MutableLiveData<MutableList<SongRetrofit>?> {
 //        return albumSongsLiveData
 //    }
-//
-//    fun getSongsLiveData(): MutableLiveData<SongRetrofit?> {
-//        return songsLiveData
-//    }
-//
-//    fun clear() {
-//        this.artistsLiveData = MutableLiveData()
-//        this.artistAlbumsLiveData = MutableLiveData()
-//        this.artistSongsLiveData = MutableLiveData()
-//        this.usersLiveData = MutableLiveData()
-//        this.albumsLiveData = MutableLiveData()
-//        this.albumSongsLiveData = MutableLiveData()
-//        this.songsLiveData = MutableLiveData()
-//    }
+
+    fun getSongLiveData(): MutableLiveData<Song?> {
+        return songLiveData
+    }
+
+    fun getAlbumLiveData(): MutableLiveData<Album?> {
+        return albumLiveData
+    }
+
+    fun getArtistLiveData(): MutableLiveData<Artist?> {
+        return artistLiveData
+    }
+
+    fun getArtistAlbumsLiveData(): MutableLiveData<MutableList<Album>> {
+        return artistAlbumsLiveData
+    }
+
+    fun getArtistSongsLiveData(): MutableLiveData<MutableList<Song>> {
+        return artistSongsLiveData
+    }
+
+    fun getAlbumSongsLiveData(): MutableLiveData<MutableList<Song>> {
+        return albumSongsLiveData
+    }
+
+    fun clear() {
+        this.songLiveData = MutableLiveData()
+        this.albumLiveData = MutableLiveData()
+        this.artistLiveData = MutableLiveData()
+
+        this.artistAlbumsLiveData = MutableLiveData()
+        this.artistSongsLiveData = MutableLiveData()
+        this.albumSongsLiveData = MutableLiveData()
+
+        // TODO: Add others here as well
+    }
 }

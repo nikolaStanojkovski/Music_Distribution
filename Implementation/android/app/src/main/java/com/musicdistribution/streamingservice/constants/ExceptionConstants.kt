@@ -11,6 +11,12 @@ object ExceptionConstants {
     const val ARTISTS_FETCH_FAILED = "There was a problem when fetching the artists"
     const val ALBUMS_FETCH_FAILED = "There was a problem when fetching the albums"
     const val SONGS_FETCH_FAILED = "There was a problem when fetching the songs"
+    const val SONG_FETCH_FAILED = "There was a problem when fetching the song with id "
+    const val ALBUM_FETCH_FAILED = "There was a problem when fetching the album with id "
+    const val ARTIST_FETCH_FAILED = "There was a problem when fetching the artist with id "
+    const val ARTIST_PICTURE_FETCH_FAILED = "There was a problem when fetching the the artist image"
+    const val ALBUM_PICTURE_FETCH_FAILED = "There was a problem when fetching the the album cover image"
+    const val SONG_PICTURE_FETCH_FAILED = "There was a problem when fetching the the song cover image"
 
     const val SESSION_NOT_INITIALIZED = "The session service has not been initialized"
 }

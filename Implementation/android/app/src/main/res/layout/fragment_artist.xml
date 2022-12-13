@@ -7,44 +7,59 @@
     android:background="@drawable/gradient"
     tools:context=".ui.home.item.AlbumFragment">
 
-
     <ImageView
         android:id="@+id/imageArtist"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="152dp"
+        android:layout_height="152dp"
+        android:contentDescription="@string/image_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.23"
+        app:layout_constraintVertical_bias="0.19"
         tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/txtArtistInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/artist_personal_info"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/txtArtistName"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="@+id/txtArtistName"
+        app:layout_constraintTop_toBottomOf="@+id/txtArtistName" />
 
     <TextView
         android:id="@+id/txtArtistName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="[artist_name]"
+        android:text="@string/artist_name_placeholder"
         android:textSize="34sp"
+        android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageArtist"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="@+id/imageArtist"
         app:layout_constraintTop_toBottomOf="@+id/imageArtist"
-        app:layout_constraintVertical_bias="0.053" />
+        app:layout_constraintVertical_bias="0.033" />
 
-    <TextView
-        android:id="@+id/txtAlbumInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/artist_default_info"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/txtArtistName"
-        app:layout_constraintHorizontal_bias="0.393"
-        app:layout_constraintStart_toStartOf="@+id/txtArtistName"
-        app:layout_constraintTop_toBottomOf="@+id/txtArtistName" />
+    <ImageView
+        android:id="@+id/btnLikeArtist"
+        android:layout_width="34dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/image_placeholder"
+        android:src="@drawable/ic_favourite_unfilled"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBackArtist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBackArtist"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/artistItemRecyclerView"
@@ -55,22 +70,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAlbumInfo"
+        app:layout_constraintTop_toBottomOf="@+id/txtArtistInfo"
         app:layout_constraintVertical_bias="0.977" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnFollow"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
-        android:background="@drawable/border"
-        android:text="@string/button_follow"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/btnBackArtist"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.898"
-        app:layout_constraintStart_toEndOf="@+id/btnBackArtist"
-        app:layout_constraintTop_toTopOf="@+id/btnBackArtist"
-        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btnBackArtist"

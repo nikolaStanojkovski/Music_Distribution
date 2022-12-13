@@ -1,5 +1,6 @@
 package com.musicdistribution.streamingservice.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
 import com.musicdistribution.streamingservice.model.search.Category
 import com.musicdistribution.streamingservice.model.search.CategoryItem
-import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
 import streamingservice.R
 
+@SuppressLint("NotifyDataSetChanged")
 class HomeVerticalAdapter(
     categoryList: MutableList<Category>,
     fragment: CategoryItemClickListener

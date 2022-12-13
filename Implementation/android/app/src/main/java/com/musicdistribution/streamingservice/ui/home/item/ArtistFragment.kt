@@ -8,26 +8,30 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.constants.ComponentConstants
+import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.constants.FileConstants
 import com.musicdistribution.streamingservice.data.CategoryData
+import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.ui.HomeActivity
 import com.musicdistribution.streamingservice.ui.home.HomeVerticalAdapter
-import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
 import streamingservice.R
 
 class ArtistFragment : Fragment(), CategoryItemClickListener {
 
     private lateinit var homeItemFragmentViewModel: HomeItemFragmentViewModel
     private lateinit var fragmentView: View
-//    private lateinit var currentArtist: ArtistRetrofit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,69 +44,50 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        val selectedArtistId = arguments?.get("selected_artist_id") as String?
-        if (selectedArtistId == null) {
+        val selectedArtistId = arguments?.get(ComponentConstants.SELECTED_ARTIST_ID) as String?
+        val categoryItemType = arguments?.get(ComponentConstants.ITEM_TYPE) as CategoryItemType?
+        if (selectedArtistId == null || categoryItemType == null || categoryItemType != CategoryItemType.ARTIST) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))
             requireActivity().finish()
-        }
-
-        homeItemFragmentViewModel =
-            ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
-        fillData(selectedArtistId!!)
-        fragmentView.findViewById<Button>(R.id.btnBackArtist).setOnClickListener {
-            findNavController().navigate(R.id.action_artistFragment_to_homeFragment)
-//            homeItemFragmentViewModel.clear()
+        } else {
+            homeItemFragmentViewModel =
+                ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
+            fillData(selectedArtistId)
+            fragmentView.findViewById<Button>(R.id.btnBackArtist).setOnClickListener {
+                findNavController().navigate(R.id.action_artistFragment_to_homeFragment)
+                homeItemFragmentViewModel.clear()
+            }
         }
     }
 
     private fun fillData(selectedArtistId: String) {
-        homeItemFragmentViewModel.fetchArtistApi(selectedArtistId)
-        homeItemFragmentViewModel.fetchArtistAlbumsApi(selectedArtistId)
-        homeItemFragmentViewModel.fetchArtistSongsApi(selectedArtistId)
+        homeItemFragmentViewModel.fetchArtist(selectedArtistId)
+        homeItemFragmentViewModel.fetchArtistAlbums(selectedArtistId)
+        homeItemFragmentViewModel.fetchArtistSongs(selectedArtistId)
 
-//        homeItemFragmentViewModel.getArtistsLiveData()
-//            .observe(viewLifecycleOwner,
-//                { artist ->
-//                    if (artist != null) {
-//                        homeItemFragmentViewModel.fetchArtistFirebase(artist.email)
-//
-//                        currentArtist = artist
-//                        fragmentView.findViewById<TextView>(R.id.txtArtistName).text =
-//                            artist.artistPersonalInfo.fullName
-//                        val imageControl =
-//                            fragmentView.findViewById<ImageView>(R.id.imageArtist)
-//                        val gsReference =
-//                            FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/profile-images/${artist.email}.jpg")
-//                        gsReference.downloadUrl.addOnCompleteListener { uri ->
-//                            var link = ""
-//                            if (uri.isSuccessful) {
-//                                link = uri.result.toString()
-//                            }
-//                            Glide.with(this)
-//                                .load(link)
-//                                .placeholder(R.drawable.default_picture)
-//                                .into(imageControl!!)
-//                        }
-//                    }
-//                })
-//        homeItemFragmentViewModel.getUsersLiveData()
-//            .observe(viewLifecycleOwner,
-//                { user ->
-//                    val followButton = fragmentView.findViewById<Button>(R.id.btnFollow)
-//                    if (user != null) {
-//                        fragmentView.findViewById<TextView>(R.id.txtAlbumInfo).text =
-//                            "Has ${user.noFollowers} followers"
-//                        followButton.isClickable = true
-//                        followButton.isEnabled = true
-//                    } else {
-//                        fragmentView.findViewById<TextView>(R.id.txtAlbumInfo).text =
-//                            "Unknown number of artist's followers"
-//                        followButton.isClickable = false
-//                        followButton.isEnabled = false
-//                    }
-//                })
-        fillFollowButton(selectedArtistId)
+        homeItemFragmentViewModel.getArtistLiveData()
+            .observe(viewLifecycleOwner,
+                { item ->
+                    if (item != null) {
+                        fragmentView.findViewById<TextView>(R.id.txtArtistName).text =
+                            if (item.userPersonalInfo.artName.isNotBlank())
+                                item.userPersonalInfo.artName else item.email
+                        fragmentView.findViewById<TextView>(R.id.txtArtistInfo).text =
+                            item.userPersonalInfo.fullName
+                        val imageControl =
+                            fragmentView.findViewById<ImageView>(R.id.imageArtist)
+                        val profilePictureReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
 
+                        if (imageControl != null) {
+                            fillImage(profilePictureReference, imageControl)
+                        }
+                    }
+                })
+        fillAdapterData()
+    }
+
+    private fun fillAdapterData() {
         val verticalAdapter = HomeVerticalAdapter(CategoryData.artistData, this)
         val verticalRecyclerView =
             fragmentView.findViewById<RecyclerView>(R.id.artistItemRecyclerView)
@@ -113,57 +98,56 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
 
         CategoryData.clearData()
         verticalAdapter.updateCategory(CategoryData.artistData[0])
-//        homeItemFragmentViewModel.getArtistSongsLiveData()
-//            .observe(viewLifecycleOwner,
-//                { songs ->
-//                    verticalAdapter.emptyData(CategoryData.artistData[0])
-//                    if (songs != null) {
-//                        for (song in songs) {
-//                            val gsReference =
-//                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/song-images/${song.id}.jpg")
-//                            try {
-//                                gsReference.downloadUrl.addOnCompleteListener { uri ->
-//                                    var link = ""
-//                                    if (uri.isSuccessful) {
-//                                        link = uri.result.toString()
-//                                    }
-//                                    verticalAdapter.updateData(
-//                                        CategoryData.artistData[0],
-//                                        CategoryItem(song.id, link, CategoryItemType.SONG)
-//                                    )
-//                                }
-//                            } catch (ignored: IOException) {
-//                            }
-//                        }
-//                    }
-//                })
-//        verticalAdapter.updateCategory(CategoryData.artistData[1])
-//        homeItemFragmentViewModel.getArtistAlbumsLiveData()
-//            .observe(viewLifecycleOwner,
-//                { albums ->
-//                    if (albums != null) {
-//                        for (album in albums) {
-//                            val gsReference =
-//                                FirebaseStorage.storage.getReferenceFromUrl("gs://album-distribution.appspot.com/album-images/${album.id}.jpg")
-//                            try {
-//                                gsReference.downloadUrl.addOnCompleteListener { uri ->
-//                                    var link = ""
-//                                    if (uri.isSuccessful) {
-//                                        link = uri.result.toString()
-//                                    }
-//                                    verticalAdapter.updateData(
-//                                        CategoryData.artistData[1],
-//                                        CategoryItem(album.id, link, CategoryItemType.ALBUM)
-//                                    )
-//                                }
-//                            } catch (ignored: IOException) {
-//                            }
-//                        }
-//                    }
-//                })
+        homeItemFragmentViewModel.getArtistSongsLiveData()
+            .observe(viewLifecycleOwner,
+                { songs ->
+                    verticalAdapter.emptyData(CategoryData.artistData[0])
+                    if (songs != null && songs.size > 0) {
+                        for (song in songs) {
+                            val songCoverReference =
+                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${song.id}${FileConstants.PNG_EXTENSION}"
+                            verticalAdapter.updateData(
+                                CategoryData.artistData[0],
+                                CategoryItem(song.id, songCoverReference, CategoryItemType.SONG)
+                            )
+                        }
+                    }
+                })
+
+        verticalAdapter.updateCategory(CategoryData.artistData[1])
+        homeItemFragmentViewModel.getArtistAlbumsLiveData()
+            .observe(viewLifecycleOwner,
+                { albums ->
+                    verticalAdapter.emptyData(CategoryData.artistData[1])
+                    if (albums != null && albums.size > 0) {
+                        for (album in albums) {
+                            val albumCoverReference =
+                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${album.id}${FileConstants.PNG_EXTENSION}"
+                            verticalAdapter.updateData(
+                                CategoryData.artistData[1],
+                                CategoryItem(album.id, albumCoverReference, CategoryItemType.ALBUM)
+                            )
+                        }
+                    }
+                })
     }
 
-    private fun fillFollowButton(selectedArtistId: String) {
+    private fun fillImage(profilePictureReference: String, imageControl: ImageView) {
+        try {
+            Glide.with(this)
+                .load(profilePictureReference)
+                .placeholder(R.drawable.default_picture)
+                .into(imageControl)
+        } catch (exception: Exception) {
+            Toast.makeText(
+                context,
+                ExceptionConstants.ARTIST_PICTURE_FETCH_FAILED,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+//    private fun fillFollowButton(selectedArtistId: String) {
 //        FirebaseRealtimeDB.favouriteArtistsReference.child("/follow-${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}-${selectedArtistId}")
 //            .get()
 //            .addOnSuccessListener { user ->
@@ -174,24 +158,24 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
 //                    buttonFollow(followButton, selectedArtistId)
 //                }
 //            }
-    }
+//    }
 
-    private fun buttonFollow(followButton: Button, selectedArtistId: String) {
-        followButton.text = "Follow"
-        followButton.setOnClickListener {
+//    private fun buttonFollow(followButton: Button, selectedArtistId: String) {
+//        followButton.text = "Follow"
+//        followButton.setOnClickListener {
 //            homeItemFragmentViewModel.updateFollowers(
 //                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
 //                selectedArtistId,
 //                true,
 //                currentArtist.email
 //            )
-            buttonUnfollow(followButton, selectedArtistId)
-        }
-    }
+//            buttonUnfollow(followButton, selectedArtistId)
+//        }
+//    }
 
-    private fun buttonUnfollow(followButton: Button, selectedArtistId: String) {
-        followButton.text = "Unfollow"
-        followButton.setOnClickListener {
+//    private fun buttonUnfollow(followButton: Button, selectedArtistId: String) {
+//        followButton.text = "Unfollow"
+//        followButton.setOnClickListener {
 //            homeItemFragmentViewModel.updateFollowers(
 //                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
 //                selectedArtistId,
@@ -199,18 +183,24 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
 //                currentArtist.email
 //            )
 //            buttonFollow(followButton, selectedArtistId)
-        }
-    }
+//        }
+//    }
 
     override fun onClick(item: CategoryItem) {
         when (item.itemType) {
             CategoryItemType.ALBUM -> {
-                val bundle = bundleOf("selected_album_id" to item.itemId)
+                val bundle = bundleOf(
+                    ComponentConstants.SELECTED_ALBUM_ID to item.itemId,
+                    ComponentConstants.ITEM_TYPE to CategoryItemType.ALBUM
+                )
                 findNavController()
                     .navigate(R.id.action_artistFragment_to_albumFragment, bundle)
             }
             CategoryItemType.SONG -> {
-                val bundle = bundleOf("selected_song_id" to item.itemId)
+                val bundle = bundleOf(
+                    ComponentConstants.SELECTED_SONG_ID to item.itemId,
+                    ComponentConstants.ITEM_TYPE to CategoryItemType.SONG
+                )
                 findNavController()
                     .navigate(R.id.action_artistFragment_to_songFragment, bundle)
             }
@@ -219,8 +209,4 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-//        homeItemFragmentViewModel.clear()
-    }
 }
