@@ -48,11 +48,11 @@ public class CustomListenerRepository implements SearchRepository<Listener> {
         CriteriaQuery<Listener> cq = cb.createQuery(Listener.class);
 
         Root<Listener> listenerRoot = cq.from(Listener.class);
-        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, listenerRoot, cb, searchTerm));
         if (pageable.getSort().isSorted()) {
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), listenerRoot, cb));
         }
 
+        cq.where(SearchUtil.convertToOrPredicates(formattedSearchParams, listenerRoot, cb, searchTerm));
         List<Listener> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))

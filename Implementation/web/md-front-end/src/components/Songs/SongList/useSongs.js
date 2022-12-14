@@ -6,6 +6,9 @@ import {MP3, PNG} from "../../../constants/extension";
 import {toast} from "react-toastify";
 import {SONG_AUDIO_PLAY_FAILED} from "../../../constants/exception";
 import {STOP_BUTTON} from "../../../constants/screen";
+import AuthUtil from "../../../util/authUtil";
+import {ALBUM, IS_A_SINGLE, IS_PUBLISHED} from "../../../constants/model";
+import {EMPTY_STRING} from "../../../constants/alphabet";
 
 const useSongs = (props) => {
 
@@ -71,6 +74,28 @@ const useSongs = (props) => {
         }
     }
 
+    const renderTableRowHeader = () => {
+        if(!AuthUtil.isAuthorized()) {
+            return null;
+        }
+        return [
+            <th scope={"col"}>Is Published</th>,
+            <th scope={"col"}>Is Single</th>,
+            <th scope={"col"}>Album</th>
+        ];
+    }
+
+    const renderTableRowData = (term) => {
+        if(!AuthUtil.isAuthorized()) {
+            return null;
+        }
+        return [
+            <td>{(term[IS_PUBLISHED]) ? 'Yes' : 'No'}</td>,
+            <td>{(term[IS_A_SINGLE]) ? 'Yes' : 'No'}</td>,
+            <td>{(term[ALBUM]) ? term[ALBUM].albumName : EMPTY_STRING}</td>
+        ];
+    }
+
     return {
         songs,
         imageSource,
@@ -81,7 +106,9 @@ const useSongs = (props) => {
         fetchSongCover,
         fetchSong,
         filterSongs,
-        loadSongs
+        loadSongs,
+        renderTableRowHeader,
+        renderTableRowData
     };
 }
 

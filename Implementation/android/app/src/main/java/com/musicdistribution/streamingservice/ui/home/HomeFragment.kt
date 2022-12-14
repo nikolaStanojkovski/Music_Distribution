@@ -277,24 +277,24 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         when (item.itemType) {
             CategoryItemType.ARTIST -> {
                 val bundle = bundleOf(
-                    ComponentConstants.SELECTED_ARTIST_ID to item.itemId,
-                    ComponentConstants.ITEM_TYPE to CategoryItemType.ARTIST
+                    SearchConstants.SELECTED_ARTIST_ID to item.itemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.ARTIST
                 )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_artistFragment, bundle)
             }
             CategoryItemType.ALBUM -> {
                 val bundle = bundleOf(
-                    ComponentConstants.SELECTED_ALBUM_ID to item.itemId,
-                    ComponentConstants.ITEM_TYPE to CategoryItemType.ALBUM
+                    SearchConstants.SELECTED_ALBUM_ID to item.itemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.ALBUM
                 )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_albumFragment, bundle)
             }
             CategoryItemType.SONG -> {
                 val bundle = bundleOf(
-                    ComponentConstants.SELECTED_SONG_ID to item.itemId,
-                    ComponentConstants.ITEM_TYPE to CategoryItemType.SONG
+                    SearchConstants.SELECTED_SONG_ID to item.itemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.SONG
                 )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_songFragment, bundle)

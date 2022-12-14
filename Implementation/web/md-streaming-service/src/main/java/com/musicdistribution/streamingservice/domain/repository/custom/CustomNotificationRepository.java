@@ -48,11 +48,11 @@ public class CustomNotificationRepository implements SearchRepository<Notificati
         CriteriaQuery<Notification> cq = cb.createQuery(Notification.class);
 
         Root<Notification> notificationRoot = cq.from(Notification.class);
-        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, notificationRoot, cb, searchTerm));
         if (pageable.getSort().isSorted()) {
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), notificationRoot, cb));
         }
 
+        cq.where(SearchUtil.convertToOrPredicates(formattedSearchParams, notificationRoot, cb, searchTerm));
         List<Notification> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))

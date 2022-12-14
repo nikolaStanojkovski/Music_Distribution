@@ -39,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         bottomNavigationView.setupWithNavController(navController)
 
+        // TODO: Replace with Home Activity view model or Notifications model
 //        homeFragmentViewModel =
 //            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 //        checkNotifications()

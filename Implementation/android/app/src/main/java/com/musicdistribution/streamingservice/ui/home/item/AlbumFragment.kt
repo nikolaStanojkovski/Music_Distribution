@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.ComponentConstants
+import com.musicdistribution.streamingservice.constants.SearchConstants
 import com.musicdistribution.streamingservice.constants.ExceptionConstants
 import com.musicdistribution.streamingservice.constants.FileConstants
 import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
@@ -44,8 +44,8 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        val selectedAlbumId = arguments?.get(ComponentConstants.SELECTED_ALBUM_ID) as String?
-        val categoryItemType = arguments?.get(ComponentConstants.ITEM_TYPE) as CategoryItemType?
+        val selectedAlbumId = arguments?.get(SearchConstants.SELECTED_ALBUM_ID) as String?
+        val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
         if (selectedAlbumId == null || categoryItemType == null || categoryItemType != CategoryItemType.ALBUM) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))
             requireActivity().finish()
@@ -136,8 +136,8 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
 
     override fun onClick(searchItem: SearchItem) {
         val bundle = bundleOf(
-            ComponentConstants.SELECTED_SONG_ID to searchItem.searchItemId,
-            ComponentConstants.ITEM_TYPE to CategoryItemType.SONG
+            SearchConstants.SELECTED_SONG_ID to searchItem.searchItemId,
+            SearchConstants.ITEM_TYPE to CategoryItemType.SONG
         )
         findNavController().navigate(R.id.action_albumFragment_to_songFragment, bundle)
     }

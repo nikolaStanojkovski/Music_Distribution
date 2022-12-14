@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.ComponentConstants
+import com.musicdistribution.streamingservice.constants.SearchConstants
 import com.musicdistribution.streamingservice.constants.ExceptionConstants
 import com.musicdistribution.streamingservice.constants.FileConstants
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
@@ -37,8 +37,8 @@ class SongFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        val selectedSongId = arguments?.get(ComponentConstants.SELECTED_SONG_ID) as String?
-        val categoryItemType = arguments?.get(ComponentConstants.ITEM_TYPE) as CategoryItemType?
+        val selectedSongId = arguments?.get(SearchConstants.SELECTED_SONG_ID) as String?
+        val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
 
         if (selectedSongId == null || categoryItemType == null || categoryItemType != CategoryItemType.SONG) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))

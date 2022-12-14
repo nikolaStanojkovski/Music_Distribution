@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.streamingservice.constants.AlphabetConstants
 import com.musicdistribution.streamingservice.model.enums.EmailDomain
 import streamingservice.R
 import streamingservice.databinding.FragmentRegistrationBinding

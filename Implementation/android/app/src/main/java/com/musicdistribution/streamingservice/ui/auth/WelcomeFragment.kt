@@ -9,7 +9,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.streamingservice.data.SessionService
 import streamingservice.R
 import streamingservice.databinding.FragmentWelcomeBinding
 

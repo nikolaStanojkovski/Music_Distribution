@@ -48,11 +48,11 @@ public class CustomAlbumRepository implements SearchRepository<Album> {
         CriteriaQuery<Album> cq = cb.createQuery(Album.class);
 
         Root<Album> albumRoot = cq.from(Album.class);
-        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, albumRoot, cb, searchTerm));
         if (pageable.getSort().isSorted()) {
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), albumRoot, cb));
         }
 
+        cq.where(SearchUtil.convertToOrPredicates(formattedSearchParams, albumRoot, cb, searchTerm));
         List<Album> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))

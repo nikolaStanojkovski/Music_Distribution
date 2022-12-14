@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.ComponentConstants
+import com.musicdistribution.streamingservice.constants.SearchConstants
 import com.musicdistribution.streamingservice.constants.ExceptionConstants
 import com.musicdistribution.streamingservice.constants.FileConstants
 import com.musicdistribution.streamingservice.data.CategoryData
@@ -44,8 +44,8 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        val selectedArtistId = arguments?.get(ComponentConstants.SELECTED_ARTIST_ID) as String?
-        val categoryItemType = arguments?.get(ComponentConstants.ITEM_TYPE) as CategoryItemType?
+        val selectedArtistId = arguments?.get(SearchConstants.SELECTED_ARTIST_ID) as String?
+        val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
         if (selectedArtistId == null || categoryItemType == null || categoryItemType != CategoryItemType.ARTIST) {
             startActivity(Intent(requireActivity(), HomeActivity::class.java))
             requireActivity().finish()
@@ -190,16 +190,16 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         when (item.itemType) {
             CategoryItemType.ALBUM -> {
                 val bundle = bundleOf(
-                    ComponentConstants.SELECTED_ALBUM_ID to item.itemId,
-                    ComponentConstants.ITEM_TYPE to CategoryItemType.ALBUM
+                    SearchConstants.SELECTED_ALBUM_ID to item.itemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.ALBUM
                 )
                 findNavController()
                     .navigate(R.id.action_artistFragment_to_albumFragment, bundle)
             }
             CategoryItemType.SONG -> {
                 val bundle = bundleOf(
-                    ComponentConstants.SELECTED_SONG_ID to item.itemId,
-                    ComponentConstants.ITEM_TYPE to CategoryItemType.SONG
+                    SearchConstants.SELECTED_SONG_ID to item.itemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.SONG
                 )
                 findNavController()
                     .navigate(R.id.action_artistFragment_to_songFragment, bundle)

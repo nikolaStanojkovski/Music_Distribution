@@ -10,9 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.musicdistribution.streamingservice.constants.SearchConstants
 import com.musicdistribution.streamingservice.data.GenreData
-import com.musicdistribution.streamingservice.model.enums.Genre
 import com.musicdistribution.streamingservice.listeners.GenreItemClickListener
+import com.musicdistribution.streamingservice.model.enums.Genre
 import streamingservice.R
 
 class SearchFragment : Fragment(), GenreItemClickListener {
@@ -43,7 +44,7 @@ class SearchFragment : Fragment(), GenreItemClickListener {
     }
 
     override fun onClick(genre: Genre) {
-        val bundle = bundleOf("selected_genre" to genre)
+        val bundle = bundleOf(SearchConstants.SELECTED_GENRE to genre)
         findNavController().navigate(R.id.action_searchFragment_to_searchItemFragment, bundle)
     }
 }

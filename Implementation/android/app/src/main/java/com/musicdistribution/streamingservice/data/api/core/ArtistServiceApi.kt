@@ -18,7 +18,7 @@ interface ArtistServiceApi {
 
     @GET(ApiConstants.API_ARTISTS_SEARCH)
     fun search(
-        @Query(EntityConstants.SEARCH_PARAMS) searchParams: String,
+        @Query(EntityConstants.SEARCH_PARAMS) searchParams: ArrayList<String>,
         @Query(EntityConstants.SEARCH_TERM) searchTerm: String,
         @Query(EntityConstants.PAGE) page: Int,
         @Query(EntityConstants.SIZE) size: Int

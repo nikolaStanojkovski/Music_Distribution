@@ -1,6 +1,5 @@
-import AuthUtil from "../../../util/authUtil";
 import React from "react";
-import {ALBUM, CREATOR, FORMATTED_STRING, IS_A_SINGLE, IS_PUBLISHED, SONG_LENGTH} from "../../../constants/model";
+import {CREATOR, FORMATTED_STRING, IS_A_SINGLE, SONG_LENGTH} from "../../../constants/model";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 
 const viewSongs = (props) => {
@@ -13,13 +12,10 @@ const viewSongs = (props) => {
                     <th scope={"col"}>Name</th>
                     <th scope={"col"}>Genre</th>
                     <th scope={"col"}>Length</th>
-                    {
-                        (AuthUtil.isAuthorized())
-                            ? <th scope={"col"}>Is Published</th> : null
-                    }
-                    <th scope={"col"}>Is Single</th>
                     <th scope={"col"}>Artist</th>
-                    <th scope={"col"}>Album</th>
+                    {
+                        props.renderTableRowHeader()
+                    }
                     <th scope={"col"}/>
                 </tr>
                 </thead>
@@ -32,13 +28,12 @@ const viewSongs = (props) => {
                             <td>{term.songName}</td>
                             <td>{term.songGenre}</td>
                             <td>{term[SONG_LENGTH][FORMATTED_STRING]}</td>
+                            <td>{(term[CREATOR]['userPersonalInfo'].artName)
+                                ? term[CREATOR]['userPersonalInfo'].artName
+                                : term[CREATOR]['userPersonalInfo'].fullName}</td>
                             {
-                                (AuthUtil.isAuthorized())
-                                    ? <td>{(term[IS_PUBLISHED]) ? 'Yes' : 'No'}</td> : null
+                                props.renderTableRowData(term)
                             }
-                            <td>{(term[IS_A_SINGLE]) ? 'Yes' : 'No'}</td>
-                            <td>{term[CREATOR]['userPersonalInfo'].fullName}</td>
-                            <td>{(term[ALBUM]) ? term[ALBUM].albumName : EMPTY_STRING}</td>
                             <td className={"table-cell-clickable"}>
                                 <button onClick={props.fetchSong}
                                         className={`btn btn-outline-secondary btn-block bi bi-play play-pause-button`}>

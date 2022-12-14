@@ -6,7 +6,6 @@ import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -51,15 +50,14 @@ public class CustomSongRepository implements SearchRepository<Song> {
         CriteriaQuery<Song> cq = cb.createQuery(Song.class);
 
         Root<Song> songRoot = cq.from(Song.class);
-        Predicate[] predicates = SearchUtil.convertToAndPredicates(formattedSearchParams, songRoot, cb, searchTerm);
-        if (shouldFilterPublished) {
-            predicates = filterSingleSongs(predicates, cb, songRoot);
-        }
+        Predicate orPredicates = SearchUtil.convertToOrPredicates(formattedSearchParams, songRoot, cb, searchTerm);
         if (pageable.getSort().isSorted()) {
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), songRoot, cb));
         }
 
-        cq.where(predicates);
+        cq.where((shouldFilterPublished)
+                ? cb.and(filterSingleSongs(cb, songRoot), orPredicates)
+                : orPredicates);
         List<Song> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))
@@ -69,18 +67,16 @@ public class CustomSongRepository implements SearchRepository<Song> {
     }
 
     /**
-     * Method used to filter published songs which are singles.
+     * Method used to create predicate for filtering published songs which are singles.
      *
-     * @param predicates - the existing predicates to the builder.
-     * @param cb         - the criteria builder wrapper object.
-     * @param root       - the class root wrapper object.
-     * @return the predicates array containing the single songs filtering.
+     * @param cb   - the criteria builder wrapper object.
+     * @param root - the class root wrapper object.
+     * @return the predicate containing the single songs filtering.
      */
-    private Predicate[] filterSingleSongs(Predicate[] predicates,
-                                             CriteriaBuilder cb,
-                                             Root<Song> root) {
-        return ArrayUtils.add(predicates, cb.and(cb.equal(SearchUtil
+    private Predicate filterSingleSongs(CriteriaBuilder cb,
+                                        Root<Song> root) {
+        return cb.and(cb.equal(SearchUtil
                 .convertToPredicateExpression(EntityConstants.IS_A_SINGLE,
-                        root), Boolean.TRUE)));
+                        root), Boolean.TRUE));
     }
 }

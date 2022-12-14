@@ -12,8 +12,11 @@ object EntityConstants {
     const val ENTITY_TYPE = "entityType"
     const val PUBLISHING_ID = "publishingId"
     const val LISTENER_ID = "listenerId"
-    const val IS_A_SINGLE = "isASingle"
 
     const val CREATOR_ID = "creator_id"
     const val ALBUM_ID = "album_id"
+
+    const val ARTIST = "Artist"
+    const val ALBUM = "Album"
+    const val SONG = "Song"
 }

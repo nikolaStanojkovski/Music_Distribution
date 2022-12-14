@@ -48,11 +48,11 @@ public class CustomArtistRepository implements SearchRepository<Artist> {
         CriteriaQuery<Artist> cq = cb.createQuery(Artist.class);
 
         Root<Artist> artistRoot = cq.from(Artist.class);
-        cq.where(SearchUtil.convertToAndPredicates(formattedSearchParams, artistRoot, cb, searchTerm));
         if (pageable.getSort().isSorted()) {
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), artistRoot, cb));
         }
 
+        cq.where(SearchUtil.convertToOrPredicates(formattedSearchParams, artistRoot, cb, searchTerm));
         List<Artist> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))

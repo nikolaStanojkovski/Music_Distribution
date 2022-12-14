@@ -18,5 +18,6 @@ object ExceptionConstants {
     const val ALBUM_PICTURE_FETCH_FAILED = "There was a problem when fetching the the album cover image"
     const val SONG_PICTURE_FETCH_FAILED = "There was a problem when fetching the the song cover image"
 
+    const val GENRE_DATA_NOT_LOADED = "There was a problem when filling the genre filtering data"
     const val SESSION_NOT_INITIALIZED = "The session service has not been initialized"
 }

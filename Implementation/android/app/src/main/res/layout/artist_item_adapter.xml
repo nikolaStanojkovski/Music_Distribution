@@ -9,9 +9,9 @@
         android:id="@+id/cardView"
         android:layout_width="180dp"
         android:layout_height="180dp"
-        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
         android:layout_marginTop="33dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="55dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="13dp"
@@ -24,7 +24,8 @@
             android:id="@+id/categoryItemView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:contentDescription="@string/image_placeholder" />
 
     </androidx.cardview.widget.CardView>
 
@@ -33,8 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="[songRoom/albumRoom name]"
-        android:textSize="18dp"
+        android:text="@string/artist_item_placeholder"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/cardView"
         app:layout_constraintHorizontal_bias="0.445"
@@ -46,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="[songRoom/albumRoom year]"
-        android:textSize="14dp"
+        android:text="@string/date_time_placeholder"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/txtArtistItemTitle"
         app:layout_constraintStart_toStartOf="@+id/txtArtistItemTitle"
         app:layout_constraintTop_toBottomOf="@+id/txtArtistItemTitle" />

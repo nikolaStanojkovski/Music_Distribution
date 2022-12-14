@@ -119,7 +119,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 
     fun fetchArtistAlbums(artistId: String) {
         albumServiceApi.search(
-            EntityConstants.CREATOR_ID,
+            arrayListOf(EntityConstants.CREATOR_ID),
             artistId,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
             PaginationConstants.DEFAULT_PAGE_SIZE
@@ -155,7 +155,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 
     fun fetchArtistSongs(artistId: String) {
         songServiceApi.search(
-            EntityConstants.CREATOR_ID,
+            arrayListOf(EntityConstants.CREATOR_ID),
             artistId,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
             PaginationConstants.DEFAULT_PAGE_SIZE
@@ -191,7 +191,7 @@ class HomeItemFragmentViewModel(application: Application) : AndroidViewModel(app
 
     fun fetchAlbumSongs(albumId: String) {
         songServiceApi.search(
-            EntityConstants.ALBUM_ID,
+            arrayListOf(EntityConstants.ALBUM_ID),
             albumId,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
             PaginationConstants.DEFAULT_PAGE_SIZE

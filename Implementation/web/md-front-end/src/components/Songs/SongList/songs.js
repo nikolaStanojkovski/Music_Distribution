@@ -17,7 +17,9 @@ const Songs = (props) => {
         fetchSongCover,
         fetchSong,
         filterSongs,
-        loadSongs
+        loadSongs,
+        renderTableRowHeader,
+        renderTableRowData
     } = useSongs(props);
 
     return (
@@ -29,7 +31,13 @@ const Songs = (props) => {
             <hr/>
             <div className={"row my-4"}>
                 {
-                    viewSongs({songs, fetchSongCover, fetchSong})
+                    viewSongs({
+                        songs,
+                        fetchSongCover,
+                        fetchSong,
+                        renderTableRowHeader,
+                        renderTableRowData
+                    })
                 }
             </div>
             {(songs && songs[PAGEABLE] && songs[TOTAL_PAGES])
