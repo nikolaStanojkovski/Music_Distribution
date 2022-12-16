@@ -42,6 +42,7 @@ class SessionService(var context: Context) {
                 throw UnsupportedOperationException(ExceptionConstants.SESSION_NOT_INITIALIZED)
             } else {
                 sessionService!!.editor.remove(key)
+                sessionService!!.editor.apply()
             }
         }
     }

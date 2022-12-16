@@ -7,6 +7,7 @@ object SearchConstants {
     const val SELECTED_SONG_ID = "selected_song_id"
     const val SELECTED_GENRE = "selected_genre"
     const val ITEM_TYPE = "item_type"
+    const val LISTING_TYPE = "listing_type"
 
     // Artist search
     const val ARTIST_FIRST_NAME = "userPersonalInfo_firstName"

@@ -40,9 +40,10 @@ class SongFragment : Fragment() {
         val selectedSongId = arguments?.get(SearchConstants.SELECTED_SONG_ID) as String?
         val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
 
-        if (selectedSongId == null || categoryItemType == null || categoryItemType != CategoryItemType.SONG) {
-            startActivity(Intent(requireActivity(), HomeActivity::class.java))
-            requireActivity().finish()
+        if (selectedSongId == null
+            || categoryItemType == null
+            || categoryItemType != CategoryItemType.SONG) {
+            navigateOut()
         } else {
             homeItemFragmentViewModel =
                 ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
@@ -123,4 +124,10 @@ class SongFragment : Fragment() {
 //            buttonLike(likeButton, selectedSongId)
 //        }
 //    }
+
+    private fun navigateOut() {
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
 }

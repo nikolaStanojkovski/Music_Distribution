@@ -15,9 +15,13 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.musicdistribution.streamingservice.constants.ApiConstants
 import com.musicdistribution.streamingservice.constants.MessageConstants
 import com.musicdistribution.streamingservice.constants.NotificationConstants
+import com.musicdistribution.streamingservice.data.SessionService
+import com.musicdistribution.streamingservice.ui.auth.AuthActivity
 import com.musicdistribution.streamingservice.ui.home.HomeFragmentViewModel
+import com.musicdistribution.streamingservice.util.AuthenticationUtils
 import streamingservice.R
 
 @Suppress(MessageConstants.DEPRECATION)
@@ -33,16 +37,20 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.navigationHostFragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        bottomNavigationView.setupWithNavController(navController)
+        if (AuthenticationUtils.getAccessToken().isNotEmpty()) {
+            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.navigationHostFragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            bottomNavigationView.setupWithNavController(navController)
 
-        // TODO: Replace with Home Activity view model or Notifications model
+            // TODO: Replace with Home Activity view model or Notifications model
 //        homeFragmentViewModel =
 //            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 //        checkNotifications()
+        } else {
+            navigateOut()
+        }
     }
 
 //    private fun checkNotifications() {
@@ -97,5 +105,11 @@ class HomeActivity : AppCompatActivity() {
 
             notificationManager.notify(NotificationConstants.ID, builder.build())
         }
+    }
+
+    private fun navigateOut() {
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

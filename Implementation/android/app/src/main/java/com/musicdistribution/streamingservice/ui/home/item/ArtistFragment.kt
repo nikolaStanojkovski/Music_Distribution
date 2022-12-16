@@ -46,9 +46,10 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
 
         val selectedArtistId = arguments?.get(SearchConstants.SELECTED_ARTIST_ID) as String?
         val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
-        if (selectedArtistId == null || categoryItemType == null || categoryItemType != CategoryItemType.ARTIST) {
-            startActivity(Intent(requireActivity(), HomeActivity::class.java))
-            requireActivity().finish()
+        if (selectedArtistId == null
+            || categoryItemType == null
+            || categoryItemType != CategoryItemType.ARTIST) {
+            navigateOut()
         } else {
             homeItemFragmentViewModel =
                 ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
@@ -207,6 +208,12 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
             else -> findNavController()
                 .navigate(R.id.action_artistFragment_to_homeFragment)
         }
+    }
+
+    private fun navigateOut() {
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 
 }

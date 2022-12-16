@@ -1,148 +1,86 @@
 package com.musicdistribution.streamingservice.ui.profile
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.musicdistribution.streamingservice.constants.EntityConstants
+import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.data.SessionService
+import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
+import com.musicdistribution.streamingservice.data.api.core.ListenerServiceApi
+import com.musicdistribution.streamingservice.model.retrofit.core.Album
+import com.musicdistribution.streamingservice.model.retrofit.core.Artist
+import com.musicdistribution.streamingservice.model.retrofit.core.Listener
+import com.musicdistribution.streamingservice.model.retrofit.core.Song
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProfileFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app: Application = application
 
-//    private val streamingServiceApi: StreamingServiceApi = StreamingServiceApiClient.getAlbumCatalogApi()!!
+    private val listenerServiceApi: ListenerServiceApi =
+        StreamingServiceApiClient.getListenerServiceApi()
 
-//    private var songsLiveData: MutableLiveData<SongRetrofit?> = MutableLiveData()
-//    private var artistsLiveData: MutableLiveData<ArtistRetrofit?> = MutableLiveData()
-//    private var publishedSongsLiveData: MutableLiveData<MutableList<SongRetrofit?>> =
-//        MutableLiveData()
-//    private var publishedAlbumsLiveData: MutableLiveData<MutableList<AlbumRetrofit?>> =
-//        MutableLiveData()
+    private var songsLiveData: MutableLiveData<MutableList<Song>> = MutableLiveData()
+    private var albumsLiveData: MutableLiveData<MutableList<Album>> = MutableLiveData()
+    private var artistsLiveData: MutableLiveData<MutableList<Artist>> = MutableLiveData()
 
-    fun updateUserInfo(firstName: String, lastName: String) {
-//        updateFirebaseDb(firstName, lastName)
-        // API not updated cause the users information is only valid for android version
+    fun fetchFavouritesData() {
+        val userId = SessionService.read(EntityConstants.USER_ID)
+        listenerServiceApi.findById(userId.toString())
+            .enqueue(object : Callback<Listener?> {
+                override fun onResponse(
+                    call: Call<Listener?>?,
+                    response: Response<Listener?>?
+                ) {
+                    if (response?.body() == null) {
+                        Toast.makeText(
+                            app,
+                            "${ExceptionConstants.LISTENER_DATA_FETCH_FAILED} $userId",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        val listener = response.body()
+                        if (listener != null
+                            && !listener.favouriteAlbums.isNullOrEmpty()
+                            && !listener.favouriteArtists.isNullOrEmpty()
+                            && !listener.favouriteSongs.isNullOrEmpty()
+                        ) {
+                            artistsLiveData.value = listener.favouriteArtists
+                            albumsLiveData.value = listener.favouriteAlbums
+                            songsLiveData.value = listener.favouriteSongs
+                        } else {
+                            Toast.makeText(
+                                app,
+                                "${ExceptionConstants.LISTENER_DATA_FETCH_FAILED} $userId",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Listener?>?, throwable: Throwable) {
+                    Toast.makeText(
+                        app,
+                        ExceptionConstants.ARTIST_FETCH_FAILED,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
     }
 
-//    private fun updateFirebaseDb(name: String, surname: String) {
-//        val currentUser = FirebaseAuthUser.user!!
-//        currentUser.name = name
-//        currentUser.surname = surname
-//        FirebaseRealtimeDB.usersReference.child(FirebaseAuthDB.firebaseAuth.currentUser!!.uid)
-//            .setValue(currentUser)
-//            .addOnCompleteListener(OnCompleteListener<Void?> { task ->
-//                if (task.isSuccessful) {
-//                    firebaseLiveData.value = currentUser
-//                }
-//            })
-//    }
+    fun getArtistsLiveData(): MutableLiveData<MutableList<Artist>> {
+        return artistsLiveData
+    }
 
-//    fun fetchFavoriteSongs() {
-//        FirebaseRealtimeDB.favouriteSongsReference.orderByChild("fanId")
-//            .equalTo(FirebaseAuthDB.firebaseAuth.currentUser!!.uid)
-//            .addListenerForSingleValueEvent(object : ValueEventListener {
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    if (snapshot.exists() && snapshot.value != null) {
-//                        val values = snapshot.value as HashMap<String, Any>
-//                        for (favSong in values.entries) {
-//                            val favouriteSong = favSong.value as HashMap<String, Any>
-//                            val songId = favouriteSong["songId"].toString()
-//                            streamingServiceApi.getSong(songId)
-//                                .enqueue(object : Callback<SongRetrofit?> {
-//                                    override fun onResponse(
-//                                        call: Call<SongRetrofit?>?,
-//                                        response: Response<SongRetrofit?>?
-//                                    ) {
-//                                        val song = response!!.body()
-//                                        if (song != null) {
-//                                            songsLiveData.value = song
-//                                        }
-//                                    }
-//
-//                                    override fun onFailure(
-//                                        call: Call<SongRetrofit?>?,
-//                                        t: Throwable?
-//                                    ) {
-//                                        Toast.makeText(
-//                                            app,
-//                                            "There was a problem when trying to fetch song with id: $songId",
-//                                            Toast.LENGTH_LONG
-//                                        ).show()
-//                                    }
-//                                })
-//                        }
-//                    }
-//                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//                    Toast.makeText(
-//                        app,
-//                        "There was a problem when trying to fetch favourite songs for current user",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            })
-//    }
-//
-//    fun fetchFavouriteArtists() {
-//        FirebaseRealtimeDB.favouriteArtistsReference.orderByChild("followerId")
-//            .equalTo(FirebaseAuthDB.firebaseAuth.currentUser!!.uid)
-//            .addListenerForSingleValueEvent(object : ValueEventListener {
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    if (snapshot.exists() && snapshot.value != null) {
-//                        val values = snapshot.value as HashMap<String, Any>
-//                        for (favArtist in values.entries) {
-//                            val favouriteArtist = favArtist.value as HashMap<String, Any>
-//                            val artistId = favouriteArtist["followingId"].toString()
-//                            streamingServiceApi.getArtistById(artistId)
-//                                .enqueue(object : Callback<ArtistRetrofit?> {
-//                                    override fun onResponse(
-//                                        call: Call<ArtistRetrofit?>?,
-//                                        response: Response<ArtistRetrofit?>?
-//                                    ) {
-//                                        val artist = response!!.body()
-//                                        if (artist != null) {
-//                                            artistsLiveData.value = artist
-//                                        }
-//                                    }
-//
-//                                    override fun onFailure(
-//                                        call: Call<ArtistRetrofit?>?,
-//                                        t: Throwable?
-//                                    ) {
-//                                        Toast.makeText(
-//                                            app,
-//                                            "There was a problem when trying to fetch artist with id: $artistId",
-//                                            Toast.LENGTH_LONG
-//                                        ).show()
-//                                    }
-//                                })
-//                        }
-//                    }
-//                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//                    Toast.makeText(
-//                        app,
-//                        "There was a problem when trying to fetch favourite artists for current user",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            })
-//    }
+    fun getAlbumsLiveData(): MutableLiveData<MutableList<Album>> {
+        return albumsLiveData
+    }
 
-
-//    fun getSongsLiveData(): MutableLiveData<SongRetrofit?> {
-//        return songsLiveData
-//    }
-//
-//    fun getArtistsLiveData(): MutableLiveData<ArtistRetrofit?> {
-//        return artistsLiveData
-//    }
-//
-//    fun getPublishedSongsLiveData(): MutableLiveData<MutableList<SongRetrofit?>> {
-//        return publishedSongsLiveData
-//    }
-//
-//    fun getPublishedAlbumsLiveData(): MutableLiveData<MutableList<AlbumRetrofit?>> {
-//        return publishedAlbumsLiveData
-//    }
+    fun getSongsLiveData(): MutableLiveData<MutableList<Song>> {
+        return songsLiveData
+    }
 }

@@ -31,11 +31,11 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.musicdistribution.streamingservice.ui.profile.ProfileListenerFragment"
+        android:name="com.musicdistribution.streamingservice.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile_listener" >
+        tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragmentListener_to_profileListFragment"
+            android:id="@+id/action_profileFragment_to_profileListFragment"
             app:destination="@id/profileListFragment" />
     </fragment>
     <fragment

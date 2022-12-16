@@ -15,6 +15,7 @@ object EntityConstants {
 
     const val CREATOR_ID = "creator_id"
     const val ALBUM_ID = "album_id"
+    const val FAVOURITE_ARTISTS_ID = "favouriteArtists_id"
 
     const val ARTIST = "Artist"
     const val ALBUM = "Album"

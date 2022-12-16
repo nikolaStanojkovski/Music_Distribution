@@ -47,8 +47,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         val selectedAlbumId = arguments?.get(SearchConstants.SELECTED_ALBUM_ID) as String?
         val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
         if (selectedAlbumId == null || categoryItemType == null || categoryItemType != CategoryItemType.ALBUM) {
-            startActivity(Intent(requireActivity(), HomeActivity::class.java))
-            requireActivity().finish()
+            navigateOut()
         } else {
             homeItemFragmentViewModel =
                 ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
@@ -140,5 +139,11 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
             SearchConstants.ITEM_TYPE to CategoryItemType.SONG
         )
         findNavController().navigate(R.id.action_albumFragment_to_songFragment, bundle)
+    }
+
+    private fun navigateOut() {
+        val intent = Intent(activity, HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

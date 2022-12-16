@@ -38,16 +38,16 @@ public class Listener extends AbstractEntity<ListenerId> implements Serializable
     })
     private Email userEmail;
 
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Album> favouriteAlbums;
 
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Song> favouriteSongs;
 
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Artist> favouriteArtists;
 
     @OneToMany(fetch = FetchType.LAZY)

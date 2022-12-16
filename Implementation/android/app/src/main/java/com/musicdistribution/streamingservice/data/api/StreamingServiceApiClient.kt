@@ -1,11 +1,9 @@
 package com.musicdistribution.streamingservice.data.api
 
-import com.musicdistribution.streamingservice.constants.AlphabetConstants
 import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.data.api.core.*
+import com.musicdistribution.streamingservice.util.AuthenticationUtils
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -67,14 +65,16 @@ class StreamingServiceApiClient {
         private fun <T> buildServiceApi(streamingServiceClass: Class<T>): T {
             val httpClient = OkHttpClient.Builder()
             httpClient.addInterceptor { chain ->
-                val request: Request =
+                chain.proceed(
                     chain.request().newBuilder()
                         .addHeader(ApiConstants.AUTH_ROLE, ApiConstants.LISTENER_ROLE)
-                        .addHeader(ApiConstants.AUTHORIZATION, "Bearer ${getAccessToken()}")
+                        .addHeader(
+                            ApiConstants.AUTHORIZATION,
+                            "Bearer ${AuthenticationUtils.getAccessToken()}"
+                        )
                         .build()
-                chain.proceed(request)
+                )
             }
-
             return Retrofit.Builder()
                 .baseUrl(ApiConstants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -83,10 +83,6 @@ class StreamingServiceApiClient {
                 .create(streamingServiceClass)
         }
 
-        private fun getAccessToken(): String {
-            val accessToken = SessionService.read(ApiConstants.ACCESS_TOKEN)
-            return if (accessToken != null && accessToken.isNotBlank())
-                accessToken else AlphabetConstants.EMPTY_STRING
-        }
+
     }
 }

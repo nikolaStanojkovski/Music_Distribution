@@ -6,6 +6,7 @@ object MessageConstants {
     const val FAILED_REGISTRATION = "There was a problem when registering"
     const val SUCCESSFUL_LOGIN = "The user login was successful"
     const val FAILED_LOGIN = "Incorrect credentials were entered"
+    const val SELECT_PROFILE_PICTURE = "Select a profile image"
 
     const val GOOD_NIGHT = "Good night"
     const val GOOD_MORNING = "Good morning"
@@ -13,6 +14,9 @@ object MessageConstants {
     const val GOOD_EVENING = "Good evening"
     const val HELLO_THERE = "Hello there"
 
+    const val FAVOURITE_SONGS = "Favourite Songs"
+    const val FAVOURITE_ALBUMS = "Favourite Albums"
+    const val FAVOURITE_ARTISTS = "Favourite Artists"
     const val EXPLORE_SONGS = "Explore Songs"
     const val EXPLORE_ALBUMS = "Explore Albums"
     const val EXPLORE_ARTISTS = "Explore Artists"

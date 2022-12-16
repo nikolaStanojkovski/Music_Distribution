@@ -5,5 +5,9 @@ import com.musicdistribution.streamingservice.model.retrofit.partial.user.UserRe
 data class Listener (
     val id: String,
     val email: String,
-    val userRegistrationInfo: UserRegistrationInfo
+    val userRegistrationInfo: UserRegistrationInfo,
+
+    val favouriteArtists: MutableList<Artist>,
+    val favouriteAlbums: MutableList<Album>,
+    val favouriteSongs: MutableList<Song>
 )
