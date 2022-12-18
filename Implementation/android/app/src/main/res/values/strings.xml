@@ -45,5 +45,6 @@
     <string name="button_favourite_songs">Liked Songs</string>
     <string name="button_favourite_albums">Liked Albums</string>
     <string name="button_favourite_artists">Liked Artists</string>
+    <string name="profile_item_placeholder">[profile_item_heading]</string>
 
 </resources>

@@ -5,5 +5,5 @@ package com.musicdistribution.streamingservice.domain.model.enums;
  * the type of the database entity.
  */
 public enum EntityType {
-    SONGS, ALBUMS, ARTISTS
+    SONGS, ALBUMS, ARTISTS, NONE
 }

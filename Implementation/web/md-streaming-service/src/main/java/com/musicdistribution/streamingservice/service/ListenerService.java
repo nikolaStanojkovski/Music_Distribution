@@ -1,10 +1,10 @@
 package com.musicdistribution.streamingservice.service;
 
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -44,10 +44,11 @@ public interface ListenerService {
     /**
      * Method used for fetching a listener with the specified ID.
      *
-     * @param id - listener's ID.
+     * @param id         - listener's ID.
+     * @param entityType - the entity type which should be eagerly included with the found object.
      * @return an optional with the found listener.
      */
-    Optional<Listener> findById(ListenerId id);
+    Optional<Listener> findById(ListenerId id, EntityType entityType);
 
     /**
      * Method used for authenticating an existing listener from the database.
@@ -74,4 +75,14 @@ public interface ListenerService {
      * @return a flag determining whether the object was added to the favourites list.
      */
     Optional<Boolean> addToFavourite(ListenerId listenerId, String objectId, EntityType type);
+
+    /**
+     * Method used for removing an object to the list of favourites.
+     *
+     * @param listenerId - a wrapper object containing listener's identifier.
+     * @param objectId   - a string object containing object's identifier.
+     * @param type       - a wrapper object containing entity's type.
+     * @return a flag determining whether the object was removed from the favourites list.
+     */
+    Optional<Boolean> removeFromFavourite(ListenerId listenerId, String objectId, EntityType type);
 }

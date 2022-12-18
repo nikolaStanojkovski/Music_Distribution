@@ -8,6 +8,7 @@ import com.musicdistribution.streamingservice.domain.valueobject.core.SongLength
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -45,8 +46,10 @@ public class AlbumResponse {
         albumResponse.setGenre(album.getGenre());
         albumResponse.setAlbumInfo(album.getAlbumInfo());
         albumResponse.setPaymentInfo(album.getPaymentInfo());
-        albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null
-                : ArtistResponse.from(album.getCreator(), encryptedArtistId));
+        if(StringUtils.isNotBlank(encryptedArtistId)) {
+            albumResponse.setCreator(Objects.isNull(album.getCreator()) ? null
+                    : ArtistResponse.from(album.getCreator(), encryptedArtistId));
+        }
 
         return albumResponse;
     }

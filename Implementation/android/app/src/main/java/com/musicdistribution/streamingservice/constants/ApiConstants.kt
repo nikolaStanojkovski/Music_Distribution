@@ -18,7 +18,9 @@ object ApiConstants {
     private const val NOTIFICATIONS = "/notifications"
     private const val LISTENERS = "/listeners"
     private const val SEARCH = "/search"
+    private const val FAVOURITE = "/favourite"
     private const val FORMATTED_ID = "/{id}"
+    private const val ENTITY_TYPE = "/{entityType}"
 
     const val API_LOGIN = "$API$AUTH/login"
     const val API_REGISTER = "$API$AUTH/register/listener"
@@ -39,8 +41,9 @@ object ApiConstants {
     const val API_SONGS_SEARCH = "$API$RESOURCE$SONGS$SEARCH"
     const val API_SONGS_ID = "$API$RESOURCE$SONGS$FORMATTED_ID"
 
-    const val API_LISTENERS_ID = "$API$RESOURCE$LISTENERS$FORMATTED_ID"
-    const val API_LISTENERS_FAVOURITE = "$API$RESOURCE$LISTENERS$FORMATTED_ID/favourite"
+    const val API_LISTENERS_ID = "$API$RESOURCE$LISTENERS$FORMATTED_ID$ENTITY_TYPE"
+    const val API_LISTENERS_FAVOURITE_ADD = "$API$RESOURCE$LISTENERS$FORMATTED_ID$FAVOURITE/add"
+    const val API_LISTENERS_FAVOURITE_REMOVE = "$API$RESOURCE$LISTENERS$FORMATTED_ID$FAVOURITE/remove"
 
     const val API_NOTIFICATIONS_SEARCH = "$API$RESOURCE$NOTIFICATIONS$SEARCH"
     const val API_NOTIFICATIONS_RECEIVE = "$API$RESOURCE$NOTIFICATIONS/send"

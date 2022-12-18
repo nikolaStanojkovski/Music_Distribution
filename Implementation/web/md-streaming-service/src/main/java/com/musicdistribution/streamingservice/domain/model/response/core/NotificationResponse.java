@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Object used for data transfer from the
@@ -42,7 +43,8 @@ public class NotificationResponse {
         listenerResponse.setType(notification.getType());
         listenerResponse.setPublishedTime(notification.getPublishedTime());
         listenerResponse.setReceivedTime(notification.getReceivedTime());
-        listenerResponse.setListenerResponse(ListenerResponse.from(notification.getReceiver(), encryptedListenerId));
+        listenerResponse.setListenerResponse(ListenerResponse.from(notification.getReceiver(), encryptedListenerId,
+                List.of(), List.of(), List.of()));
 
         return listenerResponse;
     }

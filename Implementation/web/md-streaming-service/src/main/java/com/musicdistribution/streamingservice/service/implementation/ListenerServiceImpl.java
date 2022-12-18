@@ -1,8 +1,10 @@
 package com.musicdistribution.streamingservice.service.implementation;
 
 import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Email;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.EmailDomain;
+import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
 import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ArtistId;
@@ -10,7 +12,6 @@ import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.request.AuthRequest;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.repository.core.AlbumRepository;
 import com.musicdistribution.streamingservice.domain.repository.core.ArtistRepository;
 import com.musicdistribution.streamingservice.domain.repository.core.ListenerRepository;
@@ -18,13 +19,18 @@ import com.musicdistribution.streamingservice.domain.repository.core.SongReposit
 import com.musicdistribution.streamingservice.domain.valueobject.core.UserRegistrationInfo;
 import com.musicdistribution.streamingservice.service.ListenerService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -34,6 +40,8 @@ import java.util.Optional;
 @Transactional
 @AllArgsConstructor
 public class ListenerServiceImpl implements ListenerService {
+
+    private final EntityManager entityManager;
 
     private final SongRepository songRepository;
     private final AlbumRepository albumRepository;
@@ -80,12 +88,40 @@ public class ListenerServiceImpl implements ListenerService {
     /**
      * Method used for fetching a listener with the specified ID.
      *
-     * @param id - listener's ID.
+     * @param id         - listener's ID.
+     * @param entityType - the entity type which should be eagerly included with the found object.
      * @return an optional with the found listener.
      */
     @Override
-    public Optional<Listener> findById(ListenerId id) {
-        return listenerRepository.findById(id);
+    public Optional<Listener> findById(ListenerId id, EntityType entityType) {
+        EntityGraph<Listener> graph = this.entityManager.createEntityGraph(Listener.class);
+        String attributeNode = getAttributeNodes(entityType);
+        if (!attributeNode.isEmpty()) {
+            graph.addAttributeNodes(attributeNode);
+        }
+        return Optional.ofNullable(
+                this.entityManager.find(Listener.class,
+                        id,
+                        Map.of(QueryHints.LOADGRAPH, graph)));
+    }
+
+    /**
+     * Method used for reading the attribute nodes of the entity graph, given the entity fetch type.
+     *
+     * @param entityType - the type of the entity that is to be fetched by the entity graph.
+     * @return the chosen attribute node.
+     */
+    private String getAttributeNodes(EntityType entityType) {
+        switch (entityType) {
+            case ARTISTS:
+                return EntityConstants.FAVOURITE_ARTISTS;
+            case ALBUMS:
+                return EntityConstants.FAVOURITE_ALBUMS;
+            case SONGS:
+                return EntityConstants.FAVOURITE_SONGS;
+            default:
+                return StringUtils.EMPTY;
+        }
     }
 
     /**
@@ -149,7 +185,7 @@ public class ListenerServiceImpl implements ListenerService {
      */
     @Override
     public Optional<Boolean> addToFavourite(ListenerId listenerId, String objectId, EntityType type) {
-        return findById(listenerId)
+        return findById(listenerId, EntityType.NONE)
                 .map(listener -> {
                     switch (type) {
                         case SONGS:
@@ -172,6 +208,49 @@ public class ListenerServiceImpl implements ListenerService {
                             return artistRepository.findById(ArtistId.of(objectId))
                                     .map(artist -> {
                                         listener.addFavouriteArtist(artist);
+                                        listenerRepository.save(listener);
+                                        listenerRepository.flush();
+                                        return true;
+                                    }).orElse(false);
+                        default:
+                            return false;
+                    }
+                });
+    }
+
+    /**
+     * Method used for removing an object to the list of favourites.
+     *
+     * @param listenerId - a wrapper object containing listener's identifier.
+     * @param objectId   - a string object containing object's identifier.
+     * @param type       - a wrapper object containing entity's type.
+     * @return a flag determining whether the object was removed from the favourites list.
+     */
+    @Override
+    public Optional<Boolean> removeFromFavourite(ListenerId listenerId, String objectId, EntityType type) {
+        return findById(listenerId, EntityType.NONE)
+                .map(listener -> {
+                    switch (type) {
+                        case SONGS:
+                            return songRepository.findById(SongId.of(objectId))
+                                    .map(song -> {
+                                        listener.removeFavouriteSong(song);
+                                        listenerRepository.save(listener);
+                                        listenerRepository.flush();
+                                        return true;
+                                    }).orElse(false);
+                        case ALBUMS:
+                            return albumRepository.findById(AlbumId.of(objectId))
+                                    .map(album -> {
+                                        listener.removeFavouriteAlbum(album);
+                                        listenerRepository.save(listener);
+                                        listenerRepository.flush();
+                                        return true;
+                                    }).orElse(false);
+                        case ARTISTS:
+                            return artistRepository.findById(ArtistId.of(objectId))
+                                    .map(artist -> {
+                                        listener.removeFavouriteArtist(artist);
                                         listenerRepository.save(listener);
                                         listenerRepository.flush();
                                         return true;

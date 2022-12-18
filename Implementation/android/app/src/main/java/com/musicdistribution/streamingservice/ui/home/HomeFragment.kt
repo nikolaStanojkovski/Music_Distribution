@@ -26,6 +26,7 @@ import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.util.LocalizationUtils
 import com.musicdistribution.streamingservice.util.StringUtils
+import com.musicdistribution.streamingservice.viewmodel.HomeViewModel
 import streamingservice.R
 import java.util.*
 
@@ -33,7 +34,7 @@ import java.util.*
 class HomeFragment : Fragment(), CategoryItemClickListener {
 
     private lateinit var fragmentView: View
-    private lateinit var homeFragmentViewModel: HomeFragmentViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +47,8 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        homeFragmentViewModel =
-            ViewModelProvider(this)[HomeFragmentViewModel::class.java]
+        homeViewModel =
+            ViewModelProvider(this)[HomeViewModel::class.java]
         fetchData()
 
         CategoryData.clearData()
@@ -57,11 +58,11 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     }
 
     private fun fetchData() {
-        homeFragmentViewModel.emptyData()
+        homeViewModel.emptyData()
 
-        homeFragmentViewModel.fetchSongs()
-        homeFragmentViewModel.fetchAlbums()
-        homeFragmentViewModel.fetchArtists()
+        homeViewModel.fetchSongs()
+        homeViewModel.fetchAlbums()
+        homeViewModel.fetchArtists()
     }
 
     override fun onRequestPermissionsResult(
@@ -123,7 +124,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     private fun fetchSongs(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[0])
         verticalAdapter.updateCategory(CategoryData.mainData[0])
-        homeFragmentViewModel.getSongsLiveData()
+        homeViewModel.getSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
                     if (songs != null) {
@@ -152,7 +153,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     private fun fetchAlbums(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[1])
         verticalAdapter.updateCategory(CategoryData.mainData[1])
-        homeFragmentViewModel.getAlbumsLiveData()
+        homeViewModel.getAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { albums ->
                     if (albums != null) {
@@ -181,7 +182,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     private fun fetchArtists(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[2])
         verticalAdapter.updateCategory(CategoryData.mainData[2])
-        homeFragmentViewModel.getArtistsLiveData()
+        homeViewModel.getArtistsLiveData()
             .observe(viewLifecycleOwner,
                 { artists ->
                     if (artists != null) {

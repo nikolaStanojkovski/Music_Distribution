@@ -15,16 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.streamingservice.constants.*
 import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
+import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.model.search.SearchItem
-import com.musicdistribution.streamingservice.ui.HomeActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.ui.search.SearchItemAdapter
+import com.musicdistribution.streamingservice.viewmodel.FavouriteViewModel
 import streamingservice.R
 
 class ProfileListFragment : Fragment(), SearchItemClickListener {
 
     private lateinit var fragmentView: View
-    private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
+    private lateinit var favouriteViewModel: FavouriteViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +43,9 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
         if (listingType == null) {
             navigateOut()
         } else {
-            profileFragmentViewModel =
-                ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
+            favouriteViewModel =
+                ViewModelProvider(this)[FavouriteViewModel::class.java]
+
             val adapter = fillRecyclerView()
             fetchData(listingType, adapter)
             fragmentView.findViewById<Button>(R.id.btnBackProfileItem).setOnClickListener {
@@ -64,35 +67,31 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
     }
 
     private fun fetchData(listingType: CategoryItemType, adapter: SearchItemAdapter) {
-        if (profileFragmentViewModel.getAlbumsLiveData().value.isNullOrEmpty()
-            || profileFragmentViewModel.getArtistsLiveData().value.isNullOrEmpty()
-            || profileFragmentViewModel.getSongsLiveData().value.isNullOrEmpty()
-        ) {
-            profileFragmentViewModel.fetchFavouritesData()
-        }
-
         val heading = fragmentView.findViewById<TextView>(R.id.txtProfileItemHeading)
         when (listingType) {
+            CategoryItemType.ARTIST -> {
+                heading.text =
+                    MessageConstants.FAVOURITE_ARTISTS
+                favouriteViewModel.fetchFavouritesData(EntityType.ARTISTS)
+                fetchArtists(adapter)
+            }
             CategoryItemType.ALBUM -> {
                 heading.text =
                     MessageConstants.FAVOURITE_ALBUMS
+                favouriteViewModel.fetchFavouritesData(EntityType.ALBUMS)
                 fetchAlbums(adapter)
             }
             CategoryItemType.SONG -> {
                 heading.text =
                     MessageConstants.FAVOURITE_SONGS
+                favouriteViewModel.fetchFavouritesData(EntityType.SONGS)
                 fetchSongs(adapter)
-            }
-            CategoryItemType.ARTIST -> {
-                heading.text =
-                    MessageConstants.FAVOURITE_ARTISTS
-                fetchArtists(adapter)
             }
         }
     }
 
     private fun fetchArtists(searchAdapter: SearchItemAdapter) {
-        profileFragmentViewModel.getArtistsLiveData()
+        favouriteViewModel.getArtistsLiveData()
             .observe(viewLifecycleOwner,
                 { artists ->
                     if (artists != null && artists.isNotEmpty()) {
@@ -112,7 +111,7 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
     }
 
     private fun fetchAlbums(searchAdapter: SearchItemAdapter) {
-        profileFragmentViewModel.getAlbumsLiveData()
+        favouriteViewModel.getAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { albums ->
                     if (albums != null && albums.isNotEmpty()) {
@@ -130,7 +129,7 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
     }
 
     private fun fetchSongs(searchAdapter: SearchItemAdapter) {
-        profileFragmentViewModel.getSongsLiveData()
+        favouriteViewModel.getSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
                     if (songs != null && songs.isNotEmpty()) {
@@ -150,17 +149,26 @@ class ProfileListFragment : Fragment(), SearchItemClickListener {
     override fun onClick(searchItem: SearchItem) {
         when (searchItem.searchItemType) {
             CategoryItemType.ARTIST -> {
-                val bundle = bundleOf(SearchConstants.SELECTED_ARTIST_ID to searchItem.searchItemId)
+                val bundle = bundleOf(
+                    SearchConstants.SELECTED_ARTIST_ID to searchItem.searchItemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.ARTIST
+                )
                 findNavController()
                     .navigate(R.id.action_profileListFragment_to_artistFragment, bundle)
             }
             CategoryItemType.ALBUM -> {
-                val bundle = bundleOf(SearchConstants.SELECTED_ALBUM_ID to searchItem.searchItemId)
+                val bundle = bundleOf(
+                    SearchConstants.SELECTED_ALBUM_ID to searchItem.searchItemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.ALBUM
+                )
                 findNavController()
                     .navigate(R.id.action_profileListFragment_to_albumFragment, bundle)
             }
             CategoryItemType.SONG -> {
-                val bundle = bundleOf(SearchConstants.SELECTED_SONG_ID to searchItem.searchItemId)
+                val bundle = bundleOf(
+                    SearchConstants.SELECTED_SONG_ID to searchItem.searchItemId,
+                    SearchConstants.ITEM_TYPE to CategoryItemType.SONG
+                )
                 findNavController()
                     .navigate(R.id.action_profileListFragment_to_songFragment, bundle)
             }

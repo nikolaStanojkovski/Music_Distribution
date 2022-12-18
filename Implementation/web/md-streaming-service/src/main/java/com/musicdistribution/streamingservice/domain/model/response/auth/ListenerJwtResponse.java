@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Object used to transfer JWT data from the
  * back-end to the front-end for a listener.
@@ -28,7 +30,8 @@ public class ListenerJwtResponse extends JwtResponse {
      */
     public static ListenerJwtResponse from(Listener listener, String jwtToken, String encryptedId) {
         ListenerJwtResponse listenerJwtResponse = new ListenerJwtResponse();
-        listenerJwtResponse.setListenerResponse(ListenerResponse.from(listener, encryptedId));
+        listenerJwtResponse.setListenerResponse(ListenerResponse.from(listener, encryptedId,
+                List.of(), List.of(), List.of()));
         listenerJwtResponse.setJwtToken(jwtToken);
 
         return listenerJwtResponse;

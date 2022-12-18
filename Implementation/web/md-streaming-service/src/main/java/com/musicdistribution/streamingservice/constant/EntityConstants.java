@@ -24,9 +24,11 @@ public final class EntityConstants {
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
     public static final String ART_NAME = "artName";
-    public static final String IS_PUBLISHED = "isPublished";
     public static final String IS_A_SINGLE = "isASingle";
     public static final String LENGTH_IN_SECONDS = "lengthInSeconds";
+    public static final String FAVOURITE_ARTISTS = "favouriteArtists";
+    public static final String FAVOURITE_ALBUMS = "favouriteAlbums";
+    public static final String FAVOURITE_SONGS = "favouriteSongs";
 
     public static final String ALBUM = "album";
     public static final String ALBUM_ARTIST_NAME = "album_artist_name";

@@ -18,8 +18,11 @@ object ExceptionConstants {
     const val ARTIST_PICTURE_FETCH_FAILED = "There was a problem when fetching the the artist image"
     const val ALBUM_PICTURE_FETCH_FAILED = "There was a problem when fetching the the album cover image"
     const val SONG_PICTURE_FETCH_FAILED = "There was a problem when fetching the the song cover image"
+    const val FAVOURITE_ADD_FAILED = "There was a problem when liking the item with id "
+    const val FAVOURITE_REMOVE_FAILED = "There was a problem when un-liking the item with id "
 
     const val GENRE_DATA_NOT_LOADED = "There was a problem when filling the genre filtering data"
     const val FRAGMENT_DATA_NOT_LOADED = "There was a problem when loading the screen data"
     const val SESSION_NOT_INITIALIZED = "The session service has not been initialized"
+    const val UNKNOWN_VIEW_MODEL = "Unknown ViewModel class"
 }

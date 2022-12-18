@@ -6,6 +6,7 @@ import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.core.SongLength;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -47,9 +48,14 @@ public class SongResponse {
         songResponse.setIsPublished(song.getIsPublished());
         songResponse.setSongLength(song.getSongLength());
         songResponse.setPaymentInfo(song.getPaymentInfo());
-        songResponse.setCreator(ArtistResponse.from(song.getCreator(), encryptedArtistId));
-        songResponse.setAlbum(Objects.isNull(song.getAlbum()) ? null :
-                AlbumResponse.from(song.getAlbum(), encryptedAlbumId, encryptedArtistId));
+        if (StringUtils.isNotBlank(encryptedArtistId)) {
+            songResponse.setCreator(Objects.isNull(song.getCreator()) ? null :
+                    ArtistResponse.from(song.getCreator(), encryptedArtistId));
+        }
+        if (StringUtils.isNotBlank(encryptedAlbumId)) {
+            songResponse.setAlbum(Objects.isNull(song.getAlbum()) ? null :
+                    AlbumResponse.from(song.getAlbum(), encryptedAlbumId, encryptedArtistId));
+        }
 
         return songResponse;
     }

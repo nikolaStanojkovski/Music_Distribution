@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.musicdistribution.streamingservice.model.enums.EmailDomain
+import com.musicdistribution.streamingservice.viewmodel.AuthenticationViewModel
 import streamingservice.R
 import streamingservice.databinding.FragmentRegistrationBinding
 
@@ -19,7 +20,7 @@ class RegistrationFragment : Fragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var authActivityViewModel: AuthActivityViewModel
+    private lateinit var authenticationViewModel: AuthenticationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +33,8 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authActivityViewModel =
-            ViewModelProvider(this)[AuthActivityViewModel::class.java]
+        authenticationViewModel =
+            ViewModelProvider(this)[AuthenticationViewModel::class.java]
 
         binding.btnBackRegister.setOnClickListener {
             findNavController().navigate(R.id.action_RegisterFragment_to_WelcomeFragment)
@@ -53,7 +54,7 @@ class RegistrationFragment : Fragment() {
         val email = view.findViewById<EditText>(R.id.inputRegisterEmail).text.toString()
         val password = view.findViewById<EditText>(R.id.inputRegisterPassword).text.toString()
 
-        authActivityViewModel.registerApi(email, password)
+        authenticationViewModel.registerApi(email, password)
     }
 
     override fun onDestroyView() {

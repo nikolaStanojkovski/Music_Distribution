@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.musicdistribution.streamingservice.viewmodel.AuthenticationViewModel
 import streamingservice.R
 import streamingservice.databinding.FragmentWelcomeBinding
 
@@ -18,7 +19,7 @@ class WelcomeFragment : Fragment() {
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var authActivityViewModel: AuthActivityViewModel
+    private lateinit var authenticationViewModel: AuthenticationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +33,8 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authActivityViewModel =
-            ViewModelProvider(this)[AuthActivityViewModel::class.java]
+        authenticationViewModel =
+            ViewModelProvider(this)[AuthenticationViewModel::class.java]
 
         binding.btnSignUp.setOnClickListener {
             findNavController().navigate(R.id.action_WelcomeFragment_to_RegistrationFragment)

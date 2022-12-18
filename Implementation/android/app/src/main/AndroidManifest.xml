@@ -20,7 +20,7 @@
         android:theme="@style/Theme.MusicDistribution">
 
         <activity
-            android:name="com.musicdistribution.streamingservice.ui.HomeActivity"
+            android:name="com.musicdistribution.streamingservice.ui.home.HomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_home"

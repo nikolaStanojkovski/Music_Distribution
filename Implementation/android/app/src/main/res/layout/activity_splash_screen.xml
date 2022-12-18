@@ -10,14 +10,14 @@
         android:id="@+id/logo"
         android:layout_width="270dp"
         android:layout_height="270dp"
+        android:contentDescription="@string/image_placeholder"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.389"
-        android:contentDescription="@string/image_placeholder" />
+        app:layout_constraintVertical_bias="0.344" />
 
     <ProgressBar
         android:id="@+id/progressBarSplashScreen"
@@ -30,6 +30,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:layout_constraintVertical_bias="0.213" />
+        app:layout_constraintVertical_bias="0.346" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

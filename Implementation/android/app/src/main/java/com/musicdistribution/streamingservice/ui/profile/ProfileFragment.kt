@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.musicdistribution.streamingservice.constants.ApiConstants
 import com.musicdistribution.streamingservice.constants.EntityConstants
@@ -18,15 +17,13 @@ import com.musicdistribution.streamingservice.constants.ExceptionConstants
 import com.musicdistribution.streamingservice.constants.SearchConstants
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
-import com.musicdistribution.streamingservice.ui.HomeActivity
 import com.musicdistribution.streamingservice.ui.auth.AuthActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import streamingservice.R
 
 class ProfileFragment : Fragment() {
 
     private var fragmentView: View? = null
-
-    private lateinit var profileFragmentViewModel: ProfileFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,9 +35,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
-
-        profileFragmentViewModel =
-            ViewModelProvider(this)[ProfileFragmentViewModel::class.java]
 
         if (fragmentView != null) {
             fillData()

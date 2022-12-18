@@ -13,7 +13,8 @@ import com.musicdistribution.streamingservice.constants.ApiConstants
 import com.musicdistribution.streamingservice.constants.EntityConstants
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.model.retrofit.response.ListenerJwt
-import com.musicdistribution.streamingservice.ui.HomeActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
+import com.musicdistribution.streamingservice.viewmodel.AuthenticationViewModel
 import streamingservice.R
 import streamingservice.databinding.FragmentLoginBinding
 
@@ -22,7 +23,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var authActivityViewModel: AuthActivityViewModel
+    private lateinit var authenticationViewModel: AuthenticationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +36,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authActivityViewModel =
-            ViewModelProvider(this)[AuthActivityViewModel::class.java]
+        authenticationViewModel =
+            ViewModelProvider(this)[AuthenticationViewModel::class.java]
 
         binding.btnBackLogin.setOnClickListener {
             findNavController().navigate(R.id.action_LoginFragment_to_WelcomeFragment)
@@ -46,14 +47,14 @@ class LoginFragment : Fragment() {
             val email = view.findViewById<EditText>(R.id.inputLoginEmail).text.toString()
             val password = view.findViewById<EditText>(R.id.inputLoginPassword).text.toString()
 
-            authActivityViewModel.loginApi(email, password)
+            authenticationViewModel.loginApi(email, password)
         }
 
         validateLogin()
     }
 
     private fun validateLogin() {
-        authActivityViewModel.getLoginLiveData()
+        authenticationViewModel.getLoginLiveData()
             .observe(viewLifecycleOwner,
                 { listener ->
                     if (listener != null && listener.jwtToken.isNotEmpty()) {

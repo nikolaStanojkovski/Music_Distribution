@@ -11,8 +11,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Listener domain entity.
@@ -38,17 +39,17 @@ public class Listener extends AbstractEntity<ListenerId> implements Serializable
     })
     private Email userEmail;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Album> favouriteAlbums;
+    private Set<Album> favouriteAlbums;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Song> favouriteSongs;
+    private Set<Song> favouriteSongs;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Artist> favouriteArtists;
+    private Set<Artist> favouriteArtists;
 
     @OneToMany(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -74,9 +75,9 @@ public class Listener extends AbstractEntity<ListenerId> implements Serializable
         listener.userRegistrationInfo = userRegistrationInfo;
         listener.userEmail = userEmail;
 
-        listener.favouriteAlbums = new ArrayList<>();
-        listener.favouriteSongs = new ArrayList<>();
-        listener.favouriteArtists = new ArrayList<>();
+        listener.favouriteAlbums = new LinkedHashSet<>();
+        listener.favouriteSongs = new LinkedHashSet<>();
+        listener.favouriteArtists = new LinkedHashSet<>();
 
         return listener;
     }
@@ -106,5 +107,32 @@ public class Listener extends AbstractEntity<ListenerId> implements Serializable
      */
     public void addFavouriteSong(Song song) {
         this.favouriteSongs.add(song);
+    }
+
+    /**
+     * Method used for removing an artist from the favourites list.
+     *
+     * @param artist - the artist to be removed from the favourites list.
+     */
+    public void removeFavouriteArtist(Artist artist) {
+        this.favouriteArtists.remove(artist);
+    }
+
+    /**
+     * Method used for removing an album from the favourites list.
+     *
+     * @param album - the album to be removed from the favourites list.
+     */
+    public void removeFavouriteAlbum(Album album) {
+        this.favouriteAlbums.remove(album);
+    }
+
+    /**
+     * Method used for removing a song from the favourites list.
+     *
+     * @param song - the song to be removed from the favourites list.
+     */
+    public void removeFavouriteSong(Song song) {
+        this.favouriteSongs.remove(song);
     }
 }

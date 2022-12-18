@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Authentication Rest Controller.
@@ -122,7 +123,7 @@ public class AuthResource {
     public ResponseEntity<ListenerResponse> registerListener(@RequestBody @Valid AuthRequest listenerRequest) {
         return this.listenerService.register(listenerRequest)
                 .map(listener -> ResponseEntity.ok().body(ListenerResponse.from(listener,
-                        encryptionSystem.encrypt(listener.getId().getId()))))
+                        encryptionSystem.encrypt(listener.getId().getId()), List.of(), List.of(), List.of())))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

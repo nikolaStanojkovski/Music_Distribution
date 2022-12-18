@@ -16,21 +16,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.SearchConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
-import com.musicdistribution.streamingservice.constants.FileConstants
+import com.musicdistribution.streamingservice.constants.*
 import com.musicdistribution.streamingservice.data.CategoryData
+import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
+import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
-import com.musicdistribution.streamingservice.ui.HomeActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.ui.home.HomeVerticalAdapter
+import com.musicdistribution.streamingservice.viewmodel.FavouriteViewModel
+import com.musicdistribution.streamingservice.viewmodel.ItemTypeViewModel
 import streamingservice.R
 
 class ArtistFragment : Fragment(), CategoryItemClickListener {
 
-    private lateinit var homeItemFragmentViewModel: HomeItemFragmentViewModel
+    private lateinit var itemTypeViewModel: ItemTypeViewModel
+    private lateinit var favouriteViewModel: FavouriteViewModel
     private lateinit var fragmentView: View
 
     override fun onCreateView(
@@ -48,25 +50,29 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         val categoryItemType = arguments?.get(SearchConstants.ITEM_TYPE) as CategoryItemType?
         if (selectedArtistId == null
             || categoryItemType == null
-            || categoryItemType != CategoryItemType.ARTIST) {
+            || categoryItemType != CategoryItemType.ARTIST
+        ) {
             navigateOut()
         } else {
-            homeItemFragmentViewModel =
-                ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
+            itemTypeViewModel =
+                ViewModelProvider(this)[ItemTypeViewModel::class.java]
+            favouriteViewModel =
+                ViewModelProvider(this)[FavouriteViewModel::class.java]
+
             fillData(selectedArtistId)
             fragmentView.findViewById<Button>(R.id.btnBackArtist).setOnClickListener {
                 findNavController().navigate(R.id.action_artistFragment_to_homeFragment)
-                homeItemFragmentViewModel.clear()
+                itemTypeViewModel.clear()
             }
         }
     }
 
     private fun fillData(selectedArtistId: String) {
-        homeItemFragmentViewModel.fetchArtist(selectedArtistId)
-        homeItemFragmentViewModel.fetchArtistAlbums(selectedArtistId)
-        homeItemFragmentViewModel.fetchArtistSongs(selectedArtistId)
+        itemTypeViewModel.fetchArtist(selectedArtistId)
+        itemTypeViewModel.fetchArtistAlbums(selectedArtistId)
+        itemTypeViewModel.fetchArtistSongs(selectedArtistId)
 
-        homeItemFragmentViewModel.getArtistLiveData()
+        itemTypeViewModel.getArtistLiveData()
             .observe(viewLifecycleOwner,
                 { item ->
                     if (item != null) {
@@ -86,6 +92,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                     }
                 })
         fillAdapterData()
+        fillFavouriteData(selectedArtistId)
     }
 
     private fun fillAdapterData() {
@@ -99,7 +106,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
 
         CategoryData.clearData()
         verticalAdapter.updateCategory(CategoryData.artistData[0])
-        homeItemFragmentViewModel.getArtistSongsLiveData()
+        itemTypeViewModel.getArtistSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
                     verticalAdapter.emptyData(CategoryData.artistData[0])
@@ -116,7 +123,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                 })
 
         verticalAdapter.updateCategory(CategoryData.artistData[1])
-        homeItemFragmentViewModel.getArtistAlbumsLiveData()
+        itemTypeViewModel.getArtistAlbumsLiveData()
             .observe(viewLifecycleOwner,
                 { albums ->
                     verticalAdapter.emptyData(CategoryData.artistData[1])
@@ -148,44 +155,41 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         }
     }
 
-//    private fun fillFollowButton(selectedArtistId: String) {
-//        FirebaseRealtimeDB.favouriteArtistsReference.child("/follow-${FirebaseAuthDB.firebaseAuth.currentUser!!.uid}-${selectedArtistId}")
-//            .get()
-//            .addOnSuccessListener { user ->
-//                val followButton = fragmentView.findViewById<Button>(R.id.btnFollow)
-//                if (user.exists()) {
-//                    buttonUnfollow(followButton, selectedArtistId)
-//                } else {
-//                    buttonFollow(followButton, selectedArtistId)
-//                }
-//            }
-//    }
+    private fun fillFavouriteData(selectedArtistId: String) {
+        if (favouriteViewModel.getArtistsLiveData().value.isNullOrEmpty()) {
+            favouriteViewModel.fetchFavouritesData(EntityType.ARTISTS)
+        }
 
-//    private fun buttonFollow(followButton: Button, selectedArtistId: String) {
-//        followButton.text = "Follow"
-//        followButton.setOnClickListener {
-//            homeItemFragmentViewModel.updateFollowers(
-//                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
-//                selectedArtistId,
-//                true,
-//                currentArtist.email
-//            )
-//            buttonUnfollow(followButton, selectedArtistId)
-//        }
-//    }
+        val userId = SessionService.read(EntityConstants.USER_ID)
+        val likeButton: ImageView? = fragmentView.findViewById(R.id.btnLikeArtist)
+        if (!userId.isNullOrEmpty() && likeButton != null) {
+            favouriteViewModel.getArtistsLiveData()
+                .observe(viewLifecycleOwner,
+                    { artists ->
+                        if (!artists.isNullOrEmpty() && artists.filter { a -> a.id == selectedArtistId }.size == 1) {
+                            buttonUnlike(likeButton, userId, selectedArtistId)
+                        } else {
+                            buttonLike(likeButton, userId, selectedArtistId)
+                        }
+                    })
+        }
+    }
 
-//    private fun buttonUnfollow(followButton: Button, selectedArtistId: String) {
-//        followButton.text = "Unfollow"
-//        followButton.setOnClickListener {
-//            homeItemFragmentViewModel.updateFollowers(
-//                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
-//                selectedArtistId,
-//                false,
-//                currentArtist.email
-//            )
-//            buttonFollow(followButton, selectedArtistId)
-//        }
-//    }
+    private fun buttonLike(likeButton: ImageView, userId: String, selectedArtistId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_unfilled)
+        likeButton.setOnClickListener {
+            favouriteViewModel.addToFavourites(userId, selectedArtistId, EntityType.ARTISTS)
+            buttonUnlike(likeButton, userId, selectedArtistId)
+        }
+    }
+
+    private fun buttonUnlike(likeButton: ImageView, userId: String, selectedArtistId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_filled)
+        likeButton.setOnClickListener {
+            favouriteViewModel.removeFromFavourites(userId, selectedArtistId, EntityType.ARTISTS)
+            buttonLike(likeButton, userId, selectedArtistId)
+        }
+    }
 
     override fun onClick(item: CategoryItem) {
         when (item.itemType) {

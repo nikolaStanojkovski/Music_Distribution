@@ -13,18 +13,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.SearchConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
-import com.musicdistribution.streamingservice.constants.FileConstants
+import com.musicdistribution.streamingservice.constants.*
+import com.musicdistribution.streamingservice.data.SessionService
+import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
-import com.musicdistribution.streamingservice.ui.HomeActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
+import com.musicdistribution.streamingservice.viewmodel.FavouriteViewModel
+import com.musicdistribution.streamingservice.viewmodel.ItemTypeViewModel
 import streamingservice.R
 
 class SongFragment : Fragment() {
 
     private lateinit var fragmentView: View
-    private lateinit var homeItemFragmentViewModel: HomeItemFragmentViewModel
+    private lateinit var itemTypeViewModel: ItemTypeViewModel
+    private lateinit var favouriteViewModel: FavouriteViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,24 +44,27 @@ class SongFragment : Fragment() {
 
         if (selectedSongId == null
             || categoryItemType == null
-            || categoryItemType != CategoryItemType.SONG) {
+            || categoryItemType != CategoryItemType.SONG
+        ) {
             navigateOut()
         } else {
-            homeItemFragmentViewModel =
-                ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
+            itemTypeViewModel =
+                ViewModelProvider(this)[ItemTypeViewModel::class.java]
+            favouriteViewModel =
+                ViewModelProvider(this)[FavouriteViewModel::class.java]
 
             fillData(selectedSongId)
             fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
                 findNavController().navigate(R.id.action_songFragment_to_homeFragment)
-                homeItemFragmentViewModel.clear()
+                itemTypeViewModel.clear()
             }
         }
     }
 
     private fun fillData(selectedSongId: String) {
-        homeItemFragmentViewModel.clear()
-        homeItemFragmentViewModel.fetchSong(selectedSongId)
-        homeItemFragmentViewModel.getSongLiveData()
+        itemTypeViewModel.clear()
+        itemTypeViewModel.fetchSong(selectedSongId)
+        itemTypeViewModel.getSongLiveData()
             .observe(viewLifecycleOwner,
                 { item ->
                     if (item != null) {
@@ -79,11 +84,12 @@ class SongFragment : Fragment() {
                         val songCoverReference =
                             "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${item.id}${FileConstants.PNG_EXTENSION}"
 
-                       if(imageControl != null) {
-                           fillImage(songCoverReference, imageControl)
-                       }
+                        if (imageControl != null) {
+                            fillImage(songCoverReference, imageControl)
+                        }
                     }
                 })
+        fillFavouriteData(selectedSongId)
     }
 
     private fun fillImage(songCoverReference: String, imageControl: ImageView) {
@@ -100,30 +106,42 @@ class SongFragment : Fragment() {
             ).show()
         }
     }
-//
-//    private fun buttonLike(likeButton: ImageView, selectedSongId: String) {
-//        likeButton.setImageResource(R.drawable.ic_favourite_unfilled)
-//        likeButton.setOnClickListener {
-//            homeItemFragmentViewModel.favouriteSong(
-//                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
-//                selectedSongId,
-//                true
-//            )
-//            buttonUnlike(likeButton, selectedSongId)
-//        }
-//    }
-//
-//    private fun buttonUnlike(likeButton: ImageView, selectedSongId: String) {
-//        likeButton.setImageResource(R.drawable.ic_favourite_filled)
-//        likeButton.setOnClickListener {
-//            homeItemFragmentViewModel.favouriteSong(
-//                FirebaseAuthDB.firebaseAuth.currentUser!!.uid,
-//                selectedSongId,
-//                false,
-//            )
-//            buttonLike(likeButton, selectedSongId)
-//        }
-//    }
+
+    private fun fillFavouriteData(selectedSongId: String) {
+        if (favouriteViewModel.getSongsLiveData().value.isNullOrEmpty()) {
+            favouriteViewModel.fetchFavouritesData(EntityType.SONGS)
+        }
+
+        val userId = SessionService.read(EntityConstants.USER_ID)
+        val likeButton: ImageView? = fragmentView.findViewById(R.id.btnLikeSong)
+        if (!userId.isNullOrEmpty() && likeButton != null) {
+            favouriteViewModel.getSongsLiveData()
+                .observe(viewLifecycleOwner,
+                    { songs ->
+                        if (!songs.isNullOrEmpty() && songs.filter { s -> s.id == selectedSongId }.size == 1) {
+                            buttonUnlike(likeButton, userId, selectedSongId)
+                        } else {
+                            buttonLike(likeButton, userId, selectedSongId)
+                        }
+                    })
+        }
+    }
+
+    private fun buttonLike(likeButton: ImageView, userId: String, selectedSongId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_unfilled)
+        likeButton.setOnClickListener {
+            favouriteViewModel.addToFavourites(userId, selectedSongId, EntityType.SONGS)
+            buttonUnlike(likeButton, userId, selectedSongId)
+        }
+    }
+
+    private fun buttonUnlike(likeButton: ImageView, userId: String, selectedSongId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_filled)
+        likeButton.setOnClickListener {
+            favouriteViewModel.removeFromFavourites(userId, selectedSongId, EntityType.SONGS)
+            buttonLike(likeButton, userId, selectedSongId)
+        }
+    }
 
     private fun navigateOut() {
         val intent = Intent(requireActivity(), HomeActivity::class.java)

@@ -8,7 +8,7 @@ import com.musicdistribution.streamingservice.constants.ApiConstants
 import com.musicdistribution.streamingservice.constants.EntityConstants
 import com.musicdistribution.streamingservice.constants.ExceptionConstants
 import com.musicdistribution.streamingservice.data.SessionService
-import com.musicdistribution.streamingservice.ui.HomeActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.util.InternetUtils
 import streamingservice.databinding.ActivityAuthBinding
 

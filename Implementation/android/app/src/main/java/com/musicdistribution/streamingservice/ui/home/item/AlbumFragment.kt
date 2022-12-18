@@ -16,22 +16,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.SearchConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
-import com.musicdistribution.streamingservice.constants.FileConstants
+import com.musicdistribution.streamingservice.constants.*
+import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
+import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.model.search.SearchItem
-import com.musicdistribution.streamingservice.ui.HomeActivity
+import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.ui.search.SearchItemAdapter
+import com.musicdistribution.streamingservice.viewmodel.FavouriteViewModel
+import com.musicdistribution.streamingservice.viewmodel.ItemTypeViewModel
 import streamingservice.R
 
 
 class AlbumFragment : Fragment(), SearchItemClickListener {
 
     private lateinit var fragmentView: View
-    private lateinit var homeItemFragmentViewModel: HomeItemFragmentViewModel
+    private lateinit var itemTypeViewModel: ItemTypeViewModel
+    private lateinit var favouriteViewModel: FavouriteViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,21 +51,24 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         if (selectedAlbumId == null || categoryItemType == null || categoryItemType != CategoryItemType.ALBUM) {
             navigateOut()
         } else {
-            homeItemFragmentViewModel =
-                ViewModelProvider(this)[HomeItemFragmentViewModel::class.java]
+            itemTypeViewModel =
+                ViewModelProvider(this)[ItemTypeViewModel::class.java]
+            favouriteViewModel =
+                ViewModelProvider(this)[FavouriteViewModel::class.java]
+
             fillData(selectedAlbumId)
             fragmentView.findViewById<Button>(R.id.btnBackAlbum).setOnClickListener {
                 findNavController().navigate(R.id.action_albumFragment_to_homeFragment)
-                homeItemFragmentViewModel.clear()
+                itemTypeViewModel.clear()
             }
         }
     }
 
     private fun fillData(selectedAlbumId: String) {
-        homeItemFragmentViewModel.fetchAlbum(selectedAlbumId)
-        homeItemFragmentViewModel.fetchAlbumSongs(selectedAlbumId)
+        itemTypeViewModel.fetchAlbum(selectedAlbumId)
+        itemTypeViewModel.fetchAlbumSongs(selectedAlbumId)
 
-        homeItemFragmentViewModel.getAlbumLiveData()
+        itemTypeViewModel.getAlbumLiveData()
             .observe(viewLifecycleOwner,
                 { item ->
                     if (item != null) {
@@ -86,6 +91,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                     }
                 })
 
+        fillFavouriteData(selectedAlbumId)
         fillAdapterData()
     }
 
@@ -98,7 +104,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         songItemAdapter.emptyData()
         songItemRecyclerView.adapter = songItemAdapter
 
-        homeItemFragmentViewModel.getAlbumSongsLiveData()
+        itemTypeViewModel.getAlbumSongsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
                     if (songs != null && songs.size > 0) {
@@ -130,6 +136,42 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                 ExceptionConstants.ALBUM_PICTURE_FETCH_FAILED,
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    private fun fillFavouriteData(selectedAlbumId: String) {
+        if (favouriteViewModel.getAlbumsLiveData().value.isNullOrEmpty()) {
+            favouriteViewModel.fetchFavouritesData(EntityType.ALBUMS)
+        }
+
+        val userId = SessionService.read(EntityConstants.USER_ID)
+        val likeButton: ImageView? = fragmentView.findViewById(R.id.btnLikeAlbum)
+        if (!userId.isNullOrEmpty() && likeButton != null) {
+            favouriteViewModel.getAlbumsLiveData()
+                .observe(viewLifecycleOwner,
+                    { albums ->
+                        if (!albums.isNullOrEmpty() && albums.filter { a -> a.id == selectedAlbumId }.size == 1) {
+                            buttonUnlike(likeButton, userId, selectedAlbumId)
+                        } else {
+                            buttonLike(likeButton, userId, selectedAlbumId)
+                        }
+                    })
+        }
+    }
+
+    private fun buttonLike(likeButton: ImageView, userId: String, selectedAlbumId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_unfilled)
+        likeButton.setOnClickListener {
+            favouriteViewModel.addToFavourites(userId, selectedAlbumId, EntityType.ALBUMS)
+            buttonUnlike(likeButton, userId, selectedAlbumId)
+        }
+    }
+
+    private fun buttonUnlike(likeButton: ImageView, userId: String, selectedAlbumId: String) {
+        likeButton.setImageResource(R.drawable.ic_favourite_filled)
+        likeButton.setOnClickListener {
+            favouriteViewModel.removeFromFavourites(userId, selectedAlbumId, EntityType.ALBUMS)
+            buttonLike(likeButton, userId, selectedAlbumId)
         }
     }
 

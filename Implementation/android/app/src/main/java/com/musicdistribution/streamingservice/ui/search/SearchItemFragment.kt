@@ -20,12 +20,13 @@ import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
 import com.musicdistribution.streamingservice.model.enums.Genre
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.model.search.SearchItem
+import com.musicdistribution.streamingservice.viewmodel.SearchViewModel
 import streamingservice.R
 
 class SearchItemFragment : Fragment(), SearchItemClickListener {
 
     private lateinit var fragmentView: View
-    private lateinit var searchFragmentViewModel: SearchFragmentViewModel
+    private lateinit var searchViewModel: SearchViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +39,8 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentView = view
 
-        searchFragmentViewModel =
-            ViewModelProvider(this)[SearchFragmentViewModel::class.java]
+        searchViewModel =
+            ViewModelProvider(this)[SearchViewModel::class.java]
         val searchAdapter = fillRecyclerView()
 
         val selectedGenre = arguments?.get(SearchConstants.SELECTED_GENRE) as Genre?
@@ -62,10 +63,10 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
     }
 
     private fun fillGenreData(selectedGenre: Genre, searchAdapter: SearchItemAdapter) {
-        searchFragmentViewModel.fetchGenreData(selectedGenre)
+        searchViewModel.fetchGenreData(selectedGenre)
         searchAdapter.emptyData()
 
-        searchFragmentViewModel.getGenreAlbumResultsLiveData()
+        searchViewModel.getGenreAlbumResultsLiveData()
             .observe(viewLifecycleOwner,
                 { albums ->
                     if (albums != null && albums.isNotEmpty()) {
@@ -80,7 +81,7 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
                         }.forEach { si -> searchAdapter.updateDataItem(si) }
                     }
                 })
-        searchFragmentViewModel.getGenreSongResultsLiveData()
+        searchViewModel.getGenreSongResultsLiveData()
             .observe(viewLifecycleOwner,
                 { songs ->
                     if (songs != null && songs.isNotEmpty()) {
@@ -105,9 +106,9 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
 
             if (!searchTerm.isNullOrEmpty()) {
                 searchAdapter.emptyData()
-                searchFragmentViewModel.fetchSearchData(searchTerm.toString())
+                searchViewModel.fetchSearchData(searchTerm.toString())
 
-                searchFragmentViewModel.getArtistsLiveData()
+                searchViewModel.getArtistsLiveData()
                     .observe(viewLifecycleOwner,
                         { artists ->
                             if (artists != null && artists.isNotEmpty()) {
@@ -124,7 +125,7 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
                                 }.forEach { si -> searchAdapter.updateDataItem(si) }
                             }
                         })
-                searchFragmentViewModel.getAlbumsLiveData()
+                searchViewModel.getAlbumsLiveData()
                     .observe(viewLifecycleOwner,
                         { albums ->
                             if (albums != null && albums.isNotEmpty()) {
@@ -139,7 +140,7 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
                                 }.forEach { si -> searchAdapter.updateDataItem(si) }
                             }
                         })
-                searchFragmentViewModel.getSongsLiveData()
+                searchViewModel.getSongsLiveData()
                     .observe(viewLifecycleOwner,
                         { songs ->
                             if (songs != null && songs.isNotEmpty()) {
