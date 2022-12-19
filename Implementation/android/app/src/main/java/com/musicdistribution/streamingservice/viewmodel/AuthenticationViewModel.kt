@@ -4,7 +4,7 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.constants.MessageConstants
+import com.musicdistribution.streamingservice.constant.MessageConstants
 import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
 import com.musicdistribution.streamingservice.data.api.core.AuthServiceApi
 import com.musicdistribution.streamingservice.model.enums.EmailDomain

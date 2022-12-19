@@ -4,7 +4,7 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.constant.ExceptionConstants
 import com.musicdistribution.streamingservice.data.api.StreamingServiceApiClient
 import com.musicdistribution.streamingservice.data.api.core.AlbumServiceApi
 import com.musicdistribution.streamingservice.data.api.core.ArtistServiceApi

@@ -3,7 +3,7 @@ package com.musicdistribution.streamingservice.util
 import android.app.Activity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.musicdistribution.streamingservice.constants.MessageConstants
+import com.musicdistribution.streamingservice.constant.MessageConstants
 import java.util.*
 
 @Suppress(MessageConstants.DEPRECATION)

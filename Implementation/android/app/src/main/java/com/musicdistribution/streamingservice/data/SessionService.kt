@@ -2,9 +2,9 @@ package com.musicdistribution.streamingservice.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.musicdistribution.streamingservice.constants.AlphabetConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
-import com.musicdistribution.streamingservice.constants.MessageConstants
+import com.musicdistribution.streamingservice.constant.AlphabetConstants
+import com.musicdistribution.streamingservice.constant.ExceptionConstants
+import com.musicdistribution.streamingservice.constant.MessageConstants
 
 class SessionService(var context: Context) {
 

@@ -16,9 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.musicdistribution.streamingservice.constants.*
+import com.musicdistribution.streamingservice.constant.*
 import com.musicdistribution.streamingservice.data.SessionService
-import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
+import com.musicdistribution.streamingservice.listener.SearchItemClickListener
 import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.model.search.SearchItem

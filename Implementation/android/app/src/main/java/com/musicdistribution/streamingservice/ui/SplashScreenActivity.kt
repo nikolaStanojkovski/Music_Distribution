@@ -7,8 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.musicdistribution.streamingservice.constants.MessageConstants
-import com.musicdistribution.streamingservice.constants.TimeConstants
+import com.musicdistribution.streamingservice.constant.MessageConstants
+import com.musicdistribution.streamingservice.constant.TimeConstants
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.ui.auth.AuthActivity
 import streamingservice.R

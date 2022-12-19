@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.util
 
-import com.musicdistribution.streamingservice.constants.AlphabetConstants
-import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.constant.AlphabetConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
 import com.musicdistribution.streamingservice.data.SessionService
 
 object AuthenticationUtils {

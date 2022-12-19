@@ -9,8 +9,8 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.EntityConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
+import com.musicdistribution.streamingservice.constant.EntityConstants
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.model.retrofit.response.ListenerJwt
 import com.musicdistribution.streamingservice.ui.home.HomeActivity

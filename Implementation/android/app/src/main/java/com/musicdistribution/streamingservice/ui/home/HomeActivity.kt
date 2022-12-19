@@ -15,8 +15,8 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.musicdistribution.streamingservice.constants.MessageConstants
-import com.musicdistribution.streamingservice.constants.NotificationConstants
+import com.musicdistribution.streamingservice.constant.MessageConstants
+import com.musicdistribution.streamingservice.constant.NotificationConstants
 import com.musicdistribution.streamingservice.ui.auth.AuthActivity
 import com.musicdistribution.streamingservice.util.AuthenticationUtils
 import com.musicdistribution.streamingservice.viewmodel.HomeViewModel

@@ -1,10 +1,8 @@
 package com.musicdistribution.streamingservice.data.api.core
 
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.EntityConstants
-import com.musicdistribution.streamingservice.model.retrofit.core.Album
+import com.musicdistribution.streamingservice.constant.ApiConstants
+import com.musicdistribution.streamingservice.constant.EntityConstants
 import com.musicdistribution.streamingservice.model.retrofit.core.Artist
-import com.musicdistribution.streamingservice.model.retrofit.response.AlbumResponse
 import com.musicdistribution.streamingservice.model.retrofit.response.ArtistResponse
 import retrofit2.Call
 import retrofit2.http.GET

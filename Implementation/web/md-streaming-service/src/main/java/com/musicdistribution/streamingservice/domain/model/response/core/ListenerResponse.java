@@ -1,7 +1,6 @@
 package com.musicdistribution.streamingservice.domain.model.response.core;
 
 import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
-import com.musicdistribution.streamingservice.domain.valueobject.core.UserRegistrationInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +16,6 @@ public class ListenerResponse {
 
     private String id;
     private String email;
-    private UserRegistrationInfo userRegistrationInfo;
 
     private List<SongResponse> favouriteSongs;
     private List<AlbumResponse> favouriteAlbums;
@@ -37,7 +35,6 @@ public class ListenerResponse {
         ListenerResponse listenerResponse = new ListenerResponse();
         listenerResponse.setId(encryptedId);
         listenerResponse.setEmail(listener.getUserEmail().getFullAddress());
-        listenerResponse.setUserRegistrationInfo(listenerResponse.getUserRegistrationInfo());
         if (favouriteArtists != null && !favouriteArtists.isEmpty()) {
             listenerResponse.setFavouriteArtists(favouriteArtists);
         }

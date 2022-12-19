@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.EntityConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
+import com.musicdistribution.streamingservice.constant.EntityConstants
+import com.musicdistribution.streamingservice.constant.ExceptionConstants
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.util.InternetUtils

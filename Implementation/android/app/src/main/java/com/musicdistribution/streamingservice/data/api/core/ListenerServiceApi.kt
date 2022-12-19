@@ -1,7 +1,7 @@
 package com.musicdistribution.streamingservice.data.api.core
 
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.EntityConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
+import com.musicdistribution.streamingservice.constant.EntityConstants
 import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.retrofit.core.Listener
 import retrofit2.Call

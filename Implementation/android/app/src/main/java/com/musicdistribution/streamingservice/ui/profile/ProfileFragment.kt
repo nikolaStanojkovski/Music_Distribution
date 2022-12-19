@@ -11,10 +11,10 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.EntityConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
-import com.musicdistribution.streamingservice.constants.SearchConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
+import com.musicdistribution.streamingservice.constant.EntityConstants
+import com.musicdistribution.streamingservice.constant.ExceptionConstants
+import com.musicdistribution.streamingservice.constant.SearchConstants
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.ui.auth.AuthActivity

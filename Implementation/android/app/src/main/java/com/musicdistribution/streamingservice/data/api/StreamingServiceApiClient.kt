@@ -1,6 +1,6 @@
 package com.musicdistribution.streamingservice.data.api
 
-import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
 import com.musicdistribution.streamingservice.data.api.core.*
 import com.musicdistribution.streamingservice.util.AuthenticationUtils
 import okhttp3.OkHttpClient

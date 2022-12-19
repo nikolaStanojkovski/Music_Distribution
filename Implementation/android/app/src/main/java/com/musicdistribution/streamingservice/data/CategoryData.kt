@@ -1,6 +1,6 @@
 package com.musicdistribution.streamingservice.data
 
-import com.musicdistribution.streamingservice.constants.MessageConstants
+import com.musicdistribution.streamingservice.constant.MessageConstants
 import com.musicdistribution.streamingservice.model.search.Category
 
 object CategoryData {

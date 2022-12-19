@@ -1,6 +1,6 @@
 package com.musicdistribution.streamingservice.data.api.core
 
-import com.musicdistribution.streamingservice.constants.ApiConstants
+import com.musicdistribution.streamingservice.constant.ApiConstants
 import com.musicdistribution.streamingservice.model.retrofit.UserAuth
 import com.musicdistribution.streamingservice.model.retrofit.core.Listener
 import com.musicdistribution.streamingservice.model.retrofit.response.ListenerJwt

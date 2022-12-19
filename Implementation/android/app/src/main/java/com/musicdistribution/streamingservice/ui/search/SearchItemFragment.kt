@@ -12,11 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.streamingservice.constants.ApiConstants
-import com.musicdistribution.streamingservice.constants.EntityConstants
-import com.musicdistribution.streamingservice.constants.FileConstants
-import com.musicdistribution.streamingservice.constants.SearchConstants
-import com.musicdistribution.streamingservice.listeners.SearchItemClickListener
+import com.musicdistribution.streamingservice.constant.ApiConstants
+import com.musicdistribution.streamingservice.constant.EntityConstants
+import com.musicdistribution.streamingservice.constant.FileConstants
+import com.musicdistribution.streamingservice.constant.SearchConstants
+import com.musicdistribution.streamingservice.listener.SearchItemClickListener
 import com.musicdistribution.streamingservice.model.enums.Genre
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.model.search.SearchItem

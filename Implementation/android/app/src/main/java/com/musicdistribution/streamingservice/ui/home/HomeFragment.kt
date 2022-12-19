@@ -18,10 +18,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.musicdistribution.streamingservice.constants.*
+import com.musicdistribution.streamingservice.constant.*
 import com.musicdistribution.streamingservice.data.CategoryData
 import com.musicdistribution.streamingservice.data.SessionService
-import com.musicdistribution.streamingservice.listeners.CategoryItemClickListener
+import com.musicdistribution.streamingservice.listener.CategoryItemClickListener
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.util.LocalizationUtils

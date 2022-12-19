@@ -3,11 +3,9 @@ package com.musicdistribution.streamingservice.util
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
-import com.musicdistribution.streamingservice.constants.AlphabetConstants
-import com.musicdistribution.streamingservice.constants.EmailConstants
-import com.musicdistribution.streamingservice.constants.ExceptionConstants
-import java.lang.Double.parseDouble
-import java.lang.Integer.parseInt
+import com.musicdistribution.streamingservice.constant.AlphabetConstants
+import com.musicdistribution.streamingservice.constant.EmailConstants
+import com.musicdistribution.streamingservice.constant.ExceptionConstants
 
 object ValidationUtils {
 

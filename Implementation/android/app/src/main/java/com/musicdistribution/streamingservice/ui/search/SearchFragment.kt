@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.musicdistribution.streamingservice.constants.SearchConstants
+import com.musicdistribution.streamingservice.constant.SearchConstants
 import com.musicdistribution.streamingservice.data.GenreData
-import com.musicdistribution.streamingservice.listeners.GenreItemClickListener
+import com.musicdistribution.streamingservice.listener.GenreItemClickListener
 import com.musicdistribution.streamingservice.model.enums.Genre
 import streamingservice.R
 
