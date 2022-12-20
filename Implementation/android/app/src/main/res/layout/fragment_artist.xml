@@ -7,18 +7,29 @@
     android:background="@drawable/gradient"
     tools:context=".ui.home.item.AlbumFragment">
 
-    <ImageView
-        android:id="@+id/imageArtist"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/imageArtistWrapper"
         android:layout_width="152dp"
         android:layout_height="152dp"
-        android:contentDescription="@string/image_placeholder"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="55dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="13dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintVertical_bias="0.19">
+        <ImageView
+            android:id="@+id/imageArtist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image_placeholder"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/txtArtistInfo"
@@ -42,10 +53,10 @@
         android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageArtist"
+        app:layout_constraintEnd_toEndOf="@+id/imageArtistWrapper"
         app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="@+id/imageArtist"
-        app:layout_constraintTop_toBottomOf="@+id/imageArtist"
+        app:layout_constraintStart_toStartOf="@+id/imageArtistWrapper"
+        app:layout_constraintTop_toBottomOf="@+id/imageArtistWrapper"
         app:layout_constraintVertical_bias="0.033" />
 
     <ImageView

@@ -52,7 +52,7 @@ public class SongServiceImpl implements SongService {
      * Method used for fetching a page of songs from the database.
      *
      * @param pageable              - the wrapper object containing pagination data.
-     * @param shouldFilterPublished - a flag determining whether a filtering should be done by publishing status.
+     * @param shouldFilterPublished S- a flag determining whether a filtering should be done by publishing status.
      * @return a page of the songs.
      */
     @Override

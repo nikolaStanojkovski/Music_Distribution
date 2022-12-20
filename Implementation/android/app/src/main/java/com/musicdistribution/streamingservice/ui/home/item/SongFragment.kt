@@ -1,22 +1,32 @@
 package com.musicdistribution.streamingservice.ui.home.item
 
+import android.annotation.SuppressLint
+import android.app.LauncherActivity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.musicdistribution.streamingservice.constant.*
 import com.musicdistribution.streamingservice.data.SessionService
+import com.musicdistribution.streamingservice.listener.SeekBarListener
 import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.service.SongFetchService
@@ -26,14 +36,16 @@ import com.musicdistribution.streamingservice.viewmodel.ItemTypeViewModel
 import streamingservice.R
 
 @Suppress(MessageConstants.DEPRECATION)
-class SongFragment : Fragment() {
+class SongFragment : Fragment(), SeekBarListener {
 
     private lateinit var fragmentView: View
+    private lateinit var seekBar: SeekBar
     private lateinit var itemTypeViewModel: ItemTypeViewModel
     private lateinit var favouriteViewModel: FavouriteViewModel
 
     private var songPlaying: Boolean = false
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer? = MediaPlayer()
+    private var mediaFileLength: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,9 +67,11 @@ class SongFragment : Fragment() {
             favouriteViewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
 
             fillData(selectedSongId)
+            seekBar = fragmentView.findViewById(R.id.songSeekBar)
             fragmentView.findViewById<Button>(R.id.btnBackSong).setOnClickListener {
-                findNavController().navigate(R.id.action_songFragment_to_homeFragment)
+                resetMediaPlayer()
                 itemTypeViewModel.clear()
+                findNavController().navigate(R.id.action_songFragment_to_homeFragment)
             }
             fillPlayData(selectedSongId)
         }
@@ -70,13 +84,11 @@ class SongFragment : Fragment() {
             viewLifecycleOwner
         ) { item ->
             if (item != null) {
-                fragmentView.findViewById<TextView>(R.id.txtSongGenre).text =
-                    item.songGenre.toString()
                 fragmentView.findViewById<TextView>(R.id.txtSongTitle).text = item.songName
                 fragmentView.findViewById<TextView>(R.id.txtArtistSong).text =
                     item.creator.userPersonalInfo.artName.ifBlank { item.creator.email }
 
-                fragmentView.findViewById<TextView>(R.id.txtSongLength).text =
+                fragmentView.findViewById<TextView>(R.id.txtFullSongLength).text =
                     item.songLength.formattedString
 
                 val imageControl = fragmentView.findViewById<ImageView>(R.id.imageSong)
@@ -91,27 +103,39 @@ class SongFragment : Fragment() {
         fillFavouriteData(selectedSongId)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun fillPlayData(selectedSongId: String) {
-        val playSongControl = fragmentView.findViewById<ImageView>(R.id.btnPlaySong)
-        val filePath =
-            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM}" +
-                    "/${selectedSongId}${FileConstants.MP3_EXTENSION}"
-        var mp3Play: AsyncTask<String, String, String>? = null
-
-        playSongControl.setOnClickListener {
-            songPlaying = if (songPlaying) {
-                mp3Play!!.cancel(true)
-                mediaPlayer.pause()
-                mediaPlayer = MediaPlayer()
-                playSongControl.setImageResource(R.drawable.ic_play)
-                false
-            } else {
-                mp3Play = SongFetchService(
-                    requireActivity().application, selectedSongId, mediaPlayer
-                )
-                mp3Play!!.execute(filePath)
-                playSongControl.setImageResource(R.drawable.ic_stop)
+        if (mediaPlayer != null) {
+            val playSongControl = fragmentView.findViewById<ImageView>(R.id.btnPlaySong)
+            val filePath =
+                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM}" +
+                        "/${selectedSongId}${FileConstants.MP3_EXTENSION}"
+            val mp3Play = SongFetchService(this, mediaPlayer)
+            seekBar.setOnTouchListener(View.OnTouchListener { v, event ->
+                if (event.action == MotionEvent.ACTION_MOVE) {
+                    val position = ((mediaFileLength.toDouble() / 100.00)
+                            * (v as SeekBar).progress).toInt()
+                    mediaPlayer!!.seekTo(position)
+                    v.performClick()
+                    return@OnTouchListener false
+                }
                 true
+            })
+
+            playSongControl.setOnClickListener {
+                songPlaying = if (songPlaying) {
+                    mediaPlayer!!.pause()
+                    playSongControl.setImageResource(R.drawable.ic_play)
+                    false
+                } else {
+                    if (mp3Play.status == AsyncTask.Status.PENDING) {
+                        mp3Play.execute(filePath)
+                    } else {
+                        mediaPlayer!!.start()
+                    }
+                    playSongControl.setImageResource(R.drawable.ic_stop)
+                    true
+                }
             }
         }
     }
@@ -164,7 +188,23 @@ class SongFragment : Fragment() {
         }
     }
 
+    private fun resetMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer!!.stop()
+            mediaPlayer!!.release()
+            mediaPlayer = null
+        }
+    }
+
+    override fun onUpdate(progress: Int) {
+        if(mediaPlayer != null) {
+            mediaFileLength = mediaPlayer!!.duration
+            seekBar.progress = progress
+        }
+    }
+
     private fun navigateOut() {
+        resetMediaPlayer()
         val intent = Intent(requireActivity(), HomeActivity::class.java)
         startActivity(intent)
         requireActivity().finish()

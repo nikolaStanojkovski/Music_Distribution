@@ -48,6 +48,6 @@ public class SongLength implements ValueObject, Serializable {
         String seconds = ((this.lengthInSeconds % 60) < 10)
                 ? String.format("0%s", this.lengthInSeconds % 60)
                 : String.valueOf(this.lengthInSeconds % 60);
-        return String.format("%s : %s", minutes, seconds);
+        return String.format("%s min, %s sec", minutes, seconds);
     }
 }

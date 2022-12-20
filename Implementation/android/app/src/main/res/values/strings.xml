@@ -30,6 +30,8 @@
     <string name="category_title_placeholder">[category_title]</string>
     <string name="image_placeholder">Home fragment item image</string>
     <string name="length_placeholder">[length]</string>
+    <string name="initial_length_placeholder">[initial_length]</string>
+    <string name="full_length_placeholder">[full_length]</string>
     <string name="length_parameter_placeholder">Length: %1$s</string>
     <string name="location_placeholder">[location]</string>
     <string name="date_time_placeholder">[date_time]</string>
