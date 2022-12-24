@@ -186,7 +186,7 @@ public class SongServiceImpl implements SongService {
     private void createNotifications(Song song, Artist artist) {
         listenerRepository.findAllByFavouriteArtists_Id(artist.getId())
                 .forEach(listener -> notificationRepository.save(
-                        Notification.build(song.getId().getId(), listener, EntityType.SONGS)
+                        Notification.build(song.getId().getId(), artist, listener, EntityType.SONGS)
                 ));
     }
 

@@ -1,14 +1,14 @@
 package com.musicdistribution.streamingservice.model.retrofit.core
 
 import com.musicdistribution.streamingservice.model.enums.EntityType
-import java.time.LocalDateTime
 
 data class Notification(
     val listenerId: String,
     val publishingId: String,
-    val isReceived: String,
+    val isReceived: Boolean,
     val type: EntityType,
-    val publishedTime: LocalDateTime,
-    val receivedTime: LocalDateTime,
+    val publishedTime: String,
+    val receivedTime: String?,
+    val creatorResponse: Artist,
     val listenerResponse: Listener
 )

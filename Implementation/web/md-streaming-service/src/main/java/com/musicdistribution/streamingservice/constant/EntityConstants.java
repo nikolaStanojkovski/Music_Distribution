@@ -29,6 +29,7 @@ public final class EntityConstants {
     public static final String FAVOURITE_ARTISTS = "favouriteArtists";
     public static final String FAVOURITE_ALBUMS = "favouriteAlbums";
     public static final String FAVOURITE_SONGS = "favouriteSongs";
+    public static final String IS_RECEIVED = "isReceived";
 
     public static final String ALBUM = "album";
     public static final String ALBUM_ARTIST_NAME = "album_artist_name";

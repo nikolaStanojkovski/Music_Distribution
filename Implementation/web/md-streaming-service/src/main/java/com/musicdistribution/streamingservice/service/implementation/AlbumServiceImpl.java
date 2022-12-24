@@ -134,7 +134,7 @@ public class AlbumServiceImpl implements AlbumService {
     private void createNotifications(Album album, Artist artist) {
         listenerRepository.findAllByFavouriteArtists_Id(artist.getId())
                 .forEach(listener -> notificationRepository.save(
-                        Notification.build(album.getId().getId(), listener, EntityType.ALBUMS)
+                        Notification.build(album.getId().getId(), artist, listener, EntityType.ALBUMS)
                 ));
     }
 

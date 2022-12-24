@@ -1,8 +1,16 @@
 package com.musicdistribution.streamingservice.ui.home
 
 import android.Manifest
+import android.app.LauncherActivity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -22,6 +31,8 @@ import com.musicdistribution.streamingservice.constant.*
 import com.musicdistribution.streamingservice.data.CategoryData
 import com.musicdistribution.streamingservice.data.SessionService
 import com.musicdistribution.streamingservice.listener.CategoryItemClickListener
+import com.musicdistribution.streamingservice.model.enums.EntityType
+import com.musicdistribution.streamingservice.model.retrofit.core.Notification
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.util.LocalizationUtils
@@ -55,6 +66,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         getLocation(LocalizationUtils.getLocationProvider(requireActivity()))
         fillDateAndTime()
         fillRecyclerViews()
+        checkNotifications()
     }
 
     private fun fetchData() {
@@ -65,6 +77,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         homeViewModel.fetchArtists()
     }
 
+    @Deprecated(MessageConstants.DEPRECATION_JAVA)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -125,87 +138,90 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         verticalAdapter.emptyData(CategoryData.mainData[0])
         verticalAdapter.updateCategory(CategoryData.mainData[0])
         homeViewModel.getSongsLiveData()
-            .observe(viewLifecycleOwner,
-                { songs ->
-                    if (songs != null) {
-                        for (item in songs) {
-                            val songCoverReference =
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${item.id}${FileConstants.PNG_EXTENSION}"
-                            verticalAdapter.updateData(
-                                CategoryData.mainData[0],
-                                CategoryItem(
-                                    item.id,
-                                    songCoverReference,
-                                    CategoryItemType.SONG
-                                )
+            .observe(
+                viewLifecycleOwner
+            ) { songs ->
+                if (songs != null) {
+                    for (item in songs) {
+                        val songCoverReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${item.id}${FileConstants.PNG_EXTENSION}"
+                        verticalAdapter.updateData(
+                            CategoryData.mainData[0],
+                            CategoryItem(
+                                item.id,
+                                songCoverReference,
+                                CategoryItemType.SONG
                             )
-                        }
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            ExceptionConstants.SONGS_FETCH_FAILED,
-                            Toast.LENGTH_LONG
-                        ).show()
+                        )
                     }
-                })
+                } else {
+                    Toast.makeText(
+                        activity,
+                        ExceptionConstants.SONGS_FETCH_FAILED,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 
     private fun fetchAlbums(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[1])
         verticalAdapter.updateCategory(CategoryData.mainData[1])
         homeViewModel.getAlbumsLiveData()
-            .observe(viewLifecycleOwner,
-                { albums ->
-                    if (albums != null) {
-                        for (item in albums) {
-                            val albumCoverReference =
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
-                            verticalAdapter.updateData(
-                                CategoryData.mainData[1],
-                                CategoryItem(
-                                    item.id,
-                                    albumCoverReference,
-                                    CategoryItemType.ALBUM
-                                )
+            .observe(
+                viewLifecycleOwner
+            ) { albums ->
+                if (albums != null) {
+                    for (item in albums) {
+                        val albumCoverReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
+                        verticalAdapter.updateData(
+                            CategoryData.mainData[1],
+                            CategoryItem(
+                                item.id,
+                                albumCoverReference,
+                                CategoryItemType.ALBUM
                             )
-                        }
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            ExceptionConstants.ALBUMS_FETCH_FAILED,
-                            Toast.LENGTH_LONG
-                        ).show()
+                        )
                     }
-                })
+                } else {
+                    Toast.makeText(
+                        activity,
+                        ExceptionConstants.ALBUMS_FETCH_FAILED,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 
     private fun fetchArtists(verticalAdapter: HomeVerticalAdapter) {
         verticalAdapter.emptyData(CategoryData.mainData[2])
         verticalAdapter.updateCategory(CategoryData.mainData[2])
         homeViewModel.getArtistsLiveData()
-            .observe(viewLifecycleOwner,
-                { artists ->
-                    if (artists != null) {
-                        for (item in artists) {
-                            val profilePictureReference =
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
-                            verticalAdapter.updateData(
-                                CategoryData.mainData[2],
-                                CategoryItem(
-                                    item.id,
-                                    profilePictureReference,
-                                    CategoryItemType.ARTIST
-                                )
+            .observe(
+                viewLifecycleOwner
+            ) { artists ->
+                if (artists != null) {
+                    for (item in artists) {
+                        val profilePictureReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
+                        verticalAdapter.updateData(
+                            CategoryData.mainData[2],
+                            CategoryItem(
+                                item.id,
+                                profilePictureReference,
+                                CategoryItemType.ARTIST
                             )
-                        }
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            ExceptionConstants.ARTISTS_FETCH_FAILED,
-                            Toast.LENGTH_LONG
-                        ).show()
+                        )
                     }
-                })
+                } else {
+                    Toast.makeText(
+                        activity,
+                        ExceptionConstants.ARTISTS_FETCH_FAILED,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
 
 
@@ -301,5 +317,73 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                     .navigate(R.id.action_homeFragment_to_songFragment, bundle)
             }
         }
+    }
+
+    private fun checkNotifications() {
+        val listenerId = SessionService.read(EntityConstants.USER_ID)
+        if (!listenerId.isNullOrBlank()) {
+            homeViewModel.fetchNotifications(listenerId)
+            homeViewModel.getNotificationLiveData()
+                .observe(
+                    requireActivity()
+                ) { notification ->
+                    showNotification(notification)
+                }
+        }
+    }
+
+    private fun showNotification(notification: Notification) {
+        val notificationManager =
+            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val creatorName =
+                notification.creatorResponse.userPersonalInfo.artName.ifBlank {
+                    notification.creatorResponse.userPersonalInfo.fullName
+                }
+            val publishingName =
+                if (notification.type == EntityType.ALBUMS)
+                    EntityConstants.ALBUM
+                else EntityConstants.SONG
+            val message =
+                "$publishingName was published by $creatorName on ${notification.publishedTime}"
+
+            val notificationChannel =
+                NotificationChannel(
+                    NotificationConstants.CHANNEL_ID,
+                    message,
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+            notificationChannel.enableLights(true)
+            notificationChannel.enableVibration(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+
+            notificationManager.notify(NotificationConstants.ID, buildNotification(message))
+        }
+    }
+
+    private fun buildNotification(message: String): android.app.Notification {
+        val intent = Intent(requireActivity(), LauncherActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            requireActivity(),
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        return NotificationCompat.Builder(requireActivity(), NotificationConstants.CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher_foreground)
+            .setContentTitle(NotificationConstants.CONTENT_TITLE)
+            .setContentText(message)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    this.resources,
+                    R.mipmap.ic_launcher_foreground
+                )
+            )
+            .setStyle(
+                NotificationCompat.BigTextStyle().bigText(message)
+            )
+            .setContentIntent(pendingIntent).build()
     }
 }

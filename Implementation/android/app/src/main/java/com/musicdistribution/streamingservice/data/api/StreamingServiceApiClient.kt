@@ -82,7 +82,5 @@ class StreamingServiceApiClient {
                 .build()
                 .create(streamingServiceClass)
         }
-
-
     }
 }

@@ -34,6 +34,10 @@ public class Notification extends AbstractEntity<NotificationId> implements Seri
 
     @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
+    private Artist creator;
+
+    @ManyToOne
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Listener receiver;
 
     /**
@@ -47,15 +51,17 @@ public class Notification extends AbstractEntity<NotificationId> implements Seri
      * Method used for creating a new album information object.
      *
      * @param publishingId - the ID of the publishing for which a notification is being created.
+     * @param creator      - the creator of the publishing which triggers the notification.
      * @param receiver     - the listener to whom the notification is to be made.
      * @param type         - the type of the notification which is being made.
      * @return the created notification object.
      */
-    public static Notification build(String publishingId, Listener receiver, EntityType type) {
+    public static Notification build(String publishingId, Artist creator, Listener receiver, EntityType type) {
         Notification notification = new Notification(receiver.getId().getId(), publishingId);
         notification.isReceived = false;
         notification.publishedTime = LocalDateTime.now();
         notification.receivedTime = null;
+        notification.creator = creator;
         notification.receiver = receiver;
         notification.type = type;
 

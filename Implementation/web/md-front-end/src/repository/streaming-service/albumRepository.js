@@ -2,8 +2,8 @@ import axios from "../../custom-axios/axiosStreamingService";
 import {DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DEFAULT_SORT_ORDER} from "../../constants/pagination";
 import {ALBUMS, ALBUMS_PUBLISH, ALBUMS_RAISE_TIER, RESOURCE, SEARCH} from "../../constants/endpoint";
 import {
-    ALBUM_ID,
     ALBUM_GENRE,
+    ALBUM_ID,
     ALBUM_NAME,
     ALBUM_TIER,
     ALBUM_TRANSACTION_REQUEST,
@@ -15,7 +15,8 @@ import {
     SEARCH_PARAMS,
     SEARCH_TERM,
     SIZE,
-    SONG_ID_LIST, SORT,
+    SONG_ID_LIST,
+    SORT,
     SUBSCRIPTION_FEE,
     TRANSACTION_FEE
 } from "../../constants/model";
@@ -48,7 +49,7 @@ const AlbumRepository = {
         formData.append(ALBUM_TRANSACTION_REQUEST, new Blob([JSON.stringify(albumTransactionRequest)], {
             type: APPLICATION_JSON
         }));
-        return axios.post(ALBUMS_PUBLISH, formData);
+        return axios.post(`${RESOURCE}${ALBUMS_PUBLISH}`, formData);
     },
     raiseTierAlbum: (albumId, albumTier, subscriptionFee, transactionFee) => {
         const raiseAlbumTierRequest = {};

@@ -1,8 +1,9 @@
 package com.musicdistribution.streamingservice.domain.repository.custom;
 
-import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.sharedkernel.domain.repository.SearchRepository;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.streamingservice.constant.EntityConstants;
+import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
 import com.musicdistribution.streamingservice.util.SearchUtil;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -52,12 +54,28 @@ public class CustomNotificationRepository implements SearchRepository<Notificati
             cq.orderBy(QueryUtils.toOrders(pageable.getSort(), notificationRoot, cb));
         }
 
-        cq.where(SearchUtil.convertToOrPredicates(formattedSearchParams, notificationRoot, cb, searchTerm));
+        Predicate predicate = SearchUtil
+                .convertToOrPredicates(formattedSearchParams, notificationRoot, cb, searchTerm);
+        cq.where(cb.and(filterNonReceivedNotifications(cb, notificationRoot), predicate));
         List<Notification> resultList = entityManager.createQuery(cq)
                 .setMaxResults(pageable.getPageSize())
                 .setFirstResult(Integer.parseInt(String.valueOf(pageable.getOffset())))
                 .getResultList();
         Integer resultListSize = entityManager.createQuery(cq).getResultList().size();
         return new SearchResultResponse<>(new PageImpl<>(resultList, pageable, resultList.size()), resultListSize);
+    }
+
+    /**
+     * Method used to create predicate for filtering notifications which were non received.
+     *
+     * @param cb   - the criteria builder wrapper object.
+     * @param root - the class root wrapper object.
+     * @return the predicate containing the non-received notifications filtering.
+     */
+    private Predicate filterNonReceivedNotifications(CriteriaBuilder cb,
+                                                     Root<Notification> root) {
+        return cb.and(cb.equal(SearchUtil
+                .convertToPredicateExpression(EntityConstants.IS_RECEIVED,
+                        root), Boolean.FALSE));
     }
 }

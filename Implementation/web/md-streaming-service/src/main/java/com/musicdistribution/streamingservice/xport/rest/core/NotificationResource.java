@@ -1,12 +1,12 @@
 package com.musicdistribution.streamingservice.xport.rest.core;
 
 import com.musicdistribution.sharedkernel.config.ApiController;
+import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Notification;
 import com.musicdistribution.streamingservice.domain.model.entity.id.ListenerId;
 import com.musicdistribution.streamingservice.domain.model.entity.id.NotificationId;
-import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import com.musicdistribution.streamingservice.domain.model.response.core.NotificationResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.streamingservice.service.NotificationService;
@@ -54,6 +54,7 @@ public class NotificationResource {
         return new PageImpl<>(notificationSearchResultResponse.getResultPage()
                 .stream()
                 .map(notification -> NotificationResponse.from(notification,
+                        encryptionSystem.encrypt(notification.getCreator().getId().getId()),
                         encryptionSystem.encrypt(notification.getId().getUuid1()),
                         encryptionSystem.encrypt(notification.getId().getUuid2())
                 )).collect(Collectors.toList()), pageable, notificationSearchResultResponse.getResultSize());
@@ -73,6 +74,7 @@ public class NotificationResource {
                 encryptionSystem.decrypt(listenerId), encryptionSystem.decrypt(publishingId)))
                 .map(notification -> ResponseEntity.ok().body(NotificationResponse.from(
                         notification,
+                        encryptionSystem.encrypt(notification.getCreator().getId().getId()),
                         encryptionSystem.encrypt(notification.getId().getUuid1()),
                         encryptionSystem.encrypt(notification.getId().getUuid2())
                 ))).orElseGet(() -> ResponseEntity.notFound().build());
@@ -89,9 +91,11 @@ public class NotificationResource {
     public ResponseEntity<NotificationResponse> send(@RequestParam String listenerId,
                                                      @RequestParam String publishingId) {
         return this.notificationService.send(
-                ListenerId.of(encryptionSystem.decrypt(listenerId)), publishingId)
+                ListenerId.of(
+                        encryptionSystem.decrypt(listenerId)), encryptionSystem.decrypt(publishingId))
                 .map(notification -> ResponseEntity.ok().body(NotificationResponse.from(
                         notification,
+                        encryptionSystem.encrypt(notification.getCreator().getId().getId()),
                         encryptionSystem.encrypt(notification.getId().getUuid1()),
                         encryptionSystem.encrypt(notification.getId().getUuid2())
                 ))).orElseGet(() -> ResponseEntity.notFound().build());
