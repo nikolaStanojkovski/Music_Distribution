@@ -2,7 +2,7 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {PAYMENT_INFO, TIER} from "../../../constants/model";
-import {CHECKOUT} from "../../../constants/endpoint";
+import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {
     ALBUM_HIGHER_TIER_WARNING,
@@ -15,12 +15,24 @@ const useAlbumRaiseTier = (props) => {
 
     const history = useHistory();
 
+
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const albums = props.albums;
+    const albumsTotalLength = props.albumsTotalLength;
+    const filterAlbums = props.filterAlbums;
+    const selectedArtist = props.selectedArtist;
     const tiers = props.tiers;
     const [album, updateAlbum] = React.useState({});
     const [albumTier, updateAlbumTier] = React.useState(EMPTY_STRING);
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});
+    const [fetch, setFetch] = React.useState(false);
+
+    React.useEffect(() => {
+        if(!fetch) {
+            filterAlbums(0, albumsTotalLength, CREATOR_ID, selectedArtist.id);
+            setFetch(true);
+        }
+    }, [fetch, filterAlbums, albumsTotalLength, selectedArtist.id]);
 
     const handleAlbumChange = async (e) => {
         const albumId = e.target.value;

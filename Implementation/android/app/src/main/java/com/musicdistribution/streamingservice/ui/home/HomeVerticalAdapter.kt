@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.musicdistribution.streamingservice.listener.CategoryItemClickListener
 import com.musicdistribution.streamingservice.model.search.Category
 import com.musicdistribution.streamingservice.model.search.CategoryItem
+import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import streamingservice.R
 
 @SuppressLint("NotifyDataSetChanged")
@@ -27,6 +28,7 @@ class HomeVerticalAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val categoryTitleControl: TextView = view.findViewById(R.id.txtCategoryTitle)
         val categoryListControl: RecyclerView = view.findViewById(R.id.horizontalHomeRecyclerView)
+        val categoryShowAllControl: TextView = view.findViewById(R.id.txtShowAll)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +43,19 @@ class HomeVerticalAdapter(
 
         holder.categoryTitleControl.text = currentCategory.title
         setCartItemView(holder.categoryListControl, currentCategory.categoryItems)
+        setShowMoreButton(holder, currentCategory)
+    }
+
+    private fun setShowMoreButton(holder: ViewHolder, currentCategory: Category) {
+        if (currentCategory.categoryItemType != CategoryItemType.PUBLISHED_ALBUM &&
+            currentCategory.categoryItemType != CategoryItemType.PUBLISHED_SONG
+        ) {
+            holder.categoryShowAllControl.setOnClickListener {
+                parentFragment.onShowMoreClick(currentCategory.categoryItemType)
+            }
+        } else {
+            holder.categoryShowAllControl.visibility = View.INVISIBLE
+        }
     }
 
     override fun getItemCount(): Int {

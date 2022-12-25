@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="14dp"
         android:textColor="@color/lighter_black"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="18dp"
         android:layout_marginEnd="15dp"
         android:text="@string/category_title_placeholder"
         android:textSize="20sp"
@@ -25,6 +25,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtShowAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="18dp"
+        android:paddingBottom="14dp"
+        android:text="@string/show_all_placeholder"
+        android:textAlignment="center"
+        android:textColor="@color/darker_gray"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.052" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/horizontalHomeRecyclerView"

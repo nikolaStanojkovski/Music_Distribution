@@ -23,8 +23,8 @@ const SongRepository = {
     fetchSongs: (pageNumber) => {
         return axios.get(`${RESOURCE}${SONGS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
     },
-    filterSongs: (pageNumber, key, value) => {
-        return axios.get(`${RESOURCE}${SONGS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`)
+    filterSongs: (pageNumber, pageSize, key, value) => {
+        return axios.get(`${RESOURCE}${SONGS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${pageSize || DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`)
     },
 
     fetchSong: (id) => {

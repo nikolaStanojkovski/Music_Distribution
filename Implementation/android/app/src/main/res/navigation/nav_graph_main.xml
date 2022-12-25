@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_songFragment"
             app:destination="@id/songFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_listItemFragment"
+            app:destination="@id/listItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -35,26 +38,29 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_profileListFragment"
-            app:destination="@id/profileListFragment" />
+            android:id="@+id/action_profileFragment_to_listItemFragment"
+            app:destination="@id/listItemFragment" />
     </fragment>
     <fragment
-        android:id="@+id/profileListFragment"
-        android:name="com.musicdistribution.streamingservice.ui.profile.ProfileListFragment"
+        android:id="@+id/listItemFragment"
+        android:name="com.musicdistribution.streamingservice.ui.profile.ListItemFragment"
         android:label="fragment_profile_list"
-        tools:layout="@layout/fragment_profile_list" >
+        tools:layout="@layout/fragment_list_item" >
         <action
-            android:id="@+id/action_profileListFragment_to_songFragment"
+            android:id="@+id/action_listItemFragment_to_songFragment"
             app:destination="@id/songFragment" />
         <action
-            android:id="@+id/action_profileListFragment_to_albumFragment"
+            android:id="@+id/action_listItemFragment_to_albumFragment"
             app:destination="@id/albumFragment" />
         <action
-            android:id="@+id/action_profileListFragment_to_artistFragment"
+            android:id="@+id/action_listItemFragment_to_artistFragment"
             app:destination="@id/artistFragment" />
         <action
-            android:id="@+id/action_profileListFragment_to_profileFragment"
+            android:id="@+id/action_listItemFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_listItemFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchItemFragment"

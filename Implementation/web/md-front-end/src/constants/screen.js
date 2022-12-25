@@ -13,7 +13,6 @@ export const NAVBAR_COLLAPSE = 'navbar-collapse';
 export const ACCORDION_COLLAPSE = 'accordion-collapse';
 export const TABLE_CELL_CLICKABLE = 'table-cell-clickable';
 export const DATA_ID = 'data-id';
-export const ACTIVE = 'active';
 export const PLAY_BUTTON = 'bi-play';
 export const STOP_BUTTON = 'bi-stop';
 export const PLAY_PAUSE_BUTTON = 'play-pause-button';

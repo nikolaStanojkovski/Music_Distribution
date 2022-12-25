@@ -35,6 +35,7 @@ import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.retrofit.core.Notification
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
+import com.musicdistribution.streamingservice.model.search.CategoryListType
 import com.musicdistribution.streamingservice.util.LocalizationUtils
 import com.musicdistribution.streamingservice.util.StringUtils
 import com.musicdistribution.streamingservice.viewmodel.HomeViewModel
@@ -72,9 +73,9 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
     private fun fetchData() {
         homeViewModel.emptyData()
 
-        homeViewModel.fetchSongs()
-        homeViewModel.fetchAlbums()
-        homeViewModel.fetchArtists()
+        homeViewModel.fetchSongs(PaginationConstants.DEFAULT_PAGE_NUMBER)
+        homeViewModel.fetchAlbums(PaginationConstants.DEFAULT_PAGE_NUMBER)
+        homeViewModel.fetchArtists(PaginationConstants.DEFAULT_PAGE_NUMBER)
     }
 
     @Deprecated(MessageConstants.DEPRECATION_JAVA)
@@ -290,7 +291,7 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
         }
     }
 
-    override fun onClick(item: CategoryItem) {
+    override fun onItemClick(item: CategoryItem) {
         when (item.itemType) {
             CategoryItemType.ARTIST -> {
                 val bundle = bundleOf(
@@ -315,6 +316,37 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
                 )
                 findNavController()
                     .navigate(R.id.action_homeFragment_to_songFragment, bundle)
+            }
+            else -> {}
+        }
+    }
+
+    override fun onShowMoreClick(itemType: CategoryItemType) {
+        findNavController()
+            .navigate(
+                R.id.action_homeFragment_to_listItemFragment, bundleOf(
+                    getListItemType(itemType),
+                    SearchConstants.CATEGORY_LISTING_TYPE to CategoryListType.ALL_ITEMS
+                )
+            )
+    }
+
+    private fun getListItemType(itemType: CategoryItemType): Pair<String, CategoryItemType> {
+        when (itemType) {
+            CategoryItemType.ARTIST -> {
+                return SearchConstants.LISTING_TYPE to CategoryItemType.ARTIST
+            }
+            CategoryItemType.ALBUM -> {
+                return SearchConstants.LISTING_TYPE to CategoryItemType.ALBUM
+            }
+            CategoryItemType.SONG -> {
+                return SearchConstants.LISTING_TYPE to CategoryItemType.SONG
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                return SearchConstants.LISTING_TYPE to CategoryItemType.PUBLISHED_ALBUM
+            }
+            CategoryItemType.PUBLISHED_SONG -> {
+                return SearchConstants.LISTING_TYPE to CategoryItemType.PUBLISHED_SONG
             }
         }
     }

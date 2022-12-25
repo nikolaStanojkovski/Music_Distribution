@@ -67,35 +67,37 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
         searchAdapter.emptyData()
 
         searchViewModel.getGenreAlbumResultsLiveData()
-            .observe(viewLifecycleOwner,
-                { albums ->
-                    if (albums != null && albums.isNotEmpty()) {
-                        albums.map { a ->
-                            SearchItem(
-                                a.id,
-                                a.albumName,
-                                EntityConstants.ALBUM,
-                                CategoryItemType.ALBUM,
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${a.id}${FileConstants.PNG_EXTENSION}"
-                            )
-                        }.forEach { si -> searchAdapter.updateDataItem(si) }
-                    }
-                })
+            .observe(
+                viewLifecycleOwner
+            ) { albums ->
+                if (albums != null && albums.isNotEmpty()) {
+                    albums.map { a ->
+                        SearchItem(
+                            a.id,
+                            a.albumName,
+                            EntityConstants.ALBUM,
+                            CategoryItemType.ALBUM,
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${a.id}${FileConstants.PNG_EXTENSION}"
+                        )
+                    }.forEach { si -> searchAdapter.updateDataItem(si) }
+                }
+            }
         searchViewModel.getGenreSongResultsLiveData()
-            .observe(viewLifecycleOwner,
-                { songs ->
-                    if (songs != null && songs.isNotEmpty()) {
-                        songs.map { s ->
-                            SearchItem(
-                                s.id,
-                                s.songName,
-                                EntityConstants.SONG,
-                                CategoryItemType.SONG,
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${s.id}${FileConstants.PNG_EXTENSION}"
-                            )
-                        }.forEach { si -> searchAdapter.updateDataItem(si) }
-                    }
-                })
+            .observe(
+                viewLifecycleOwner
+            ) { songs ->
+                if (songs != null && songs.isNotEmpty()) {
+                    songs.map { s ->
+                        SearchItem(
+                            s.id,
+                            s.songName,
+                            EntityConstants.SONG,
+                            CategoryItemType.SONG,
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${s.id}${FileConstants.PNG_EXTENSION}"
+                        )
+                    }.forEach { si -> searchAdapter.updateDataItem(si) }
+                }
+            }
     }
 
     private fun fillSearchData(searchAdapter: SearchItemAdapter) {
@@ -109,52 +111,53 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
                 searchViewModel.fetchSearchData(searchTerm.toString())
 
                 searchViewModel.getArtistsLiveData()
-                    .observe(viewLifecycleOwner,
-                        { artists ->
-                            if (artists != null && artists.isNotEmpty()) {
-                                artists.map { a ->
-                                    SearchItem(
-                                        a.id,
-                                        if (a.userPersonalInfo.artName.isNotBlank())
-                                            a.userPersonalInfo.artName
-                                        else a.userContactInfo.email.fullAddress,
-                                        EntityConstants.ARTIST,
-                                        CategoryItemType.ARTIST,
-                                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${a.id}${FileConstants.PNG_EXTENSION}"
-                                    )
-                                }.forEach { si -> searchAdapter.updateDataItem(si) }
-                            }
-                        })
+                    .observe(
+                        viewLifecycleOwner
+                    ) { artists ->
+                        if (artists != null && artists.isNotEmpty()) {
+                            artists.map { a ->
+                                SearchItem(
+                                    a.id,
+                                    a.userPersonalInfo.artName.ifBlank { a.userContactInfo.email.fullAddress },
+                                    EntityConstants.ARTIST,
+                                    CategoryItemType.ARTIST,
+                                    "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${a.id}${FileConstants.PNG_EXTENSION}"
+                                )
+                            }.forEach { si -> searchAdapter.updateDataItem(si) }
+                        }
+                    }
                 searchViewModel.getAlbumsLiveData()
-                    .observe(viewLifecycleOwner,
-                        { albums ->
-                            if (albums != null && albums.isNotEmpty()) {
-                                albums.map { a ->
-                                    SearchItem(
-                                        a.id,
-                                        a.albumName,
-                                        EntityConstants.ALBUM,
-                                        CategoryItemType.ALBUM,
-                                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${a.id}${FileConstants.PNG_EXTENSION}"
-                                    )
-                                }.forEach { si -> searchAdapter.updateDataItem(si) }
-                            }
-                        })
+                    .observe(
+                        viewLifecycleOwner
+                    ) { albums ->
+                        if (albums != null && albums.isNotEmpty()) {
+                            albums.map { a ->
+                                SearchItem(
+                                    a.id,
+                                    a.albumName,
+                                    EntityConstants.ALBUM,
+                                    CategoryItemType.ALBUM,
+                                    "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${a.id}${FileConstants.PNG_EXTENSION}"
+                                )
+                            }.forEach { si -> searchAdapter.updateDataItem(si) }
+                        }
+                    }
                 searchViewModel.getSongsLiveData()
-                    .observe(viewLifecycleOwner,
-                        { songs ->
-                            if (songs != null && songs.isNotEmpty()) {
-                                songs.map { s ->
-                                    SearchItem(
-                                        s.id,
-                                        s.songName,
-                                        EntityConstants.SONG,
-                                        CategoryItemType.SONG,
-                                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${s.id}${FileConstants.PNG_EXTENSION}"
-                                    )
-                                }.forEach { si -> searchAdapter.updateDataItem(si) }
-                            }
-                        })
+                    .observe(
+                        viewLifecycleOwner
+                    ) { songs ->
+                        if (songs != null && songs.isNotEmpty()) {
+                            songs.map { s ->
+                                SearchItem(
+                                    s.id,
+                                    s.songName,
+                                    EntityConstants.SONG,
+                                    CategoryItemType.SONG,
+                                    "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${s.id}${FileConstants.PNG_EXTENSION}"
+                                )
+                            }.forEach { si -> searchAdapter.updateDataItem(si) }
+                        }
+                    }
             }
         }
     }
@@ -186,6 +189,7 @@ class SearchItemFragment : Fragment(), SearchItemClickListener {
                 findNavController()
                     .navigate(R.id.action_searchItemFragment_to_songFragment, bundle)
             }
+            else -> {}
         }
     }
 }

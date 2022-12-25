@@ -4,6 +4,7 @@ import Pagination from "../../Partial/Pagination/pagination";
 import useSongs from "./useSongs";
 import viewSongs from "./viewSongs";
 import {KEY, PAGEABLE, TOTAL_PAGES, VALUE} from "../../../constants/model";
+import {DEFAULT_PAGE_SIZE} from "../../../constants/pagination";
 
 const Songs = (props) => {
 
@@ -44,6 +45,7 @@ const Songs = (props) => {
                 ? <Pagination changePage={(pageNumber) =>
                     (filter && searchParams && searchParams[KEY] && searchParams[VALUE])
                         ? filterSongs(pageNumber,
+                        DEFAULT_PAGE_SIZE,
                         searchParams[KEY],
                         searchParams[VALUE])
                         : loadSongs(pageNumber)}

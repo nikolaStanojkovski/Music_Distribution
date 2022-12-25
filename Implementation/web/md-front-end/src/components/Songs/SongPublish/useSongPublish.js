@@ -2,7 +2,7 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {SONG_TIER} from "../../../constants/model";
-import {CHECKOUT} from "../../../constants/endpoint";
+import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {SONG_PUBLISHING_FAILED} from "../../../constants/exception";
 import PaymentUtil from "../../../util/paymentUtil";
@@ -12,6 +12,8 @@ const useSongPublish = (props) => {
     const history = useHistory();
 
     const songs = props.songs;
+    const songsTotalLength = props.songsTotalLength;
+    const filterSongs = props.filterSongs;
     const tiers = props.tiers;
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const selectedArtist = props.selectedArtist;
@@ -21,6 +23,14 @@ const useSongPublish = (props) => {
         songId: EMPTY_STRING,
         songTier: EMPTY_STRING,
     });
+    const [fetch, setFetch] = React.useState(false);
+
+    React.useEffect(() => {
+        if(!fetch) {
+            filterSongs(0, songsTotalLength, CREATOR_ID, selectedArtist.id);
+            setFetch(true);
+        }
+    }, [fetch, filterSongs, songsTotalLength, selectedArtist.id]);
 
     const handleSubscriptionFee = async (tier) => {
         if (tier && tier !== EMPTY_STRING) {

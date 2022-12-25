@@ -41,9 +41,13 @@ class HomeVerticalAdapter(categoryList: MutableList<Category>) :
         return categoryData.size
     }
 
-    private fun setCartItemView(recyclerView: RecyclerView, categoryItemList: MutableList<CategoryItem>) {
+    private fun setCartItemView(
+        recyclerView: RecyclerView,
+        categoryItemList: MutableList<CategoryItem>
+    ) {
         val horizontalAdapter = HomeHorizontalAdapter(categoryItemList)
-        recyclerView.layoutManager =  LinearLayoutManager(activityContext, RecyclerView.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(activityContext, RecyclerView.HORIZONTAL, false)
         recyclerView.adapter = horizontalAdapter
     }
 

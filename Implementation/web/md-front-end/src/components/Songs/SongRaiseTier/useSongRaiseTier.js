@@ -2,7 +2,7 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {PAYMENT_INFO, TIER} from "../../../constants/model";
-import {CHECKOUT} from "../../../constants/endpoint";
+import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {SONG_HIGHER_TIER_WARNING, SONG_RAISE_TIER_FAILED} from "../../../constants/exception";
 import PaymentUtil from "../../../util/paymentUtil";
@@ -12,12 +12,22 @@ const useSongRaiseTier = (props) => {
     const history = useHistory();
 
     const songs = props.songs;
+    const songsTotalLength = props.songsTotalLength;
+    const filterSongs = props.filterSongs;
+    const selectedArtist = props.selectedArtist;
     const tiers = props.tiers;
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const [song, updateSong] = React.useState({});
     const [songTier, updateSongTier] = React.useState(EMPTY_STRING);
     const [subscriptionFee, updateSubscriptionFee] = React.useState({});
+    const [fetch, setFetch] = React.useState(false);
 
+    React.useEffect(() => {
+        if(!fetch) {
+            filterSongs(0, songsTotalLength, CREATOR_ID, selectedArtist.id);
+            setFetch(true);
+        }
+    }, [fetch, filterSongs, songsTotalLength, selectedArtist.id]);
 
     const handleSongChange = async (e) => {
         const songId = e.target.value;

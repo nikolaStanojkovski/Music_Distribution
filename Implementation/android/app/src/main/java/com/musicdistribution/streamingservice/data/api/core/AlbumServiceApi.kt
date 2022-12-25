@@ -12,7 +12,10 @@ import retrofit2.http.Query
 interface AlbumServiceApi {
 
     @GET(ApiConstants.API_ALBUMS)
-    fun findAll(): Call<AlbumResponse?>
+    fun findAll(
+        @Query(EntityConstants.PAGE) page: Int,
+        @Query(EntityConstants.SIZE) size: Int
+    ): Call<AlbumResponse?>
 
     @GET(ApiConstants.API_ALBUMS_SEARCH)
     fun search(

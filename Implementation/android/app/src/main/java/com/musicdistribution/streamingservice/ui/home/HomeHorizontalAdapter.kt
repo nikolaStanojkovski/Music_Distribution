@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.listener.CategoryItemClickListener
+import com.musicdistribution.streamingservice.model.search.CategoryItem
 import streamingservice.R
 
 class HomeHorizontalAdapter(
@@ -32,7 +32,7 @@ class HomeHorizontalAdapter(
             val position = layoutPosition
             if (position != RecyclerView.NO_POSITION) {
                 val clickedItem = categoryData[position]
-                parentFragment.onClick(clickedItem)
+                parentFragment.onItemClick(clickedItem)
             }
         }
     }

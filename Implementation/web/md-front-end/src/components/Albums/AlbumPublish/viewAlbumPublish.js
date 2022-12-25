@@ -3,7 +3,7 @@ import makeAnimated from "react-select/animated";
 import StringUtil from "../../../util/stringUtil";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import React from "react";
-import {ALBUM, CREATOR, FULL_NAME, IS_PUBLISHED, NONE, USER_PERSONAL_INFO} from "../../../constants/model";
+import {ALBUM, FULL_NAME, IS_PUBLISHED, NONE, USER_PERSONAL_INFO} from "../../../constants/model";
 
 const viewAlbumPublish = (props) => {
     return (
@@ -54,8 +54,7 @@ const viewAlbumPublish = (props) => {
                     defaultValue={"-- Select songs --"}
                     onChange={(choice) => props.updateSongIdList(choice)}
                     options={(props.songs && props.songs.content) ? props.songs.content.map((term) => {
-                        return (term && term[CREATOR].id === props.selectedArtist.id
-                            && !term[ALBUM] && !term[IS_PUBLISHED])
+                        return (term[ALBUM] == null && !term[IS_PUBLISHED])
                             ? {value: term.id, label: term.songName} : undefined;
                     }).filter(term => term !== undefined) : undefined}/>
             </div>
@@ -72,9 +71,9 @@ const viewAlbumPublish = (props) => {
                     {(props.tiers) ? props.tiers
                         .filter(term => term !== NONE)
                         .map((term) => {
-                            return <option key={term} value={term}>{term}</option>;
-                        }
-                    ) : undefined}
+                                return <option key={term} value={term}>{term}</option>;
+                            }
+                        ) : undefined}
                 </select>
             </div>
             <br/>

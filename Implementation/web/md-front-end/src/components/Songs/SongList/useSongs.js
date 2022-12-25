@@ -9,6 +9,7 @@ import {STOP_BUTTON} from "../../../constants/screen";
 import AuthUtil from "../../../util/authUtil";
 import {ALBUM, IS_A_SINGLE, IS_PUBLISHED} from "../../../constants/model";
 import {EMPTY_STRING} from "../../../constants/alphabet";
+import {DEFAULT_PAGE_SIZE} from "../../../constants/pagination";
 
 const useSongs = (props) => {
 
@@ -25,7 +26,7 @@ const useSongs = (props) => {
     React.useEffect(() => {
         const fetchSongs = () => {
             if (searchParams && searchParams.key && searchParams.value) {
-                filterSongs(0, searchParams.key, searchParams.value);
+                filterSongs(0, DEFAULT_PAGE_SIZE, searchParams.key, searchParams.value);
                 setFilter(true);
             } else {
                 loadSongs(0);

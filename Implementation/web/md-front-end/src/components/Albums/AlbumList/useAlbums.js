@@ -3,6 +3,7 @@ import SearchParamUtil from "../../../util/searchParamUtil";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
 import {ALBUM_COVER_URL, API_BASE_URL} from "../../../constants/endpoint";
 import {PNG} from "../../../constants/extension";
+import {DEFAULT_PAGE_SIZE} from "../../../constants/pagination";
 
 const useAlbums = (props) => {
 
@@ -18,7 +19,7 @@ const useAlbums = (props) => {
     React.useEffect(() => {
         const fetchAlbums = () => {
             if (searchParams && searchParams.key && searchParams.value) {
-                filterAlbums(0, searchParams.key, searchParams.value);
+                filterAlbums(0, DEFAULT_PAGE_SIZE, searchParams.key, searchParams.value);
                 setFilter(true);
             } else {
                 loadAlbums(0);

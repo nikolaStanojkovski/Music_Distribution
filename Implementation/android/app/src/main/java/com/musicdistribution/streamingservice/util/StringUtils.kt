@@ -26,7 +26,7 @@ object StringUtils {
 
     fun isDouble(string: String): Boolean {
         try {
-            val parsedNumber = string.toDouble()
+            string.toDouble()
         } catch (e: NumberFormatException) {
             return false
         }

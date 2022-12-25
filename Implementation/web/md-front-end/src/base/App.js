@@ -37,7 +37,8 @@ import {
     ALBUMS_PUBLISH,
     ALBUMS_RAISE_TIER,
     ARTISTS,
-    CHECKOUT, DEFAULT,
+    CHECKOUT,
+    DEFAULT,
     HOME,
     LOGIN,
     REGISTER,
@@ -106,6 +107,8 @@ const App = () => {
                                             component={SongCreate}/>
                             <ProtectedRoute path={SONGS_PUBLISH}
                                             songs={songService.songs}
+                                            songsTotalLength={songService.songsTotalLength}
+                                            filterSongs={songService.filterSongs}
                                             tiers={tierService.tiers}
                                             selectedArtist={ArtistRepository.fetchArtistLocal()}
                                             transactionFee={paymentService.transactionFee}
@@ -114,7 +117,10 @@ const App = () => {
                                             component={SongPublish}/>
                             <ProtectedRoute path={SONGS_RAISE_TIER}
                                             songs={songService.songs}
+                                            songsTotalLength={songService.songsTotalLength}
+                                            filterSongs={songService.filterSongs}
                                             tiers={tierService.tiers}
+                                            selectedArtist={ArtistRepository.fetchArtistLocal()}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}
                                             raiseTierSong={songService.raiseTierSong}
@@ -127,6 +133,8 @@ const App = () => {
                                                component={Albums}/>
                             <ProtectedRoute path={ALBUMS_PUBLISH} exact
                                             songs={songService.songs}
+                                            songsTotalLength={songService.songsTotalLength}
+                                            filterSongs={songService.filterSongs}
                                             genres={genreService.genres}
                                             tiers={tierService.tiers}
                                             selectedArtist={ArtistRepository.fetchArtistLocal()}
@@ -136,6 +144,9 @@ const App = () => {
                                             component={AlbumPublish}/>
                             <ProtectedRoute path={ALBUMS_RAISE_TIER} exact
                                             albums={albumService.albums}
+                                            albumsTotalLength={albumService.albumsTotalLength}
+                                            filterAlbums={albumService.filterAlbums}
+                                            selectedArtist={ArtistRepository.fetchArtistLocal()}
                                             tiers={tierService.tiers}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}

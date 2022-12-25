@@ -9,10 +9,12 @@ import {
     SONG_PUBLISHING_FAILED,
     SONG_RAISE_TIER_FAILED
 } from "../../constants/exception";
+import {TOTAL_ELEMENTS} from "../../constants/pagination";
 
 const useSongService = () => {
 
     const [songs, setSongs] = React.useState([]);
+    const [songsTotalLength, setSongsTotalLength] = React.useState(0);
     React.useEffect(() => {
         loadSongs(0);
     }, []);
@@ -21,14 +23,14 @@ const useSongService = () => {
         SongRepository.fetchSongs(pageNumber)
             .then((data) => {
                 setSongs(data.data);
+                setSongsTotalLength(data.data[TOTAL_ELEMENTS])
             }).catch(() => {
             toast.error(SONG_FETCH_FAILED);
         });
     }
 
-
-    const filterSongs = (pageNumber, key, value) => {
-        SongRepository.filterSongs(pageNumber, key, value)
+    const filterSongs = (pageNumber, pageSize, key, value) => {
+        SongRepository.filterSongs(pageNumber, pageSize, key, value)
             .then((data) => {
                 setSongs(data.data);
             }).catch(() => {
@@ -75,6 +77,7 @@ const useSongService = () => {
 
     return {
         songs,
+        songsTotalLength,
         loadSongs,
         filterSongs,
         fetchSong,

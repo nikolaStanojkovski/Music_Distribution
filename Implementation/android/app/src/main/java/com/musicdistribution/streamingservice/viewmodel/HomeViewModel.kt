@@ -14,7 +14,6 @@ import com.musicdistribution.streamingservice.data.api.core.NotificationServiceA
 import com.musicdistribution.streamingservice.data.api.core.SongServiceApi
 import com.musicdistribution.streamingservice.data.room.AppDatabase
 import com.musicdistribution.streamingservice.model.domain.NotificationRoom
-import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.retrofit.core.Album
 import com.musicdistribution.streamingservice.model.retrofit.core.Artist
 import com.musicdistribution.streamingservice.model.retrofit.core.Notification
@@ -48,8 +47,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private var notificationLiveData: MutableLiveData<Notification> =
         MutableLiveData()
 
-    fun fetchAlbums() {
-        albumServiceApi.findAll().enqueue(object : Callback<AlbumResponse?> {
+    fun fetchAlbums(page: Int?) {
+        albumServiceApi.findAll(
+            page ?: PaginationConstants.DEFAULT_PAGE_NUMBER,
+            PaginationConstants.DEFAULT_PAGE_SIZE
+        ).enqueue(object : Callback<AlbumResponse?> {
             override fun onResponse(
                 call: Call<AlbumResponse?>?,
                 response: Response<AlbumResponse?>
@@ -72,8 +74,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun fetchArtists() {
-        artistServiceApi.findAll().enqueue(object : Callback<ArtistResponse?> {
+    fun fetchArtists(page: Int?) {
+        artistServiceApi.findAll(
+            page ?: PaginationConstants.DEFAULT_PAGE_NUMBER,
+            PaginationConstants.DEFAULT_PAGE_SIZE
+        ).enqueue(object : Callback<ArtistResponse?> {
             override fun onResponse(
                 call: Call<ArtistResponse?>?,
                 response: Response<ArtistResponse?>
@@ -96,8 +101,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         })
     }
 
-    fun fetchSongs() {
-        songServiceApi.findAll().enqueue(object : Callback<SongResponse?> {
+    fun fetchSongs(page: Int?) {
+        songServiceApi.findAll(
+            page ?: PaginationConstants.DEFAULT_PAGE_NUMBER,
+            PaginationConstants.DEFAULT_PAGE_SIZE
+        ).enqueue(object : Callback<SongResponse?> {
             override fun onResponse(
                 call: Call<SongResponse?>?,
                 response: Response<SongResponse?>

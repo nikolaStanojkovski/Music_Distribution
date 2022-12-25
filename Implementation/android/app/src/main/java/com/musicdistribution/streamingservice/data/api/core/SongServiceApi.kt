@@ -12,7 +12,10 @@ import retrofit2.http.Query
 interface SongServiceApi {
 
     @GET(ApiConstants.API_SONGS)
-    fun findAll(): Call<SongResponse?>
+    fun findAll(
+        @Query(EntityConstants.PAGE) page: Int,
+        @Query(EntityConstants.SIZE) size: Int
+    ): Call<SongResponse?>
 
     @GET(ApiConstants.API_SONGS_SEARCH)
     fun search(

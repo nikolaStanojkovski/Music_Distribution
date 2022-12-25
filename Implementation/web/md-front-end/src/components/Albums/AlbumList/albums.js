@@ -4,6 +4,7 @@ import Pagination from "../../Partial/Pagination/pagination";
 import useAlbums from "./useAlbums";
 import viewAlbums from "./viewAlbums";
 import {KEY, PAGEABLE, TOTAL_PAGES, VALUE} from "../../../constants/model";
+import {DEFAULT_PAGE_SIZE} from "../../../constants/pagination";
 
 const Albums = (props) => {
 
@@ -33,6 +34,7 @@ const Albums = (props) => {
                 ? <Pagination changePage={(pageNumber) =>
                     (filter && searchParams && searchParams[KEY] && searchParams[VALUE])
                         ? filterAlbums(pageNumber,
+                        DEFAULT_PAGE_SIZE,
                         searchParams[KEY],
                         searchParams[VALUE])
                         : loadAlbums(pageNumber)}

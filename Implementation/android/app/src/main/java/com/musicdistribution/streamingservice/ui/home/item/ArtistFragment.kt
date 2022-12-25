@@ -23,6 +23,7 @@ import com.musicdistribution.streamingservice.listener.CategoryItemClickListener
 import com.musicdistribution.streamingservice.model.enums.EntityType
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
+import com.musicdistribution.streamingservice.model.search.CategoryListType
 import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.ui.home.HomeVerticalAdapter
 import com.musicdistribution.streamingservice.viewmodel.FavouriteViewModel
@@ -73,24 +74,24 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         itemTypeViewModel.fetchArtistSongs(selectedArtistId)
 
         itemTypeViewModel.getArtistLiveData()
-            .observe(viewLifecycleOwner,
-                { item ->
-                    if (item != null) {
-                        fragmentView.findViewById<TextView>(R.id.txtArtistName).text =
-                            if (item.userPersonalInfo.artName.isNotBlank())
-                                item.userPersonalInfo.artName else item.email
-                        fragmentView.findViewById<TextView>(R.id.txtArtistInfo).text =
-                            item.userPersonalInfo.fullName
-                        val imageControl =
-                            fragmentView.findViewById<ImageView>(R.id.imageArtist)
-                        val profilePictureReference =
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
+            .observe(
+                viewLifecycleOwner
+            ) { item ->
+                if (item != null) {
+                    fragmentView.findViewById<TextView>(R.id.txtArtistName).text =
+                        item.userPersonalInfo.artName.ifBlank { item.email }
+                    fragmentView.findViewById<TextView>(R.id.txtArtistInfo).text =
+                        item.userPersonalInfo.fullName
+                    val imageControl =
+                        fragmentView.findViewById<ImageView>(R.id.imageArtist)
+                    val profilePictureReference =
+                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
 
-                        if (imageControl != null) {
-                            fillImage(profilePictureReference, imageControl)
-                        }
+                    if (imageControl != null) {
+                        fillImage(profilePictureReference, imageControl)
                     }
-                })
+                }
+            }
         fillAdapterData()
         fillFavouriteData(selectedArtistId)
     }
@@ -107,37 +108,39 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         CategoryData.clearData()
         verticalAdapter.updateCategory(CategoryData.artistData[0])
         itemTypeViewModel.getArtistSongsLiveData()
-            .observe(viewLifecycleOwner,
-                { songs ->
-                    verticalAdapter.emptyData(CategoryData.artistData[0])
-                    if (songs != null && songs.size > 0) {
-                        for (song in songs) {
-                            val songCoverReference =
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${song.id}${FileConstants.PNG_EXTENSION}"
-                            verticalAdapter.updateData(
-                                CategoryData.artistData[0],
-                                CategoryItem(song.id, songCoverReference, CategoryItemType.SONG)
-                            )
-                        }
+            .observe(
+                viewLifecycleOwner
+            ) { songs ->
+                verticalAdapter.emptyData(CategoryData.artistData[0])
+                if (songs != null && songs.size > 0) {
+                    for (song in songs) {
+                        val songCoverReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_SONGS}/${song.id}${FileConstants.PNG_EXTENSION}"
+                        verticalAdapter.updateData(
+                            CategoryData.artistData[0],
+                            CategoryItem(song.id, songCoverReference, CategoryItemType.SONG)
+                        )
                     }
-                })
+                }
+            }
 
         verticalAdapter.updateCategory(CategoryData.artistData[1])
         itemTypeViewModel.getArtistAlbumsLiveData()
-            .observe(viewLifecycleOwner,
-                { albums ->
-                    verticalAdapter.emptyData(CategoryData.artistData[1])
-                    if (albums != null && albums.size > 0) {
-                        for (album in albums) {
-                            val albumCoverReference =
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${album.id}${FileConstants.PNG_EXTENSION}"
-                            verticalAdapter.updateData(
-                                CategoryData.artistData[1],
-                                CategoryItem(album.id, albumCoverReference, CategoryItemType.ALBUM)
-                            )
-                        }
+            .observe(
+                viewLifecycleOwner
+            ) { albums ->
+                verticalAdapter.emptyData(CategoryData.artistData[1])
+                if (albums != null && albums.size > 0) {
+                    for (album in albums) {
+                        val albumCoverReference =
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${album.id}${FileConstants.PNG_EXTENSION}"
+                        verticalAdapter.updateData(
+                            CategoryData.artistData[1],
+                            CategoryItem(album.id, albumCoverReference, CategoryItemType.ALBUM)
+                        )
                     }
-                })
+                }
+            }
     }
 
     private fun fillImage(profilePictureReference: String, imageControl: ImageView) {
@@ -164,14 +167,15 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         val likeButton: ImageView? = fragmentView.findViewById(R.id.btnLikeArtist)
         if (!userId.isNullOrEmpty() && likeButton != null) {
             favouriteViewModel.getArtistsLiveData()
-                .observe(viewLifecycleOwner,
-                    { artists ->
-                        if (!artists.isNullOrEmpty() && artists.filter { a -> a.id == selectedArtistId }.size == 1) {
-                            buttonUnlike(likeButton, userId, selectedArtistId)
-                        } else {
-                            buttonLike(likeButton, userId, selectedArtistId)
-                        }
-                    })
+                .observe(
+                    viewLifecycleOwner
+                ) { artists ->
+                    if (!artists.isNullOrEmpty() && artists.filter { a -> a.id == selectedArtistId }.size == 1) {
+                        buttonUnlike(likeButton, userId, selectedArtistId)
+                    } else {
+                        buttonLike(likeButton, userId, selectedArtistId)
+                    }
+                }
         }
     }
 
@@ -191,7 +195,7 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
         }
     }
 
-    override fun onClick(item: CategoryItem) {
+    override fun onItemClick(item: CategoryItem) {
         when (item.itemType) {
             CategoryItemType.ALBUM -> {
                 val bundle = bundleOf(
@@ -212,6 +216,33 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
             else -> findNavController()
                 .navigate(R.id.action_artistFragment_to_homeFragment)
         }
+    }
+
+    override fun onShowMoreClick(itemType: CategoryItemType) {
+        val listItemType: Pair<String, CategoryItemType> = when (itemType) {
+            CategoryItemType.ARTIST -> {
+                SearchConstants.ITEM_TYPE to CategoryItemType.ARTIST
+            }
+            CategoryItemType.ALBUM -> {
+                SearchConstants.ITEM_TYPE to CategoryItemType.ALBUM
+            }
+            CategoryItemType.SONG -> {
+                SearchConstants.ITEM_TYPE to CategoryItemType.SONG
+            }
+            CategoryItemType.PUBLISHED_ALBUM -> {
+                SearchConstants.ITEM_TYPE to CategoryItemType.PUBLISHED_ALBUM
+            }
+            CategoryItemType.PUBLISHED_SONG -> {
+                SearchConstants.ITEM_TYPE to CategoryItemType.PUBLISHED_SONG
+            }
+        }
+        findNavController()
+            .navigate(
+                R.id.action_homeFragment_to_listItemFragment, bundleOf(
+                    listItemType,
+                    SearchConstants.CATEGORY_LISTING_TYPE to CategoryListType.FAVOURITE_ITEMS
+                )
+            )
     }
 
     private fun navigateOut() {

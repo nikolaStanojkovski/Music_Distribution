@@ -1,5 +1,5 @@
 import React from "react";
-import {ALBUM, CREATOR, IS_PUBLISHED, NONE} from "../../../constants/model";
+import {ALBUM, IS_PUBLISHED, NONE} from "../../../constants/model";
 import StringUtil from "../../../util/stringUtil";
 
 const viewSongPublish = (props) => {
@@ -24,9 +24,7 @@ const viewSongPublish = (props) => {
                         -- Choose song --
                     </option>
                     {(props.songs && props.songs.content) ? props.songs.content.map((term) => {
-                            return (term && term[CREATOR]
-                                && term[CREATOR].id === props.selectedArtist.id
-                                && !term[ALBUM] && !term[IS_PUBLISHED]) ?
+                            return (term[ALBUM] == null && !term[IS_PUBLISHED]) ?
                                 <option key={term.id} value={term.id}>{term.songName}</option> : undefined;
                         }
                     ) : undefined}
@@ -44,9 +42,9 @@ const viewSongPublish = (props) => {
                     {(props.tiers) ? props.tiers
                         .filter(term => term !== NONE)
                         .map((term) => {
-                            return <option key={term} value={term}>{term}</option>;
-                        }
-                    ) : undefined}
+                                return <option key={term} value={term}>{term}</option>;
+                            }
+                        ) : undefined}
                 </select>
             </div>
             <br/>

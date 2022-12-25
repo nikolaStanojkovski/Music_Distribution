@@ -28,6 +28,7 @@
     <string name="artist_personal_info">[personal_info]</string>
     <string name="album_name_placeholder">[album_name]</string>
     <string name="category_title_placeholder">[category_title]</string>
+    <string name="show_all_placeholder">Show All</string>
     <string name="image_placeholder">Home fragment item image</string>
     <string name="length_placeholder">[length]</string>
     <string name="initial_length_placeholder">[initial_length]</string>

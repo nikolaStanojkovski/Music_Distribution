@@ -26,8 +26,8 @@ const AlbumRepository = {
     fetchAlbums: (pageNumber) => {
         return axios.get(`${RESOURCE}${ALBUMS}?${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
     },
-    filterAlbums: (pageNumber, key, value) => {
-        return axios.get(`${RESOURCE}${ALBUMS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
+    filterAlbums: (pageNumber, pageSize, key, value) => {
+        return axios.get(`${RESOURCE}${ALBUMS}${SEARCH}?${SEARCH_PARAMS}=${key}&${SEARCH_TERM}=${value}&${PAGE}=${pageNumber || DEFAULT_PAGE_NUMBER}&${SIZE}=${pageSize || DEFAULT_PAGE_SIZE}&${SORT}=${DEFAULT_SORT_ORDER}`);
     },
 
     publishAlbum: (cover, songIdList,
