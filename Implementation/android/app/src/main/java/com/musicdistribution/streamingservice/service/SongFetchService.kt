@@ -76,7 +76,7 @@ class SongFetchService(
                     }
                 }
             }
-            handler.postDelayed(updater, 1000)
+            handler.postDelayed(updater, 10)
         }
     }
 }

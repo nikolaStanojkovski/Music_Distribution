@@ -55,13 +55,13 @@ class LoginFragment : Fragment() {
 
     private fun validateLogin() {
         authenticationViewModel.getLoginLiveData()
-            .observe(viewLifecycleOwner,
-                { listener ->
-                    if (listener != null && listener.jwtToken.isNotEmpty()) {
-                        saveUserInfo(listener)
-                        navigateOut()
-                    }
-                })
+            .observe(viewLifecycleOwner
+            ) { listener ->
+                if (listener != null && listener.jwtToken.isNotEmpty()) {
+                    saveUserInfo(listener)
+                    navigateOut()
+                }
+            }
     }
 
     private fun saveUserInfo(listener: ListenerJwt) {

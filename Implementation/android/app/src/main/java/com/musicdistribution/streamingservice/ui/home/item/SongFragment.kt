@@ -103,7 +103,9 @@ class SongFragment : Fragment(), SeekBarListener {
                         "/${selectedSongId}${FileConstants.MP3_EXTENSION}"
             val mp3Play = SongFetchService(this, mediaPlayer)
             seekBar.setOnTouchListener(View.OnTouchListener { v, event ->
-                if (event.action == MotionEvent.ACTION_MOVE) {
+                if (event.action == MotionEvent.ACTION_MOVE
+                    && songPlaying
+                ) {
                     val position = ((mediaFileLength.toDouble() / 100.00)
                             * (v as SeekBar).progress).toInt()
                     mediaPlayer!!.seekTo(position)
@@ -138,6 +140,7 @@ class SongFragment : Fragment(), SeekBarListener {
                 if (mediaPlayer!!.isPlaying) {
                     mediaPlayer!!.pause()
                 }
+                songPlaying = false
                 resetSongStatus(0)
             }
         }
@@ -146,6 +149,7 @@ class SongFragment : Fragment(), SeekBarListener {
                 if (mediaPlayer!!.isPlaying) {
                     mediaPlayer!!.pause()
                 }
+                songPlaying = false
                 resetSongStatus(100)
             }
         }
@@ -220,10 +224,12 @@ class SongFragment : Fragment(), SeekBarListener {
     override fun onUpdate(progress: Int) {
         if (mediaPlayer != null) {
             mediaFileLength = mediaPlayer!!.duration
-            if (progress >= 99) {
-                resetSongStatus(0)
-            } else {
-                seekBar.progress = progress
+            if (songPlaying) {
+                if (progress >= 99) {
+                    resetSongStatus(0)
+                } else {
+                    seekBar.progress = progress
+                }
             }
         }
     }

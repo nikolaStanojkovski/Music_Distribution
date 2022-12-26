@@ -135,9 +135,9 @@ const App = () => {
                                             songs={songService.songs}
                                             songsTotalLength={songService.songsTotalLength}
                                             filterSongs={songService.filterSongs}
-                                            genres={genreService.genres}
                                             tiers={tierService.tiers}
                                             selectedArtist={ArtistRepository.fetchArtistLocal()}
+                                            genres={genreService.genres}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}
                                             publishAlbum={albumService.publishAlbum}

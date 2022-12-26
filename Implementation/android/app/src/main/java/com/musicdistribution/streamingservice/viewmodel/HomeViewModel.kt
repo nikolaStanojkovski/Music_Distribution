@@ -25,7 +25,6 @@ import com.musicdistribution.streamingservice.model.retrofit.response.SongRespon
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,8 +43,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private var artistsLiveData: MutableLiveData<MutableList<Artist>> = MutableLiveData()
     private var albumsLiveData: MutableLiveData<MutableList<Album>> = MutableLiveData()
     private var songsLiveData: MutableLiveData<MutableList<Song>> = MutableLiveData()
-    private var notificationLiveData: MutableLiveData<Notification> =
-        MutableLiveData()
+    private var notificationLiveData: MutableLiveData<MutableList<Notification>> =
+        MutableLiveData(mutableListOf())
 
     fun fetchAlbums(page: Int?) {
         albumServiceApi.findAll(
@@ -186,14 +185,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun saveNotification(notification: Notification) {
-        val listenerId = notification.listenerId
-        val publishingId = notification.publishingId
-        val creatorId = notification.creatorResponse.id
-
         CoroutineScope(Dispatchers.IO).launch {
-            if (database.notificationDao()
-                    .find(listenerId, publishingId, creatorId) == null
-            ) {
+            val listenerId = notification.listenerId
+            val publishingId = notification.publishingId
+            val creatorId = notification.creatorResponse.id
+
+            if (database.notificationDao().find(listenerId, publishingId, creatorId) == null) {
                 database.notificationDao()
                     .insert(
                         NotificationRoom(
@@ -202,9 +199,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                             publishingId = publishingId
                         )
                     )
-                withContext(Dispatchers.Main) {
-                    notificationLiveData.value = notification
-                }
+                notificationLiveData.postValue(mutableListOf(notification))
             }
         }
     }
@@ -221,7 +216,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return songsLiveData
     }
 
-    fun getNotificationLiveData(): MutableLiveData<Notification> {
+    fun getNotificationLiveData(): MutableLiveData<MutableList<Notification>> {
         return notificationLiveData
     }
 
@@ -230,5 +225,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         this.albumsLiveData = MutableLiveData()
         this.songsLiveData = MutableLiveData()
         this.notificationLiveData = MutableLiveData()
+        this.notificationLiveData.value = mutableListOf()
     }
 }

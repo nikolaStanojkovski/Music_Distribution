@@ -69,27 +69,27 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         itemTypeViewModel.fetchAlbumSongs(selectedAlbumId)
 
         itemTypeViewModel.getAlbumLiveData()
-            .observe(viewLifecycleOwner,
-                { item ->
-                    if (item != null) {
-                        fragmentView.findViewById<TextView>(R.id.txtAlbumHeading).text =
-                            if (item.creator.userPersonalInfo.artName.isNotBlank())
-                                item.creator.userPersonalInfo.artName else item.creator.email
-                        fragmentView.findViewById<TextView>(R.id.txtAlbumTitle).text =
-                            item.albumName
-                        fragmentView.findViewById<TextView>(R.id.txtAlbumLength).text =
-                            item.totalLength.formattedString
+            .observe(viewLifecycleOwner
+            ) { item ->
+                if (item != null) {
+                    fragmentView.findViewById<TextView>(R.id.txtAlbumHeading).text =
+                        if (item.creator.userPersonalInfo.artName.isNotBlank())
+                            item.creator.userPersonalInfo.artName else item.creator.email
+                    fragmentView.findViewById<TextView>(R.id.txtAlbumTitle).text =
+                        item.albumName
+                    fragmentView.findViewById<TextView>(R.id.txtAlbumLength).text =
+                        item.totalLength.formattedString
 
-                        val imageControl =
-                            fragmentView.findViewById<ImageView>(R.id.imageAlbum)
-                        val coverPictureReference =
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
+                    val imageControl =
+                        fragmentView.findViewById<ImageView>(R.id.imageAlbum)
+                    val coverPictureReference =
+                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
 
-                        if (imageControl != null) {
-                            fillImage(coverPictureReference, imageControl)
-                        }
+                    if (imageControl != null) {
+                        fillImage(coverPictureReference, imageControl)
                     }
-                })
+                }
+            }
 
         fillFavouriteData(selectedAlbumId)
         fillAdapterData()
@@ -105,23 +105,23 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         songItemRecyclerView.adapter = songItemAdapter
 
         itemTypeViewModel.getAlbumSongsLiveData()
-            .observe(viewLifecycleOwner,
-                { songs ->
-                    if (songs != null && songs.size > 0) {
-                        songItemAdapter.updateData(songs.map { song ->
-                            SearchItem(
-                                song.id,
-                                song.songName,
-                                getString(
-                                    R.string.length_parameter_placeholder,
-                                    song.songLength.formattedString
-                                ),
-                                CategoryItemType.SONG,
-                                "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${song.id}${FileConstants.PNG_EXTENSION}"
-                            )
-                        }.toMutableList())
-                    }
-                })
+            .observe(viewLifecycleOwner
+            ) { songs ->
+                if (songs != null && songs.size > 0) {
+                    songItemAdapter.updateData(songs.map { song ->
+                        SearchItem(
+                            song.id,
+                            song.songName,
+                            getString(
+                                R.string.length_parameter_placeholder,
+                                song.songLength.formattedString
+                            ),
+                            CategoryItemType.SONG,
+                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${song.id}${FileConstants.PNG_EXTENSION}"
+                        )
+                    }.toMutableList())
+                }
+            }
     }
 
     private fun fillImage(coverPictureReference: String, imageControl: ImageView) {
@@ -148,14 +148,14 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
         val likeButton: ImageView? = fragmentView.findViewById(R.id.btnLikeAlbum)
         if (!userId.isNullOrEmpty() && likeButton != null) {
             favouriteViewModel.getAlbumsLiveData()
-                .observe(viewLifecycleOwner,
-                    { albums ->
-                        if (!albums.isNullOrEmpty() && albums.filter { a -> a.id == selectedAlbumId }.size == 1) {
-                            buttonUnlike(likeButton, userId, selectedAlbumId)
-                        } else {
-                            buttonLike(likeButton, userId, selectedAlbumId)
-                        }
-                    })
+                .observe(viewLifecycleOwner
+                ) { albums ->
+                    if (!albums.isNullOrEmpty() && albums.filter { a -> a.id == selectedAlbumId }.size == 1) {
+                        buttonUnlike(likeButton, userId, selectedAlbumId)
+                    } else {
+                        buttonLike(likeButton, userId, selectedAlbumId)
+                    }
+                }
         }
     }
 

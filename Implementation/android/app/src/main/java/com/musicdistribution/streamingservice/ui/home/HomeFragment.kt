@@ -36,6 +36,7 @@ import com.musicdistribution.streamingservice.model.retrofit.core.Notification
 import com.musicdistribution.streamingservice.model.search.CategoryItem
 import com.musicdistribution.streamingservice.model.search.CategoryItemType
 import com.musicdistribution.streamingservice.model.search.CategoryListType
+import com.musicdistribution.streamingservice.service.SequenceService
 import com.musicdistribution.streamingservice.util.LocalizationUtils
 import com.musicdistribution.streamingservice.util.StringUtils
 import com.musicdistribution.streamingservice.viewmodel.HomeViewModel
@@ -225,7 +226,6 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
             }
     }
 
-
     private fun fillLocation(longitude: Double, latitude: Double) {
         val geocoder = Geocoder(requireActivity(), Locale.getDefault())
 
@@ -357,13 +357,14 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
             homeViewModel.fetchNotifications(listenerId)
             homeViewModel.getNotificationLiveData()
                 .observe(
-                    requireActivity()
-                ) { notification ->
-                    showNotification(notification)
+                    viewLifecycleOwner
+                ) { notifications ->
+                    notifications.forEach { showNotification(it) }
                 }
         }
     }
 
+    @Synchronized
     private fun showNotification(notification: Notification) {
         val notificationManager =
             requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -390,10 +391,11 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
             notificationChannel.enableVibration(true)
             notificationManager.createNotificationChannel(notificationChannel)
 
-            notificationManager.notify(NotificationConstants.ID, buildNotification(message))
+            notificationManager.notify(SequenceService.nextValue(), buildNotification(message))
         }
     }
 
+    @Synchronized
     private fun buildNotification(message: String): android.app.Notification {
         val intent = Intent(requireActivity(), LauncherActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(

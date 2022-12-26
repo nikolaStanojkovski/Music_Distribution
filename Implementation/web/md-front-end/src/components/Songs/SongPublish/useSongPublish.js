@@ -14,9 +14,9 @@ const useSongPublish = (props) => {
     const songs = props.songs;
     const songsTotalLength = props.songsTotalLength;
     const filterSongs = props.filterSongs;
+    const selectedArtist = props.selectedArtist;
     const tiers = props.tiers;
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
-    const selectedArtist = props.selectedArtist;
     const [cover, updateCover] = React.useState(null);
     const [subscriptionFee, updateSubscriptionFee] = React.useState(EMPTY_STRING);
     const [formData, updateFormData] = React.useState({

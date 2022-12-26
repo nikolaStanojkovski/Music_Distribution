@@ -35,13 +35,13 @@ const viewSongs = (props) => {
                                 props.renderTableRowData(term)
                             }
                             <td className={"table-cell-clickable"}>
-                                <button onClick={props.fetchSong}
+                                <button key={term.id} onClick={props.fetchSong}
                                         className={`btn btn-outline-secondary btn-block bi bi-play play-pause-button`}>
                                 </button>
                             </td>
                         </tr>
                     );
-                }) : null}
+                }) : undefined}
                 </tbody>
             </table>
         </div>
