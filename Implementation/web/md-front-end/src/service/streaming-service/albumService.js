@@ -1,13 +1,7 @@
 import React from "react";
 import AlbumRepository from "../../repository/streaming-service/albumRepository";
-import {PAGEABLE} from "../../constants/model";
 import {toast} from "react-toastify";
-import {
-    ALBUM_FETCH_FAILED,
-    ALBUM_FILTER_FAILED,
-    ALBUM_PUBLISHING_FAILED,
-    ALBUM_RAISE_TIER_FAILED
-} from "../../constants/exception";
+import {ALBUM_FETCH_FAILED, ALBUM_FILTER_FAILED} from "../../constants/exception";
 import {TOTAL_ELEMENTS} from "../../constants/pagination";
 
 const useAlbumService = () => {
@@ -38,35 +32,7 @@ const useAlbumService = () => {
         });
     }
 
-    const publishAlbum = (cover, songIdList,
-                          albumName, albumGenre, albumTier,
-                          subscriptionFee, transactionFee,
-                          artistName, producerName, composerName) => {
-        return AlbumRepository.publishAlbum(cover, songIdList,
-            albumName, albumGenre, albumTier,
-            subscriptionFee, transactionFee,
-            artistName, producerName, composerName)
-            .then(() => {
-                loadAlbums(albums[PAGEABLE].pageNumber);
-                return true;
-            }).catch(() => {
-            toast.error(ALBUM_PUBLISHING_FAILED);
-            return false;
-        });
-    }
-
-    const raiseTierAlbum = (albumId, albumTier, subscriptionFee, transactionFee) => {
-        return AlbumRepository.raiseTierAlbum(albumId, albumTier, subscriptionFee, transactionFee)
-            .then(() => {
-                loadAlbums(albums[PAGEABLE].pageNumber);
-                return true;
-            }).catch(() => {
-            toast.error(ALBUM_RAISE_TIER_FAILED);
-            return false;
-        });
-    }
-
-    return {albums, albumsTotalLength, loadAlbums, filterAlbums, publishAlbum, raiseTierAlbum};
+    return {albums, albumsTotalLength, loadAlbums, filterAlbums};
 }
 
 export default useAlbumService;

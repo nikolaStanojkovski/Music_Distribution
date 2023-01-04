@@ -8,8 +8,8 @@ import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.constant.ServletConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Album;
 import com.musicdistribution.streamingservice.domain.model.entity.id.AlbumId;
-import com.musicdistribution.streamingservice.domain.model.request.AlbumShortTransactionRequest;
-import com.musicdistribution.streamingservice.domain.model.request.AlbumTransactionRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.AlbumShortTransactionRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.AlbumTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.response.core.AlbumResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import com.musicdistribution.streamingservice.service.AlbumService;
@@ -97,20 +97,20 @@ public class AlbumResource {
     /**
      * Method used for publishing an album.
      *
-     * @param authToken               - the access token of the user which is being authenticated.
-     * @param cover                   - the cover picture of the album that is to be published.
-     * @param albumTransactionRequest - an object wrapper containing information for the album to be published.
+     * @param authToken    - the access token of the user which is being authenticated.
+     * @param cover        - the cover picture of the album that is to be published.
+     * @param albumRequest - an object wrapper containing information for the album to be published.
      * @return the published album.
      */
     @PostMapping(PathConstants.PUBLISH)
     public ResponseEntity<AlbumResponse> publish(
             @RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
             @RequestPart MultipartFile cover,
-            @RequestPart @Valid AlbumTransactionRequest albumTransactionRequest) {
+            @RequestPart @Valid AlbumTransactionRequest albumRequest) {
         String username = jwtUtil.getUserNameFromJwtToken(authToken
                 .replace(String.format("%s ", AuthConstants.JWT_TOKEN_PREFIX), StringUtils.EMPTY));
-        return this.albumService.publish(albumTransactionRequest, cover,
-                username, getDecryptedSongIds(albumTransactionRequest.getSongIdList()))
+        return this.albumService.publish(albumRequest, cover,
+                username, getDecryptedSongIds(albumRequest.getSongIdList()))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId()))))
@@ -130,14 +130,14 @@ public class AlbumResource {
     /**
      * Method used for raising an album's tier.
      *
-     * @param albumShortTransactionRequest - an object wrapper containing information for the album to be updated.
+     * @param albumRequest - an object wrapper containing information for the album to be updated.
      * @return the updated album.
      */
     @PostMapping(PathConstants.RAISE_TIER)
     public ResponseEntity<AlbumResponse> raiseTier(
-            @RequestBody @Valid AlbumShortTransactionRequest albumShortTransactionRequest) {
-        return this.albumService.raiseTier(albumShortTransactionRequest,
-                AlbumId.of(encryptionSystem.decrypt(albumShortTransactionRequest.getAlbumId())))
+            @RequestBody @Valid AlbumShortTransactionRequest albumRequest) {
+        return this.albumService.raiseTier(albumRequest,
+                AlbumId.of(encryptionSystem.decrypt(albumRequest.getAlbumId())))
                 .map(album -> ResponseEntity.ok().body(AlbumResponse.from(album,
                         encryptionSystem.encrypt(album.getId().getId()),
                         encryptionSystem.encrypt(album.getCreator().getId().getId()))))

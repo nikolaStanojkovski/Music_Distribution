@@ -3,8 +3,7 @@ package com.musicdistribution.streamingservice.service;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
-import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
-import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.SongTransactionRequest;
 import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -82,5 +81,5 @@ public interface SongService {
      * @param id   - song's id.
      * @return an optional with the updated song.
      */
-    Optional<Song> raiseTier(SongShortTransactionRequest song, SongId id);
+    Optional<Song> raiseTier(SongTransactionRequest song, SongId id);
 }

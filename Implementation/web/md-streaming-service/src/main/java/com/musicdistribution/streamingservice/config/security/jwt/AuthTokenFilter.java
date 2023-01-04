@@ -63,7 +63,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error(e);
+            log.error(e.getMessage());
         }
 
         filterChain.doFilter(request, response);

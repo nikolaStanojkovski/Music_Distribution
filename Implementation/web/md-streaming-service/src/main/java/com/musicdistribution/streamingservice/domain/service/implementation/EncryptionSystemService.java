@@ -5,6 +5,7 @@ import com.musicdistribution.streamingservice.constant.PropertyConstants;
 import com.musicdistribution.streamingservice.domain.exception.EncryptionException;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,16 @@ import java.util.Optional;
 /**
  * The implementation of the domain service used for object encryption.
  */
+@Slf4j
 @Service
 @AllArgsConstructor
 public class EncryptionSystemService implements IEncryptionSystem {
 
     private final Cipher cipher;
-
     private final SecretKey key;
 
     /**
-     * An autowired constructor in order to inject the needed encryption schemes.
+     * An autowired constructor used to inject the needed encryption schemes.
      *
      * @param environment - a reference to the local environment of the framework.
      * @throws Exception if the encryption schemes were not instantiated properly.
@@ -67,7 +68,7 @@ public class EncryptionSystemService implements IEncryptionSystem {
             byte[] encryptedText = cipher.doFinal(plainText);
             encryptedString = Base64.encodeBase64URLSafeString(encryptedText);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             throw new EncryptionException(String.format(ExceptionConstants.STRING_ENCRYPTION_FAILURE, unencryptedString));
         }
         return (!unencryptedString.isEmpty()) ? encryptedString : StringUtils.EMPTY;
@@ -88,7 +89,7 @@ public class EncryptionSystemService implements IEncryptionSystem {
             byte[] plainText = cipher.doFinal(encryptedText);
             decryptedText = new String(plainText);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             throw new EncryptionException(String.format(ExceptionConstants.STRING_DECRYPTION_FAILURE, encryptedString));
         }
         return (!encryptedString.isEmpty()) ? decryptedText : StringUtils.EMPTY;

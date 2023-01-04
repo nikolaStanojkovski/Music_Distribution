@@ -1,6 +1,7 @@
 import {toast} from "react-toastify";
 import {SUBSCRIPTION_FEE_FETCH_FAILED} from "../constants/exception";
 import {EUR} from "../constants/alphabet";
+import {AMOUNT, CURRENCY} from "../constants/model";
 
 const PaymentUtil = {
     async getSubscriptionFeeWithoutCalculation(props, tier) {
@@ -44,6 +45,12 @@ const PaymentUtil = {
                 currency: existingSubscriptionFee.currency
             };
         }
+    },
+    getTotalAmount(transactionFee, subscriptionFee) {
+        const totalAmount = {};
+        totalAmount[AMOUNT] = subscriptionFee[AMOUNT] + transactionFee[AMOUNT];
+        totalAmount[CURRENCY] = subscriptionFee[CURRENCY] || transactionFee[AMOUNT];
+        return totalAmount;
     }
 }
 

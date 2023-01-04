@@ -2,6 +2,7 @@ package com.musicdistribution.streamingservice.util;
 
 import com.musicdistribution.streamingservice.constant.AlphabetConstants;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.metamodel.spi.MetamodelImplementor;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 /**
  * A utility helper class used for search related manipulation.
  */
+@Slf4j
 public final class SearchUtil {
 
     /**
@@ -131,6 +133,7 @@ public final class SearchUtil {
         try {
             return classMetadata.getPropertyNames();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return new String[]{};
         }
     }

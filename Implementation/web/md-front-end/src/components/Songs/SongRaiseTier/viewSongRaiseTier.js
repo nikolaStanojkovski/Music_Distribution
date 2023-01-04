@@ -63,7 +63,7 @@ const viewSongRaiseTier = (props) => {
 
             <br/>
 
-            <button id="submit" type="submit" className="btn btn-dark w-100">Submit</button>
+            <button id="submit" type="submit" className="btn btn-dark w-100">Proceed to Checkout</button>
             <br/>
         </form>
     );

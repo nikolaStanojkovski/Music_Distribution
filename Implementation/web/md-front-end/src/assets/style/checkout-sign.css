@@ -145,6 +145,7 @@
 .o-circle {
     display: flex;
     height: 10.555rem;
+    width: 10.555rem;
     margin: 0 2rem 0 2rem;
     justify-content: center;
     align-items: flex-start;

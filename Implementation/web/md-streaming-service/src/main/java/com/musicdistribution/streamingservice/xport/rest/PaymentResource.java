@@ -1,14 +1,18 @@
 package com.musicdistribution.streamingservice.xport.rest;
 
+import com.musicdistribution.sharedkernel.config.ApiController;
 import com.musicdistribution.sharedkernel.domain.valueobjects.Money;
 import com.musicdistribution.sharedkernel.domain.valueobjects.auxiliary.Tier;
-import com.musicdistribution.sharedkernel.config.ApiController;
 import com.musicdistribution.streamingservice.constant.PathConstants;
+import com.musicdistribution.streamingservice.domain.model.response.payment.OrderResponse;
 import com.musicdistribution.streamingservice.service.PaymentService;
+import com.musicdistribution.streamingservice.util.PaymentUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * Payment Rest Controller.
@@ -40,5 +44,18 @@ public class PaymentResource {
     @GetMapping(PathConstants.TRANSACTION)
     public Money getTransactionFee(@RequestParam String locale) {
         return paymentService.getTransactionFee(locale);
+    }
+
+    /**
+     * Method used for creating a new payment given a total amount for transaction.
+     *
+     * @param totalAmount - the total amount of money to be processed for the transaction.
+     * @return the created order for the payment.
+     */
+    @PostMapping(PathConstants.CREATE)
+    public ResponseEntity<OrderResponse> createPayment(@RequestBody @Valid Money totalAmount) {
+        return Optional.ofNullable(paymentService.createPayment(totalAmount, PaymentUtil.buildReturnUrl()))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

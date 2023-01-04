@@ -1,5 +1,5 @@
 import axios from "../../custom-axios/axiosStreamingService";
-import {PAYMENT, SUBSCRIPTION, TRANSACTION} from "../../constants/endpoint";
+import {CREATE, PAYMENT, SUBSCRIPTION, TRANSACTION} from "../../constants/endpoint";
 import {LOCALE, TIER} from "../../constants/model";
 
 const PaymentRepository = {
@@ -9,6 +9,9 @@ const PaymentRepository = {
     getSubscriptionFee: (tier) => {
         return axios.get(`${PAYMENT}${SUBSCRIPTION}?${TIER}=${tier}`);
     },
+    createOrder: (totalAmount) => {
+        return axios.post(`${PAYMENT}${CREATE}`, totalAmount);
+    }
 }
 
 export default PaymentRepository;

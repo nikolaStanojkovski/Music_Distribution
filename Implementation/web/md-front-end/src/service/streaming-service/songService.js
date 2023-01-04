@@ -2,13 +2,7 @@ import React from "react";
 import SongRepository from "../../repository/streaming-service/songRepository";
 import {PAGEABLE} from "../../constants/model";
 import {toast} from "react-toastify";
-import {
-    SONG_CREATION_FAILED,
-    SONG_FETCH_FAILED,
-    SONG_FILTER_FAILED,
-    SONG_PUBLISHING_FAILED,
-    SONG_RAISE_TIER_FAILED
-} from "../../constants/exception";
+import {SONG_CREATION_FAILED, SONG_FETCH_FAILED, SONG_FILTER_FAILED} from "../../constants/exception";
 import {TOTAL_ELEMENTS} from "../../constants/pagination";
 
 const useSongService = () => {
@@ -53,37 +47,13 @@ const useSongService = () => {
             });
     }
 
-    const publishSong = (cover, songId, songTier, subscriptionFee, transactionFee) => {
-        return SongRepository.publishSong(cover, songId, songTier, subscriptionFee, transactionFee)
-            .then(() => {
-                loadSongs(songs[PAGEABLE].pageNumber);
-                return true;
-            }).catch(() => {
-                toast.error(SONG_PUBLISHING_FAILED);
-                return false;
-            });
-    }
-
-    const raiseTierSong = (songId, songTier, subscriptionFee, transactionFee) => {
-        return SongRepository.raiseTierSong(songId, songTier, subscriptionFee, transactionFee)
-            .then(() => {
-                loadSongs(songs[PAGEABLE].pageNumber);
-                return true;
-            }).catch(() => {
-                toast.error(SONG_RAISE_TIER_FAILED);
-                return false;
-            });
-    }
-
     return {
         songs,
         songsTotalLength,
         loadSongs,
         filterSongs,
         fetchSong,
-        createSong,
-        publishSong,
-        raiseTierSong
+        createSong
     };
 }
 

@@ -1,14 +1,19 @@
-import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
-import {ALBUM_TIER} from "../../../constants/model";
-import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
+import {ALBUM_TIER, COVER} from "../../../constants/model";
+import {CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {ALBUM_PUBLISHING_FAILED} from "../../../constants/exception";
 import PaymentUtil from "../../../util/paymentUtil";
+import {
+    TRANSACTION_OBJECT_PLACEHOLDER,
+    TRANSACTION_TYPE,
+    TRANSACTION_TYPE_PLACEHOLDER
+} from "../../../constants/transaction";
+import FileUtil from "../../../util/fileUtil";
+import RequestUtil from "../../../util/requestUtil";
 
 const useAlbumPublish = (props) => {
-    const history = useHistory();
 
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const genres = props.genres;
@@ -63,15 +68,18 @@ const useAlbumPublish = (props) => {
         if (songIdList && songIdList.length > 0
             && albumName && albumGenre && albumTier
             && subscriptionFee && props.transactionFee) {
-            const result = await props.publishAlbum(cover, songIdList.map(song => song.value)
+            localStorage.setItem(TRANSACTION_TYPE_PLACEHOLDER, TRANSACTION_TYPE.ALBUM_PUBLISH.toString());
+            FileUtil.convertAndSaveToString(COVER, cover);
+            const albumRequest = RequestUtil.constructAlbumPublishRequest(songIdList
+                    .map(song => song.value)
                     .filter(term => term !== undefined),
                 albumName, albumGenre, albumTier,
-                subscriptionFee, props.transactionFee,
+                subscriptionFee, transactionFee,
                 formData.artistName, formData.producerName, formData.composerName);
-            history.push({
-                pathname: CHECKOUT,
-                state: {result: result}
-            });
+            localStorage.setItem(TRANSACTION_OBJECT_PLACEHOLDER, JSON.stringify(albumRequest));
+
+            const totalAmount = PaymentUtil.getTotalAmount(transactionFee, subscriptionFee);
+            props.createPayment(totalAmount);
         } else {
             toast.error(ALBUM_PUBLISHING_FAILED);
         }

@@ -1,8 +1,7 @@
-import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {PAYMENT_INFO, TIER} from "../../../constants/model";
-import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
+import {CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {
     ALBUM_HIGHER_TIER_WARNING,
@@ -10,11 +9,14 @@ import {
     SUBSCRIPTION_FEE_FETCH_FAILED
 } from "../../../constants/exception";
 import PaymentUtil from "../../../util/paymentUtil";
+import {
+    TRANSACTION_OBJECT_PLACEHOLDER,
+    TRANSACTION_TYPE,
+    TRANSACTION_TYPE_PLACEHOLDER
+} from "../../../constants/transaction";
+import RequestUtil from "../../../util/requestUtil";
 
 const useAlbumRaiseTier = (props) => {
-
-    const history = useHistory();
-
 
     const transactionFee = (props.transactionFee) ? props.transactionFee : undefined;
     const albums = props.albums;
@@ -28,7 +30,7 @@ const useAlbumRaiseTier = (props) => {
     const [fetch, setFetch] = React.useState(false);
 
     React.useEffect(() => {
-        if(!fetch) {
+        if (!fetch) {
             filterAlbums(0, albumsTotalLength, CREATOR_ID, selectedArtist.id);
             setFetch(true);
         }
@@ -71,14 +73,13 @@ const useAlbumRaiseTier = (props) => {
         const albumId = album.id;
         if (albumId && albumTier && subscriptionFee &&
             subscriptionFee.amount > 0 && props.transactionFee) {
-            const result = await props.raiseTierAlbum(albumId,
-                albumTier,
-                subscriptionFee,
-                props.transactionFee);
-            history.push({
-                pathname: CHECKOUT,
-                state: {result: result}
-            });
+            localStorage.setItem(TRANSACTION_TYPE_PLACEHOLDER,
+                TRANSACTION_TYPE.ALBUM_RAISE_TIER.toString());
+            const albumRequest = RequestUtil.constructAlbumRaiseTierRequest(albumId, albumTier, subscriptionFee, transactionFee);
+            localStorage.setItem(TRANSACTION_OBJECT_PLACEHOLDER, JSON.stringify(albumRequest));
+
+            const totalAmount = PaymentUtil.getTotalAmount(transactionFee, subscriptionFee);
+            props.createPayment(totalAmount);
         } else {
             toast.error(ALBUM_RAISE_TIER_FAILED);
         }

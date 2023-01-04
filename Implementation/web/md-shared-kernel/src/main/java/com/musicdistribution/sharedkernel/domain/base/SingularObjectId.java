@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.musicdistribution.sharedkernel.constant.ExceptionConstants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.Embeddable;
@@ -14,6 +15,7 @@ import java.util.UUID;
 /**
  * Domain object identifier.
  */
+@Slf4j
 @Getter
 @Embeddable
 @MappedSuperclass
@@ -44,8 +46,9 @@ public class SingularObjectId implements DomainObjectId {
         Objects.requireNonNull(idClass, ExceptionConstants.ID_CLASS_CREATION_FAILURE);
         try {
             return idClass.getConstructor(String.class).newInstance(UUID.randomUUID().toString());
-        } catch (Exception ex) {
-            throw new RuntimeException(String.format(ExceptionConstants.CLASS_CREATION_FAILURE, idClass), ex);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(String.format(ExceptionConstants.CLASS_CREATION_FAILURE, idClass), e);
         }
     }
 }

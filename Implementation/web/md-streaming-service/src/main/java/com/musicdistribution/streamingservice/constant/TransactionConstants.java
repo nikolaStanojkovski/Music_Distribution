@@ -20,6 +20,9 @@ public final class TransactionConstants {
     public final static Double PLATINUM_SUBSCRIPTION_FEE = 100.00;
     public final static Double DIAMOND_SUBSCRIPTION_FEE = 150.00;
 
+    public final static String CAPTURED_ORDER_STATUS = "CAPTURE";
+    public final static String APPROVED_ORDER_STATUS = "approve";
+
     /**
      * Private constructor which throws an exception because the class should not be instantiated.
      */

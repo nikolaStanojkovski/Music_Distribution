@@ -113,7 +113,7 @@ const App = () => {
                                             selectedArtist={ArtistRepository.fetchArtistLocal()}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}
-                                            publishSong={songService.publishSong}
+                                            createPayment={paymentService.createPayment}
                                             component={SongPublish}/>
                             <ProtectedRoute path={SONGS_RAISE_TIER}
                                             songs={songService.songs}
@@ -123,7 +123,7 @@ const App = () => {
                                             selectedArtist={ArtistRepository.fetchArtistLocal()}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}
-                                            raiseTierSong={songService.raiseTierSong}
+                                            createPayment={paymentService.createPayment}
                                             component={SongRaiseTier}/>
 
                             <NonProtectedRoute path={ALBUMS} exact
@@ -140,7 +140,7 @@ const App = () => {
                                             genres={genreService.genres}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}
-                                            publishAlbum={albumService.publishAlbum}
+                                            createPayment={paymentService.createPayment}
                                             component={AlbumPublish}/>
                             <ProtectedRoute path={ALBUMS_RAISE_TIER} exact
                                             albums={albumService.albums}
@@ -150,7 +150,7 @@ const App = () => {
                                             tiers={tierService.tiers}
                                             transactionFee={paymentService.transactionFee}
                                             subscriptionFee={paymentService.getSubscriptionFee}
-                                            raiseTierAlbum={albumService.raiseTierAlbum}
+                                            createPayment={paymentService.createPayment}
                                             component={AlbumRaiseTier}/>
 
                             <ProtectedRoute path={CHECKOUT} exact component={Checkout}/>

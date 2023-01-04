@@ -11,8 +11,7 @@ import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.EntityType;
 import com.musicdistribution.streamingservice.domain.model.enums.FileLocationType;
-import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
-import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.SongTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.repository.core.ArtistRepository;
 import com.musicdistribution.streamingservice.domain.repository.core.ListenerRepository;
@@ -23,6 +22,7 @@ import com.musicdistribution.streamingservice.domain.valueobject.PaymentInfo;
 import com.musicdistribution.streamingservice.domain.valueobject.core.SongLength;
 import com.musicdistribution.streamingservice.service.SongService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,7 @@ import java.util.Optional;
 /**
  * Implementation of the song service.
  */
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -143,7 +144,8 @@ public class SongServiceImpl implements SongService {
                 String fileName = String.format("%s.%s", songId, FileConstants.MPEG_EXTENSION);
                 fileSystemStorage.saveFile(file, fileName, FileLocationType.SONGS);
             }
-        } catch (Exception exception) {
+        } catch (Exception e) {
+            log.error(e.getMessage());
             throw new FileStorageException(String.format(ExceptionConstants.SONG_NOT_SAVED, songId));
         }
     }
@@ -198,7 +200,7 @@ public class SongServiceImpl implements SongService {
      * @return an optional with the updated song.
      */
     @Override
-    public Optional<Song> raiseTier(SongShortTransactionRequest songShortTransactionRequest, SongId id) {
+    public Optional<Song> raiseTier(SongTransactionRequest songShortTransactionRequest, SongId id) {
         return songRepository.findById(id).map(song -> {
             PaymentInfo paymentInfo = PaymentInfo.from(songShortTransactionRequest.getSubscriptionFee(),
                     songShortTransactionRequest.getTransactionFee(),

@@ -27,6 +27,7 @@ export const UNAUTHORIZED = '/unauthorized';
 export const PAYMENT = '/payment';
 export const TRANSACTION = '/transaction';
 export const SUBSCRIPTION = '/subscription';
+export const CREATE = '/create';
 
 export const EMAIL_DOMAINS = '/email-domains';
 export const GENRES = '/genres';

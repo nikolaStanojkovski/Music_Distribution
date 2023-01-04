@@ -10,6 +10,8 @@ public final class PathConstants {
 
     public static final String SUBSCRIPTION = "/subscription";
     public static final String TRANSACTION = "/transaction";
+    public static final String CAPTURE = "/capture";
+    public static final String CHECKOUT = "/checkout";
     public static final String SEARCH = "/search";
     public static final String PUBLISH = "/publish";
     public static final String RAISE_TIER = "/raise-tier";
@@ -51,6 +53,7 @@ public final class PathConstants {
     public static final String API_FAVOURITE_REMOVE = FORMATTED_ID + FAVOURITE + "/remove";
     public static final String API_NOTIFICATIONS = API + RESOURCE + NOTIFICATIONS;
     public static final String API_NOTIFICATIONS_SEARCH = NOTIFICATIONS + SEARCH;
+    public static final String API_PAYMENT_CAPTURE = API_PAYMENT + CAPTURE;
 
     public static final String API_AUDIO_STREAM = FORMATTED_ID + AlphabetConstants.DOT + FileConstants.MPEG_EXTENSION;
     public static final String API_SONG_COVER = SONGS + FORMATTED_ID

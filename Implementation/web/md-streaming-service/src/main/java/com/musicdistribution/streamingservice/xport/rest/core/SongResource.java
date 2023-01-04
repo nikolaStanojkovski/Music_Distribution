@@ -9,8 +9,7 @@ import com.musicdistribution.streamingservice.constant.ServletConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Song;
 import com.musicdistribution.streamingservice.domain.model.entity.id.SongId;
 import com.musicdistribution.streamingservice.domain.model.enums.AuthRole;
-import com.musicdistribution.streamingservice.domain.model.request.SongShortTransactionRequest;
-import com.musicdistribution.streamingservice.domain.model.request.SongTransactionRequest;
+import com.musicdistribution.streamingservice.domain.model.request.core.SongTransactionRequest;
 import com.musicdistribution.streamingservice.domain.model.request.core.SongRequest;
 import com.musicdistribution.streamingservice.domain.model.response.core.SongResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
@@ -169,19 +168,19 @@ public class SongResource {
     /**
      * Method used for publishing a new song.
      *
-     * @param authToken              - the access token of the user which is being authenticated.
-     * @param cover                  - the cover picture of the song that is to be published.
-     * @param songTransactionRequest - an object wrapper containing information for the song to be published.
+     * @param authToken   - the access token of the user which is being authenticated.
+     * @param cover       - the cover picture of the song that is to be published.
+     * @param songRequest - an object wrapper containing information for the song to be published.
      * @return the published song.
      */
     @PostMapping(PathConstants.PUBLISH)
     public ResponseEntity<SongResponse> publish(@RequestHeader(value = ServletConstants.AUTH_HEADER) String authToken,
                                                 @RequestPart MultipartFile cover,
-                                                @RequestPart @Valid SongTransactionRequest songTransactionRequest) {
+                                                @RequestPart @Valid SongTransactionRequest songRequest) {
         String username = jwtUtil.getUserNameFromJwtToken(authToken.replace(String.format("%s ",
                 AuthConstants.JWT_TOKEN_PREFIX), StringUtils.EMPTY));
-        return this.songService.publish(songTransactionRequest, cover,
-                username, encryptionSystem.decrypt(songTransactionRequest.getSongId()))
+        return this.songService.publish(songRequest, cover,
+                username, encryptionSystem.decrypt(songRequest.getSongId()))
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),
@@ -192,14 +191,14 @@ public class SongResource {
     /**
      * Method used for raising a song's tier.
      *
-     * @param songShortTransactionRequest - an object wrapper containing information for the song to be updated.
+     * @param songRequest - an object wrapper containing information for the song to be updated.
      * @return the song whose tier was raised.
      */
     @PostMapping(PathConstants.RAISE_TIER)
     public ResponseEntity<SongResponse> raiseTier(
-            @RequestBody @Valid SongShortTransactionRequest songShortTransactionRequest) {
-        return this.songService.raiseTier(songShortTransactionRequest,
-                SongId.of(encryptionSystem.decrypt(songShortTransactionRequest.getSongId())))
+            @RequestBody @Valid SongTransactionRequest songRequest) {
+        return this.songService.raiseTier(songRequest,
+                SongId.of(encryptionSystem.decrypt(songRequest.getSongId())))
                 .map(song -> ResponseEntity.ok().body(SongResponse.from(song,
                         encryptionSystem.encrypt(song.getId().getId()),
                         encryptionSystem.encrypt(song.getCreator().getId().getId()),

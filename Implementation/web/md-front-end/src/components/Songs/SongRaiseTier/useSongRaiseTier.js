@@ -1,15 +1,18 @@
-import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
 import {PAYMENT_INFO, TIER} from "../../../constants/model";
-import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
+import {CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {SONG_HIGHER_TIER_WARNING, SONG_RAISE_TIER_FAILED} from "../../../constants/exception";
 import PaymentUtil from "../../../util/paymentUtil";
+import {
+    TRANSACTION_OBJECT_PLACEHOLDER,
+    TRANSACTION_TYPE,
+    TRANSACTION_TYPE_PLACEHOLDER
+} from "../../../constants/transaction";
+import RequestUtil from "../../../util/requestUtil";
 
 const useSongRaiseTier = (props) => {
-
-    const history = useHistory();
 
     const songs = props.songs;
     const songsTotalLength = props.songsTotalLength;
@@ -23,7 +26,7 @@ const useSongRaiseTier = (props) => {
     const [fetch, setFetch] = React.useState(false);
 
     React.useEffect(() => {
-        if(!fetch) {
+        if (!fetch) {
             filterSongs(0, songsTotalLength, CREATOR_ID, selectedArtist.id);
             setFetch(true);
         }
@@ -67,12 +70,13 @@ const useSongRaiseTier = (props) => {
         const songId = song.id;
         if (songId && songTier && subscriptionFee &&
             subscriptionFee.amount > 0 && props.transactionFee) {
-            const result = await props.raiseTierSong(songId, songTier,
-                subscriptionFee, props.transactionFee);
-            history.push({
-                pathname: CHECKOUT,
-                state: {result: result}
-            });
+            localStorage.setItem(TRANSACTION_TYPE_PLACEHOLDER,
+                TRANSACTION_TYPE.SONG_RAISE_TIER.toString());
+            const songRequest = RequestUtil.constructSongRequest(songId, songTier, subscriptionFee, transactionFee);
+            localStorage.setItem(TRANSACTION_OBJECT_PLACEHOLDER, JSON.stringify(songRequest));
+
+            const totalAmount = PaymentUtil.getTotalAmount(transactionFee, subscriptionFee);
+            props.createPayment(totalAmount);
         } else {
             toast.error(SONG_RAISE_TIER_FAILED);
         }

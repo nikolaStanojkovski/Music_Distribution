@@ -22,6 +22,7 @@
         <org.springframework.spring-webflux.version>5.3.23</org.springframework.spring-webflux.version>
         <javax.validation.validation-api.version>2.0.1.Final</javax.validation.validation-api.version>
         <org.apache.commons.commons-lang3.version>3.12.0</org.apache.commons.commons-lang3.version>
+        <com.paypal.sdk.checkout-sdk.version>2.0.0</com.paypal.sdk.checkout-sdk.version>
 
         <com.music-disstribution.shared-kernel.md-shared-kernel.version>0.0.1-SNAPSHOT</com.music-disstribution.shared-kernel.md-shared-kernel.version>
         <org.apache.maven.plugins.maven-surefire-plugin.version>2.19.1</org.apache.maven.plugins.maven-surefire-plugin.version>
@@ -75,6 +76,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>${org.apache.commons.commons-lang3.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>checkout-sdk</artifactId>
+            <version>${com.paypal.sdk.checkout-sdk.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -87,6 +93,7 @@
             <artifactId>md-shared-kernel</artifactId>
             <version>${com.music-disstribution.shared-kernel.md-shared-kernel.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

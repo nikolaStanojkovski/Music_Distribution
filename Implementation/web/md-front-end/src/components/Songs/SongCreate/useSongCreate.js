@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import {SONG_AUDIO_READ_FAILED, SONG_CREATION_FAILED} from "../../../constants/exception";
 import {AUDIO_ELEMENT, DURATION_CHANGE_EVENT} from "../../../constants/screen";
 import ScreenElementsUtil from "../../../util/screenElementsUtil";
+import RequestUtil from "../../../util/requestUtil";
 
 const useSongCreate = (props) => {
 
@@ -59,7 +60,9 @@ const useSongCreate = (props) => {
         const songGenre = formData.songGenre;
 
         if (songName && songGenre && lengthInSeconds && songGenre) {
-            if (await props.createSong(song, songName, lengthInSeconds, songGenre)) {
+            const songRequest = RequestUtil
+                .constructSongCreateRequest(songName, lengthInSeconds, songGenre);
+            if (await props.createSong(song, JSON.stringify(songRequest))) {
                 ScreenElementsUtil.reloadDomain();
             } else {
                 toast.error(SONG_CREATION_FAILED);

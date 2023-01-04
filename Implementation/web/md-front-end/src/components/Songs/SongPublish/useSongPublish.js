@@ -1,15 +1,19 @@
-import {useHistory} from "react-router-dom";
 import React from "react";
 import {EMPTY_STRING} from "../../../constants/alphabet";
-import {SONG_TIER} from "../../../constants/model";
-import {CHECKOUT, CREATOR_ID} from "../../../constants/endpoint";
+import {COVER, SONG_TIER} from "../../../constants/model";
+import {CREATOR_ID} from "../../../constants/endpoint";
 import {toast} from "react-toastify";
 import {SONG_PUBLISHING_FAILED} from "../../../constants/exception";
 import PaymentUtil from "../../../util/paymentUtil";
+import {
+    TRANSACTION_OBJECT_PLACEHOLDER,
+    TRANSACTION_TYPE,
+    TRANSACTION_TYPE_PLACEHOLDER
+} from "../../../constants/transaction";
+import FileUtil from "../../../util/fileUtil";
+import RequestUtil from "../../../util/requestUtil";
 
 const useSongPublish = (props) => {
-
-    const history = useHistory();
 
     const songs = props.songs;
     const songsTotalLength = props.songsTotalLength;
@@ -26,7 +30,7 @@ const useSongPublish = (props) => {
     const [fetch, setFetch] = React.useState(false);
 
     React.useEffect(() => {
-        if(!fetch) {
+        if (!fetch) {
             filterSongs(0, songsTotalLength, CREATOR_ID, selectedArtist.id);
             setFetch(true);
         }
@@ -56,14 +60,14 @@ const useSongPublish = (props) => {
         const songId = formData.songId;
         const songTier = formData.songTier;
 
-        if (songId && songTier && subscriptionFee && props.transactionFee) {
-            const result = await props.publishSong(cover, songId,
-                songTier, subscriptionFee,
-                props.transactionFee);
-            history.push({
-                pathname: CHECKOUT,
-                state: {result: result}
-            });
+        if (songId && songTier && subscriptionFee && transactionFee) {
+            localStorage.setItem(TRANSACTION_TYPE_PLACEHOLDER, TRANSACTION_TYPE.SONG_PUBLISH.toString());
+            FileUtil.convertAndSaveToString(COVER, cover);
+            const songRequest = RequestUtil.constructSongRequest(songId, songTier, subscriptionFee, transactionFee);
+            localStorage.setItem(TRANSACTION_OBJECT_PLACEHOLDER, JSON.stringify(songRequest));
+
+            const totalAmount = PaymentUtil.getTotalAmount(transactionFee, subscriptionFee);
+            props.createPayment(totalAmount);
         } else {
             toast.error(SONG_PUBLISHING_FAILED);
         }

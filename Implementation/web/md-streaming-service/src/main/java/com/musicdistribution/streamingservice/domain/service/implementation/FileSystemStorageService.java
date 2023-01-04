@@ -94,8 +94,8 @@ public class FileSystemStorageService implements IFileSystemStorage {
             byte[] result = new byte[(int) (end - start) + 1];
             System.arraycopy(bufferedOutputStream.toByteArray(), (int) start, result, 0, result.length);
             return result;
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            log.error(e.getMessage());
             throw new FileStorageException(String.format(ExceptionConstants.FILE_BYTES_LOADING_FAILURE,
                     filename, start, end));
         }
@@ -119,6 +119,7 @@ public class FileSystemStorageService implements IFileSystemStorage {
                 throw new FileStorageException(ExceptionConstants.FILE_NOT_FOUND);
             }
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new FileStorageException(ExceptionConstants.FILE_LOADING_FAILURE);
         }
     }
@@ -138,7 +139,8 @@ public class FileSystemStorageService implements IFileSystemStorage {
                 Files.createDirectories(path);
                 FileSystemStorageService.class.getResource(location);
                 return path;
-            } catch (Exception ex) {
+            } catch (Exception e) {
+                log.error(e.getMessage());
                 throw new FileStorageException(ExceptionConstants.FILES_FOLDER_FAILURE);
             }
         }).orElse(null);
