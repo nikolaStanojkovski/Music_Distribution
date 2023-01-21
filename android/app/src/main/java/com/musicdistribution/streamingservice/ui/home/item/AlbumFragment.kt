@@ -25,6 +25,7 @@ import com.musicdistribution.streamingservice.model.search.enums.CategoryItemTyp
 import com.musicdistribution.streamingservice.service.SessionService
 import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.ui.search.SearchItemAdapter
+import com.musicdistribution.streamingservice.util.ApiUtils
 import com.musicdistribution.streamingservice.viewmodel.FavouriteItemViewModel
 import com.musicdistribution.streamingservice.viewmodel.EntityItemViewModel
 import streamingservice.R
@@ -83,11 +84,8 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
 
                     val imageControl =
                         fragmentView.findViewById<ImageView>(R.id.imageAlbum)
-                    val coverPictureReference =
-                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
-
                     if (imageControl != null) {
-                        fillImage(coverPictureReference, imageControl)
+                        fillImage(ApiUtils.getAlbumCoverUrl(item), imageControl)
                     }
                 }
             }
@@ -119,7 +117,7 @@ class AlbumFragment : Fragment(), SearchItemClickListener {
                                 song.songLength.formattedString
                             ),
                             CategoryItemType.SONG,
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${song.id}${FileConstants.PNG_EXTENSION}"
+                            ApiUtils.getSongCoverUrl(song)
                         )
                     }.toMutableList())
                 }

@@ -180,13 +180,11 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
             ) { albums ->
                 if (albums != null) {
                     for (item in albums) {
-                        val albumCoverReference =
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${item.id}${FileConstants.PNG_EXTENSION}"
                         verticalAdapter.updateData(
                             CategoryData.mainData[1],
                             CategoryItem(
                                 item.id,
-                                albumCoverReference,
+                                ApiUtils.getAlbumCoverUrl(item),
                                 CategoryItemType.ALBUM
                             )
                         )
@@ -210,13 +208,11 @@ class HomeFragment : Fragment(), CategoryItemClickListener {
             ) { artists ->
                 if (artists != null) {
                     for (item in artists) {
-                        val profilePictureReference =
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
                         verticalAdapter.updateData(
                             CategoryData.mainData[2],
                             CategoryItem(
                                 item.id,
-                                profilePictureReference,
+                                ApiUtils.getArtistCoverUrl(item),
                                 CategoryItemType.ARTIST
                             )
                         )

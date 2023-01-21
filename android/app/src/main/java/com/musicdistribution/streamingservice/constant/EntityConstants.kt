@@ -10,6 +10,7 @@ object EntityConstants {
     const val SEARCH_TERM = "searchTerm"
     const val PAGE = "page"
     const val SIZE = "size"
+    const val SORT = "sort"
     const val ENTITY_TYPE = "entityType"
     const val PUBLISHING_ID = "publishingId"
     const val LISTENER_ID = "listenerId"

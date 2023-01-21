@@ -14,7 +14,8 @@ interface SongServiceApi {
     @GET(ApiConstants.API_SONGS)
     fun findAll(
         @Query(EntityConstants.PAGE) page: Int,
-        @Query(EntityConstants.SIZE) size: Int
+        @Query(EntityConstants.SIZE) size: Int,
+        @Query(EntityConstants.SORT) sort: String
     ): Call<SongResponse?>
 
     @GET(ApiConstants.API_SONGS_SEARCH)
@@ -22,7 +23,8 @@ interface SongServiceApi {
         @Query(EntityConstants.SEARCH_PARAMS) searchParams: ArrayList<String>,
         @Query(EntityConstants.SEARCH_TERM) searchTerm: String,
         @Query(EntityConstants.PAGE) page: Int,
-        @Query(EntityConstants.SIZE) size: Int
+        @Query(EntityConstants.SIZE) size: Int,
+        @Query(EntityConstants.SORT) sort: String
     ): Call<SongResponse?>
 
     @GET(ApiConstants.API_SONGS_ID)

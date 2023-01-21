@@ -1,7 +1,8 @@
 package com.musicdistribution.streamingservice.application.web.core;
 
-import com.musicdistribution.sharedkernel.infrastructure.ApiController;
 import com.musicdistribution.sharedkernel.domain.response.SearchResultResponse;
+import com.musicdistribution.sharedkernel.infrastructure.ApiController;
+import com.musicdistribution.streamingservice.application.service.ListenerService;
 import com.musicdistribution.streamingservice.constant.EntityConstants;
 import com.musicdistribution.streamingservice.constant.PathConstants;
 import com.musicdistribution.streamingservice.domain.model.entity.core.Listener;
@@ -12,7 +13,6 @@ import com.musicdistribution.streamingservice.domain.model.response.core.ArtistR
 import com.musicdistribution.streamingservice.domain.model.response.core.ListenerResponse;
 import com.musicdistribution.streamingservice.domain.model.response.core.SongResponse;
 import com.musicdistribution.streamingservice.domain.service.IEncryptionSystem;
-import com.musicdistribution.streamingservice.application.service.ListenerService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -107,7 +108,10 @@ public class ListenerResource {
         }
         return listener.getFavouriteSongs().stream()
                 .map(s -> SongResponse.from(s, encryptionSystem.encrypt(s.getId().getId()),
-                        StringUtils.EMPTY, StringUtils.EMPTY))
+                        encryptionSystem.encrypt(s.getCreator().getId().getId()),
+                        (Objects.nonNull(s.getAlbum()))
+                                ? encryptionSystem.encrypt(s.getAlbum().getId().getId())
+                                : StringUtils.EMPTY))
                 .collect(Collectors.toList());
     }
 
@@ -122,8 +126,9 @@ public class ListenerResource {
             return List.of();
         }
         return listener.getFavouriteAlbums().stream()
-                .map(s -> AlbumResponse.from(s, encryptionSystem.encrypt(s.getId().getId()),
-                        StringUtils.EMPTY))
+                .map(s -> AlbumResponse.from(s,
+                        encryptionSystem.encrypt(s.getId().getId()),
+                        encryptionSystem.encrypt(s.getCreator().getId().getId())))
                 .collect(Collectors.toList());
     }
 

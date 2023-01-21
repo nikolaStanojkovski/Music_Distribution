@@ -9,7 +9,6 @@ import android.util.Log
 import com.musicdistribution.streamingservice.constant.AlphabetConstants
 import com.musicdistribution.streamingservice.constant.MessageConstants
 import com.musicdistribution.streamingservice.listener.SeekBarListener
-import kotlin.math.log
 
 class SongFetchService(
     private val seekBarListener: SeekBarListener,

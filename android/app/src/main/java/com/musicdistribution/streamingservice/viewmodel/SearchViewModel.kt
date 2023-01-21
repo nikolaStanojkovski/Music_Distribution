@@ -81,7 +81,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             ),
             searchTerm,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object :
             Callback<AlbumResponse?> {
             override fun onResponse(
@@ -111,7 +112,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             ),
             searchTerm,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object :
             Callback<SongResponse?> {
             override fun onResponse(
@@ -145,7 +147,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             ),
             genre.toString(),
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object :
             Callback<AlbumResponse?> {
             override fun onResponse(
@@ -175,7 +178,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             ),
             genre.toString(),
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object :
             Callback<SongResponse?> {
             override fun onResponse(

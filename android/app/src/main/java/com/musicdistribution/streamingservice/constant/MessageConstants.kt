@@ -24,5 +24,6 @@ object MessageConstants {
 
     const val APPLICATION_ID = "MusicDistribution"
     const val DEPRECATION = "deprecation"
+    const val UNUSED = "unused"
     const val DEPRECATION_JAVA = "Deprecated in Java"
 }

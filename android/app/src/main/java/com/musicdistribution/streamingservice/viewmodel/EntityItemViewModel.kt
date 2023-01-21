@@ -122,7 +122,8 @@ class EntityItemViewModel(application: Application) : AndroidViewModel(applicati
             arrayListOf(EntityConstants.CREATOR_ID),
             artistId,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object : Callback<AlbumResponse?> {
             override fun onResponse(
                 call: Call<AlbumResponse?>?,
@@ -158,7 +159,8 @@ class EntityItemViewModel(application: Application) : AndroidViewModel(applicati
             arrayListOf(EntityConstants.CREATOR_ID),
             artistId,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object : Callback<SongResponse?> {
             override fun onResponse(
                 call: Call<SongResponse?>?,
@@ -194,7 +196,8 @@ class EntityItemViewModel(application: Application) : AndroidViewModel(applicati
             arrayListOf(EntityConstants.ALBUM_ID),
             albumId,
             PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object : Callback<SongResponse?> {
             override fun onResponse(
                 call: Call<SongResponse?>?,

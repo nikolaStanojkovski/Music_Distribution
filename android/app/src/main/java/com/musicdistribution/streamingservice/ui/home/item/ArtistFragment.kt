@@ -27,6 +27,7 @@ import com.musicdistribution.streamingservice.model.search.enums.CategoryListTyp
 import com.musicdistribution.streamingservice.service.SessionService
 import com.musicdistribution.streamingservice.ui.home.HomeActivity
 import com.musicdistribution.streamingservice.ui.home.HomeVerticalAdapter
+import com.musicdistribution.streamingservice.util.ApiUtils
 import com.musicdistribution.streamingservice.viewmodel.FavouriteItemViewModel
 import com.musicdistribution.streamingservice.viewmodel.EntityItemViewModel
 import streamingservice.R
@@ -85,11 +86,9 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                         item.userPersonalInfo.fullName
                     val imageControl =
                         fragmentView.findViewById<ImageView>(R.id.imageArtist)
-                    val profilePictureReference =
-                        "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${item.id}${FileConstants.PNG_EXTENSION}"
 
                     if (imageControl != null) {
-                        fillImage(profilePictureReference, imageControl)
+                        fillImage(ApiUtils.getArtistCoverUrl(item), imageControl)
                     }
                 }
             }
@@ -133,11 +132,9 @@ class ArtistFragment : Fragment(), CategoryItemClickListener {
                 verticalAdapter.emptyData(CategoryData.artistData[1])
                 if (albums != null && albums.size > 0) {
                     for (album in albums) {
-                        val albumCoverReference =
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${album.id}${FileConstants.PNG_EXTENSION}"
                         verticalAdapter.updateData(
                             CategoryData.artistData[1],
-                            CategoryItem(album.id, albumCoverReference, CategoryItemType.ALBUM)
+                            CategoryItem(album.id, ApiUtils.getAlbumCoverUrl(album), CategoryItemType.ALBUM)
                         )
                     }
                 }

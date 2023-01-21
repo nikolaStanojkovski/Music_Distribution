@@ -14,7 +14,8 @@ interface AlbumServiceApi {
     @GET(ApiConstants.API_ALBUMS)
     fun findAll(
         @Query(EntityConstants.PAGE) page: Int,
-        @Query(EntityConstants.SIZE) size: Int
+        @Query(EntityConstants.SIZE) size: Int,
+        @Query(EntityConstants.SORT) sort: String
     ): Call<AlbumResponse?>
 
     @GET(ApiConstants.API_ALBUMS_SEARCH)
@@ -22,7 +23,8 @@ interface AlbumServiceApi {
         @Query(EntityConstants.SEARCH_PARAMS) searchParams: ArrayList<String>,
         @Query(EntityConstants.SEARCH_TERM) searchTerm: String,
         @Query(EntityConstants.PAGE) page: Int,
-        @Query(EntityConstants.SIZE) size: Int
+        @Query(EntityConstants.SIZE) size: Int,
+        @Query(EntityConstants.SORT) sort: String
     ): Call<AlbumResponse?>
 
     @GET(ApiConstants.API_ALBUMS_ID)

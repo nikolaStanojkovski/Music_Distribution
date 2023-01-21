@@ -35,7 +35,8 @@ class EntityViewModel(application: Application) : AndroidViewModel(application) 
     fun fetchAlbums(page: Int?) {
         albumServiceApi.findAll(
             page ?: PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object : Callback<AlbumResponse?> {
             override fun onResponse(
                 call: Call<AlbumResponse?>?,
@@ -89,7 +90,8 @@ class EntityViewModel(application: Application) : AndroidViewModel(application) 
     fun fetchSongs(page: Int?) {
         songServiceApi.findAll(
             page ?: PaginationConstants.DEFAULT_PAGE_NUMBER,
-            PaginationConstants.DEFAULT_PAGE_SIZE
+            PaginationConstants.DEFAULT_PAGE_SIZE,
+            PaginationConstants.DEFAULT_SORT_ORDER
         ).enqueue(object : Callback<SongResponse?> {
             override fun onResponse(
                 call: Call<SongResponse?>?,

@@ -176,7 +176,7 @@ class ListItemFragment : Fragment(), SearchItemClickListener {
                             a.userPersonalInfo.artName.ifBlank { a.userContactInfo.email.fullAddress },
                             a.userContactInfo.email.fullAddress,
                             CategoryItemType.ARTIST,
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ARTISTS}/${a.id}${FileConstants.PNG_EXTENSION}"
+                            ApiUtils.getArtistCoverUrl(a)
                         )
                     }.forEach { si -> searchAdapter.updateDataItem(si) }
                     currentSize += artists.size
@@ -200,7 +200,7 @@ class ListItemFragment : Fragment(), SearchItemClickListener {
                             a.albumName,
                             a.totalLength.formattedString,
                             CategoryItemType.ALBUM,
-                            "${ApiConstants.BASE_URL}${ApiConstants.API_STREAM_ALBUMS}/${a.id}${FileConstants.PNG_EXTENSION}"
+                            ApiUtils.getAlbumCoverUrl(a)
                         )
                     }.forEach { si -> searchAdapter.updateDataItem(si) }
                     currentSize += albums.size
