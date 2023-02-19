@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/WelcomeFragment">
+
+    <fragment
+        android:id="@+id/WelcomeFragment"
+        android:name="com.musicdistribution.streamingservice.ui.auth.WelcomeFragment"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_WelcomeFragment_to_RegistrationFragment"
+            app:destination="@id/RegistrationFragment" />
+        <action
+            android:id="@+id/action_WelcomeFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/RegistrationFragment"
+        android:name="com.musicdistribution.streamingservice.ui.auth.RegistrationFragment"
+        android:label="@string/registration_fragment_label"
+        tools:layout="@layout/fragment_registration">
+        <action
+            android:id="@+id/action_RegisterFragment_to_WelcomeFragment"
+            app:destination="@id/WelcomeFragment" />
+        <action
+            android:id="@+id/action_RegisterFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="com.musicdistribution.streamingservice.ui.auth.LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_LoginFragment_to_WelcomeFragment"
+            app:destination="@id/WelcomeFragment" />
+    </fragment>
+</navigation>

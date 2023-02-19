@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Music Distribution</string>
+
+    <!-- Strings related to 'Authentication' screens -->
+    <string name="title_activity_auth">AuthActivity</string>
+    <string name="registration_fragment_label">Create account</string>
+    <string name="button_sign_up">Sign Up</string>
+    <string name="button_logout">Sign Out</string>
+    <string name="button_log_in">Sign In</string>
+    <string name="registration_title">Create Account</string>
+    <string name="login_email">Enter your username</string>
+    <string name="login_password">Enter your password</string>
+    <string name="password_hint">Enter at least 6 characters</string>
+    <string name="username_hint">eg. `test.example@yahoo.com`</string>
+
+    <!-- Strings related to 'Home' screen -->
+    <string name="title_home">Home</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="hint_text_username">Domains: %1$s</string>
+    <string name="logo_description">The logo image for the application</string>
+    <string name="floating_button_description">Button used to display an e-mail action</string>
+
+    <!-- Strings related to 'Home Item' screens -->
+    <string name="song_genre_placeholder">[song_genre]</string>
+    <string name="song_title_placeholder">[song_title]</string>
+    <string name="artist_name_placeholder">[artist_name]</string>
+    <string name="artist_item_placeholder">[artist_item]</string>
+    <string name="artist_personal_info">[personal_info]</string>
+    <string name="album_name_placeholder">[album_name]</string>
+    <string name="category_title_placeholder">[category_title]</string>
+    <string name="show_all_placeholder">Show All</string>
+    <string name="image_placeholder">Home fragment item image</string>
+    <string name="length_placeholder">[length]</string>
+    <string name="initial_length_placeholder">[initial_length]</string>
+    <string name="full_length_placeholder">[full_length]</string>
+    <string name="length_parameter_placeholder">Length: %1$s</string>
+    <string name="location_placeholder">[location]</string>
+    <string name="date_time_placeholder">[date_time]</string>
+
+    <!-- Strings related to 'Search' screens -->
+    <string name="search_title">Search</string>
+    <string name="search_placeholder">Artists, Songs or Albums …</string>
+    <string name="search_favourite_genre_title">Genres of music we offer</string>
+
+    <!-- Strings related to 'Profile' screen -->
+    <string name="profile_title">Profile</string>
+    <string name="email_placeholder">[email_address]</string>
+    <string name="button_favourite_songs">Liked Songs</string>
+    <string name="button_favourite_albums">Liked Albums</string>
+    <string name="button_favourite_artists">Liked Artists</string>
+    <string name="profile_item_placeholder">[profile_item_heading]</string>
+
+    <!-- Strings related to menus -->
+    <string name="action_settings_placeholder">Action Settings</string>
+</resources>

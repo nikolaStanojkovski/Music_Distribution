@@ -1,0 +1,88 @@
+.card {
+    display: flex;
+}
+
+.header-teaser {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 15px;
+}
+
+.carousel-image {
+    aspect-ratio: 87/46;
+}
+
+.navbar-img {
+    margin-right: 2rem;
+}
+
+.nav-item {
+    font-size: 18px;
+    padding-right: 0.7rem;
+}
+
+#main {
+    min-height: calc(100vh - 150px);
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+}
+
+.special-character {
+    font-size: 24px;
+    font-weight: 200;
+}
+
+.form-group-inner {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+.table-row-clickable {
+    transition: all 0.2s ease;
+}
+
+.table-row-clickable:hover {
+    background-color: #d4d4d4;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-link:not(.active) {
+    color: #161c2d !important;
+}
+
+.page-item.active .page-link {
+    color: white !important;
+    background-color: #161c2d !important;
+}
+
+.table-item-button {
+    border-radius: 50%;
+    border-width: thin;
+    transition: all 0.2s ease;
+}
+
+.table-item-button:hover {
+    background-color: black;
+    border-color: white;
+    color: white;
+}
+
+.auth-form {
+    background-color: #dedede;
+}
+
+.clickable {
+    cursor: pointer;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.clickable:hover {
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}

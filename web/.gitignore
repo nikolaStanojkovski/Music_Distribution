@@ -1,0 +1,5 @@
+.idea
+md-streaming-service/.mvn
+md-shared-kernel/.mvn
+md-streaming-service/target
+md-shared-kernel/target
